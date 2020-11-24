@@ -1,1 +1,1 @@
-g++ -o3 cout_server.cpp -o server -Ilibs -lpthread
+g++ -o3 -g main.cpp ./framework/settings.cpp ./framework/request.cpp ./framework/http_server.cpp ./framework/file_cache.cpp ./framework/application.cpp ./rdn_application.cpp -o ./bin/server -Ilibs -lpthread -std=c++11
