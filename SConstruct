@@ -9,11 +9,6 @@ import pickle
 import sys
 from collections import OrderedDict
 
-# Local
-import methods
-import gles_builders
-from platform_methods import run_in_subprocess
-
 # scan possible build platforms
 
 platform_list = []  # list of platforms
@@ -24,32 +19,6 @@ active_platforms = []
 active_platform_ids = []
 platform_exporters = []
 platform_apis = []
-
-for x in sorted(glob.glob("platform/*")):
-    if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
-        continue
-    tmppath = "./" + x
-
-    sys.path.insert(0, tmppath)
-    import detect
-
-    if os.path.exists(x + "/export/export.cpp"):
-        platform_exporters.append(x[9:])
-    if os.path.exists(x + "/api/api.cpp"):
-        platform_apis.append(x[9:])
-    if detect.is_active():
-        active_platforms.append(detect.get_name())
-        active_platform_ids.append(x)
-    if detect.can_build():
-        x = x.replace("platform/", "")  # rest of world
-        x = x.replace("platform\\", "")  # win32
-        platform_list += [x]
-        platform_opts[x] = detect.get_opts()
-        platform_flags[x] = detect.get_flags()
-    sys.path.remove(tmppath)
-    sys.modules.pop("detect")
-
-methods.save_active_platforms(active_platforms, active_platform_ids)
 
 custom_tools = ["default"]
 
@@ -71,29 +40,11 @@ env_base.use_ptrcall = False
 env_base.module_version_string = ""
 env_base.msvc = False
 
-env_base.__class__.disable_module = methods.disable_module
-
-env_base.__class__.add_module_version_string = methods.add_module_version_string
-
-env_base.__class__.add_source_files = methods.add_source_files
-env_base.__class__.use_windows_spawn_fix = methods.use_windows_spawn_fix
-env_base.__class__.split_lib = methods.split_lib
-
-env_base.__class__.add_shared_library = methods.add_shared_library
-env_base.__class__.add_library = methods.add_library
-env_base.__class__.add_program = methods.add_program
-env_base.__class__.CommandNoCache = methods.CommandNoCache
-env_base.__class__.disable_warnings = methods.disable_warnings
-
-env_base["x86_libtheora_opt_gcc"] = False
-env_base["x86_libtheora_opt_vc"] = False
-
 # avoid issues when building with different versions of python out of the same directory
 env_base.SConsignFile(".sconsign{0}.dblite".format(pickle.HIGHEST_PROTOCOL))
 
 # Build options
 
-customs = ["custom.py"]
 
 profile = ARGUMENTS.get("profile", False)
 if profile:
@@ -114,36 +65,6 @@ opts.Add(EnumVariable("optimize", "Optimization type", "speed", ("speed", "size"
 opts.Add(BoolVariable("tools", "Build the tools (a.k.a. the Godot editor)", True))
 opts.Add(BoolVariable("use_lto", "Use link-time optimization", False))
 opts.Add(BoolVariable("use_precise_math_checks", "Math checks use very precise epsilon (debug option)", False))
-
-# Components
-opts.Add(BoolVariable("deprecated", "Enable deprecated features", True))
-opts.Add(BoolVariable("gdscript", "Enable GDScript support", True))
-opts.Add(BoolVariable("minizip", "Enable ZIP archive support using minizip", True))
-opts.Add(BoolVariable("xaudio2", "Enable the XAudio2 audio driver", False))
-opts.Add("custom_modules", "A list of comma-separated directory paths containing custom modules to build.", "")
-
-# Advanced options
-opts.Add(BoolVariable("verbose", "Enable verbose output for the compilation", False))
-opts.Add(BoolVariable("progress", "Show a progress indicator during compilation", True))
-opts.Add(EnumVariable("warnings", "Level of compilation warnings", "all", ("extra", "all", "moderate", "no")))
-opts.Add(BoolVariable("werror", "Treat compiler warnings as errors", False))
-opts.Add(BoolVariable("dev", "If yes, alias for verbose=yes warnings=extra werror=yes", False))
-opts.Add("extra_suffix", "Custom extra suffix added to the base filename of all generated binary files", "")
-opts.Add(BoolVariable("vsproj", "Generate a Visual Studio solution", False))
-opts.Add(EnumVariable("macports_clang", "Build using Clang from MacPorts", "no", ("no", "5.0", "devel")))
-opts.Add(
-    BoolVariable(
-        "split_libmodules",
-        "Split intermediate libmodules.a in smaller chunks to prevent exceeding linker command line size (forced to True when using MinGW)",
-        False,
-    )
-)
-opts.Add(BoolVariable("disable_3d", "Disable 3D nodes for a smaller executable", False))
-opts.Add(BoolVariable("disable_advanced_gui", "Disable advanced GUI nodes and behaviors", False))
-opts.Add(BoolVariable("no_editor_splash", "Don't use the custom splash screen for the editor", False))
-opts.Add("system_certs_path", "Use this path as SSL certificates default for editor (for package maintainers)", "")
-
-# Thirdparty libraries
 
 # Compilation environment setup
 opts.Add("CXX", "C++ compiler")
@@ -169,38 +90,6 @@ opts.Update(env_base)
 modules_detected = OrderedDict()
 module_search_paths = ["modules"]  # Built-in path.
 
-if env_base["custom_modules"]:
-    paths = env_base["custom_modules"].split(",")
-    for p in paths:
-        try:
-            module_search_paths.append(methods.convert_custom_modules_path(p))
-        except ValueError as e:
-            print(e)
-            sys.exit(255)
-
-for path in module_search_paths:
-    # Note: custom modules can override built-in ones.
-    modules_detected.update(methods.detect_modules(path))
-    include_path = os.path.dirname(path)
-    if include_path:
-        env_base.Prepend(CPPPATH=[include_path])
-
-# Add module options
-for name, path in modules_detected.items():
-    enabled = True
-    sys.path.insert(0, path)
-    import config
-
-    try:
-        enabled = config.is_enabled()
-    except AttributeError:
-        pass
-    sys.path.remove(path)
-    sys.modules.pop("config")
-    opts.Add(BoolVariable("module_" + name + "_enabled", "Enable module '%s'" % (name,), enabled))
-
-methods.write_modules(modules_detected)
-
 # Update the environment again after all the module options are added.
 opts.Update(env_base)
 Help(opts.GenerateHelpText(env_base))
@@ -212,28 +101,6 @@ env_base.Prepend(CPPPATH=["#"])
 # configure ENV for platform
 env_base.platform_exporters = platform_exporters
 env_base.platform_apis = platform_apis
-
-if env_base["use_precise_math_checks"]:
-    env_base.Append(CPPDEFINES=["PRECISE_MATH_CHECKS"])
-
-if env_base["target"] == "debug":
-    env_base.Append(CPPDEFINES=["DEBUG_MEMORY_ALLOC", "DISABLE_FORCED_INLINE"])
-
-    # The two options below speed up incremental builds, but reduce the certainty that all files
-    # will properly be rebuilt. As such, we only enable them for debug (dev) builds, not release.
-
-    # To decide whether to rebuild a file, use the MD5 sum only if the timestamp has changed.
-    # http://scons.org/doc/production/HTML/scons-user/ch06.html#idm139837621851792
-    env_base.Decider("MD5-timestamp")
-    # Use cached implicit dependencies by default. Can be overridden by specifying `--implicit-deps-changed` in the command line.
-    # http://scons.org/doc/production/HTML/scons-user/ch06s04.html
-    env_base.SetOption("implicit_cache", 1)
-
-if env_base["no_editor_splash"]:
-    env_base.Append(CPPDEFINES=["NO_EDITOR_SPLASH"])
-
-if not env_base["deprecated"]:
-    env_base.Append(CPPDEFINES=["DISABLE_DEPRECATED"])
 
 env_base.platforms = {}
 
@@ -436,49 +303,6 @@ if selected_platform in platform_list:
     env.module_icons_paths = []
     env.doc_class_path = {}
 
-    for name, path in modules_detected.items():
-        if not env["module_" + name + "_enabled"]:
-            continue
-        sys.path.insert(0, path)
-        env.current_module = name
-        import config
-
-        # can_build changed number of arguments between 3.0 (1) and 3.1 (2),
-        # so try both to preserve compatibility for 3.0 modules
-        can_build = False
-        try:
-            can_build = config.can_build(env, selected_platform)
-        except TypeError:
-            print(
-                "Warning: module '%s' uses a deprecated `can_build` "
-                "signature in its config.py file, it should be "
-                "`can_build(env, platform)`." % x
-            )
-            can_build = config.can_build(selected_platform)
-        if can_build:
-            config.configure(env)
-            # Get doc classes paths (if present)
-            try:
-                doc_classes = config.get_doc_classes()
-                doc_path = config.get_doc_path()
-                for c in doc_classes:
-                    env.doc_class_path[c] = path + "/" + doc_path
-            except:
-                pass
-            # Get icon paths (if present)
-            try:
-                icons_path = config.get_icons_path()
-                env.module_icons_paths.append(path + "/" + icons_path)
-            except:
-                # Default path for module icons
-                env.module_icons_paths.append(path + "/" + "icons")
-            modules_enabled[name] = path
-
-        sys.path.remove(path)
-        sys.modules.pop("config")
-
-    env.module_list = modules_enabled
-
     methods.update_version(env.module_version_string)
 
     env["PROGSUFFIX"] = suffix + env.module_version_string + env["PROGSUFFIX"]
@@ -496,61 +320,8 @@ if selected_platform in platform_list:
     env["LIBSUFFIX"] = suffix + env["LIBSUFFIX"]
     env["SHLIBSUFFIX"] = suffix + env["SHLIBSUFFIX"]
 
-    if env.use_ptrcall:
-        env.Append(CPPDEFINES=["PTRCALL_ENABLED"])
-    if env["tools"]:
-        env.Append(CPPDEFINES=["TOOLS_ENABLED"])
-    if env["disable_3d"]:
-        if env["tools"]:
-            print(
-                "Build option 'disable_3d=yes' cannot be used with 'tools=yes' (editor), "
-                "only with 'tools=no' (export template)."
-            )
-            sys.exit(255)
-        else:
-            env.Append(CPPDEFINES=["_3D_DISABLED"])
-    if env["gdscript"]:
-        env.Append(CPPDEFINES=["GDSCRIPT_ENABLED"])
-    if env["disable_advanced_gui"]:
-        if env["tools"]:
-            print(
-                "Build option 'disable_advanced_gui=yes' cannot be used with 'tools=yes' (editor), "
-                "only with 'tools=no' (export template)."
-            )
-            sys.exit(255)
-        else:
-            env.Append(CPPDEFINES=["ADVANCED_GUI_DISABLED"])
-    if env["minizip"]:
-        env.Append(CPPDEFINES=["MINIZIP_ENABLED"])
-
-    editor_module_list = ["regex"]
-    for x in editor_module_list:
-        if not env["module_" + x + "_enabled"]:
-            if env["tools"]:
-                print(
-                    "Build option 'module_" + x + "_enabled=no' cannot be used with 'tools=yes' (editor), "
-                    "only with 'tools=no' (export template)."
-                )
-                sys.exit(255)
-
     if not env["verbose"]:
         methods.no_verbose(sys, env)
-
-    if not env["platform"] == "server":  # FIXME: detect GLES3
-        env.Append(
-            BUILDERS={
-                "GLES3_GLSL": env.Builder(
-                    action=run_in_subprocess(gles_builders.build_gles3_headers), suffix="glsl.gen.h", src_suffix=".glsl"
-                )
-            }
-        )
-        env.Append(
-            BUILDERS={
-                "GLES2_GLSL": env.Builder(
-                    action=run_in_subprocess(gles_builders.build_gles2_headers), suffix="glsl.gen.h", src_suffix=".glsl"
-                )
-            }
-        )
 
     scons_cache_path = os.environ.get("SCONS_CACHE")
     if scons_cache_path != None:
@@ -564,18 +335,6 @@ if selected_platform in platform_list:
     Export("env")
 
     # build subdirs, the build order is dependent on link order.
-
-    SConscript("core/SCsub")
-    SConscript("servers/SCsub")
-    SConscript("scene/SCsub")
-    SConscript("editor/SCsub")
-    SConscript("drivers/SCsub")
-
-    SConscript("platform/SCsub")
-    SConscript("modules/SCsub")
-    SConscript("main/SCsub")
-
-    SConscript("platform/" + selected_platform + "/SCsub")  # build selected platform
 
     # Microsoft Visual Studio Project Generation
     if env["vsproj"]:
