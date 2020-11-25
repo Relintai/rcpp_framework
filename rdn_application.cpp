@@ -12,18 +12,18 @@ void RDNApplication::index(Request *request) {
 	if (FileCache::get_singleton()->get_cached_body("index", &body)) {
 		request->response->setBody(body);
 
-        return;
+		return;
 	}
 
-	body = "<html>hello world aaaaa </html>";
+	SiteTheme::default_theme->render_index_page(request, &body);
 
-    FileCache::get_singleton()->set_cached_body("index", body);
+	FileCache::get_singleton()->set_cached_body("index", body);
 
 	request->response->setBody(body);
 }
 
 void RDNApplication::session_middleware_func(Request *request) {
-	std::cout << "dddd" << std::endl;
+	std::cout << "test: session_middleware_func called" << std::endl;
 }
 
 void RDNApplication::setup_routes() {
@@ -40,9 +40,24 @@ void RDNApplication::setup_middleware() {
 	middlewares.push_back(RDNApplication::session_middleware_func);
 }
 
-RDNApplication::RDNApplication() :
-		Application() {
+RDNApplication::RDNApplication() :	Application() {
+
+	SiteTheme *t = new TestSiteTheme();
+	t->register_theme();
+	t->set_theme_as_default();
+
+	themes.push_back(t);
+
+	t = new TestSiteTheme2();
+	t->register_theme();
+
+	themes.push_back(t);
 }
 
 RDNApplication::~RDNApplication() {
+	for (uint32_t i = 0; i < themes.size(); ++i) {
+		delete themes[i];
+	}
+
+	themes.clear();
 }

@@ -17,6 +17,7 @@ int main(int argc, char **argv) {
     Application *app = new MAIN_CLASS();
 
     app->setup_routes();
+    app->setup_middleware();
 
 	HTTPServer *server = new HTTPServer();
 

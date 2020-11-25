@@ -11,7 +11,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdlib.h>
 
 void Application::setup_routes() {
 	default_error_handler_func = Application::default_fallback_error_handler;
@@ -70,7 +69,7 @@ void Application::handle_request(Request *request) {
 		return;
 	}
 
-	for (uint32_t i; i < middlewares.size(); ++i) {
+	for (uint32_t i = 0; i < middlewares.size(); ++i) {
 		middlewares[i](request);
 
 		if (request->finalized)
@@ -93,7 +92,7 @@ void Application::send_error(int error_code, Request *request) {
 
 void Application::send_file(const std::string &path, Request *request) {
 	std::string fp = FileCache::get_singleton()->wwwroot + path;
-	
+
 	FILE *f = fopen(fp.c_str(), "rb");
 
 	if (!f) {
@@ -105,7 +104,7 @@ void Application::send_file(const std::string &path, Request *request) {
 
 	fseek(f, 0, SEEK_END);
 	long fsize = ftell(f);
-	fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
+	fseek(f, 0, SEEK_SET); /* same as rewind(f); */
 
 	std::string body;
 	body.resize(fsize);

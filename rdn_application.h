@@ -2,6 +2,7 @@
 #define RDN_APPLICATION_H
 
 #include "core/application.h"
+#include "core/theme.h"
 
 class RDNApplication : public Application {
 public:
@@ -14,6 +15,8 @@ public:
 
     RDNApplication();
     ~RDNApplication();
+
+    std::vector<Theme *> themes;
 };
 
 #endif
