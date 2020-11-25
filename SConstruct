@@ -89,8 +89,10 @@ opts.Add("LINKFLAGS", "Custom flags for the linker")
 # add default include paths
 env_base.Prepend(CPPPATH=["#", "libs"])
 env_base.Prepend(CPPPATH=["#libs"])
-#env_base.Prepend(CXXFLAGS=["-lpthread"])
 env_base.Prepend(LINKFLAGS=["-lpthread"])
+
+env_base.Append(CXX=["-o3"])
+#env_base.Append(CXX=["-g"])
 
 env = env_base.Clone()
 
@@ -99,8 +101,8 @@ Export("env")
 SConscript("core/SCsub")
 
 env.prg_sources = ["rdn_application.cpp"]
-plib = env.add_library("prg", env.prg_sources)
-env.Prepend(LIBS=[plib])
+libapp = env.add_library("application", env.prg_sources)
+env.Prepend(LIBS=[libapp])
 
 prog = env.add_program("#bin/server", ["main.cpp"])
 
