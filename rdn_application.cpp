@@ -23,7 +23,7 @@ void RDNApplication::index(Request *request) {
 }
 
 void RDNApplication::session_middleware_func(Request *request) {
-	std::cout << "test: session_middleware_func called" << std::endl;
+	//std::cout << "test: session_middleware_func called" << std::endl;
 }
 
 void RDNApplication::setup_routes() {
@@ -37,7 +37,7 @@ void RDNApplication::setup_routes() {
 void RDNApplication::setup_middleware() {
 	Application::setup_middleware();
 
-	middlewares.push_back(RDNApplication::session_middleware_func);
+	//middlewares.push_back(RDNApplication::session_middleware_func);
 }
 
 RDNApplication::RDNApplication() :	Application() {
