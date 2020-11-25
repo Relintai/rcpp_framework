@@ -10,8 +10,6 @@ void RDNApplication::index(Request *request) {
 	std::string body;
 
 	if (FileCache::get_singleton()->get_cached_body("index", &body)) {
-		std::string body = "<html>hello world aaaaa </html>";
-
 		request->response->setBody(body);
 
         return;
