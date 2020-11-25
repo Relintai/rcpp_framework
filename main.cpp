@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 
-#include "framework/http_server.h"
-#include "framework/application.h"
-#include "framework/file_cache.h"
+#include "core/http_server.h"
+#include "core/application.h"
+#include "core/file_cache.h"
 
 #include "rdn_application.h"
 

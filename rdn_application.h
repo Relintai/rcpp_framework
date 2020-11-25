@@ -1,7 +1,7 @@
 #ifndef RDN_APPLICATION_H
 #define RDN_APPLICATION_H
 
-#include "framework/application.h"
+#include "core/application.h"
 
 class RDNApplication : public Application {
 public:
