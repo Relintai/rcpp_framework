@@ -4,16 +4,28 @@
 
 #include <iostream>
 
-void RDNApplication::index(Request *request) {
-	//std::string body = "<html>hello world aaaaa </html>";
+#include "core/file_cache.h"
 
-    std::string body = "<html><script>var blocked = false; document.addEventListener(\"visibilitychange\", function() { if (!blocked && document.hidden) {blocked = true;alert('Blocked once');}});</script></html>";
+void RDNApplication::index(Request *request) {
+	std::string body;
+
+	if (FileCache::get_singleton()->get_cached_body("index", &body)) {
+		std::string body = "<html>hello world aaaaa </html>";
+
+		request->response->setBody(body);
+
+        return;
+	}
+
+	body = "<html>hello world aaaaa </html>";
+
+    FileCache::get_singleton()->set_cached_body("index", body);
 
 	request->response->setBody(body);
 }
 
 void RDNApplication::session_middleware_func(Request *request) {
-    std::cout << "dddd" << std::endl;
+	std::cout << "dddd" << std::endl;
 }
 
 void RDNApplication::setup_routes() {

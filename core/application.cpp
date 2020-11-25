@@ -38,7 +38,7 @@ void Application::handle_request(Request *request) {
 
 	std::string path = request->http_parser->getPath();
 
-	if (FileCache::get_instance()->has_file(path)) {
+	if (FileCache::get_singleton()->wwwroot_has_file(path)) {
 		send_file(path, request);
 
 		return;
@@ -92,7 +92,7 @@ void Application::send_error(int error_code, Request *request) {
 }
 
 void Application::send_file(const std::string &path, Request *request) {
-	std::string fp = FileCache::get_instance()->wwwroot + path;
+	std::string fp = FileCache::get_singleton()->wwwroot + path;
 	
 	FILE *f = fopen(fp.c_str(), "rb");
 

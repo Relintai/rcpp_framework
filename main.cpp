@@ -10,9 +10,9 @@
 #define MAIN_CLASS RDNApplication
 
 int main(int argc, char **argv) {
-    FileCache *file_cache = new FileCache();
+    FileCache *file_cache = new FileCache(true);
     file_cache->wwwroot = "./www";
-    file_cache->refresh();
+    file_cache->wwwroot_refresh_cache();
 
     Application *app = new MAIN_CLASS();
 
