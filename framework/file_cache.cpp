@@ -13,7 +13,7 @@ void FileCache::deregister_file(const std::string &file_path) {
 }
 
 bool FileCache::has_file(const std::string &file_path) {
-    return registered_files.find(file_path) != registered_files.end();
+	return registered_files.find(file_path) != registered_files.end();
 }
 
 void FileCache::refresh() {

@@ -95,6 +95,14 @@ void Application::send_file(const std::string &path, Request *request) {
 	std::string fp = FileCache::get_instance()->wwwroot + path;
 	
 	FILE *f = fopen(fp.c_str(), "rb");
+
+	if (!f) {
+		printf("Error: Registered file doesn't exists anymore! %s\n", path.c_str());
+
+		send_error(404, request);
+		return;
+	}
+
 	fseek(f, 0, SEEK_END);
 	long fsize = ftell(f);
 	fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
@@ -104,6 +112,8 @@ void Application::send_file(const std::string &path, Request *request) {
 
 	fread(&body[0], 1, fsize, f);
 	fclose(f);
+
+	//TODO set mimetype?
 
 	request->response->setBody(body);
 	request->finalized = true;
