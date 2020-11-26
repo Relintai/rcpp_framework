@@ -19,20 +19,10 @@ void Application::setup_routes() {
 }
 
 void Application::setup_middleware() {
+	middlewares.push_back(Application::default_routing_middleware);
 }
 
-void Application::default_fallback_error_handler(int error_code, Request *request) {
-	request->response->setBody(default_generic_error_body);
-	request->send();
-}
-
-void Application::default_404_error_handler(int error_code, Request *request) {
-	request->response->setBody(default_error_404_body);
-	request->send();
-}
-
-void Application::handle_request(Request *request) {
-
+void Application::default_routing_middleware(Request *request) {
 	std::string path = request->http_parser->getPath();
 
 	if (FileCache::get_singleton()->wwwroot_has_file(path)) {
@@ -68,8 +58,23 @@ void Application::handle_request(Request *request) {
 	}
 
 	request->handler_func = func;
+	request->next_stage();
+}
+
+void Application::default_fallback_error_handler(int error_code, Request *request) {
+	request->response->setBody(default_generic_error_body);
+	request->send();
+}
+
+void Application::default_404_error_handler(int error_code, Request *request) {
+	request->response->setBody(default_error_404_body);
+	request->send();
+}
+
+void Application::handle_request(Request *request) {
 	request->middleware_stack = &middlewares;
 
+	//note that middlewares handle the routing -> Application::default_routing_middleware by default
 	request->next_stage();
 }
 

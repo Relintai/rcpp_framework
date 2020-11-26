@@ -23,6 +23,8 @@ public:
 	virtual void setup_routes();
     virtual void setup_middleware();
 
+    static void default_routing_middleware(Request *request);
+
 	Application();
 	virtual ~Application();
 
