@@ -22,14 +22,14 @@ void Application::setup_middleware() {
 }
 
 void Application::default_fallback_error_handler(int error_code, Request *request) {
-	std::string body = "<html>Internal server error! :(</html>";
+	std::string body = "<html><body>Internal server error! :(</body></html>";
 	request->response->setBody(body);
 	request->finalized = true;
 	request->send();
 }
 
 void Application::default_404_error_handler(int error_code, Request *request) {
-	std::string body = "<html>404 :(</html>";
+	std::string body = "<html><body>404 :(</body></html>";
 	request->response->setBody(body);
 	request->finalized = true;
 	request->send();
