@@ -10,6 +10,9 @@ class Request;
 
 class Application {
 public:
+    static std::string default_error_404_body;
+    static std::string default_generic_error_body;
+
 	static void handle_request(Request *request);
     static void send_error(int error_code, Request *request);
     static void send_file(const std::string &path, Request *request);

@@ -22,15 +22,13 @@ void Application::setup_middleware() {
 }
 
 void Application::default_fallback_error_handler(int error_code, Request *request) {
-	std::string body = "<html><body>Internal server error! :(</body></html>";
-	request->response->setBody(body);
+	request->response->setBody(default_generic_error_body);
 	request->finalized = true;
 	request->send();
 }
 
 void Application::default_404_error_handler(int error_code, Request *request) {
-	std::string body = "<html><body>404 :(</body></html>";
-	request->response->setBody(body);
+	request->response->setBody(default_error_404_body);
 	request->finalized = true;
 	request->send();
 }
@@ -144,3 +142,6 @@ std::function<void(int, Request *)> Application::default_error_handler_func = nu
 std::vector<std::function<void(Request *)> > Application::middlewares;
 
 Application *Application::_instance = nullptr;
+
+std::string Application::default_error_404_body = "<html><body>404 :(</body></html>";
+std::string Application::default_generic_error_body = "<html><body>Internal server error! :(</body></html>";
