@@ -16,8 +16,12 @@ public:
 	const HTTPParser *http_parser;
 	const HttpSession::Ptr *session;
 	HttpResponse *response;
-	bool finalized;
 
+    uint32_t current_middleware_index;
+    std::function<void(Request *)> handler_func;
+    std::vector<std::function<void(Request *)> > *middleware_stack;
+
+    void next_stage();
 	void send();
 	void reset();
 

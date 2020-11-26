@@ -23,13 +23,11 @@ void Application::setup_middleware() {
 
 void Application::default_fallback_error_handler(int error_code, Request *request) {
 	request->response->setBody(default_generic_error_body);
-	request->finalized = true;
 	request->send();
 }
 
 void Application::default_404_error_handler(int error_code, Request *request) {
 	request->response->setBody(default_error_404_body);
-	request->finalized = true;
 	request->send();
 }
 
@@ -69,16 +67,10 @@ void Application::handle_request(Request *request) {
 		return;
 	}
 
-	for (uint32_t i = 0; i < middlewares.size(); ++i) {
-		middlewares[i](request);
+	request->handler_func = func;
+	request->middleware_stack = &middlewares;
 
-		if (request->finalized) {
-			request->send();
-			return;
-		}
-	}
-
-	func(request);
+	request->next_stage();
 }
 
 void Application::send_error(int error_code, Request *request) {
@@ -117,7 +109,6 @@ void Application::send_file(const std::string &path, Request *request) {
 	//TODO set mimetype?
 
 	request->response->setBody(body);
-	request->finalized = true;
 	request->send();
 }
 

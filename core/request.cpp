@@ -1,5 +1,14 @@
 #include "request.h"
 
+void Request::next_stage() {
+	if (current_middleware_index == (*middleware_stack).size()) {
+		handler_func(this);
+		return;
+	}
+
+	(*middleware_stack)[current_middleware_index++](this);
+}
+
 void Request::send() {
 	if (http_parser->isKeepAlive()) {
 		response->addHeadValue("Connection", "Keep-Alive");
@@ -23,7 +32,8 @@ void Request::send() {
 void Request::reset() {
 	http_parser = nullptr;
 	session = nullptr;
-	finalized = false;
+	current_middleware_index = 0;
+	middleware_stack = nullptr;
 
 	if (response)
 		delete response;
