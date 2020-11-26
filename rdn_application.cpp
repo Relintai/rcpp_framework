@@ -20,6 +20,7 @@ void RDNApplication::index(Request *request) {
 	FileCache::get_singleton()->set_cached_body("index", body);
 
 	request->response->setBody(body);
+	request->send();
 }
 
 void RDNApplication::session_middleware_func(Request *request) {

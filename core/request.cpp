@@ -1,9 +1,29 @@
 #include "request.h"
 
+void Request::send() {
+	if (http_parser->isKeepAlive()) {
+		response->addHeadValue("Connection", "Keep-Alive");
+
+		std::string result = response->getResult();
+
+		(*session)->send(result.c_str(), result.size());
+	} else {
+		response->addHeadValue("Connection", "Close");
+
+		std::string result = response->getResult();
+
+		const HttpSession::Ptr lsession = (*session);
+
+		(*session)->send(result.c_str(), result.size(), [lsession]() { lsession->postShutdown(); });
+	}
+
+	RequestPool::return_request(this);
+}
+
 void Request::reset() {
 	http_parser = nullptr;
 	session = nullptr;
-    finalized = false;
+	finalized = false;
 
 	if (response)
 		delete response;
@@ -12,7 +32,7 @@ void Request::reset() {
 }
 
 Request::Request() {
-    response = nullptr;
+	response = nullptr;
 
 	reset();
 }
@@ -43,11 +63,11 @@ Request *RequestPool::get_request() {
 }
 
 void RequestPool::return_request(Request *request) {
-    request->reset();
+	request->reset();
 
-    _mutex.lock();
+	_mutex.lock();
 	_requests.push_back(request);
-    _mutex.unlock();
+	_mutex.unlock();
 }
 
 RequestPool::RequestPool() {

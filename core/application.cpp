@@ -25,12 +25,14 @@ void Application::default_fallback_error_handler(int error_code, Request *reques
 	std::string body = "<html>Internal server error! :(</html>";
 	request->response->setBody(body);
 	request->finalized = true;
+	request->send();
 }
 
 void Application::default_404_error_handler(int error_code, Request *request) {
 	std::string body = "<html>404 :(</html>";
 	request->response->setBody(body);
 	request->finalized = true;
+	request->send();
 }
 
 void Application::handle_request(Request *request) {
@@ -72,8 +74,10 @@ void Application::handle_request(Request *request) {
 	for (uint32_t i = 0; i < middlewares.size(); ++i) {
 		middlewares[i](request);
 
-		if (request->finalized)
+		if (request->finalized) {
+			request->send();
 			return;
+		}
 	}
 
 	func(request);
@@ -116,6 +120,7 @@ void Application::send_file(const std::string &path, Request *request) {
 
 	request->response->setBody(body);
 	request->finalized = true;
+	request->send();
 }
 
 Application::Application() {

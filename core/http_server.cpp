@@ -10,8 +10,6 @@ void HTTPServer::http_callback_handler(Request *request) {
 }
 
 void HTTPServer::httpEnterCallbackDefault(const HTTPParser &httpParser, const HttpSession::Ptr &session) {
-	//(void)httpParser; needed?
-
 	Request *request = RequestPool::get_request();
 
     request->http_parser = &httpParser;
@@ -22,22 +20,6 @@ void HTTPServer::httpEnterCallbackDefault(const HTTPParser &httpParser, const Ht
 #endif
 
     http_callback_handler(request);
-
-	if (httpParser.isKeepAlive()) {
-		request->response->addHeadValue("Connection", "Keep-Alive");
-
-		std::string result = request->response->getResult();
-
-		session->send(result.c_str(), result.size());
-	} else {
-		request->response->addHeadValue("Connection", "Close");
-
-		std::string result = request->response->getResult();
-
-		session->send(result.c_str(), result.size(), [session]() { session->postShutdown(); });
-	}
-
-	RequestPool::return_request(request);
 }
 
 void HTTPServer::wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, WebSocketFormat::WebSocketFrameType opcode, const std::string &payload) {
@@ -66,6 +48,7 @@ void HTTPServer::initialize() {
 
 	int p_port = port;
 
+	//!
 	if (listenBuilder)
 		delete listenBuilder;
 
@@ -95,6 +78,7 @@ void HTTPServer::initialize() {
 void HTTPServer::main_loop() {
 	while (true) {
 		std::this_thread::sleep_for(std::chrono::seconds(1));
+
 		if (brynet::base::app_kbhit()) {
 			break;
 		}
@@ -104,6 +88,7 @@ void HTTPServer::main_loop() {
 HTTPServer::HTTPServer() {
 	port = 80;
 	threads = 4;
+	listenBuilder = nullptr;
 }
 
 HTTPServer::~HTTPServer() {
