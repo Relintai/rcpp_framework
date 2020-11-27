@@ -7,12 +7,17 @@
 
 #include "rdn_application.h"
 
+#include "database/mysql/mysql_connection.h"
+
 #define MAIN_CLASS RDNApplication
 
 int main(int argc, char **argv) {
     FileCache *file_cache = new FileCache(true);
     file_cache->wwwroot = "./www";
     file_cache->wwwroot_refresh_cache();
+
+    //MysqlConnection  *conn;
+    //conn = new MysqlConnection();
 
     Application *app = new MAIN_CLASS();
 
@@ -28,6 +33,7 @@ int main(int argc, char **argv) {
 	delete server;
     delete app;
     delete file_cache;
+   // delete conn;
 
 	return 0;
 }

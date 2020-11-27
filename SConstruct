@@ -71,6 +71,25 @@ env_base.msvc = False
 # avoid issues when building with different versions of python out of the same directory
 env_base.SConsignFile(".sconsign{0}.dblite".format(pickle.HIGHEST_PROTOCOL))
 
+database_list = []
+
+for x in sorted(glob.glob("database/*")):
+    if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
+        continue
+    tmppath = "./" + x
+
+    sys.path.insert(0, tmppath)
+    import detect
+
+    if detect.is_active() and detect.can_build():
+        x = x.replace("database/", "")  # rest of world
+        x = x.replace("database\\", "")  # win32
+        database_list += [x]
+
+    sys.path.remove(tmppath)
+    sys.modules.pop("detect")
+
+
 # Build options
 
 opts = Variables([], ARGUMENTS)
@@ -92,9 +111,33 @@ env_base.Prepend(CPPPATH=["#libs"])
 env_base.Prepend(LINKFLAGS=["-lpthread"])
 
 env_base.Append(CXX=["-o3"])
-#env_base.Append(CXX=["-g"])
+#env_base.Append(CXX=["-g2"])
 
 env = env_base.Clone()
+
+for d in database_list:
+    tmppath = "./database/" + d
+    sys.path.insert(0, tmppath)
+
+    import detect
+
+    env_db = env_base.Clone()
+
+    # Compilation DB requires SCons 3.1.1+.
+    from SCons import __version__ as scons_raw_version
+
+    scons_ver = env_db._get_major_minor_revision(scons_raw_version)
+
+    if scons_ver >= (4, 0, 0):
+        env_db.Tool("compilation_db")
+        env_db.Alias("compiledb", env.CompilationDatabase())
+
+    detect.configure(env_db)
+    detect.configure(env)
+
+    Export("env_db")
+
+    SConscript("database/" + d + "/SCsub")
 
 Export("env")
 
