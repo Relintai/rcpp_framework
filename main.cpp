@@ -1,23 +1,36 @@
 #include <iostream>
 #include <string>
 
-#include "core/http_server.h"
 #include "core/application.h"
 #include "core/file_cache.h"
+#include "core/http_server.h"
 
 #include "rdn_application.h"
 
 #define MAIN_CLASS RDNApplication
 
 int main(int argc, char **argv) {
-    FileCache *file_cache = new FileCache(true);
-    file_cache->wwwroot = "./www";
-    file_cache->wwwroot_refresh_cache();
 
-    Application *app = new MAIN_CLASS();
+#if MYSQL_PRESENT
+	printf("mysql present\n");
+#endif
 
-    app->setup_routes();
-    app->setup_middleware();
+#if PGSQL_PRESENT
+	printf("pgsql present\n");
+#endif
+
+#if SQLITE_PRESENT
+	printf("sqlite present\n");
+#endif
+
+	FileCache *file_cache = new FileCache(true);
+	file_cache->wwwroot = "./www";
+	file_cache->wwwroot_refresh_cache();
+
+	Application *app = new MAIN_CLASS();
+
+	app->setup_routes();
+	app->setup_middleware();
 
 	HTTPServer *server = new HTTPServer();
 
@@ -26,8 +39,8 @@ int main(int argc, char **argv) {
 	server->main_loop();
 
 	delete server;
-    delete app;
-    delete file_cache;
+	delete app;
+	delete file_cache;
 
 	return 0;
 }
