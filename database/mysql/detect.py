@@ -58,10 +58,13 @@ def configure(env):
 
     if not mariadb_error:
         env.ParseConfig("pkg-config mariadb --cflags --libs")
+        env.Append(CPPDEFINES=["MYSQL_PRESENT"])
         return
 
     if not mysql_error:
         env.ParseConfig("pkg-config mysql --cflags --libs")
+
+    env.Append(CPPDEFINES=["MYSQL_PRESENT"])
 
     # Link those statically for portability
     #if env["use_static_cpp"]:

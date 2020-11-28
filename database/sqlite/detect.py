@@ -48,6 +48,8 @@ def get_flags():
 def configure(env):
     env.ParseConfig("pkg-config sqlite3 --cflags --libs")
 
+    env.Append(CPPDEFINES=["SQLITE_PRESENT"])
+
     # Link those statically for portability
     #if env["use_static_cpp"]:
         #env.Append(LINKFLAGS=["-static-libgcc", "-static-libstdc++"])

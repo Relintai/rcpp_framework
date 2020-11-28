@@ -47,6 +47,8 @@ def get_flags():
 
 def configure(env):
     env.ParseConfig("pkg-config libpq --cflags --libs")
+    
+    env.Append(CPPDEFINES=["PGSQL_PRESENT"])
 
     # Link those statically for portability
     #if env["use_static_cpp"]:
