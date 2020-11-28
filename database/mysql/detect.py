@@ -22,10 +22,18 @@ def can_build():
         mysql_error = os.system("pkg-config mysql --modversion --silence-errors > /dev/null ")
 
         if mariadb_error and mysql_error:
-            #print("mysql and mariadb not found..")
+            print("mysql and mariadb not found..")
             return False
 
-        return True
+        if not mariadb_error:
+            print("mariadb found!")
+
+            return True
+            
+        if not mysql_error:
+            print("mysql found!")
+
+            return True
 
     #todo
     return False
@@ -50,6 +58,7 @@ def configure(env):
 
     if not mariadb_error:
         env.ParseConfig("pkg-config mariadb --cflags --libs")
+        return
 
     if not mysql_error:
         env.ParseConfig("pkg-config mysql --cflags --libs")
