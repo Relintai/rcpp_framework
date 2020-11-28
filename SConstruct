@@ -139,6 +139,9 @@ for d in database_list:
 
     SConscript("database/" + d + "/SCsub")
 
+    sys.path.remove(tmppath)
+    sys.modules.pop("detect")
+
 Export("env")
 
 SConscript("core/SCsub")
