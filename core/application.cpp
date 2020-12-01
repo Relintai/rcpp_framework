@@ -119,6 +119,10 @@ void Application::send_file(const std::string &path, Request *request) {
 	request->send();
 }
 
+void Application::migrate() {
+	
+}
+
 Application::Application() {
 	_instance = this;
 }

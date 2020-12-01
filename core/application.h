@@ -28,6 +28,8 @@ public:
 
 	static void default_routing_middleware(Object *instance, Request *request);
 
+	virtual void migrate();
+
 	Application();
 	virtual ~Application();
 

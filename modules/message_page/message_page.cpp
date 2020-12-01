@@ -5,13 +5,13 @@
 #include "core/query_builder.h"
 
 void MessagePage::index(Request *request) {
-    QueryBuilder *b = db->get_builder();
+	QueryBuilder *b = db->get_query_builder();
 
-    b->select("*")->from("tutorials_tbl")->finalize();
+	b->select("*")->from("tutorials_tbl")->finalize();
 
-    db->query(b->query_result);
+	db->query(b->query_result);
 
-    delete b;
+	delete b;
 
 /*
     db->query("show databases;");
@@ -19,23 +19,33 @@ void MessagePage::index(Request *request) {
     db->query("SELECT * FROM tutorials_tbl;");
 */
 
-    std::string r = "<html><body>";
+	std::string r = "<html><body>";
 
-    for (uint32_t i = 0; i < messages.size(); ++i) {
-        r += "<p>" + messages[i] + "</p><br>";
-    }
+	for (uint32_t i = 0; i < messages.size(); ++i) {
+		r += "<p>" + messages[i] + "</p><br>";
+	}
 
-    r += "</html></body>";
+	r += "</html></body>";
 
 	request->response->setBody(r);
 	request->send();
 }
 
-MessagePage::MessagePage() : Object() {
-    messages.push_back("T message 1");
-    messages.push_back("T message 2");
+void MessagePage::migrate() {
+	TableBuilder *t = db->get_table_builder();
+
+	t->create_table("message_page")->integer("id")->auto_increment()->primary_key()->next_row()->varchar("dd", 30)->finalize();
+
+	db->query(t->result);
+
+	delete t;
+}
+
+MessagePage::MessagePage() :
+		Object() {
+	messages.push_back("T message 1");
+	messages.push_back("T message 2");
 }
 
 MessagePage::~MessagePage() {
-
 }

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <string.h>
 
 #include "core/application.h"
 #include "core/file_cache.h"
@@ -14,6 +15,16 @@
 #define MAIN_CLASS RDNApplication
 
 int main(int argc, char **argv) {
+	bool migrate = false;
+
+	for (int i = 1; i < argc; ++i) {
+		const char *a = argv[i];
+
+		if (a[0] == 'm') {
+			migrate = true;
+		}
+	}
+
 	initialize_database_backends();
 
 	FileCache *file_cache = new FileCache(true);
@@ -36,7 +47,12 @@ int main(int argc, char **argv) {
 
 	server->port = 8080;
 	server->initialize();
-	server->main_loop();
+
+	if (!migrate) {
+		server->main_loop();
+	} else {
+		app->migrate();
+	}
 
 	delete server;
 	delete app;

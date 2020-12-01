@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "query_builder.h"
+#include "table_builder.h"
 
 enum QueryErrorCode {
 	OK,
@@ -37,7 +38,8 @@ public:
 	virtual void connect(const std::string &connection_str);
 	virtual void query(const std::string &query);
 
-	virtual QueryBuilder *get_builder();
+	virtual QueryBuilder *get_query_builder();
+	virtual TableBuilder *get_table_builder();
 
 	Database();
 	~Database();

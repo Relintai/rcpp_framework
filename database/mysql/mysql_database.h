@@ -18,7 +18,8 @@ public:
 	void connect(const std::string &connection_str);
 	void query(const std::string &query);
 
-	QueryBuilder *get_builder();
+	QueryBuilder *get_query_builder();
+	TableBuilder *get_table_builder();
 
 	static Database *_creation_func();
 	static void _register();

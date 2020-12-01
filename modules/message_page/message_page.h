@@ -15,6 +15,8 @@ class MessagePage : public Object {
 public:
     void index(Request *request);
 
+    void migrate();
+
     MessagePage();
     ~MessagePage();
 

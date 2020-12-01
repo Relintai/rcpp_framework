@@ -18,6 +18,8 @@ public:
     virtual void setup_routes();
     virtual void setup_middleware();
 
+    virtual void migrate();
+
     RDNApplication();
     ~RDNApplication();
 

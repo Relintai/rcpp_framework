@@ -2,6 +2,10 @@
 
 #include "database.h"
 
+void Object::migrate() {
+
+}
+
 Object::Object() {
     db = nullptr;
 }

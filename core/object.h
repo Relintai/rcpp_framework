@@ -71,6 +71,8 @@ public:
 	//setting object?
 	//FileCache? -> set it to the global singleton by default?
 
+	virtual void migrate();
+
 	Object();
 	virtual ~Object();
 };

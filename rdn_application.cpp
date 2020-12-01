@@ -55,6 +55,10 @@ void RDNApplication::setup_middleware() {
 	//middlewares.push_back(RDNApplication::session_middleware_func);
 }
 
+void RDNApplication::migrate() {
+	message_page->migrate();
+}
+
 RDNApplication::RDNApplication() :
 		Application() {
 
