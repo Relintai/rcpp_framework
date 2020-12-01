@@ -64,6 +64,11 @@ void MysqlTableBuilder::finalize() {
 	result += ");";
 }
 
+TableBuilder *MysqlTableBuilder::drop_table(const std::string &name) {
+	result += "DROP TABLE " + name + ";";
+
+	return this;
+}
 
 MysqlTableBuilder::MysqlTableBuilder() {
 }

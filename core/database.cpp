@@ -8,6 +8,7 @@ void Database::connect(const std::string &connection_str) {
 }
 
 QueryResult *Database::query(const std::string &query) {
+	return nullptr;
 }
 void Database::query_run(const std::string &query) {
 }

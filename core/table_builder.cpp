@@ -40,6 +40,10 @@ TableBuilder *TableBuilder::next_row() {
 	return this;
 }
 
+TableBuilder *TableBuilder::drop_table(const std::string &name) {
+
+}
+
 void TableBuilder::finalize() {
 }
 

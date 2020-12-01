@@ -16,6 +16,8 @@ public:
 	virtual TableBuilder *primary_key();
 	virtual TableBuilder *next_row();
 
+	virtual TableBuilder *drop_table(const std::string &name);
+
 	virtual void finalize();
 
 	TableBuilder();

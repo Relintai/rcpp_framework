@@ -18,6 +18,8 @@ public:
 	TableBuilder *primary_key();
 	TableBuilder *next_row();
 
+	TableBuilder *drop_table(const std::string &name);
+
 	void finalize();
 
 	MysqlTableBuilder();

@@ -43,6 +43,13 @@ void MessagePage::index(Request *request) {
 void MessagePage::migrate() {
 	TableBuilder *t = db->get_table_builder();
 
+	t->drop_table("message_page");
+	db->query_run(t->result);
+	
+	printf("%s\n", t->result.c_str());
+
+	t->result.clear();
+
 	t->create_table("message_page")->integer("id")->auto_increment()->primary_key()->next_row()->varchar("text", 30)->finalize();
 
 	printf("%s\n", t->result.c_str());
