@@ -31,6 +31,9 @@ public:
     //query interface (codeigniter 3 style)
     //virtual void where(""); etc
 
+	virtual void connect(const std::string &connection_str);
+	virtual void query(const std::string &query);
+
 	Database();
 	~Database();
 };

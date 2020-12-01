@@ -1,7 +1,9 @@
 #include "object.h"
 
-Object::Object() {
+#include "database.h"
 
+Object::Object() {
+    db = nullptr;
 }
 
 Object::~Object() {

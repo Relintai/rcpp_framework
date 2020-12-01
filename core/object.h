@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+class Database;
+
 //taken from GodotEngine's object.h
 #define RCPP_OBJECT(m_class, m_inherits)                                                                                                         \
 private:                                                                                                                                         \
@@ -46,6 +48,8 @@ private:
 
 class Object {
 public:
+	Database *db;
+
 	virtual std::string get_class() const { return "Object"; }
 	static void *get_class_ptr_static() {
 		static int ptr;

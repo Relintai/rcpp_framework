@@ -8,6 +8,8 @@
 
 #include "core/handler_instance.h"
 
+#include "core/database_manager.h"
+
 void RDNApplication::index(Object *instance, Request *request) {
 	std::string body;
 
@@ -68,6 +70,7 @@ RDNApplication::RDNApplication() :
 	themes.push_back(t);
 
 	message_page = new MessagePage();
+	message_page->db = DatabaseManager::get_singleton()->databases[0];
 }
 
 RDNApplication::~RDNApplication() {

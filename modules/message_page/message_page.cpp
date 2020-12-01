@@ -1,6 +1,11 @@
 #include "message_page.h"
 
+#include "core/database.h"
+
 void MessagePage::index(Request *request) {
+    db->query("show databases;");
+    db->query("show tables;");
+    db->query("SELECT * FROM tutorials_tbl;");
 
     std::string r = "<html><body>";
 
@@ -14,9 +19,9 @@ void MessagePage::index(Request *request) {
 	request->send();
 }
 
-MessagePage::MessagePage() {
-    messages.push_back("t message 1");
-    messages.push_back("t message 2");
+MessagePage::MessagePage() : Object() {
+    messages.push_back("T message 1");
+    messages.push_back("T message 2");
 }
 
 MessagePage::~MessagePage() {

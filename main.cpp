@@ -21,7 +21,10 @@ int main(int argc, char **argv) {
 	file_cache->wwwroot_refresh_cache();
 
 	DatabaseManager *dbm = new DatabaseManager();
-	//dbm->create_database("mysql");
+	uint32_t index = dbm->create_database("mysql");
+
+	Database *db = dbm->databases[0];
+	db->connect("");
 
 	Application *app = new MAIN_CLASS();
 

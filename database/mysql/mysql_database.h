@@ -13,16 +13,15 @@
 
 class MysqlDatabase : public Database {
 public:
+	void connect(const std::string &connection_str);
+	void query(const std::string &query);
+
 	static Database *_creation_func();
 	static void _register();
 	static void _unregister();
 
-	MysqlDatabase() : Database() {
-		mysql = new MYSQL();
-	}
-	~MysqlDatabase() {
-		delete mysql;
-	}
+	MysqlDatabase();
+	~MysqlDatabase();
 
 	MYSQL *mysql;
 };
