@@ -3,6 +3,8 @@
 
 #include "core/database.h"
 
+#include <memory>
+
 //Brynet has it aswell, and because of using namespace it is defined here aswell
 //later this will be fixed better
 #ifdef IS_NUM
@@ -15,6 +17,8 @@ class MysqlDatabase : public Database {
 public:
 	void connect(const std::string &connection_str);
 	void query(const std::string &query);
+
+	//virtual std::shared_ptr<QueryBuilder> get_builder();
 
 	static Database *_creation_func();
 	static void _register();

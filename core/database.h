@@ -2,6 +2,9 @@
 #define DATABASE_H
 
 #include <string>
+#include <memory>
+
+#include "query_builder.h"
 
 enum QueryErrorCode {
 	OK,
@@ -34,8 +37,13 @@ public:
 	virtual void connect(const std::string &connection_str);
 	virtual void query(const std::string &query);
 
+	//virtual std::shared_ptr<QueryBuilder> get_builder();
+
 	Database();
 	~Database();
+
+private:
+	//std::vector<QueryBuilder *> _builders;
 };
 
 #endif
