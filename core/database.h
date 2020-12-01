@@ -37,7 +37,7 @@ public:
 	virtual void connect(const std::string &connection_str);
 	virtual void query(const std::string &query);
 
-	//virtual std::shared_ptr<QueryBuilder> get_builder();
+	virtual QueryBuilder *get_builder();
 
 	Database();
 	~Database();

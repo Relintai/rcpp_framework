@@ -4,6 +4,7 @@
 
 #include "core/database_manager.h"
 
+#include "mysql_query_builder.h"
 
 void MysqlDatabase::connect(const std::string &connection_str) {
 	mysql = mysql_init(mysql);
@@ -52,16 +53,14 @@ void MysqlDatabase::query(const std::string &query) {
 	mysql_free_result(result);
 }
 
-/*
-std::shared_ptr<QueryBuilder> MysqlDatabase::get_builder() {
-	//return std::make_shared<MysqlQueryBuilder>();
-	return nullptr;
+
+QueryBuilder *MysqlDatabase::get_builder() {
+	return new MysqlQueryBuilder();
 }
-*/
+
 MysqlDatabase::MysqlDatabase() :
 		Database() {
 
-	//mysql = new MYSQL();
 	mysql = nullptr;
 }
 

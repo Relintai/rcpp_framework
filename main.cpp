@@ -11,8 +11,6 @@
 
 #include "database/db_init.h"
 
-//#include "database/mysql/mysql_query_builder.h"
-
 #define MAIN_CLASS RDNApplication
 
 int main(int argc, char **argv) {
@@ -28,10 +26,6 @@ int main(int argc, char **argv) {
 	Database *db = dbm->databases[0];
 	//db->_builder_creation_func = MysqlQueryBuilder::create;
 	db->connect("");
-
-	//MysqlQueryBuilder * b = new MysqlQueryBuilder();
-
-
 
 	Application *app = new MAIN_CLASS();
 

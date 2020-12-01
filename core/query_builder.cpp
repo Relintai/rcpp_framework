@@ -1,6 +1,5 @@
 #include "query_builder.h"
 
-/*
 QueryBuilder *QueryBuilder::select(const std::string &params) {
 	return this;
 }
@@ -20,7 +19,10 @@ QueryBuilder *QueryBuilder::limit(const int min, const int max) {
 QueryBuilder *QueryBuilder::insert(const std::string &table_name, const std::string &params_str) {
 	return this;
 }
-*/
+
+void QueryBuilder::finalize() {
+}
+
 QueryBuilder::QueryBuilder() {
 }
 
