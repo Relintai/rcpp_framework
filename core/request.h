@@ -7,6 +7,8 @@
 #include <brynet/net/http/HttpFormat.hpp>
 #include <brynet/net/http/HttpService.hpp>
 
+#include "handler_instance.h"
+
 using namespace brynet;
 using namespace brynet::net;
 using namespace brynet::net::http;
@@ -18,8 +20,8 @@ public:
 	HttpResponse *response;
 
     uint32_t current_middleware_index;
-    std::function<void(Request *)> handler_func;
-    std::vector<std::function<void(Request *)> > *middleware_stack;
+    HandlerInstance handler_instance;
+    std::vector<HandlerInstance> *middleware_stack;
 
     void next_stage();
 	void send();

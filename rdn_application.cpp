@@ -6,7 +6,9 @@
 
 #include "core/file_cache.h"
 
-void RDNApplication::index(Request *request) {
+#include "core/handler_instance.h"
+
+void RDNApplication::index(Object *instance, Request *request) {
 	std::string body;
 
 	if (FileCache::get_singleton()->get_cached_body("index", &body)) {
@@ -23,7 +25,7 @@ void RDNApplication::index(Request *request) {
 	request->send();
 }
 
-void RDNApplication::session_middleware_func(Request *request) {
+void RDNApplication::session_middleware_func(Object* instance, Request *request) {
 	std::cout << "test: session_middleware_func called" << std::endl;
 
 	//if fail
@@ -35,9 +37,9 @@ void RDNApplication::session_middleware_func(Request *request) {
 void RDNApplication::setup_routes() {
 	Application::setup_routes();
 
-	index_func = index;
+	index_func = HandlerInstance(index);
 
-	main_route_map["asd"] = index;
+	main_route_map["asd"] = HandlerInstance(index);
 }
 
 void RDNApplication::setup_middleware() {

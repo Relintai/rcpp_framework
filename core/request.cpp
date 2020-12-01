@@ -2,11 +2,13 @@
 
 void Request::next_stage() {
 	if (current_middleware_index == (*middleware_stack).size()) {
-		handler_func(this);
+		handler_instance.handler_func(handler_instance.instance, this);
 		return;
 	}
 
-	(*middleware_stack)[current_middleware_index++](this);
+	const HandlerInstance &hi = (*middleware_stack)[current_middleware_index++];
+
+	hi.handler_func(hi.instance, this);
 }
 
 void Request::send() {

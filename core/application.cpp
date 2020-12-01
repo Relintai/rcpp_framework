@@ -19,10 +19,10 @@ void Application::setup_routes() {
 }
 
 void Application::setup_middleware() {
-	middlewares.push_back(Application::default_routing_middleware);
+	middlewares.push_back(HandlerInstance(Application::default_routing_middleware));
 }
 
-void Application::default_routing_middleware(Request *request) {
+void Application::default_routing_middleware(Object *instance, Request *request) {
 	std::string path = request->http_parser->getPath();
 
 	if (FileCache::get_singleton()->wwwroot_has_file(path)) {
@@ -31,11 +31,13 @@ void Application::default_routing_middleware(Request *request) {
 		return;
 	}
 
-	std::function<void(Request *)> func;
+	HandlerInstance handler_data;
+
+	//std::function<void(Object *, Request *)> func;
 
 	if (path == "/") {
 		//quick shortcut
-		func = index_func;
+		handler_data = index_func;
 	} else {
 		std::string main_route = "";
 
@@ -48,16 +50,16 @@ void Application::default_routing_middleware(Request *request) {
 
 		main_route = path.substr(1, endpos - 1);
 
-		func = main_route_map[main_route];
+		handler_data = main_route_map[main_route];
 	}
 
-	if (!func) {
+	if (!handler_data.handler_func) {
 		send_error(404, request);
 
 		return;
 	}
 
-	request->handler_func = func;
+	request->handler_instance = handler_data;
 	request->next_stage();
 }
 
@@ -131,11 +133,12 @@ Application *Application::get_instance() {
 	return _instance;
 }
 
-std::function<void(Request *)> Application::index_func = nullptr;
-std::map<std::string, std::function<void(Request *)> > Application::main_route_map;
+HandlerInstance Application::index_func;
+std::map<std::string, HandlerInstance> Application::main_route_map;
+std::vector<HandlerInstance> Application::middlewares;
+
 std::map<int, std::function<void(int, Request *)> > Application::error_handler_map;
 std::function<void(int, Request *)> Application::default_error_handler_func = nullptr;
-std::vector<std::function<void(Request *)> > Application::middlewares;
 
 Application *Application::_instance = nullptr;
 
