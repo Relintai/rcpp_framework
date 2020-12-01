@@ -28,17 +28,14 @@
 int main(int argc, char **argv) {
 
 #if MYSQL_PRESENT
-	printf("mysql present\n");
 	MysqlDatabase::_register();
 #endif
 
 #if PGSQL_PRESENT
-	printf("pgsql present\n");
 	PGSQLDatabase::_register();
 #endif
 
 #if SQLITE_PRESENT
-	printf("sqlite present\n");
 	SQLite3Database::_register();
 #endif
 
