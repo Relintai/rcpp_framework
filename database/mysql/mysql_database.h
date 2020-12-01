@@ -2,7 +2,6 @@
 #define MYSQL_CONNECTION
 
 #include "core/database.h"
-#include "core/database_manager.h"
 
 //Brynet has it aswell, and because of using namespace it is defined here aswell
 //later this will be fixed better
@@ -14,17 +13,9 @@
 
 class MysqlDatabase : public Database {
 public:
-	static Database *_creation_func() {
-		return new MysqlDatabase();
-	}
-
-	static void _register() {
-		DatabaseManager::_register_db_creation_func("mysql", MysqlDatabase::_creation_func);
-	}
-
-	static void _unregister() {
-		DatabaseManager::_unregister_db_creation_func("mysql");
-	}
+	static Database *_creation_func();
+	static void _register();
+	static void _unregister();
 
 	MysqlDatabase() : Database() {
 		mysql = new MYSQL();

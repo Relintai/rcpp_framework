@@ -2,7 +2,6 @@
 #define SQLITE3_CONNECTION
 
 #include "core/database.h"
-#include "core/database_manager.h"
 
 //Brynet has it aswell, and because of using namespace it is defined here aswell
 //later this will be fixed better
@@ -16,17 +15,9 @@
 
 class SQLite3Database : public Database {
 public:
-	static Database *_creation_func() {
-		return new SQLite3Database();
-	}
-
-	static void _register() {
-		DatabaseManager::_register_db_creation_func("sqlite", SQLite3Database::_creation_func);
-	}
-
-	static void _unregister() {
-		DatabaseManager::_unregister_db_creation_func("sqlite");
-	}
+	static Database *_creation_func();
+	static void _register();
+	static void _unregister();
 
 	SQLite3Database() :
 			Database() {
