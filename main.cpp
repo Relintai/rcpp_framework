@@ -9,12 +9,16 @@
 
 #include "modules/message_page/message_page.h"
 
+#include "database/mysql/mysql_connection.h"
+
 #define MAIN_CLASS RDNApplication
 
 int main(int argc, char **argv) {
 
 #if MYSQL_PRESENT
 	printf("mysql present\n");
+
+	MysqlConnection::_register();
 #endif
 
 #if PGSQL_PRESENT
@@ -28,6 +32,9 @@ int main(int argc, char **argv) {
 	FileCache *file_cache = new FileCache(true);
 	file_cache->wwwroot = "./www";
 	file_cache->wwwroot_refresh_cache();
+
+	DatabaseManager *dbm = new DatabaseManager();
+	//dbm->create_database("mysql");
 
 	Application *app = new MAIN_CLASS();
 
@@ -46,8 +53,10 @@ int main(int argc, char **argv) {
 
 	delete server;
 	delete app;
+	delete dbm;
 	delete file_cache;
 	delete mp;
+	
 
 	return 0;
 }
