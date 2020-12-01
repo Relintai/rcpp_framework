@@ -7,8 +7,6 @@
 
 #include "rdn_application.h"
 
-#include "modules/message_page/message_page.h"
-
 #include "core/database_manager.h"
 
 #include "database/db_init.h"
@@ -32,10 +30,6 @@ int main(int argc, char **argv) {
 
 	HTTPServer *server = new HTTPServer();
 
-	MessagePage *mp = new MessagePage();
-
-	printf("%s\n", mp->get_class().c_str());
-
 	server->port = 8080;
 	server->initialize();
 	server->main_loop();
@@ -44,8 +38,6 @@ int main(int argc, char **argv) {
 	delete app;
 	delete dbm;
 	delete file_cache;
-	delete mp;
-	
 
 	return 0;
 }
