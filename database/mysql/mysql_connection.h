@@ -26,7 +26,7 @@ public:
 		DatabaseManager::_unregister_db_creation_func("mysql");
 	}
 
-	MysqlConnection() {
+	MysqlConnection() : Database() {
 		mysql = new MYSQL();
 	}
 	~MysqlConnection() {

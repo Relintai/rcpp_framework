@@ -1,6 +1,9 @@
 #ifndef SQLITE3_CONNECTION
 #define SQLITE3_CONNECTION
 
+#include "core/database.h"
+#include "core/database_manager.h"
+
 //Brynet has it aswell, and because of using namespace it is defined here aswell
 //later this will be fixed better
 //#ifdef IS_NUM
@@ -11,9 +14,22 @@
 
 #include <sqlite3.h>
 
-class SQLite3Connection {
+class SQLite3Connection : public Database {
 public:
-	SQLite3Connection() {
+	static Database *_creation_func() {
+		return new SQLite3Connection();
+	}
+
+	static void _register() {
+		DatabaseManager::_register_db_creation_func("sqlite", SQLite3Connection::_creation_func);
+	}
+
+	static void _unregister() {
+		DatabaseManager::_unregister_db_creation_func("sqlite");
+	}
+
+	SQLite3Connection() :
+			Database() {
 
 		int ret = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
 		if (ret != SQLITE_OK) {
