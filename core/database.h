@@ -10,6 +10,10 @@ enum QueryErrorCode {
 
 class QueryResult {
 public:
+	//rows
+	//next_row()
+	//get_int(int index)
+	//get_string(int column) etc
 };
 
 class Database {
