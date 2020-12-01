@@ -11,33 +11,12 @@
 
 #include "core/database_manager.h"
 
-#if MYSQL_PRESENT
-#include "database/mysql/mysql_database.h"
-#endif
-
-#if PGSQL_PRESENT
-#include "database/postgres/pgsql_database.h"
-#endif
-
-#if SQLITE_PRESENT
-#include "database/sqlite/sqlite3_database.h"
-#endif
+#include "database/db_init.h"
 
 #define MAIN_CLASS RDNApplication
 
 int main(int argc, char **argv) {
-
-#if MYSQL_PRESENT
-	MysqlDatabase::_register();
-#endif
-
-#if PGSQL_PRESENT
-	PGSQLDatabase::_register();
-#endif
-
-#if SQLITE_PRESENT
-	SQLite3Database::_register();
-#endif
+	initialize_database_backends();
 
 	FileCache *file_cache = new FileCache(true);
 	file_cache->wwwroot = "./www";
