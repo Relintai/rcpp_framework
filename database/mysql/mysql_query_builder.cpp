@@ -24,6 +24,8 @@ QueryBuilder *MysqlQueryBuilder::limit(const int min, const int max) {
 }
 
 QueryBuilder *MysqlQueryBuilder::insert(const std::string &table_name, const std::string &params_str) {
+	query_result += " INSERT INTO " + table_name + " VALUES( " + params_str + " );";
+
 	return this;
 }
 

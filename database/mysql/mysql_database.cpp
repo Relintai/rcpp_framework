@@ -6,6 +6,7 @@
 
 #include "mysql_query_builder.h"
 #include "mysql_table_builder.h"
+#include "mysql_query_result.h"
 
 void MysqlDatabase::connect(const std::string &connection_str) {
 	mysql = mysql_init(mysql);
@@ -24,11 +25,38 @@ void MysqlDatabase::connect(const std::string &connection_str) {
 	}
 }
 
-void MysqlDatabase::query(const std::string &query) {
+QueryResult *MysqlDatabase::query(const std::string &query) {
+	if (!mysql)
+		return nullptr;
+
+	//printf("%s\n", query.c_str());
+
+	int error = mysql_real_query(mysql, query.c_str(), query.length());
+
+	if (error) {
+		const char *merr = mysql_error(mysql);
+
+		printf("MySQL error: %s\n", merr);
+
+		return nullptr;
+	}
+
+	MYSQL_RES *result = mysql_use_result(mysql);
+
+	MysqlQueryResult *res = new MysqlQueryResult();
+
+	res->result = result;
+	//res->next_row();
+
+	return res;
+}
+
+void MysqlDatabase::query_run(const std::string &query) {
 	if (!mysql)
 		return;
 
-	printf("%s\n", query.c_str());
+	//printf("%s\n", query.c_str());
+	
 	int error = mysql_real_query(mysql, query.c_str(), query.length());
 
 	if (error) {
@@ -38,6 +66,10 @@ void MysqlDatabase::query(const std::string &query) {
 		return;
 	}
 
+	//printf("query OK\n");
+	//printf("----------------\n");
+
+/*
 	printf("----------------\n");
 
 	MYSQL_RES *result = mysql_use_result(mysql);
@@ -52,8 +84,8 @@ void MysqlDatabase::query(const std::string &query) {
 	printf("----------------\n");
 
 	mysql_free_result(result);
+	*/
 }
-
 
 QueryBuilder *MysqlDatabase::get_query_builder() {
 	return new MysqlQueryBuilder();

@@ -134,6 +134,7 @@ env_base.Append(CXX=["-o3"])
 
 env = env_base.Clone()
 Export("env")
+SConscript("core/SCsub")
 
 for d in database_list:
     tmppath = "./database/" + d
@@ -188,8 +189,6 @@ for m in module_list:
 
     sys.path.remove(tmppath)
     sys.modules.pop("detect")
-
-SConscript("core/SCsub")
 
 env.prg_sources = [ "rdn_application.cpp" ]
 libapp = env.add_library("application", env.prg_sources)

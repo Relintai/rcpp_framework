@@ -1,9 +1,15 @@
 #include "database.h"
 
+#include "query_builder.h"
+#include "table_builder.h"
+#include "query_result.h"
+
 void Database::connect(const std::string &connection_str) {
 }
 
-void Database::query(const std::string &query) {
+QueryResult *Database::query(const std::string &query) {
+}
+void Database::query_run(const std::string &query) {
 }
 
 QueryBuilder *Database::get_query_builder() {

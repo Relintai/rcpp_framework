@@ -51,6 +51,7 @@ int main(int argc, char **argv) {
 	if (!migrate) {
 		server->main_loop();
 	} else {
+		printf("Running migrations.\n");
 		app->migrate();
 	}
 

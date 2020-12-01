@@ -16,7 +16,8 @@
 class MysqlDatabase : public Database {
 public:
 	void connect(const std::string &connection_str);
-	void query(const std::string &query);
+	QueryResult *query(const std::string &query);
+	void query_run(const std::string &query);
 
 	QueryBuilder *get_query_builder();
 	TableBuilder *get_table_builder();

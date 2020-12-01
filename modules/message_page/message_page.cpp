@@ -3,26 +3,35 @@
 #include "core/database.h"
 
 #include "core/query_builder.h"
+#include "core/table_builder.h"
+#include "core/query_result.h"
 
 void MessagePage::index(Request *request) {
 	QueryBuilder *b = db->get_query_builder();
 
-	b->select("*")->from("tutorials_tbl")->finalize();
+	b->select("text")->from("message_page")->finalize();
 
-	db->query(b->query_result);
+	QueryResult *res = db->query(b->query_result);
 
+	std::vector<std::string> msgs;
+
+	if (res) {
+		while (res->next_row()) {
+			msgs.push_back(res->get_cell(0));
+		}
+	}
+
+	delete res;
 	delete b;
-
-/*
-    db->query("show databases;");
-    db->query("show tables;");
-    db->query("SELECT * FROM tutorials_tbl;");
-*/
 
 	std::string r = "<html><body>";
 
 	for (uint32_t i = 0; i < messages.size(); ++i) {
 		r += "<p>" + messages[i] + "</p><br>";
+	}
+
+	for (uint32_t i = 0; i < msgs.size(); ++i) {
+		r += "<p>" + msgs[i] + "</p><br>";
 	}
 
 	r += "</html></body>";
@@ -34,9 +43,26 @@ void MessagePage::index(Request *request) {
 void MessagePage::migrate() {
 	TableBuilder *t = db->get_table_builder();
 
-	t->create_table("message_page")->integer("id")->auto_increment()->primary_key()->next_row()->varchar("dd", 30)->finalize();
+	t->create_table("message_page")->integer("id")->auto_increment()->primary_key()->next_row()->varchar("text", 30)->finalize();
+
+	printf("%s\n", t->result.c_str());
 
 	db->query(t->result);
+
+	QueryBuilder *b = db->get_query_builder();
+
+	b->insert("message_page", "default, 'aaewdwd'");
+
+	printf("%s\n", b->query_result.c_str());
+
+	db->query_run(b->query_result);
+
+	b->query_result.clear();
+	b->insert("message_page", "default, 'qqqqq'");
+
+	printf("%s\n", b->query_result.c_str());
+
+	db->query_run(b->query_result);
 
 	delete t;
 }

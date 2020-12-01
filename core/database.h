@@ -4,21 +4,14 @@
 #include <string>
 #include <memory>
 
-#include "query_builder.h"
-#include "table_builder.h"
-
 enum QueryErrorCode {
 	OK,
 	ERROR
 };
 
-class QueryResult {
-public:
-	//rows
-	//next_row()
-	//get_int(int index)
-	//get_string(int column) etc
-};
+class QueryBuilder;
+class TableBuilder;
+class QueryResult;
 
 class Database {
 public:
@@ -36,7 +29,8 @@ public:
     //virtual void where(""); etc
 
 	virtual void connect(const std::string &connection_str);
-	virtual void query(const std::string &query);
+	virtual QueryResult *query(const std::string &query);
+	virtual void query_run(const std::string &query);
 
 	virtual QueryBuilder *get_query_builder();
 	virtual TableBuilder *get_table_builder();
