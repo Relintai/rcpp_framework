@@ -12,15 +12,15 @@
 #include "core/database_manager.h"
 
 #if MYSQL_PRESENT
-#include "database/mysql/mysql_connection.h"
+#include "database/mysql/mysql_database.h"
 #endif
 
 #if PGSQL_PRESENT
-#include "database/postgres/pgsql_connection.h"
+#include "database/postgres/pgsql_database.h"
 #endif
 
 #if SQLITE_PRESENT
-#include "database/sqlite/sqlite3_connection.h"
+#include "database/sqlite/sqlite3_database.h"
 #endif
 
 #define MAIN_CLASS RDNApplication
@@ -29,17 +29,17 @@ int main(int argc, char **argv) {
 
 #if MYSQL_PRESENT
 	printf("mysql present\n");
-	MysqlConnection::_register();
+	MysqlDatabase::_register();
 #endif
 
 #if PGSQL_PRESENT
 	printf("pgsql present\n");
-	PGSQLConnection::_register();
+	PGSQLDatabase::_register();
 #endif
 
 #if SQLITE_PRESENT
 	printf("sqlite present\n");
-	SQLite3Connection::_register();
+	SQLite3Database::_register();
 #endif
 
 	FileCache *file_cache = new FileCache(true);

@@ -12,24 +12,24 @@
 
 #include <mysql.h>
 
-class MysqlConnection : public Database {
+class MysqlDatabase : public Database {
 public:
 	static Database *_creation_func() {
-		return new MysqlConnection();
+		return new MysqlDatabase();
 	}
 
 	static void _register() {
-		DatabaseManager::_register_db_creation_func("mysql", MysqlConnection::_creation_func);
+		DatabaseManager::_register_db_creation_func("mysql", MysqlDatabase::_creation_func);
 	}
 
 	static void _unregister() {
 		DatabaseManager::_unregister_db_creation_func("mysql");
 	}
 
-	MysqlConnection() : Database() {
+	MysqlDatabase() : Database() {
 		mysql = new MYSQL();
 	}
-	~MysqlConnection() {
+	~MysqlDatabase() {
 		delete mysql;
 	}
 

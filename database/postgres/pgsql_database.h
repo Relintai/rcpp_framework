@@ -12,24 +12,24 @@
 
 #include <libpq-fe.h>
 
-class PGSQLConnection : public Database {
+class PGSQLDatabase : public Database {
 public:
 	static Database *_creation_func() {
-		return new PGSQLConnection();
+		return new PGSQLDatabase();
 	}
 
 	static void _register() {
-		DatabaseManager::_register_db_creation_func("pgsql", PGSQLConnection::_creation_func);
+		DatabaseManager::_register_db_creation_func("pgsql", PGSQLDatabase::_creation_func);
 	}
 
 	static void _unregister() {
 		DatabaseManager::_unregister_db_creation_func("pgsql");
 	}
 
-	PGSQLConnection() : Database() {
+	PGSQLDatabase() : Database() {
 		conn = PQconnectStart("");
 	}
-	~PGSQLConnection() {
+	~PGSQLDatabase() {
 		PQfinish(conn);
 	}
 

@@ -14,21 +14,21 @@
 
 #include <sqlite3.h>
 
-class SQLite3Connection : public Database {
+class SQLite3Database : public Database {
 public:
 	static Database *_creation_func() {
-		return new SQLite3Connection();
+		return new SQLite3Database();
 	}
 
 	static void _register() {
-		DatabaseManager::_register_db_creation_func("sqlite", SQLite3Connection::_creation_func);
+		DatabaseManager::_register_db_creation_func("sqlite", SQLite3Database::_creation_func);
 	}
 
 	static void _unregister() {
 		DatabaseManager::_unregister_db_creation_func("sqlite");
 	}
 
-	SQLite3Connection() :
+	SQLite3Database() :
 			Database() {
 
 		int ret = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
@@ -39,7 +39,7 @@ public:
 		ret = sqlite3_open("", &conn);
 	}
 
-	~SQLite3Connection() {
+	~SQLite3Database() {
 		sqlite3_close(conn);
 	}
 
