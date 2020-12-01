@@ -11,6 +11,8 @@ void MessagePage::index(Request *request) {
 
     db->query(b->query_result);
 
+    delete b;
+
 /*
     db->query("show databases;");
     db->query("show tables;");
