@@ -89,6 +89,25 @@ for x in sorted(glob.glob("database/*")):
     sys.path.remove(tmppath)
     sys.modules.pop("detect")
 
+module_list = []
+
+for x in sorted(glob.glob("modules/*")):
+    if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
+        continue
+
+    tmppath = "./" + x
+
+    sys.path.insert(0, tmppath)
+    import detect
+
+    if detect.is_active() and detect.can_build():
+        x = x.replace("modules/", "")  # rest of world
+        x = x.replace("modules\\", "")  # win32
+        module_list += [x]
+
+    sys.path.remove(tmppath)
+    sys.modules.pop("detect")
+
 
 # Build options
 
@@ -138,6 +157,33 @@ for d in database_list:
     Export("env_db")
 
     SConscript("database/" + d + "/SCsub")
+
+    sys.path.remove(tmppath)
+    sys.modules.pop("detect")
+
+for m in module_list:
+    tmppath = "./modules/" + m
+    sys.path.insert(0, tmppath)
+
+    import detect
+
+    env_mod = env_base.Clone()
+
+    # Compilation DB requires SCons 3.1.1+.
+    from SCons import __version__ as scons_raw_version
+
+    scons_ver = env_mod._get_major_minor_revision(scons_raw_version)
+
+    if scons_ver >= (4, 0, 0):
+        env_mod.Tool("compilation_db")
+        env_mod.Alias("compiledb", env.CompilationDatabase())
+
+    detect.configure(env_mod)
+    detect.configure(env)
+
+    Export("env_mod")
+
+    SConscript("modules/" + m + "/SCsub")
 
     sys.path.remove(tmppath)
     sys.modules.pop("detect")

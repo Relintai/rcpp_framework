@@ -7,6 +7,8 @@
 
 #include "rdn_application.h"
 
+#include "modules/message_page/message_page.h"
+
 #define MAIN_CLASS RDNApplication
 
 int main(int argc, char **argv) {
@@ -34,6 +36,10 @@ int main(int argc, char **argv) {
 
 	HTTPServer *server = new HTTPServer();
 
+	MessagePage *mp = new MessagePage();
+
+	printf("%s\n", mp->get_class().c_str());
+
 	server->port = 8080;
 	server->initialize();
 	server->main_loop();
@@ -41,6 +47,7 @@ int main(int argc, char **argv) {
 	delete server;
 	delete app;
 	delete file_cache;
+	delete mp;
 
 	return 0;
 }
