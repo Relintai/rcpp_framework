@@ -5,6 +5,8 @@
 #include <map>
 #include <string>
 
+class Form;
+
 #define THEME_CORE(_class_name)                               \
 public:                                                       \
 	std::string theme_name;                                   \
@@ -56,6 +58,8 @@ public:
 	virtual void add_footer(Request *request, std::string *output);
 
 	virtual void render_index_page(Request *request, std::string *output);
+
+	virtual void render_form(Request *request, Form* form, std::string *output);
 
 	SiteTheme();
 	~SiteTheme();

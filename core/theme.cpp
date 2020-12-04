@@ -1,5 +1,7 @@
 #include "theme.h"
 
+#include "form.h"
+
 Theme::Theme() {
 }
 
@@ -28,6 +30,10 @@ void SiteTheme::render_index_page(Request *request, std::string *output) {
     output->append("<p>Test HTML Body</p>");
 
     add_footer(request, output);
+}
+
+void SiteTheme::render_form(Request *request, Form* form, std::string *output) {
+
 }
 
 SiteTheme::SiteTheme() {
