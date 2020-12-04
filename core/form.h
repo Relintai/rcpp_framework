@@ -15,10 +15,7 @@ public:
 
     virtual std::string render();
 
-    //checks if form field validates
-    virtual bool validate_check(Request *request);
-    //checks if form field validates, and returns human readable errorsm if any
-    virtual std::vector<std::string> validate_report(Request *request);
+    virtual bool validate(Request *request, std::vector<std::string> *errors);
 
     FormField();
     virtual ~FormField();
