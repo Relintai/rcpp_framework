@@ -1,0 +1,13 @@
+{
+    "databases": {
+        "0" : {
+            "type": "mysql",
+            "host": "127.0.0.1",
+            "user": "",
+            "password": "",
+            "dbname": "testappdb",
+            "port": "3306"
+        }
+    }
+}
+  

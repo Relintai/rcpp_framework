@@ -23,6 +23,7 @@ public:
 	static void default_fallback_error_handler(int error_code, Request *request);
 	static void default_404_error_handler(int error_code, Request *request);
 
+	virtual void load_settings();
 	virtual void setup_routes();
 	virtual void setup_middleware();
 

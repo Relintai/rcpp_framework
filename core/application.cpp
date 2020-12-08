@@ -12,6 +12,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void Application::load_settings() {
+}
+
 void Application::setup_routes() {
 	default_error_handler_func = Application::default_fallback_error_handler;
 
