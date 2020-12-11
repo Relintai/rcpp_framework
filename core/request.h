@@ -23,6 +23,12 @@ public:
     HandlerInstance handler_instance;
     std::vector<HandlerInstance> *middleware_stack;
 
+	std::string head;
+	std::string body;
+	std::string compiled_body;
+
+	void compile_body();
+	void compile_and_send_body();
     void next_stage();
 	void send();
 	void reset();

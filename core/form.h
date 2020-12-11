@@ -7,6 +7,8 @@
 
 class Request;
 
+//This might be converted to a form validator
+
 class FormField {
 public:
     std::string name;

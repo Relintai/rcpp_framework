@@ -19,11 +19,11 @@ void RDNApplication::index(Object *instance, Request *request) {
 		return;
 	}
 
-	SiteTheme::default_theme->render_index_page(request, &body);
+	request->body.append("<p>Test HTML Body</p>");
+	request->compile_body();
 
-	FileCache::get_singleton()->set_cached_body("index", body);
+	FileCache::get_singleton()->set_cached_body("index", request->compiled_body);
 
-	request->response->setBody(body);
 	request->send();
 }
 
@@ -62,27 +62,10 @@ void RDNApplication::migrate() {
 RDNApplication::RDNApplication() :
 		Application() {
 
-	SiteTheme *t = new TestSiteTheme();
-	t->register_theme();
-	t->set_theme_as_default();
-
-	themes.push_back(t);
-
-	t = new TestSiteTheme2();
-	t->register_theme();
-
-	themes.push_back(t);
-
 	message_page = new MessagePage();
 	message_page->db = DatabaseManager::get_singleton()->databases[0];
 }
 
 RDNApplication::~RDNApplication() {
-	for (uint32_t i = 0; i < themes.size(); ++i) {
-		delete themes[i];
-	}
-
-	themes.clear();
-
 	delete message_page;
 }

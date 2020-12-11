@@ -2,7 +2,6 @@
 #define RDN_APPLICATION_H
 
 #include "core/application.h"
-#include "core/theme.h"
 #include "core/object.h"
 
 #include "modules/message_page/message_page.h"
@@ -22,8 +21,6 @@ public:
 
     RDNApplication();
     ~RDNApplication();
-
-    std::vector<Theme *> themes;
 
     MessagePage *message_page;
 };

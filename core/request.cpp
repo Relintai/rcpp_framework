@@ -1,5 +1,32 @@
 #include "request.h"
 
+void Request::compile_body() {
+	compiled_body.reserve(body.size() + head.size() + 13 + 14 + 15);
+
+	//13
+	compiled_body += "<html>"
+		 "<head>";
+
+	compiled_body += head;
+
+	//14
+	compiled_body += "</head>"
+		 "<body>";
+
+	compiled_body += body;
+
+	//15
+	compiled_body += "</body>"
+		 "</html>";
+
+	response->setBody(compiled_body);
+}
+
+void Request::compile_and_send_body() {
+	compile_body();
+	send();
+}
+
 void Request::next_stage() {
 	if (current_middleware_index == (*middleware_stack).size()) {
 		handler_instance.handler_func(handler_instance.instance, this);
@@ -36,6 +63,10 @@ void Request::reset() {
 	session = nullptr;
 	current_middleware_index = 0;
 	middleware_stack = nullptr;
+
+	head.clear();
+	body.clear();
+	compiled_body.clear();
 
 	if (response)
 		delete response;
