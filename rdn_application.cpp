@@ -10,6 +10,8 @@
 
 #include "core/database_manager.h"
 
+#include "core/html_builder.h"
+
 void RDNApplication::index(Object *instance, Request *request) {
 	std::string body;
 
@@ -19,7 +21,32 @@ void RDNApplication::index(Object *instance, Request *request) {
 		return;
 	}
 
-	request->body.append("<p>Test HTML Body</p>");
+	HTMLBuilder b;
+
+	b.h1();
+	b.w("Testh1");
+	b.ch1();
+
+	b.h2()->cls("tcls")->id("tid");
+	b.w("Testh2");
+	b.ch2();
+
+	b.br();
+
+	b.p();
+	b.w("Test HTML Body HTMLBuilder");
+	b.cp();
+
+	b.form()->method("post")->href("/");
+
+	//->str("/") is a temp hack
+	b.input()->type("text")->str("/");
+	b.input()->type("submit")->str("/");
+	b.cform();
+
+	request->body = b.result;
+
+	//request->body.append("<p>Test HTML Body</p>");
 	request->compile_body();
 
 	FileCache::get_singleton()->set_cached_body("index", request->compiled_body);
