@@ -1,5 +1,7 @@
 # rcpp_cms
 
+If you want to try it clone https://github.com/Relintai/rcpp_cms_project instead, it will set this up for you.
+
 This is an experimental project, to implement a html framework in c++, because I'm dissatisfied with 
 every single framework that I've seen or used so far.
 
