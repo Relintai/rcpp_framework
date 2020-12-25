@@ -36,8 +36,9 @@ void MessagePage::index(Request *request) {
 
 	r += "</html></body>";
 
-	request->response->setBody(r);
-	request->send();
+	request->body += r;
+
+	request->compile_and_send_body();
 }
 
 void MessagePage::migrate() {
