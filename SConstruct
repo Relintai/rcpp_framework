@@ -115,6 +115,9 @@ opts = Variables([], ARGUMENTS)
 
 opts.Add(EnumVariable("target", "Compilation target", "debug", ("debug", "release_debug", "release")))
 
+opts.Add("folders", "App folders to compile", "")
+opts.Add("main_file", "The main file", "")
+
 # Compilation environment setup
 opts.Add("CXX", "C++ compiler")
 opts.Add("CC", "C compiler")
@@ -123,6 +126,8 @@ opts.Add("CCFLAGS", "Custom flags for both the C and C++ compilers")
 opts.Add("CFLAGS", "Custom flags for the C compiler")
 opts.Add("CXXFLAGS", "Custom flags for the C++ compiler")
 opts.Add("LINKFLAGS", "Custom flags for the linker")
+
+opts.Update(env_base)
 
 # add default include paths
 env_base.Prepend(CPPPATH=["#", "libs"])
@@ -190,9 +195,28 @@ for m in module_list:
     sys.path.remove(tmppath)
     sys.modules.pop("detect")
 
-env.prg_sources = [ "rdn_application.cpp" ]
+
+folders = env_base["folders"].split(";")
+
+files = []
+
+for fol in folders:
+    folt = fol.strip()
+
+    if folt == "":
+        continue
+
+    ff = os.listdir(folt)
+
+    for f in ff:
+        if f.endswith("cpp"):
+            files.append(f)
+
+env.prg_sources = files
 libapp = env.add_library("application", env.prg_sources)
 env.Prepend(LIBS=[libapp])
 
-prog = env.add_program("#bin/server", ["main.cpp"])
+
+mfp = os.path.abspath(env_base["main_file"])
+prog = env.add_program("#bin/server", [ mfp ])
 
