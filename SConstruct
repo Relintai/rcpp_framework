@@ -210,7 +210,8 @@ for fol in folders:
 
     for f in ff:
         if f.endswith("cpp"):
-            files.append(f)
+            files.append(os.path.abspath(fol + "/" + f))
+            #files.append(fol + "/" + f)
 
 env.prg_sources = files
 libapp = env.add_library("application", env.prg_sources)
