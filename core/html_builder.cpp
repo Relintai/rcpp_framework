@@ -46,6 +46,18 @@ HTMLTag *HTMLTag::type(const std::string &val) {
 	return this;
 }
 
+HTMLTag *HTMLTag::rel(const std::string &val) {
+	attrib("rel", val);
+
+	return this;
+}
+
+HTMLTag *HTMLTag::rel_stylesheet() {
+	attrib("rel", "stylesheet");
+
+	return this;
+}
+
 HTMLTag *HTMLTag::attrib(const std::string &attr, const std::string &val) {
 	result += " " + attr + "=\"" + val + "\"";
 

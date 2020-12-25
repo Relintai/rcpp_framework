@@ -22,6 +22,8 @@ public:
 	HTMLTag *name(const std::string &val);
 	HTMLTag *method(const std::string &val);
 	HTMLTag *type(const std::string &val);
+	HTMLTag *rel(const std::string &val);
+	HTMLTag *rel_stylesheet();
 
 	HTMLTag *attrib(const std::string &attr, const std::string &val);
 
