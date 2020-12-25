@@ -14,6 +14,7 @@ void Request::compile_body() {
 		 "<body>";
 
 	compiled_body += body;
+	compiled_body += footer;
 
 	//15
 	compiled_body += "</body>"
@@ -66,6 +67,7 @@ void Request::reset() {
 
 	head.clear();
 	body.clear();
+	footer.clear();
 	compiled_body.clear();
 
 	if (response)

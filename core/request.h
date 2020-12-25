@@ -25,6 +25,7 @@ public:
 
 	std::string head;
 	std::string body;
+	std::string footer;
 	std::string compiled_body;
 
 	void compile_body();
