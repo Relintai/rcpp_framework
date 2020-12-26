@@ -15,10 +15,13 @@ class ListPage : public Object {
 public:
     void index(Request *request);
 
+    void load();
+    
     ListPage();
     ~ListPage();
 
-    std::vector<std::string> messages;
+    std::vector<std::string> list_entries;
+    std::string folder;
 };
 
 #endif
