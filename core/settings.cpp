@@ -7,7 +7,7 @@ void Settings::parse_file(const std::string &path) {
 	FILE *f = fopen(path.c_str(), "r");
 
 	if (!f) {
-		printf("Settings::parse_file: Error opening file!");
+		printf("Settings::parse_file: Error opening file!\n");
 		return;
 	}
 
