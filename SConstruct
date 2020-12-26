@@ -138,7 +138,11 @@ env_base.Append(CXX=["-o3"])
 #env_base.Append(CXX=["-g2"])
 
 env = env_base.Clone()
+
 Export("env")
+
+SConscript("libs/bbcpp/SCsub")
+
 SConscript("core/SCsub")
 
 for d in database_list:
