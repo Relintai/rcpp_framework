@@ -73,7 +73,7 @@ void ListPage::load() {
 		fclose(f);
 
 		Utils::newline_to_br(&fd);
-		Utils::bbcode_evaluate_simple(&fd);
+		Utils::markdown_to_html(&fd);
 
 		list_entries.push_back(fd);
 

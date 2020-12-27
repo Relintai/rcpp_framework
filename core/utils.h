@@ -5,10 +5,13 @@
 
 #include <bbcpp/BBDocument.h>
 
+
 class Utils {
     public:
     static void newline_to_br(std::string *str);
     //htmlspecialchars
+
+    static void markdown_to_html(std::string *str);
 
     static void bbcode_evaluate_simple(std::string *str);
     static bbcpp::BBDocumentPtr bbcode(const std::string &str);
