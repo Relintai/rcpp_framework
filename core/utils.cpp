@@ -47,7 +47,7 @@ void Utils::eval_node(std::string *str, bbcpp::BBNodePtr node) {
 		case bbcpp::BBNode::NodeType::ELEMENT: {
 			bbcpp::BBElementPtr e = node->downCast<bbcpp::BBElementPtr>();
 
-            eval_element(str, e);
+			eval_element(str, e);
 
 			break;
 		}
@@ -68,60 +68,172 @@ void Utils::eval_element(std::string *str, bbcpp::BBElementPtr element) {
 	switch (element->getElementType()) {
 		case bbcpp::BBElement::ElementType::SIMPLE: {
 
-            if (element->getNodeName() == "b") {
-                (*str) += "<span style=\"font-weight: bold;\">";
-                return;
-            }
+			if (element->getNodeName() == "b") {
+				(*str) += "<span style=\"font-weight: bold;\">";
+				return;
+			}
 
-            if (element->getNodeName() == "i") {
-                (*str) += "<span style=\"font-style: italic;\">";
-                return;
-            }
+			if (element->getNodeName() == "i") {
+				(*str) += "<span style=\"font-style: italic;\">";
+				return;
+			}
 
-            if (element->getNodeName() == "u") {
-                (*str) += "<span style=\"text-decoration: underline;\">";
-                return;
-            }
+			if (element->getNodeName() == "u") {
+				(*str) += "<span style=\"text-decoration: underline;\">";
+				return;
+			}
 
-            if (element->getNodeName() == "s") {
-                (*str) += "<span style=\"text-decoration: line-through;\">";
-                return;
-            }
+			if (element->getNodeName() == "s") {
+				(*str) += "<span style=\"text-decoration: line-through;\">";
+				return;
+			}
 
+			if (element->getNodeName() == "center") {
+				(*str) += "<span style=\"text-decoration: line-through;\">";
+				return;
+			}
+
+			if (element->getNodeName() == "center") {
+				(*str) += "<span style=\"text-align: center;\">";
+				return;
+			}
+
+			if (element->getNodeName() == "left") {
+				(*str) += "<span style=\"text-align: left;\">";
+				return;
+			}
+
+			if (element->getNodeName() == "right") {
+				(*str) += "<span style=\"text-align: right;\">";
+				return;
+			}
+
+			if (element->getNodeName() == "quote") {
+				(*str) += "<blockquote>";
+				return;
+			}
+
+			if (element->getNodeName() == "spoiler") {
+				(*str) += "<details>";
+				return;
+			}
+
+			if (element->getNodeName() == "summary") {
+				(*str) += "<summary>";
+				return;
+			}
 
 			break;
 		}
 		case bbcpp::BBElement::ElementType::VALUE: {
-            //NYI
+			//nyi
 			break;
 		}
 		case bbcpp::BBElement::ElementType::PARAMETER: {
+			if (element->getNodeName() == "style") {
+
+				bbcpp::ParameterMap m = element->getParameters();
+
+				(*str) += "<span style=\"";
+
+				std::string p = m["size"];
+
+				if (p != "") {
+					(*str) += "font-size: " + p + ";";
+				}
+
+				p = m["color"];
+
+				if (p != "") {
+					(*str) += "color: " + p + ";";
+				}
+
+				(*str) += "\">";
+
+				return;
+			}
+
+			if (element->getNodeName() == "quote") {
+
+				bbcpp::ParameterMap m = element->getParameters();
+
+				(*str) += "<span style=\"";
+
+				std::string p = m["name"];
+
+				if (p != "") {
+					(*str) += "<blockquote cite=\"" + p + "\">";
+				} else {
+					(*str) += "<blockquote>";
+				}
+
+				return;
+			}
+
 			break;
-        }
+		}
 		case bbcpp::BBElement::ElementType::CLOSING: {
-            if (element->getNodeName() == "b") {
-                (*str) += "</span>";
-                return;
-            }
+			if (element->getNodeName() == "b") {
+				(*str) += "</span>";
+				return;
+			}
 
-            if (element->getNodeName() == "i") {
-                (*str) += "</span>";
-                return;
-            }
+			if (element->getNodeName() == "i") {
+				(*str) += "</span>";
+				return;
+			}
 
-            if (element->getNodeName() == "u") {
-                (*str) += "</span>";
-                return;
-            }
+			if (element->getNodeName() == "u") {
+				(*str) += "</span>";
+				return;
+			}
 
-            if (element->getNodeName() == "s") {
-                (*str) += "</span>";
-                return;
-            }
+			if (element->getNodeName() == "s") {
+				(*str) += "</span>";
+				return;
+			}
 
+			if (element->getNodeName() == "size") {
+				(*str) += "</span>";
+				return;
+			}
 
+			if (element->getNodeName() == "color") {
+				(*str) += "</span>";
+				return;
+			}
+
+			if (element->getNodeName() == "center") {
+				(*str) += "</span>";
+				return;
+			}
+
+			if (element->getNodeName() == "left") {
+				(*str) += "</span>";
+				return;
+			}
+
+			if (element->getNodeName() == "right") {
+				(*str) += "</span>";
+				return;
+			}
+
+			if (element->getNodeName() == "quote") {
+				(*str) += "</blockquote>";
+				return;
+			}
+
+			if (element->getNodeName() == "spoiler") {
+				(*str) += "</details>";
+				return;
+			}
+
+			if (element->getNodeName() == "summary") {
+				(*str) += "</summary>";
+				return;
+			}
 
 			break;
-        }
+		}
 	}
 }
