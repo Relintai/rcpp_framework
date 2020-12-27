@@ -58,6 +58,18 @@ HTMLTag *HTMLTag::rel_stylesheet() {
 	return this;
 }
 
+HTMLTag *HTMLTag::charset(const std::string &val) {
+	attrib("charset", val);
+
+	return this;
+}
+
+HTMLTag *HTMLTag::charset_utf_8() {
+	attrib("charset", "utf-8");
+
+	return this;
+}
+
 HTMLTag *HTMLTag::attrib(const std::string &attr, const std::string &val) {
 	result += " " + attr + "=\"" + val + "\"";
 
