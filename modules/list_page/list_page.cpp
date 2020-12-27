@@ -72,7 +72,6 @@ void ListPage::load() {
 		fread(&fd[0], 1, fsize, f);
 		fclose(f);
 
-		Utils::newline_to_br(&fd);
 		Utils::markdown_to_html(&fd);
 
 		list_entries.push_back(fd);
