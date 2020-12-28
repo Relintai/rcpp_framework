@@ -19,9 +19,9 @@ public:
 	const HttpSession::Ptr *session;
 	HttpResponse *response;
 
-    uint32_t current_middleware_index;
-    HandlerInstance handler_instance;
-    std::vector<HandlerInstance> *middleware_stack;
+	uint32_t current_middleware_index;
+	HandlerInstance handler_instance;
+	std::vector<HandlerInstance> *middleware_stack;
 
 	std::string head;
 	std::string body;
@@ -30,12 +30,27 @@ public:
 
 	void compile_body();
 	void compile_and_send_body();
-    void next_stage();
+	void next_stage();
 	void send();
 	void reset();
 
+	void setup_url_stack();
+	std::string get_path() const;
+	const std::string &get_path_full() const;
+	const std::string &get_path_segment(const uint32_t i) const;
+	const std::string &get_current_path_segment() const;
+	uint32_t get_path_segment_count() const;
+	uint32_t get_current_segment_index() const;
+	uint32_t get_remaining_segment_count() const;
+	void pop_path();
+	void push_path();
+
 	Request();
 	~Request();
+
+protected:
+	std::vector<std::string> _path_stack;
+	uint32_t _path_stack_pointer;
 };
 
 class RequestPool {

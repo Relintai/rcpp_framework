@@ -15,6 +15,8 @@ void HTTPServer::httpEnterCallbackDefault(const HTTPParser &httpParser, const Ht
     request->http_parser = &httpParser;
     request->session = &session;
 
+	request->setup_url_stack();
+
 #if LOG_VERBOSE
 	std::cout << "method:" << http_method_str(static_cast<http_method>(httpParser.method())) << std::endl;
 #endif

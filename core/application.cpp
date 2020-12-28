@@ -38,22 +38,16 @@ void Application::default_routing_middleware(Object *instance, Request *request)
 
 	//std::function<void(Object *, Request *)> func;
 
-	if (path == "/") {
+	//if (path == "/") {
+	if (request->get_path_segment_count() == 0) {
 		//quick shortcut
 		handler_data = index_func;
 	} else {
-		std::string main_route = "";
-
-		uint32_t endpos = 1;
-		for (; endpos < path.size(); ++endpos) {
-			if (path[endpos] == '/') {
-				break;
-			}
-		}
-
-		main_route = path.substr(1, endpos - 1);
+		const std::string main_route = request->get_current_path_segment();
 
 		handler_data = main_route_map[main_route];
+
+		request->push_path();
 	}
 
 	if (!handler_data.handler_func) {
@@ -123,7 +117,6 @@ void Application::send_file(const std::string &path, Request *request) {
 }
 
 void Application::migrate() {
-	
 }
 
 Application::Application() {
