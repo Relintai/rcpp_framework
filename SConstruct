@@ -135,13 +135,12 @@ env_base.Prepend(CPPPATH=["#libs"])
 env_base.Prepend(LINKFLAGS=["-lpthread"])
 
 env_base.Append(CXX=["-o3"])
+#env_base.Append(CXX=["-g"])
 #env_base.Append(CXX=["-g2"])
 
 env = env_base.Clone()
 
 Export("env")
-
-SConscript("libs/bbcpp/SCsub")
 
 SConscript("core/SCsub")
 
