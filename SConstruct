@@ -159,7 +159,10 @@ for d in database_list:
 
     if scons_ver >= (4, 0, 0):
         env_db.Tool("compilation_db")
-        env_db.Alias("compiledb", env.CompilationDatabase())
+        try:
+            env_db.Alias("compiledb", env.CompilationDatabase())
+        except AttributeError:
+            print("scons: Compilation db not supported.");
 
     detect.configure(env_db)
     detect.configure(env)
@@ -186,7 +189,10 @@ for m in module_list:
 
     if scons_ver >= (4, 0, 0):
         env_mod.Tool("compilation_db")
-        env_mod.Alias("compiledb", env.CompilationDatabase())
+        try:
+            env_mod.Alias("compiledb", env.CompilationDatabase())
+        except AttributeError:
+            print("scons: Compilation db not supported.");
 
     detect.configure(env_mod)
     detect.configure(env)
