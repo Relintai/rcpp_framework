@@ -75,8 +75,6 @@ void ListPage::load() {
 		Utils::markdown_to_html(&fd);
 
 		list_entries.push_back(fd);
-
-		//printf("ListPage: Loaded %s!\n", files[i].c_str());
 	}
 }
 
