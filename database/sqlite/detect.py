@@ -56,3 +56,7 @@ def configure(env):
     # Link those statically for portability
     #if env["use_static_cpp"]:
         #env.Append(LINKFLAGS=["-static-libgcc", "-static-libstdc++"])
+
+    env.Append(LINKFLAGS=["-ldl"])
+
+        
