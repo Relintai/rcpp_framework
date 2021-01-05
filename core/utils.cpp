@@ -13,7 +13,7 @@ void Utils::newline_to_br(std::string *str) {
 
 void Utils::markdown_to_html(std::string *str) {
 	std::shared_ptr<maddy::ParserConfig> config = std::make_shared<maddy::ParserConfig>();
-	config->isEmphasizedParserEnabled = true;
+	config->isEmphasizedParserEnabled = false;
 	config->isHTMLWrappedInParagraph = true;
 
 	std::shared_ptr<maddy::Parser> parser = std::make_shared<maddy::Parser>(config);
