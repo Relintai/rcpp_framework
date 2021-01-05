@@ -138,7 +138,20 @@ env_base.Append(CXX=["-o3"])
 #env_base.Append(CXX=["-g"])
 #env_base.Append(CXX=["-g2"])
 
+# Compilation DB requires SCons 3.1.1+.
+from SCons import __version__ as scons_raw_version
+
+scons_ver = env_base._get_major_minor_revision(scons_raw_version)
+
+if scons_ver >= (4, 0, 0):
+    env_base.Tool("compilation_db")
+
+
 env = env_base.Clone()
+
+if scons_ver >= (4, 0, 0):
+    env.Tool("compilation_db")
+    env.Alias("compiledb", env_base.CompilationDatabase())
 
 Export("env")
 
@@ -152,17 +165,9 @@ for d in database_list:
 
     env_db = env_base.Clone()
 
-    # Compilation DB requires SCons 3.1.1+.
-    from SCons import __version__ as scons_raw_version
-
-    scons_ver = env_db._get_major_minor_revision(scons_raw_version)
-
     if scons_ver >= (4, 0, 0):
         env_db.Tool("compilation_db")
-        try:
-            env_db.Alias("compiledb", env.CompilationDatabase())
-        except AttributeError:
-            print("scons: Compilation db not supported.");
+        env_db.Alias("compiledb", env_base.CompilationDatabase())
 
     detect.configure(env_db)
     detect.configure(env)
@@ -189,10 +194,7 @@ for m in module_list:
 
     if scons_ver >= (4, 0, 0):
         env_mod.Tool("compilation_db")
-        try:
-            env_mod.Alias("compiledb", env.CompilationDatabase())
-        except AttributeError:
-            print("scons: Compilation db not supported.");
+        env_mod.Alias("compiledb", env_base.CompilationDatabase())
 
     detect.configure(env_mod)
     detect.configure(env)

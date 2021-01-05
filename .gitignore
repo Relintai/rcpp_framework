@@ -6,3 +6,5 @@ bin/**
 *.pyc
 
 settings.json
+
+compile_commands.json
