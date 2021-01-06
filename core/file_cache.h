@@ -18,7 +18,7 @@ public:
     void wwwroot_deregister_file(const std::string &file_path);
     bool wwwroot_has_file(const std::string &file_path);
     void wwwroot_refresh_cache();
-    void wwwroot_evaluate_dir(const char *path);
+    void wwwroot_evaluate_dir(const char *path, const bool should_exist = true);
 
     bool get_cached_body(const std::string &path, std::string *body);
     void set_cached_body(const std::string &path, const std::string &body);

@@ -24,6 +24,39 @@ void PagedArticle::index(Request *request) {
 
 	const std::string rp = request->get_current_path_segment();
 
+	if (request->get_remaining_segment_count() > 1 && rp == "files") {
+		std::string file_name = "/" + request->get_path_segment(request->get_current_segment_index() + 1);
+
+		if (s->file_cache->wwwroot_has_file(file_name)) {
+			std::string fp = s->file_cache->wwwroot + file_name;
+
+			FILE *f = fopen(fp.c_str(), "rb");
+
+			if (!f) {
+				printf("Error: Registered file doesn't exists anymore! %s\n", fp.c_str());
+
+				Application::get_instance()->send_error(404, request);
+				return;
+			}
+
+			fseek(f, 0, SEEK_END);
+			long fsize = ftell(f);
+			fseek(f, 0, SEEK_SET); /* same as rewind(f); */
+
+			std::string body;
+			body.resize(fsize);
+
+			fread(&body[0], 1, fsize, f);
+			fclose(f);
+
+			//TODO set mimetype?
+
+			request->response->setBody(body);
+			request->send();
+			return;
+		}
+	}
+
 	if (rp == "") {
 		//summary page
 		request->body += s->summary_page;
@@ -78,7 +111,9 @@ void PagedArticle::load() {
 			std::string np = file.path;
 			std::string fn = file.name;
 
-			Article *a = load_folder(np, base_path + "/" + fn);
+			std::string ff = base_path + "/" + fn;
+
+			Article *a = load_folder(np, ff);
 
 			if (a) {
 
@@ -87,6 +122,9 @@ void PagedArticle::load() {
 				a->url = p;
 				pages[p] = a;
 			}
+
+			a->file_cache->wwwroot = ("." + ff + "/files");
+			a->file_cache->wwwroot_refresh_cache();
 		}
 
 		tinydir_next(&dir);

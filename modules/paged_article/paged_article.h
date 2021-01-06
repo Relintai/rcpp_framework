@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "core/file_cache.h"
 #include "core/object.h"
 
 #include "core/request.h"
@@ -13,14 +14,19 @@ struct Article {
 	std::string url;
 	std::string summary_page;
 	std::map<std::string, std::string *> pages;
+	FileCache *file_cache;
 
-	Article() {}
+	Article() {
+		file_cache = new FileCache();
+	}
 	~Article() {
 		for (std::map<std::string, std::string *>::iterator it = pages.begin(); it != pages.end(); ++it) {
 			delete ((*it).second);
 		}
 
 		pages.clear();
+		
+		delete file_cache;
 	}
 };
 
@@ -40,7 +46,7 @@ public:
 
 	std::map<std::string, Article *> pages;
 	std::string folder;
-    std::string base_path;
+	std::string base_path;
 };
 
 #endif

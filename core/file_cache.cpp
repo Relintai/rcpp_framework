@@ -22,10 +22,13 @@ void FileCache::wwwroot_refresh_cache() {
 	wwwroot_evaluate_dir(wwwroot.c_str());
 }
 
-void FileCache::wwwroot_evaluate_dir(const char *path) {
+void FileCache::wwwroot_evaluate_dir(const char *path, const bool should_exist) {
 	tinydir_dir dir;
 	if (tinydir_open(&dir, path) == -1) {
-		printf("Error opening wwwroot!\n");
+
+		if (should_exist)
+			printf("Error opening wwwroot!\n");
+			
 		return;
 	}
 
