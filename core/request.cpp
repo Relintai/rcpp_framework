@@ -59,6 +59,28 @@ void Request::send() {
 	RequestPool::return_request(this);
 }
 
+void Request::send_file(const std::string &p_file_path) {
+	file_path = p_file_path;
+
+	FILE *f = fopen(file_path.c_str(), "rb");
+
+	if (!f) {
+		printf("send_file: Error: Download: file doesn't exists! %s\n", file_path.c_str());
+
+		return;
+	}
+
+	fseek(f, 0, SEEK_END);
+	file_size = ftell(f);
+	fclose(f);
+
+	response->addHeadValue("Connection", "Close");
+	std::string result = "HTTP/1.1 200 OK\r\nConnection: Close\r\n\r\n";
+	const HttpSession::Ptr lsession = (*session);
+
+	(*session)->send(result.c_str(), result.size(), [this]() { this->_progress_send_file(); });
+}
+
 void Request::reset() {
 	http_parser = nullptr;
 	session = nullptr;
@@ -66,6 +88,8 @@ void Request::reset() {
 	middleware_stack = nullptr;
 	_path_stack.clear();
 	_path_stack_pointer = 0;
+	file_size = 0;
+	current_file_progress = 0;
 
 	head.clear();
 	body.clear();
@@ -151,12 +175,56 @@ void Request::push_path() {
 
 Request::Request() {
 	response = nullptr;
+	//file_chunk_size = 1 << 20; //1MB
+	file_chunk_size = 1 << 23;
 
 	reset();
 }
 
 Request::~Request() {
 	delete response;
+}
+
+void Request::_progress_send_file() {
+	const HttpSession::Ptr lsession = (*session);
+
+	if (current_file_progress >= file_size) {
+		lsession->postShutdown();
+
+		RequestPool::return_request(this);
+
+		return;
+	}
+
+	FILE *f = fopen(file_path.c_str(), "rb");
+
+	if (!f) {
+		printf("Error: Download: In progress file doesn't exists anymore! %s\n", file_path.c_str());
+
+		lsession->postShutdown();
+
+		RequestPool::return_request(this);
+
+		return;
+	}
+
+	fseek(f, current_file_progress, SEEK_SET);
+
+	long nfp = current_file_progress + file_chunk_size;
+
+	long csize = file_chunk_size;
+	if (nfp >= file_size) {
+		csize = (file_size - current_file_progress);
+	}
+
+	body.resize(csize);
+
+	fread(&body[0], 1, csize, f);
+	fclose(f);
+
+	current_file_progress = nfp;
+
+	(*session)->send(body.c_str(), body.size(), [this]() { this->_progress_send_file(); });
 }
 
 Request *RequestPool::get_request() {

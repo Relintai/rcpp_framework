@@ -28,10 +28,17 @@ public:
 	std::string footer;
 	std::string compiled_body;
 
+	std::string file_path;
+	long file_size;
+	long current_file_progress;
+	long file_chunk_size;
+	bool file_next;
+
 	void compile_body();
 	void compile_and_send_body();
 	void next_stage();
 	void send();
+	void send_file(const std::string &p_file_path);
 	void reset();
 
 	void setup_url_stack();
@@ -49,6 +56,8 @@ public:
 	~Request();
 
 protected:
+	void _progress_send_file();
+
 	std::vector<std::string> _path_stack;
 	uint32_t _path_stack_pointer;
 };

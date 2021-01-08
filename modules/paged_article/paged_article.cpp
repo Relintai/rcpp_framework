@@ -30,29 +30,7 @@ void PagedArticle::index(Request *request) {
 		if (s->file_cache->wwwroot_has_file(file_name)) {
 			std::string fp = s->file_cache->wwwroot + file_name;
 
-			FILE *f = fopen(fp.c_str(), "rb");
-
-			if (!f) {
-				printf("Error: Registered file doesn't exists anymore! %s\n", fp.c_str());
-
-				Application::get_instance()->send_error(404, request);
-				return;
-			}
-
-			fseek(f, 0, SEEK_END);
-			long fsize = ftell(f);
-			fseek(f, 0, SEEK_SET); /* same as rewind(f); */
-
-			std::string body;
-			body.resize(fsize);
-
-			fread(&body[0], 1, fsize, f);
-			fclose(f);
-
-			//TODO set mimetype?
-
-			request->response->setBody(body);
-			request->send();
+			request->send_file(fp);
 			return;
 		}
 	}
