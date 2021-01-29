@@ -29,11 +29,11 @@ void HTTPServer::wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, Web
 	std::cout << "frame enter of type:" << int(opcode) << std::endl;
 	std::cout << "payload is:" << payload << std::endl;
 	// echo frame
-	auto frame = std::make_shared<std::string>();
+	//auto frame = std::make_shared<std::string>();
 
-	WebSocketFormat::wsFrameBuild(payload.c_str(), payload.size(), *frame, WebSocketFormat::WebSocketFrameType::TEXT_FRAME, true, false);
+	//WebSocketFormat::wsFrameBuild(payload.c_str(), payload.size(), *frame, WebSocketFormat::WebSocketFrameType::TEXT_FRAME, true, false);
 
-	httpSession->send(frame);
+	//httpSession->send(frame);
 }
 
 void HTTPServer::configure() {
