@@ -130,8 +130,12 @@ opts.Add("LINKFLAGS", "Custom flags for the linker")
 opts.Update(env_base)
 
 # add default include paths
-env_base.Prepend(CPPPATH=["#", "libs"])
+env_base.Prepend(CPPPATH=["#"])
 env_base.Prepend(CPPPATH=["#libs"])
+env_base.Prepend(CPPPATH=["#libs/trantor"])
+env_base.Prepend(CPPPATH=["#libs/trantor/trantor/net"])
+env_base.Prepend(CPPPATH=["#libs/trantor/trantor/net/inner"])
+env_base.Prepend(CPPPATH=["#libs/trantor/trantor/utils"])
 env_base.Prepend(LINKFLAGS=["-lpthread"])
 
 env_base.Append(CXX=["-o3"])
@@ -155,6 +159,7 @@ if scons_ver >= (4, 0, 0):
 
 Export("env")
 
+SConscript("libs/trantor/SCsub")
 SConscript("core/SCsub")
 
 for d in database_list:
