@@ -36,14 +36,14 @@ void HTTPServer::wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, Web
 	//httpSession->send(frame);
 }
 
-void HTTPServer::configure() {
+void HTTPServer::configure_old() {
 }
 
-void HTTPServer::initialize() {
+void HTTPServer::initialize_old() {
 	if (service)
 		return;
 
-	configure();
+	configure_old();
 
 	service = TcpService::Create();
 	service->startWorkerThread(threads);
@@ -77,7 +77,7 @@ void HTTPServer::initialize() {
 	listenBuilder->asyncRun();
 }
 
-void HTTPServer::main_loop() {
+void HTTPServer::main_loop_old() {
 	while (true) {
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 

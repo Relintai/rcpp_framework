@@ -30,10 +30,15 @@ public:
 	static void httpEnterCallbackDefault(const HTTPParser &httpParser, const HttpSession::Ptr &session);
 	static void wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, WebSocketFormat::WebSocketFrameType opcode, const std::string &payload);
 
-    virtual void configure();
-	virtual void initialize();
+    virtual void configure_old();
+	virtual void initialize_old();
 
-	void main_loop();
+	void main_loop_old();
+
+	//virtual void configure();
+	//virtual void initialize();
+
+	//void main_loop();
 
     HTTPServer();
     virtual ~HTTPServer();
