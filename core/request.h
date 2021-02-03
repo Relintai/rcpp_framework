@@ -9,15 +9,15 @@
 
 #include "handler_instance.h"
 
-using namespace brynet;
-using namespace brynet::net;
-using namespace brynet::net::http;
+//using namespace brynet;
+//using namespace brynet::net;
+//using namespace brynet::net::http;
 
 class Request {
 public:
-	const HTTPParser *http_parser;
-	const HttpSession::Ptr *session;
-	HttpResponse *response;
+	const brynet::net::http::HTTPParser *http_parser;
+	const brynet::net::http::HttpSession::Ptr *session;
+	brynet::net::http::HttpResponse *response;
 
 	uint32_t current_middleware_index;
 	HandlerInstance handler_instance;

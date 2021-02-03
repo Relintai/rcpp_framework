@@ -138,6 +138,7 @@ env_base.Prepend(CPPPATH=["#libs/trantor/trantor/net/inner"])
 env_base.Prepend(CPPPATH=["#libs/trantor/trantor/utils"])
 env_base.Prepend(LINKFLAGS=["-lpthread"])
 
+env_base.Append(CXX=["-std=c++17"])
 env_base.Append(CXX=["-o3"])
 #env_base.Append(CXX=["-g"])
 #env_base.Append(CXX=["-g2"])

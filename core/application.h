@@ -7,9 +7,16 @@
 #include <string>
 #include <vector>
 
+#include <trantor/net/TcpServer.h>
+#include <trantor/net/callbacks.h>
+#include <trantor/utils/NonCopyable.h>
+
 #include "handler_instance.h"
 
+#include "core/http_server_callbacks.h"
+
 class Request;
+class ListenerManager;
 
 class Application {
 public:
@@ -31,10 +38,21 @@ public:
 
 	virtual void migrate();
 
+	virtual void run();
+
+	trantor::EventLoop *get_loop() const;
+
+	void onAsyncRequest(const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback);
+	void onNewWebsockRequest(const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback,
+			const WebSocketConnectionPtr &wsConnPtr);
+	void onConnection(const trantor::TcpConnectionPtr &conn);
+
 	Application();
 	virtual ~Application();
 
 	static Application *get_instance();
+
+	std::unique_ptr<ListenerManager> listenerManagerPtr_;
 
 public:
 	static HandlerInstance index_func;
@@ -44,8 +62,15 @@ public:
 	static std::map<int, std::function<void(int, Request *)> > error_handler_map;
 	static std::function<void(int, Request *)> default_error_handler_func;
 
+	size_t idleConnectionTimeout_;
+	size_t threadNum_;
+	std::string sslCertPath_;
+	std::string sslKeyPath_;
+	std::vector<std::function<HttpResponsePtr(const HttpRequestPtr &)> > syncAdvices_;
+
 private:
 	static Application *_instance;
+	bool _running;
 };
 
 #endif
