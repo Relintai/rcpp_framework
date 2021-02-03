@@ -81,7 +81,7 @@ std::vector<trantor::EventLoop *> ListenerManager::createListeners(
 		for (auto const &listener : listeners_) {
 			auto const &ip = listener.ip_;
 			bool isIpv6 = ip.find(':') == std::string::npos ? false : true;
-			std::shared_ptr<HttpServer> serverPtr;
+			std::shared_ptr<HTTPServer> serverPtr;
 			if (i == 0) {
 				DrogonFileLocker lock;
 				// Check whether the port is in use.
@@ -90,13 +90,13 @@ std::vector<trantor::EventLoop *> ListenerManager::createListeners(
 						"drogonPortTest",
 						true,
 						false);
-				serverPtr = std::make_shared<HttpServer>(
+				serverPtr = std::make_shared<HTTPServer>(
 						loopThreadPtr->getLoop(),
 						InetAddress(ip, listener.port_, isIpv6),
 						"drogon",
 						syncAdvices);
 			} else {
-				serverPtr = std::make_shared<HttpServer>(
+				serverPtr = std::make_shared<HTTPServer>(
 						loopThreadPtr->getLoop(),
 						InetAddress(ip, listener.port_, isIpv6),
 						"drogon",
@@ -140,7 +140,7 @@ std::vector<trantor::EventLoop *> ListenerManager::createListeners(
 		LOG_TRACE << "thread num=" << threadNum;
 		auto ip = listener.ip_;
 		bool isIpv6 = ip.find(':') == std::string::npos ? false : true;
-		auto serverPtr = std::make_shared<HttpServer>(
+		auto serverPtr = std::make_shared<HTTPServer>(
 				loopThreadPtr->getLoop(),
 				InetAddress(ip, listener.port_, isIpv6),
 				"drogon",

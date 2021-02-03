@@ -50,7 +50,7 @@ class TcpServer : NonCopyable
               const std::string &name,
               bool reUseAddr = true,
               bool reUsePort = true);
-    TcpServer() {}
+    TcpServer();
     ~TcpServer();
 
     /**

@@ -103,7 +103,7 @@ protected:
 	HttpAsyncCallback httpAsyncCallback_;
 	WebSocketNewAsyncCallback newWebsocketCallback_;
 	trantor::ConnectionCallback connectionCallback_;
-	const std::vector<std::function<HttpResponsePtr(const HttpRequestPtr &)> > &syncAdvices_;
+	std::vector<std::function<HttpResponsePtr(const HttpRequestPtr &)> > syncAdvices_;
 	bool _running{ false };
 };
 

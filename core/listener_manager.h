@@ -23,7 +23,7 @@
 
 #include "core/http_server_callbacks.h"
 
-class HttpServer;
+class HTTPServer;
 
 namespace drogon {
 class ListenerManager : public trantor::NonCopyable {
@@ -74,7 +74,7 @@ private:
 	};
 
 	std::vector<ListenerInfo> listeners_;
-	std::vector<std::shared_ptr<HttpServer> > servers_;
+	std::vector<std::shared_ptr<HTTPServer> > servers_;
 	std::vector<std::shared_ptr<trantor::EventLoopThread> > listeningloopThreads_;
 	std::shared_ptr<trantor::EventLoopThreadPool> ioLoopThreadPoolPtr_;
 };

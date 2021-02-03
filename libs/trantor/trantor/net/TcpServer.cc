@@ -39,6 +39,8 @@ TcpServer::TcpServer(EventLoop *loop,
         std::bind(&TcpServer::newConnection, this, _1, _2));
 }
 
+TcpServer::TcpServer() {}
+
 TcpServer::~TcpServer()
 {
     // loop_->assertInLoopThread();
