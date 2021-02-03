@@ -12,7 +12,7 @@
  *
  */
 
-#include <core/Utilities.h>
+#include <core/utilities.h>
 #include <trantor/utils/Logger.h>
 
 #ifdef OpenSSL_FOUND

@@ -16,12 +16,14 @@
 #include <trantor/net/callbacks.h>
 #include <trantor/utils/NonCopyable.h>
 
-#include "core/http_server_callbacks.h"
 #include "core/http_request_parser.h"
+#include "core/http_server_callbacks.h"
 
-using namespace brynet;
-using namespace brynet::net;
-using namespace brynet::net::http;
+//using namespace brynet;
+//using namespace brynet::net;
+//using namespace brynet::net::http;
+
+using namespace drogon;
 
 class Request;
 
@@ -29,13 +31,13 @@ class HTTPServer {
 public:
 	int port;
 	int threads;
-	std::shared_ptr<TcpService> service;
-	wrapper::HttpListenerBuilder *listenBuilder;
+	std::shared_ptr<brynet::net::TcpService> service;
+	brynet::net::wrapper::HttpListenerBuilder *listenBuilder;
 
 	static void http_callback_handler(Request *response);
 
-	static void httpEnterCallbackDefault(const HTTPParser &httpParser, const HttpSession::Ptr &session);
-	static void wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, WebSocketFormat::WebSocketFrameType opcode, const std::string &payload);
+	static void httpEnterCallbackDefault(const brynet::net::http::HTTPParser &httpParser, const brynet::net::http::HttpSession::Ptr &session);
+	static void wsEnterCallbackDefault(const brynet::net::http::HttpSession::Ptr &httpSession, brynet::net::http::WebSocketFormat::WebSocketFrameType opcode, const std::string &payload);
 
 	virtual void configure_old();
 	virtual void initialize_old();
@@ -47,7 +49,7 @@ public:
 
 	void main_loop();
 
-	trantor::EventLoop *getLoop() const {
+	trantor::EventLoop *get_loop() const {
 		return server_.getLoop();
 	}
 
@@ -102,6 +104,7 @@ protected:
 	WebSocketNewAsyncCallback newWebsocketCallback_;
 	trantor::ConnectionCallback connectionCallback_;
 	const std::vector<std::function<HttpResponsePtr(const HttpRequestPtr &)> > &syncAdvices_;
+	bool _running{ false };
 };
 
 #endif

@@ -37,7 +37,7 @@ int HttpFileImpl::save(const std::string &path) const
     }
     else
     {
-        auto &uploadPath = HttpAppFrameworkImpl::instance().getUploadPath();
+        auto &uploadPath = Application::get_instance()->getUploadPath();
         if (uploadPath[uploadPath.length() - 1] == '/')
             tmpPath = uploadPath + path;
         else
@@ -59,7 +59,7 @@ int HttpFileImpl::save(const std::string &path) const
 }
 int HttpFileImpl::save() const
 {
-    return save(HttpAppFrameworkImpl::instance().getUploadPath());
+    return save(Application::get_instance()->getUploadPath());
 }
 int HttpFileImpl::saveAs(const std::string &filename) const
 {
@@ -74,7 +74,7 @@ int HttpFileImpl::saveAs(const std::string &filename) const
     }
     else
     {
-        auto &uploadPath = HttpAppFrameworkImpl::instance().getUploadPath();
+        auto &uploadPath = Application::get_instance()->getUploadPath();
         if (uploadPath[uploadPath.length() - 1] == '/')
             pathAndFileName = uploadPath + filename;
         else

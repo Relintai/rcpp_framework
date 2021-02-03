@@ -15,7 +15,7 @@ void HTTPServer::http_callback_handler(Request *request) {
 	Application::handle_request(request);
 }
 
-void HTTPServer::httpEnterCallbackDefault(const HTTPParser &httpParser, const HttpSession::Ptr &session) {
+void HTTPServer::httpEnterCallbackDefault(const brynet::net::http::HTTPParser &httpParser, const brynet::net::http::HttpSession::Ptr &session) {
 	Request *request = RequestPool::get_request();
 
 	request->http_parser = &httpParser;
@@ -30,7 +30,7 @@ void HTTPServer::httpEnterCallbackDefault(const HTTPParser &httpParser, const Ht
 	http_callback_handler(request);
 }
 
-void HTTPServer::wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, WebSocketFormat::WebSocketFrameType opcode, const std::string &payload) {
+void HTTPServer::wsEnterCallbackDefault(const brynet::net::http::HttpSession::Ptr &httpSession, brynet::net::http::WebSocketFormat::WebSocketFrameType opcode, const std::string &payload) {
 
 	std::cout << "frame enter of type:" << int(opcode) << std::endl;
 	std::cout << "payload is:" << payload << std::endl;
@@ -51,7 +51,7 @@ void HTTPServer::initialize_old() {
 
 	configure_old();
 
-	service = TcpService::Create();
+	service = brynet::net::TcpService::Create();
 	service->startWorkerThread(threads);
 
 	int p_port = port;
@@ -60,22 +60,22 @@ void HTTPServer::initialize_old() {
 	if (listenBuilder)
 		delete listenBuilder;
 
-	listenBuilder = new wrapper::HttpListenerBuilder();
+	listenBuilder = new brynet::net::wrapper::HttpListenerBuilder();
 	listenBuilder->configureService(service);
 
 	listenBuilder->configureSocketOptions({
-			[](TcpSocket &socket) {
+			[](brynet::net::TcpSocket &socket) {
 				socket.setNodelay();
 			},
 	});
 
-	listenBuilder->configureConnectionOptions({ AddSocketOption::WithMaxRecvBufferSize(1024) });
+	listenBuilder->configureConnectionOptions({ brynet::net::AddSocketOption::WithMaxRecvBufferSize(1024) });
 
-	listenBuilder->configureListen([p_port](wrapper::BuildListenConfig builder) {
+	listenBuilder->configureListen([p_port](brynet::net::wrapper::BuildListenConfig builder) {
 		builder.setAddr(false, "0.0.0.0", p_port);
 	});
 
-	listenBuilder->configureEnterCallback([](const HttpSession::Ptr &httpSession, HttpSessionHandlers &handlers) {
+	listenBuilder->configureEnterCallback([](const brynet::net::http::HttpSession::Ptr &httpSession, brynet::net::http::HttpSessionHandlers &handlers) {
 		handlers.setHttpCallback(HTTPServer::httpEnterCallbackDefault);
 		handlers.setWSCallback(HTTPServer::wsEnterCallbackDefault);
 	});
@@ -203,13 +203,14 @@ void HTTPServer::main_loop() {
 */
 
 	// Create all listeners.
+	/*
 	auto ioLoops = listenerManagerPtr_->createListeners(
-			std::bind(&HttpAppFrameworkImpl::onAsyncRequest, this, _1, _2),
-			std::bind(&HttpAppFrameworkImpl::onNewWebsockRequest, this, _1, _2, _3),
-			std::bind(&HttpAppFrameworkImpl::onConnection, this, _1),
-			idleConnectionTimeout_,
-			sslCertPath_,
-			sslKeyPath_,
+			std::bind(&Application::onAsyncRequest, this, _1, _2),
+			std::bind(&Application::onNewWebsockRequest, this, _1, _2, _3),
+			std::bind(&Application::onConnection, this, _1),
+			Application::get_instance()->idleConnectionTimeout_,
+			Application::get_instance()->sslCertPath_,
+			Application::get_instance()->sslKeyPath_,
 			threads,
 			syncAdvices_);
 
@@ -221,11 +222,11 @@ void HTTPServer::main_loop() {
 
 
 	getLoop()->setIndex(threads);
-
+*/
 	// A fast database client instance should be created in the main event
 	// loop, so put the main loop into ioLoops.
 
-	ioLoops.push_back(getLoop());
+	//ioLoops.push_back(getLoop());
 
 	/*
 	dbClientManagerPtr_->createDbClients(ioLoops);
@@ -235,7 +236,8 @@ void HTTPServer::main_loop() {
 	websockCtrlsRouterPtr_->init();
 	*/
 
-	getLoop()->queueInLoop([this]() {
+/*
+	get_loop()->queueInLoop([this]() {
 		// Let listener event loops run when everything is ready.
 		listenerManagerPtr_->startListening();
 
@@ -245,14 +247,8 @@ void HTTPServer::main_loop() {
 
 		beginningAdvices_.clear();
 	});
-
-	getLoop()->loop();
-}
-
-trantor::EventLoop *HttpAppFrameworkImpl::get_loop() const
-{
-    static trantor::EventLoop loop;
-    return &loop;
+*/
+	get_loop()->loop();
 }
 
 HTTPServer::HTTPServer() {

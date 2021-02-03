@@ -19,6 +19,8 @@
 #include <sys/types.h>
 #include <trantor/utils/Logger.h>
 
+#include "core/application.h"
+
 #ifndef _WIN32
 #include <sys/file.h>
 #include <sys/wait.h>
@@ -83,7 +85,7 @@ std::vector<trantor::EventLoop *> ListenerManager::createListeners(
 			if (i == 0) {
 				DrogonFileLocker lock;
 				// Check whether the port is in use.
-				TcpServer server(HttpAppFrameworkImpl::instance().getLoop(),
+				TcpServer server(Application::get_instance()->get_loop(),
 						InetAddress(ip, listener.port_, isIpv6),
 						"drogonPortTest",
 						true,
@@ -118,12 +120,13 @@ std::vector<trantor::EventLoop *> ListenerManager::createListeners(
 				serverPtr->enableSSL(cert, key);
 #endif
 			}
-
+/*
 			serverPtr->setHttpAsyncCallback(httpCallback);
 			serverPtr->setNewWebsocketCallback(webSocketCallback);
 			serverPtr->setConnectionCallback(connectionCallback);
 			serverPtr->kickoffIdleConnections(connectionTimeout);
 			serverPtr->start();
+			*/
 			servers_.push_back(serverPtr);
 		}
 	}
@@ -207,7 +210,7 @@ trantor::EventLoop *ListenerManager::getIOLoop(size_t id) const {
 
 void ListenerManager::stopListening() {
 	for (auto &serverPtr : servers_) {
-		serverPtr->stop();
+		//serverPtr->stop();
 	}
 
 	for (auto loop : ioLoops_) {

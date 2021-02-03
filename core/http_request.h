@@ -44,6 +44,7 @@
 #include <unordered_map>
 
 namespace drogon {
+
 class HttpRequest;
 using HttpRequestPtr = std::shared_ptr<HttpRequest>;
 
@@ -163,6 +164,8 @@ public:
 	T as() const {
 		return fromRequest<T>(*this);
 	}
+
+	bool setMethod(const char *start, const char *end);
 
 	/// Return the method string of the request, such as GET, POST, etc.
 	virtual const char *methodString() const;

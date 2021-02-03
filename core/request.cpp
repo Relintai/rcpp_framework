@@ -51,7 +51,7 @@ void Request::send() {
 
 		std::string result = response->getResult();
 
-		const HttpSession::Ptr lsession = (*session);
+		const brynet::net::http::HttpSession::Ptr lsession = (*session);
 
 		(*session)->send(result.c_str(), result.size(), [lsession]() { lsession->postShutdown(); });
 	}
@@ -76,7 +76,7 @@ void Request::send_file(const std::string &p_file_path) {
 
 	response->addHeadValue("Connection", "Close");
 	std::string result = "HTTP/1.1 200 OK\r\nConnection: Close\r\n\r\n";
-	const HttpSession::Ptr lsession = (*session);
+	const brynet::net::http::HttpSession::Ptr lsession = (*session);
 
 	(*session)->send(result.c_str(), result.size(), [this]() { this->_progress_send_file(); });
 }
@@ -99,7 +99,7 @@ void Request::reset() {
 	if (response)
 		delete response;
 
-	response = new HttpResponse();
+	response = new brynet::net::http::HttpResponse();
 }
 
 void Request::setup_url_stack() {
@@ -186,7 +186,7 @@ Request::~Request() {
 }
 
 void Request::_progress_send_file() {
-	const HttpSession::Ptr lsession = (*session);
+	const brynet::net::http::HttpSession::Ptr lsession = (*session);
 
 	if (current_file_progress >= file_size) {
 		lsession->postShutdown();

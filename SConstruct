@@ -68,6 +68,8 @@ env_base.use_ptrcall = False
 env_base.module_version_string = ""
 env_base.msvc = False
 
+env_base.ParseConfig("pkg-config uuid --cflags --libs")
+
 # avoid issues when building with different versions of python out of the same directory
 env_base.SConsignFile(".sconsign{0}.dblite".format(pickle.HIGHEST_PROTOCOL))
 

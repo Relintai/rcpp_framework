@@ -21,6 +21,8 @@
 #include <limits>
 #include <functional>
 
+#include "core/application.h"
+
 namespace drogon
 {
 /**
@@ -68,7 +70,7 @@ class IOThreadStorage : public trantor::NonCopyable
     {
         static_assert(std::is_constructible<C, Args &&...>::value,
                       "Unable to construct storage with given signature");
-        size_t numThreads = app().getThreadNum();
+        size_t numThreads = Application::get_instance()->threadNum_;
 #ifdef _WIN32
         assert(numThreads > 0 && numThreads != size_t(-1));
 #else
@@ -100,14 +102,14 @@ class IOThreadStorage : public trantor::NonCopyable
      */
     inline ValueType &getThreadData()
     {
-        size_t idx = app().getCurrentThreadIndex();
+        size_t idx = Application::get_instance()->getCurrentThreadIndex();
         assert(idx < storage_.size());
         return storage_[idx];
     }
 
     inline const ValueType &getThreadData() const
     {
-        size_t idx = app().getCurrentThreadIndex();
+        size_t idx = Application::get_instance()->getCurrentThreadIndex();
         assert(idx < storage_.size());
         return storage_[idx];
     }
@@ -119,21 +121,21 @@ class IOThreadStorage : public trantor::NonCopyable
      */
     inline void setThreadData(const ValueType &newData)
     {
-        size_t idx = app().getCurrentThreadIndex();
+        size_t idx = Application::get_instance()->getCurrentThreadIndex();
         assert(idx < storage_.size());
         storage_[idx] = newData;
     }
 
     inline void setThreadData(ValueType &&newData)
     {
-        size_t idx = app().getCurrentThreadIndex();
+        size_t idx = Application::get_instance()->getCurrentThreadIndex();
         assert(idx < storage_.size());
         storage_[idx] = std::move(newData);
     }
 
     inline ValueType *operator->()
     {
-        size_t idx = app().getCurrentThreadIndex();
+        size_t idx = Application::get_instance()->getCurrentThreadIndex();
         assert(idx < storage_.size());
         return &storage_[idx];
     }
@@ -145,7 +147,7 @@ class IOThreadStorage : public trantor::NonCopyable
 
     inline const ValueType *operator->() const
     {
-        size_t idx = app().getCurrentThreadIndex();
+        size_t idx = Application::get_instance()->getCurrentThreadIndex();
         assert(idx < storage_.size());
         return &storage_[idx];
     }

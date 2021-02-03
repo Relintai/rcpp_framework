@@ -648,7 +648,7 @@ HttpRequest::~HttpRequest()
 
 void HttpRequest::reserveBodySize(size_t length)
 {
-    if (length <= HttpAppFrameworkImpl::instance().getClientMaxMemoryBodySize())
+    if (length <= Application::get_instance()->getClientMaxMemoryBodySize())
     {
         content_.reserve(length);
     }
@@ -668,7 +668,7 @@ void HttpRequest::appendToBody(const char *data, size_t length)
     else
     {
         if (content_.length() + length <=
-            HttpAppFrameworkImpl::instance().getClientMaxMemoryBodySize())
+            Application::get_instance()->getClientMaxMemoryBodySize())
         {
             content_.append(data, length);
         }
@@ -685,7 +685,7 @@ void HttpRequest::appendToBody(const char *data, size_t length)
 void HttpRequest::createTmpFile()
 {
     /*
-    auto tmpfile = HttpAppFrameworkImpl::instance().getUploadPath();
+    auto tmpfile = Application::get_instance()->getUploadPath();
 
 
     auto fileName = utils::getUuid();

@@ -15,8 +15,11 @@
 
 #include "core/http_server_callbacks.h"
 
+#include "core/listener_manager.h"
+
+using namespace drogon;
+
 class Request;
-class ListenerManager;
 
 class Application {
 public:
@@ -54,6 +57,50 @@ public:
 
 	std::unique_ptr<ListenerManager> listenerManagerPtr_;
 
+	size_t getClientMaxBodySize() const {
+		return clientMaxBodySize_;
+	}
+	size_t getClientMaxMemoryBodySize() const {
+		return clientMaxMemoryBodySize_;
+	}
+	size_t getClientMaxWebSocketMessageSize() const {
+		return clientMaxWebSocketMessageSize_;
+	}
+	size_t keepaliveRequestsNumber() const {
+		return keepaliveRequestsNumber_;
+	}
+	size_t pipeliningRequestsNumber() const {
+		return pipeliningRequestsNumber_;
+	}
+
+	bool sendDateHeader() const {
+		return enableDateHeader_;
+	}
+
+	bool sendServerHeader() const {
+		return enableServerHeader_;
+	}
+
+	const std::string &getServerHeaderString() const {
+		return serverHeader_;
+	}
+
+	virtual const std::string &getUploadPath() const {
+		return uploadPath_;
+	}
+
+	virtual size_t getCurrentThreadIndex() const {
+		auto *loop = trantor::EventLoop::getEventLoopOfCurrentThread();
+		if (loop) {
+			return loop->index();
+		}
+#ifdef _WIN32
+		return size_t(-1);
+#else
+		return std::numeric_limits<size_t>::max();
+#endif
+	}
+
 public:
 	static HandlerInstance index_func;
 	static std::map<std::string, HandlerInstance> main_route_map;
@@ -71,6 +118,16 @@ public:
 private:
 	static Application *_instance;
 	bool _running;
+
+	size_t clientMaxBodySize_{ 1024 * 1024 };
+	size_t clientMaxMemoryBodySize_{ 64 * 1024 };
+	size_t clientMaxWebSocketMessageSize_{ 128 * 1024 };
+	size_t keepaliveRequestsNumber_{ 0 };
+	size_t pipeliningRequestsNumber_{ 0 };
+	std::string uploadPath_;
+	bool enableServerHeader_{ false };
+	std::string serverHeader_{ "Server: rcpp_cms\r\n" };
+	bool enableDateHeader_{ true };
 };
 
 #endif

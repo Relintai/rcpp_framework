@@ -6,9 +6,10 @@ env.core_sources = []
 
 #env.add_source_files(env.core_sources, "*.cpp")
 
-env.add_source_files(env.core_sources, "./trantor/net/*.cc")
-env.add_source_files(env.core_sources, "./trantor/net/inner/*.cc")
 env.add_source_files(env.core_sources, "./trantor/net/inner/poller/*.cc")
+env.add_source_files(env.core_sources, "./trantor/net/inner/*.cc")
+env.add_source_files(env.core_sources, "./trantor/net/*.cc")
+
 
 env.core_sources.append("./trantor/utils/AsyncFileLogger.cc")
 env.core_sources.append("./trantor/utils/ConcurrentTaskQueue.cc")

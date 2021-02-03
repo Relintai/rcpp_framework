@@ -251,7 +251,7 @@ void Application::run() {
 	// A fast database client instance should be created in the main event
 	// loop, so put the main loop into ioLoops.
 
-	ioLoops.push_back(get_loop());
+	//ioLoops.push_back(get_loop());
 
 	/*
 	dbClientManagerPtr_->createDbClients(ioLoops);

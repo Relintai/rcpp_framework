@@ -5,6 +5,8 @@
 
 #include <memory>
 
+namespace drogon {
+
 class HttpRequest;
 using HttpRequestPtr = std::shared_ptr<HttpRequest>;
 class HttpResponse;
@@ -15,5 +17,7 @@ using WebSocketConnectionPtr = std::shared_ptr<WebSocketConnectionImpl>;
 using HttpAsyncCallback = std::function<void(const HttpRequestPtr &,std::function<void(const HttpResponsePtr &)> &&)>;
 using WebSocketNewAsyncCallback = std::function<void(const HttpRequestPtr &, std::function<void(const HttpResponsePtr &)> &&,
 				const WebSocketConnectionPtr &)>;
+
+}
 
 #endif

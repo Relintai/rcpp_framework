@@ -14,14 +14,18 @@
 
 #include "core/http_request_parser.h"
 
+//#include "core/http_server_callbacks.h"
+
 #include "core/http_response.h"
-#include "http_request.h"
+#include "core/http_request.h"
 #include "core/http_utils.h"
 #include <core/http_types.h>
 
 #include <iostream>
 #include <trantor/utils/Logger.h>
 #include <trantor/utils/MsgBuffer.h>
+
+#include "core/application.h"
 
 using namespace trantor;
 using namespace drogon;
@@ -83,10 +87,10 @@ bool HttpRequestParser::processRequestLine(const char *begin, const char *end)
     }
     return succeed;
 }
-HttpRequestPtr HttpRequestParser::makeRequestForPool(HttpRequestImpl *ptr)
+HttpRequestPtr HttpRequestParser::makeRequestForPool(HttpRequest *ptr)
 {
     std::weak_ptr<HttpRequestParser> weakPtr = shared_from_this();
-    return std::shared_ptr<HttpRequestImpl>(ptr, [weakPtr](HttpRequestImpl *p) {
+    return std::shared_ptr<HttpRequest>(ptr, [weakPtr](HttpRequest *p) {
         auto thisPtr = weakPtr.lock();
         if (thisPtr)
         {
@@ -118,7 +122,7 @@ void HttpRequestParser::reset()
     status_ = HttpRequestParseStatus::kExpectMethod;
     if (requestsPool_.empty())
     {
-        request_ = makeRequestForPool(new HttpRequestImpl(loop_));
+        request_ = makeRequestForPool(new HttpRequest(loop_));
     }
     else
     {
@@ -264,13 +268,11 @@ bool HttpRequestParser::parseRequest(MsgBuffer *buf)
                         if (connPtr)
                         {
                             auto resp = HttpResponse::newHttpResponse();
-                            if (currentContentLength_ >
-                                HttpAppFrameworkImpl::instance()
-                                    .getClientMaxBodySize())
+                            if (currentContentLength_ > Application::get_instance()->getClientMaxBodySize())
                             {
                                 resp->setStatusCode(k413RequestEntityTooLarge);
                                 auto httpString =
-                                    static_cast<HttpResponseImpl *>(resp.get())
+                                    static_cast<HttpResponse *>(resp.get())
                                         ->renderToBuffer();
                                 reset();
                                 connPtr->send(std::move(*httpString));
@@ -279,7 +281,7 @@ bool HttpRequestParser::parseRequest(MsgBuffer *buf)
                             {
                                 resp->setStatusCode(k100Continue);
                                 auto httpString =
-                                    static_cast<HttpResponseImpl *>(resp.get())
+                                    static_cast<HttpResponse *>(resp.get())
                                         ->renderToBuffer();
                                 connPtr->send(std::move(*httpString));
                             }
@@ -297,9 +299,7 @@ bool HttpRequestParser::parseRequest(MsgBuffer *buf)
                             return false;
                         }
                     }
-                    else if (currentContentLength_ >
-                             HttpAppFrameworkImpl::instance()
-                                 .getClientMaxBodySize())
+                    else if (currentContentLength_ > Application::get_instance()->getClientMaxBodySize())
                     {
                         buf->retrieveAll();
                         shutdownConnection(k413RequestEntityTooLarge);
@@ -365,8 +365,7 @@ bool HttpRequestParser::parseRequest(MsgBuffer *buf)
                 // responsePtr_->currentChunkLength_;
                 if (currentChunkLength_ != 0)
                 {
-                    if (currentChunkLength_ + currentContentLength_ >
-                        HttpAppFrameworkImpl::instance().getClientMaxBodySize())
+                    if (currentChunkLength_ + currentContentLength_ > Application::get_instance()->getClientMaxBodySize())
                     {
                         buf->retrieveAll();
                         shutdownConnection(k413RequestEntityTooLarge);
