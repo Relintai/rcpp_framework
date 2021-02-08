@@ -68,8 +68,6 @@ env_base.use_ptrcall = False
 env_base.module_version_string = ""
 env_base.msvc = False
 
-env_base.ParseConfig("pkg-config uuid --cflags --libs")
-
 # avoid issues when building with different versions of python out of the same directory
 env_base.SConsignFile(".sconsign{0}.dblite".format(pickle.HIGHEST_PROTOCOL))
 
@@ -132,15 +130,10 @@ opts.Add("LINKFLAGS", "Custom flags for the linker")
 opts.Update(env_base)
 
 # add default include paths
-env_base.Prepend(CPPPATH=["#"])
+env_base.Prepend(CPPPATH=["#", "libs"])
 env_base.Prepend(CPPPATH=["#libs"])
-env_base.Prepend(CPPPATH=["#libs/trantor"])
-env_base.Prepend(CPPPATH=["#libs/trantor/trantor/net"])
-env_base.Prepend(CPPPATH=["#libs/trantor/trantor/net/inner"])
-env_base.Prepend(CPPPATH=["#libs/trantor/trantor/utils"])
 env_base.Prepend(LINKFLAGS=["-lpthread"])
 
-env_base.Append(CXX=["-std=c++17"])
 env_base.Append(CXX=["-o3"])
 #env_base.Append(CXX=["-g"])
 #env_base.Append(CXX=["-g2"])
@@ -162,7 +155,6 @@ if scons_ver >= (4, 0, 0):
 
 Export("env")
 
-SConscript("libs/trantor/SCsub")
 SConscript("core/SCsub")
 
 for d in database_list:
