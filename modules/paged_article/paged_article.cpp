@@ -67,9 +67,13 @@ void PagedArticle::load() {
 		base_path.pop_back();
 	}
 
+	if (folder.size() > 0 && folder[folder.size() - 1] == '/') {
+		folder.pop_back();
+	}
+
 	tinydir_dir dir;
 	if (tinydir_open(&dir, folder.c_str()) == -1) {
-		printf("Error opening PagedArticle::folder!\n");
+		printf("Error opening PagedArticle::folder! folder: %s\n", folder.c_str());
 		return;
 	}
 
@@ -89,9 +93,10 @@ void PagedArticle::load() {
 			std::string np = file.path;
 			std::string fn = file.name;
 
-			std::string ff = base_path + "/" + fn;
+			std::string ff = folder + "/" + fn;
+			std::string wp = base_path + "/" + fn;
 
-			Article *a = load_folder(np, ff);
+			Article *a = load_folder(np, wp);
 
 			if (a) {
 
@@ -101,7 +106,7 @@ void PagedArticle::load() {
 				pages[p] = a;
 			}
 
-			a->file_cache->wwwroot = ("." + ff + "/files");
+			a->file_cache->wwwroot = (ff + "/files");
 			a->file_cache->wwwroot_refresh_cache();
 		}
 

@@ -30,7 +30,7 @@ void ListPage::load() {
 
 	tinydir_dir dir;
 	if (tinydir_open(&dir, folder.c_str()) == -1) {
-		printf("Error opening ListPage::folder!\n");
+		printf("Error opening ListPage::folder! folder: %s\n", folder.c_str());
 		return;
 	}
 

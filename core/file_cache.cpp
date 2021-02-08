@@ -27,7 +27,7 @@ void FileCache::wwwroot_evaluate_dir(const char *path, const bool should_exist) 
 	if (tinydir_open(&dir, path) == -1) {
 
 		if (should_exist)
-			printf("Error opening wwwroot!\n");
+			printf("Error opening wwwroot! folder: %s\n", path);
 			
 		return;
 	}
