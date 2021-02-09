@@ -12,8 +12,12 @@ void HTTPServer::http_callback_handler(Request *request) {
 void HTTPServer::httpEnterCallbackDefault(const HTTPParser &httpParser, const HttpSession::Ptr &session) {
 	Request *request = RequestPool::get_request();
 
-    request->http_parser = &httpParser;
-    request->session = &session;
+	HttpSession *s = session.get();
+
+	_request_map[s] = request;
+
+    request->http_parser = std::make_shared<HTTPParser>(httpParser);
+    request->session = session;
 
 	request->setup_url_stack();
 
@@ -34,6 +38,22 @@ void HTTPServer::wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, Web
 	//WebSocketFormat::wsFrameBuild(payload.c_str(), payload.size(), *frame, WebSocketFormat::WebSocketFrameType::TEXT_FRAME, true, false);
 
 	//httpSession->send(frame);
+}
+
+void HTTPServer::closedCallbackDefault(const HttpSession::Ptr &session) {
+	HttpSession *s = session.get();
+
+	Request *r = _request_map[s];
+
+	if (r == nullptr) {
+		printf("Error HTTPServer::closedCallbackDefault: r == nullptr!");
+		_request_map.erase(s);
+		return;
+	}
+
+	r->connection_closed = true;
+
+	_request_map.erase(s);
 }
 
 void HTTPServer::configure() {
@@ -71,6 +91,7 @@ void HTTPServer::initialize() {
 
 	listenBuilder->configureEnterCallback([](const HttpSession::Ptr &httpSession, HttpSessionHandlers &handlers) {
 		handlers.setHttpCallback(HTTPServer::httpEnterCallbackDefault);
+		handlers.setClosedCallback(HTTPServer::closedCallbackDefault);
 		handlers.setWSCallback(HTTPServer::wsEnterCallbackDefault);
 	});
 
@@ -79,11 +100,14 @@ void HTTPServer::initialize() {
 
 void HTTPServer::main_loop() {
 	while (true) {
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		//std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 		if (brynet::base::app_kbhit()) {
 			break;
 		}
+
+		Application::get_instance()->update();
 	}
 }
 
@@ -96,3 +120,5 @@ HTTPServer::HTTPServer() {
 HTTPServer::~HTTPServer() {
 	delete listenBuilder;
 }
+
+std::map<HttpSession*, Request*> HTTPServer::_request_map;

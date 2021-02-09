@@ -91,32 +91,40 @@ void Application::send_error(int error_code, Request *request) {
 void Application::send_file(const std::string &path, Request *request) {
 	std::string fp = FileCache::get_singleton()->wwwroot + path;
 
-	FILE *f = fopen(fp.c_str(), "rb");
-
-	if (!f) {
-		printf("Error: Registered file doesn't exists anymore! %s\n", path.c_str());
-
-		send_error(404, request);
-		return;
-	}
-
-	fseek(f, 0, SEEK_END);
-	long fsize = ftell(f);
-	fseek(f, 0, SEEK_SET); /* same as rewind(f); */
-
-	std::string body;
-	body.resize(fsize);
-
-	fread(&body[0], 1, fsize, f);
-	fclose(f);
-
-	//TODO set mimetype?
-
-	request->response->setBody(body);
-	request->send();
+	request->send_file(fp);
 }
 
 void Application::migrate() {
+}
+
+void Application::register_request_update(Request *request) {
+	std::lock_guard<std::mutex> lock(_update_registered_requests_mutex);
+
+	_update_registered_requests.push_back(request);
+}
+void Application::unregister_request_update(Request *request) {
+	std::lock_guard<std::mutex> lock(_update_registered_requests_mutex);
+
+	std::size_t s = _update_registered_requests.size();
+	for (std::size_t i = 0; i < s; ++i) {
+		Request *r = _update_registered_requests[i];
+
+		if (r == request) {
+			_update_registered_requests[i] = _update_registered_requests[s - 1];
+
+			_update_registered_requests.pop_back();
+
+			return;
+		}
+	}
+}
+
+void Application::update() {
+	for (std::size_t i = 0; i < _update_registered_requests.size(); ++i) {
+		Request *r = _update_registered_requests[i];
+
+		r->update();
+	}
 }
 
 Application::Application() {
@@ -144,3 +152,6 @@ Application *Application::_instance = nullptr;
 
 std::string Application::default_error_404_body = "<html><body>404 :(</body></html>";
 std::string Application::default_generic_error_body = "<html><body>Internal server error! :(</body></html>";
+
+std::mutex Application::_update_registered_requests_mutex;
+std::vector<Request *> Application::_update_registered_requests;

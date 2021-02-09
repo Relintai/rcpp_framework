@@ -1,5 +1,7 @@
 #include "request.h"
 
+#include "application.h"
+
 void Request::compile_body() {
 	compiled_body.reserve(body.size() + head.size() + 13 + 14 + 15);
 
@@ -40,26 +42,36 @@ void Request::next_stage() {
 }
 
 void Request::send() {
+	if (connection_closed) {
+		RequestPool::return_request(this);
+		return;
+	}
+
 	if (http_parser->isKeepAlive()) {
 		response->addHeadValue("Connection", "Keep-Alive");
 
 		std::string result = response->getResult();
 
-		(*session)->send(result.c_str(), result.size());
+		session->send(result.c_str(), result.size());
 	} else {
 		response->addHeadValue("Connection", "Close");
 
 		std::string result = response->getResult();
 
-		const HttpSession::Ptr lsession = (*session);
+		HttpSession::Ptr lsession = session;
 
-		(*session)->send(result.c_str(), result.size(), [lsession]() { lsession->postShutdown(); });
+		session->send(result.c_str(), result.size(), [lsession]() { lsession->postShutdown(); });
 	}
 
 	RequestPool::return_request(this);
 }
 
 void Request::send_file(const std::string &p_file_path) {
+	if (connection_closed) {
+		RequestPool::return_request(this);
+		return;
+	}
+
 	file_path = p_file_path;
 
 	FILE *f = fopen(file_path.c_str(), "rb");
@@ -76,9 +88,10 @@ void Request::send_file(const std::string &p_file_path) {
 
 	response->addHeadValue("Connection", "Close");
 	std::string result = "HTTP/1.1 200 OK\r\nConnection: Close\r\n\r\n";
-	const HttpSession::Ptr lsession = (*session);
 
-	(*session)->send(result.c_str(), result.size(), [this]() { this->_progress_send_file(); });
+	Application::register_request_update(this);
+
+	session->send(result.c_str(), result.size(), [this]() { this->_file_chunk_sent(); });
 }
 
 void Request::reset() {
@@ -90,6 +103,7 @@ void Request::reset() {
 	_path_stack_pointer = 0;
 	file_size = 0;
 	current_file_progress = 0;
+	connection_closed = false;
 
 	head.clear();
 	body.clear();
@@ -173,10 +187,20 @@ void Request::push_path() {
 	_path_stack_pointer += 1;
 }
 
+void Request::update() {
+	if (file_next) {
+		file_next = false;
+		_progress_send_file();
+	}
+}
+
 Request::Request() {
 	response = nullptr;
-	//file_chunk_size = 1 << 20; //1MB
-	file_chunk_size = 1 << 23;
+
+	//This value will need benchmarks, 2 MB seems to be just as fast for me as 4 MB, but 1MB is slower
+	//It is a tradeoff on server memory though, as every active download will consume this amount of memory
+	//where the file is bigger than this number
+	file_chunk_size = 1 << 21; //2MB
 
 	reset();
 }
@@ -186,10 +210,13 @@ Request::~Request() {
 }
 
 void Request::_progress_send_file() {
-	const HttpSession::Ptr lsession = (*session);
+	if (connection_closed) {
+		RequestPool::return_request(this);
+		return;
+	}
 
 	if (current_file_progress >= file_size) {
-		lsession->postShutdown();
+		session->postShutdown();
 
 		RequestPool::return_request(this);
 
@@ -201,7 +228,9 @@ void Request::_progress_send_file() {
 	if (!f) {
 		printf("Error: Download: In progress file doesn't exists anymore! %s\n", file_path.c_str());
 
-		lsession->postShutdown();
+		Application::unregister_request_update(this);
+
+		session->postShutdown();
 
 		RequestPool::return_request(this);
 
@@ -224,7 +253,11 @@ void Request::_progress_send_file() {
 
 	current_file_progress = nfp;
 
-	(*session)->send(body.c_str(), body.size(), [this]() { this->_progress_send_file(); });
+	session->send(body.c_str(), body.size(), [this]() { this->_file_chunk_sent(); });
+}
+
+void Request::_file_chunk_sent() {
+	file_next = true;
 }
 
 Request *RequestPool::get_request() {
@@ -245,12 +278,12 @@ Request *RequestPool::get_request() {
 
 	_mutex.unlock();
 
+	request->reset();
+
 	return request;
 }
 
 void RequestPool::return_request(Request *request) {
-	request->reset();
-
 	_mutex.lock();
 	_requests.push_back(request);
 	_mutex.unlock();

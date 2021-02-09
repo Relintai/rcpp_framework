@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+#include "mutex"
+
 #include "handler_instance.h"
 
 class Request;
@@ -31,6 +33,10 @@ public:
 
 	virtual void migrate();
 
+	static void register_request_update(Request *request);
+	static void unregister_request_update(Request *request);
+	static void update();
+
 	Application();
 	virtual ~Application();
 
@@ -43,6 +49,10 @@ public:
 
 	static std::map<int, std::function<void(int, Request *)> > error_handler_map;
 	static std::function<void(int, Request *)> default_error_handler_func;
+
+protected:
+	static std::mutex _update_registered_requests_mutex;
+	static std::vector<Request *> _update_registered_requests;
 
 private:
 	static Application *_instance;

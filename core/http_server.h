@@ -4,6 +4,7 @@
 #include <condition_variable>
 #include <iostream>
 #include <string>
+#include <map>
 
 #include <brynet/base/AppStatus.hpp>
 #include <brynet/net/http/HttpFormat.hpp>
@@ -29,6 +30,7 @@ public:
 
 	static void httpEnterCallbackDefault(const HTTPParser &httpParser, const HttpSession::Ptr &session);
 	static void wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, WebSocketFormat::WebSocketFrameType opcode, const std::string &payload);
+	static void closedCallbackDefault(const HttpSession::Ptr &session);
 
     virtual void configure();
 	virtual void initialize();
@@ -37,6 +39,9 @@ public:
 
     HTTPServer();
     virtual ~HTTPServer();
+
+protected:
+	static std::map<HttpSession*, Request*> _request_map;
 };
 
 #endif

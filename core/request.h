@@ -15,8 +15,8 @@ using namespace brynet::net::http;
 
 class Request {
 public:
-	const HTTPParser *http_parser;
-	const HttpSession::Ptr *session;
+	HTTPParser::Ptr http_parser;
+	HttpSession::Ptr session;
 	HttpResponse *response;
 
 	uint32_t current_middleware_index;
@@ -33,6 +33,8 @@ public:
 	long current_file_progress;
 	long file_chunk_size;
 	bool file_next;
+
+	bool connection_closed;
 
 	void compile_body();
 	void compile_and_send_body();
@@ -52,11 +54,14 @@ public:
 	void pop_path();
 	void push_path();
 
+	void update();
+
 	Request();
 	~Request();
 
 protected:
 	void _progress_send_file();
+	void _file_chunk_sent();
 
 	std::vector<std::string> _path_stack;
 	uint32_t _path_stack_pointer;
