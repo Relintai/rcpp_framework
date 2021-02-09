@@ -3,8 +3,9 @@
 
 #include <condition_variable>
 #include <iostream>
-#include <string>
 #include <map>
+#include <mutex>
+#include <string>
 
 #include <brynet/base/AppStatus.hpp>
 #include <brynet/net/http/HttpFormat.hpp>
@@ -24,24 +25,25 @@ public:
 	int port;
 	int threads;
 	std::shared_ptr<TcpService> service;
-    wrapper::HttpListenerBuilder *listenBuilder;
+	wrapper::HttpListenerBuilder *listenBuilder;
 
-    static void http_callback_handler(Request *response);
+	static void http_callback_handler(Request *response);
 
 	static void httpEnterCallbackDefault(const HTTPParser &httpParser, const HttpSession::Ptr &session);
 	static void wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, WebSocketFormat::WebSocketFrameType opcode, const std::string &payload);
 	static void closedCallbackDefault(const HttpSession::Ptr &session);
 
-    virtual void configure();
+	virtual void configure();
 	virtual void initialize();
 
 	void main_loop();
 
-    HTTPServer();
-    virtual ~HTTPServer();
+	HTTPServer();
+	virtual ~HTTPServer();
 
 protected:
-	static std::map<HttpSession*, Request*> _request_map;
+	static std::map<HttpSession *, Request *> _request_map;
+	static std::mutex _request_map_mutex;
 };
 
 #endif

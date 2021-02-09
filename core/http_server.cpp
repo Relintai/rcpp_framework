@@ -1,23 +1,27 @@
 #include "http_server.h"
 
-#include "request.h"
 #include "application.h"
+#include "request.h"
 
 #define LOG_VERBOSE 0
 
 void HTTPServer::http_callback_handler(Request *request) {
-    Application::handle_request(request);
+	Application::handle_request(request);
 }
 
 void HTTPServer::httpEnterCallbackDefault(const HTTPParser &httpParser, const HttpSession::Ptr &session) {
+	std::unique_lock<std::mutex> lock(_request_map_mutex, std::defer_lock);
+
 	Request *request = RequestPool::get_request();
 
 	HttpSession *s = session.get();
 
+	lock.lock();
 	_request_map[s] = request;
+	lock.unlock();
 
-    request->http_parser = std::make_shared<HTTPParser>(httpParser);
-    request->session = session;
+	request->http_parser = std::make_shared<HTTPParser>(httpParser);
+	request->session = session;
 
 	request->setup_url_stack();
 
@@ -25,7 +29,7 @@ void HTTPServer::httpEnterCallbackDefault(const HTTPParser &httpParser, const Ht
 	std::cout << "method:" << http_method_str(static_cast<http_method>(httpParser.method())) << std::endl;
 #endif
 
-    http_callback_handler(request);
+	http_callback_handler(request);
 }
 
 void HTTPServer::wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, WebSocketFormat::WebSocketFrameType opcode, const std::string &payload) {
@@ -43,17 +47,22 @@ void HTTPServer::wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, Web
 void HTTPServer::closedCallbackDefault(const HttpSession::Ptr &session) {
 	HttpSession *s = session.get();
 
+	std::unique_lock<std::mutex> lock(_request_map_mutex, std::defer_lock);
+
+	lock.lock();
 	Request *r = _request_map[s];
 
 	if (r == nullptr) {
-		printf("Error HTTPServer::closedCallbackDefault: r == nullptr!");
-		_request_map.erase(s);
+		lock.unlock();
+		printf("Error HTTPServer::closedCallbackDefault: r == nullptr!\n");
+
 		return;
 	}
 
-	r->connection_closed = true;
-
 	_request_map.erase(s);
+	lock.unlock();
+
+	r->connection_closed = true;
 }
 
 void HTTPServer::configure() {
@@ -80,6 +89,7 @@ void HTTPServer::initialize() {
 	listenBuilder->configureSocketOptions({
 			[](TcpSocket &socket) {
 				socket.setNodelay();
+				socket.setNonblock();
 			},
 	});
 
@@ -121,4 +131,5 @@ HTTPServer::~HTTPServer() {
 	delete listenBuilder;
 }
 
-std::map<HttpSession*, Request*> HTTPServer::_request_map;
+std::map<HttpSession *, Request *> HTTPServer::_request_map;
+std::mutex HTTPServer::_request_map_mutex;
