@@ -40,8 +40,6 @@ public:
 	Application();
 	virtual ~Application();
 
-	static Application *get_instance();
-
 public:
 	static HandlerInstance index_func;
 	static std::map<std::string, HandlerInstance> main_route_map;
@@ -53,9 +51,6 @@ public:
 protected:
 	static std::mutex _update_registered_requests_mutex;
 	static std::vector<Request *> _update_registered_requests;
-
-private:
-	static Application *_instance;
 };
 
 #endif

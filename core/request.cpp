@@ -94,7 +94,12 @@ void Request::send_file(const std::string &p_file_path) {
 	session->send(result.c_str(), result.size(), [this]() { this->_file_chunk_sent(); });
 }
 
+void Request::send_error(int error_code) {
+	application->send_error(error_code, this);
+}
+
 void Request::reset() {
+	application = nullptr;
 	http_parser = nullptr;
 	session = nullptr;
 	current_middleware_index = 0;

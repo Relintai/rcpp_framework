@@ -19,6 +19,7 @@ using namespace brynet::net;
 using namespace brynet::net::http;
 
 class Request;
+class Application;
 
 class HTTPServer {
 public:
@@ -40,6 +41,9 @@ public:
 
 	HTTPServer();
 	virtual ~HTTPServer();
+
+	//move this to a sublcass
+	Application *application;
 
 protected:
 	std::map<HttpSession *, Request *> _request_map;

@@ -16,7 +16,7 @@ void PagedArticle::index(Request *request) {
 	Article *s = pages[r];
 
 	if (s == nullptr) {
-		Application::get_instance()->send_error(404, request);
+		request->send_error(404);
 		return;
 	}
 
@@ -48,7 +48,7 @@ void PagedArticle::index(Request *request) {
 
 	if (page == nullptr) {
 		//bad url
-		Application::get_instance()->send_error(404, request);
+		request->send_error(404);
 		return;
 	}
 

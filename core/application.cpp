@@ -128,7 +128,6 @@ void Application::update() {
 }
 
 Application::Application() {
-	_instance = this;
 }
 
 Application::~Application() {
@@ -137,18 +136,12 @@ Application::~Application() {
 	middlewares.clear();
 }
 
-Application *Application::get_instance() {
-	return _instance;
-}
-
 HandlerInstance Application::index_func;
 std::map<std::string, HandlerInstance> Application::main_route_map;
 std::vector<HandlerInstance> Application::middlewares;
 
 std::map<int, std::function<void(int, Request *)> > Application::error_handler_map;
 std::function<void(int, Request *)> Application::default_error_handler_func = nullptr;
-
-Application *Application::_instance = nullptr;
 
 std::string Application::default_error_404_body = "<html><body>404 :(</body></html>";
 std::string Application::default_generic_error_body = "<html><body>Internal server error! :(</body></html>";

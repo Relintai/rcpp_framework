@@ -20,6 +20,7 @@ void HTTPServer::httpEnterCallbackDefault(const HTTPParser &httpParser, const Ht
 	_request_map[s] = request;
 	lock.unlock();
 
+	request->application = application;
 	request->http_parser = std::make_shared<HTTPParser>(httpParser);
 	request->session = session;
 
@@ -117,7 +118,7 @@ void HTTPServer::main_loop() {
 			break;
 		}
 
-		Application::get_instance()->update();
+		application->update();
 	}
 }
 
@@ -125,6 +126,8 @@ HTTPServer::HTTPServer() {
 	port = 80;
 	threads = 4;
 	listenBuilder = nullptr;
+
+	application = nullptr;
 }
 
 HTTPServer::~HTTPServer() {

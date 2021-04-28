@@ -13,11 +13,14 @@ using namespace brynet;
 using namespace brynet::net;
 using namespace brynet::net::http;
 
+class Application;
+
 class Request {
 public:
 	HTTPParser::Ptr http_parser;
 	HttpSession::Ptr session;
 	HttpResponse *response;
+	Application *application;
 
 	uint32_t current_middleware_index;
 	HandlerInstance handler_instance;
@@ -41,6 +44,7 @@ public:
 	void next_stage();
 	void send();
 	void send_file(const std::string &p_file_path);
+	void send_error(int error_code);
 	void reset();
 
 	void setup_url_stack();
