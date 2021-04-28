@@ -27,11 +27,11 @@ public:
 	std::shared_ptr<TcpService> service;
 	wrapper::HttpListenerBuilder *listenBuilder;
 
-	static void http_callback_handler(Request *response);
+	void http_callback_handler(Request *response);
 
-	static void httpEnterCallbackDefault(const HTTPParser &httpParser, const HttpSession::Ptr &session);
-	static void wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, WebSocketFormat::WebSocketFrameType opcode, const std::string &payload);
-	static void closedCallbackDefault(const HttpSession::Ptr &session);
+	void httpEnterCallbackDefault(const HTTPParser &httpParser, const HttpSession::Ptr &session);
+	void wsEnterCallbackDefault(const HttpSession::Ptr &httpSession, WebSocketFormat::WebSocketFrameType opcode, const std::string &payload);
+	void closedCallbackDefault(const HttpSession::Ptr &session);
 
 	virtual void configure();
 	virtual void initialize();
@@ -42,8 +42,8 @@ public:
 	virtual ~HTTPServer();
 
 protected:
-	static std::map<HttpSession *, Request *> _request_map;
-	static std::mutex _request_map_mutex;
+	std::map<HttpSession *, Request *> _request_map;
+	std::mutex _request_map_mutex;
 };
 
 #endif

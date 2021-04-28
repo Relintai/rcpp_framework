@@ -99,10 +99,10 @@ void HTTPServer::initialize() {
 		builder.setAddr(false, "0.0.0.0", p_port);
 	});
 
-	listenBuilder->configureEnterCallback([](const HttpSession::Ptr &httpSession, HttpSessionHandlers &handlers) {
-		handlers.setHttpCallback(HTTPServer::httpEnterCallbackDefault);
-		handlers.setClosedCallback(HTTPServer::closedCallbackDefault);
-		handlers.setWSCallback(HTTPServer::wsEnterCallbackDefault);
+	listenBuilder->configureEnterCallback([this](const HttpSession::Ptr &httpSession, HttpSessionHandlers &handlers) {
+		handlers.setHttpCallback([this](const HTTPParser &httpParser, const HttpSession::Ptr &session){ this->httpEnterCallbackDefault(httpParser, session); });
+		handlers.setWSCallback([this](const HttpSession::Ptr &httpSession, WebSocketFormat::WebSocketFrameType opcode, const std::string &payload){ this->wsEnterCallbackDefault(httpSession, opcode, payload); });
+		handlers.setClosedCallback([this](const HttpSession::Ptr &session){ this->closedCallbackDefault(session); });
 	});
 
 	listenBuilder->asyncRun();
@@ -130,6 +130,3 @@ HTTPServer::HTTPServer() {
 HTTPServer::~HTTPServer() {
 	delete listenBuilder;
 }
-
-std::map<HttpSession *, Request *> HTTPServer::_request_map;
-std::mutex HTTPServer::_request_map_mutex;
