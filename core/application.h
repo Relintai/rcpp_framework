@@ -18,9 +18,9 @@ public:
 	static std::string default_error_404_body;
 	static std::string default_generic_error_body;
 
-	static void handle_request(Request *request);
-	static void send_error(int error_code, Request *request);
-	static void send_file(const std::string &path, Request *request);
+	void handle_request(Request *request);
+	void send_error(int error_code, Request *request);
+	void send_file(const std::string &path, Request *request);
 
 	static void default_fallback_error_handler(int error_code, Request *request);
 	static void default_404_error_handler(int error_code, Request *request);
@@ -29,28 +29,28 @@ public:
 	virtual void setup_routes();
 	virtual void setup_middleware();
 
-	static void default_routing_middleware(Object *instance, Request *request);
+	void default_routing_middleware(Object *instance, Request *request);
 
 	virtual void migrate();
 
-	static void register_request_update(Request *request);
-	static void unregister_request_update(Request *request);
-	static void update();
+	void register_request_update(Request *request);
+	void unregister_request_update(Request *request);
+	void update();
 
 	Application();
 	virtual ~Application();
 
 public:
-	static HandlerInstance index_func;
-	static std::map<std::string, HandlerInstance> main_route_map;
-	static std::vector<HandlerInstance> middlewares;
+	HandlerInstance index_func;
+	std::map<std::string, HandlerInstance> main_route_map;
+	std::vector<HandlerInstance> middlewares;
 
-	static std::map<int, std::function<void(int, Request *)> > error_handler_map;
-	static std::function<void(int, Request *)> default_error_handler_func;
+	std::map<int, std::function<void(int, Request *)> > error_handler_map;
+	std::function<void(int, Request *)> default_error_handler_func;
 
 protected:
-	static std::mutex _update_registered_requests_mutex;
-	static std::vector<Request *> _update_registered_requests;
+	std::mutex _update_registered_requests_mutex;
+	std::vector<Request *> _update_registered_requests;
 };
 
 #endif

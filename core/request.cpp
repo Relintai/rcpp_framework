@@ -89,7 +89,7 @@ void Request::send_file(const std::string &p_file_path) {
 	response->addHeadValue("Connection", "Close");
 	std::string result = "HTTP/1.1 200 OK\r\nConnection: Close\r\n\r\n";
 
-	Application::register_request_update(this);
+	application->register_request_update(this);
 
 	session->send(result.c_str(), result.size(), [this]() { this->_file_chunk_sent(); });
 }
@@ -233,7 +233,7 @@ void Request::_progress_send_file() {
 	if (!f) {
 		printf("Error: Download: In progress file doesn't exists anymore! %s\n", file_path.c_str());
 
-		Application::unregister_request_update(this);
+		application->unregister_request_update(this);
 
 		session->postShutdown();
 

@@ -6,7 +6,7 @@
 #define LOG_VERBOSE 0
 
 void HTTPServer::http_callback_handler(Request *request) {
-	Application::handle_request(request);
+	application->handle_request(request);
 }
 
 void HTTPServer::httpEnterCallbackDefault(const HTTPParser &httpParser, const HttpSession::Ptr &session) {
