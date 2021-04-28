@@ -54,7 +54,7 @@ void HTTPServer::closedCallbackDefault(const HttpSession::Ptr &session) {
 
 	if (r == nullptr) {
 		lock.unlock();
-		printf("Error HTTPServer::closedCallbackDefault: r == nullptr!\n");
+		//printf("Error HTTPServer::closedCallbackDefault: r == nullptr!\n");
 
 		return;
 	}

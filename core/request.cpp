@@ -42,10 +42,10 @@ void Request::next_stage() {
 }
 
 void Request::send() {
-	if (connection_closed) {
-		RequestPool::return_request(this);
-		return;
-	}
+	//if (connection_closed) {
+	//	RequestPool::return_request(this);
+	//	return;
+	//}
 
 	if (http_parser->isKeepAlive()) {
 		response->addHeadValue("Connection", "Keep-Alive");
@@ -67,10 +67,10 @@ void Request::send() {
 }
 
 void Request::send_file(const std::string &p_file_path) {
-	if (connection_closed) {
-		RequestPool::return_request(this);
-		return;
-	}
+	//if (connection_closed) {
+	//	RequestPool::return_request(this);
+	//	return;
+	//}
 
 	file_path = p_file_path;
 
