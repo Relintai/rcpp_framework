@@ -85,22 +85,16 @@ void HTTPServer::initialize() {
 		delete listenBuilder;
 
 	listenBuilder = new wrapper::HttpListenerBuilder();
-	listenBuilder->configureService(service);
+	listenBuilder->WithService(service);
 
-	listenBuilder->configureSocketOptions({
-			[](TcpSocket &socket) {
+	listenBuilder->AddSocketProcess([](TcpSocket &socket) {
 				socket.setNodelay();
 				socket.setNonblock();
-			},
-	});
+			});
 
-	listenBuilder->configureConnectionOptions({ AddSocketOption::WithMaxRecvBufferSize(1024) });
+	listenBuilder->WithAddr(false, "0.0.0.0", p_port);
 
-	listenBuilder->configureListen([p_port](wrapper::BuildListenConfig builder) {
-		builder.setAddr(false, "0.0.0.0", p_port);
-	});
-
-	listenBuilder->configureEnterCallback([this](const HttpSession::Ptr &httpSession, HttpSessionHandlers &handlers) {
+	listenBuilder->WithEnterCallback([this](const HttpSession::Ptr &httpSession, HttpSessionHandlers &handlers) {
 		handlers.setHttpCallback([this](const HTTPParser &httpParser, const HttpSession::Ptr &session){ this->httpEnterCallbackDefault(httpParser, session); });
 		handlers.setWSCallback([this](const HttpSession::Ptr &httpSession, WebSocketFormat::WebSocketFrameType opcode, const std::string &payload){ this->wsEnterCallbackDefault(httpSession, opcode, payload); });
 		handlers.setClosedCallback([this](const HttpSession::Ptr &session){ this->closedCallbackDefault(session); });
