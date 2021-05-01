@@ -6,7 +6,7 @@
 
 #include "core/query_result.h"
 
-#include <sqlite3.h>
+#include "./sqlite/sqlite3.h"
 
 class Sqlite3QueryResult : public QueryResult {
 public:

@@ -11,7 +11,7 @@
 
 #include <cstdio>
 
-#include <sqlite3.h>
+#include "./sqlite/sqlite3.h"
 
 class SQLite3Database : public Database {
 public:
