@@ -1,7 +1,7 @@
 #include "mqtt_server.h"
 
-void MQTTServer::add_local_session(const std::string &filter, void (*func)(const std::string &client_id, const std::vector<uint8_t> &data)) {
-    session_manager->add_local_session(filter, func);
+void MQTTServer::add_local_session(const std::string &filter, void (*func)(const std::string &client_id, const std::vector<uint8_t> &data, void *obj), void* obj) {
+    session_manager->add_local_session(filter, func, obj);
 }
 
 void MQTTServer::initialize() {

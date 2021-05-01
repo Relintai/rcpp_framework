@@ -51,7 +51,7 @@ void SessionManager::handle_local_publish(const std::string &client_id, const Pu
         LocalSession &l = local_sessions[i];
 
 		if (topic_match(l.filter, TopicName(packet.topic_name))) {
-			l.func(client_id, packet.message_data);
+			l.func(client_id, packet.message_data, l.obj);
 		}
 	}
 }

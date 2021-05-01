@@ -78,24 +78,26 @@ public:
      */
 	void handle_publish(const PublishPacket &publish_packet);
 
-    void handle_local_publish(const std::string &client_id, const PublishPacket &packet);
+	void handle_local_publish(const std::string &client_id, const PublishPacket &packet);
 
 	/** Container of BrokerSessions. */
 	std::list<std::unique_ptr<BrokerSession> > sessions;
 
 public:
-	void add_local_session(const std::string &filter, void (*func)(const std::string &client_id, const std::vector<uint8_t> &data)) {
+	void add_local_session(const std::string &filter, void (*func)(const std::string &client_id, const std::vector<uint8_t> &data, void *obj), void *obj) {
 		LocalSession l;
 
-        l.filter = filter;
-        l.func = func;
+		l.filter = filter;
+		l.func = func;
+		l.obj = obj;
 
-        local_sessions.push_back(l);
+		local_sessions.push_back(l);
 	}
 
 	struct LocalSession {
 		std::string filter;
-		void (*func)(const std::string &client_id, const std::vector<uint8_t> &data);
+		void (*func)(const std::string &client_id, const std::vector<uint8_t> &data, void *obj);
+		void *obj;
 	};
 
 	std::vector<LocalSession> local_sessions;

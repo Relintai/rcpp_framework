@@ -21,7 +21,7 @@ class MQTTServer {
 public:
 	static void listener_cb(struct evconnlistener *listener, evutil_socket_t fd, struct sockaddr *addr, int socklen, void *arg);
 
-	void add_local_session(const std::string &filter, void (*func)(const std::string &client_id, const std::vector<uint8_t> &data));
+	void add_local_session(const std::string &filter, void (*func)(const std::string &client_id, const std::vector<uint8_t> &data, void *obj), void* obj);
 
 	void initialize();
 	void run_async();
