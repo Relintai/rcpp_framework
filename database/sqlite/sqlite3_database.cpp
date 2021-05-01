@@ -13,3 +13,28 @@ void SQLite3Database::_register() {
 void SQLite3Database::_unregister() {
 	DatabaseManager::_unregister_db_creation_func("sqlite");
 }
+
+void SQLite3Database::connect(const std::string &connection_str) {
+	int ret = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
+	if (ret != SQLITE_OK) {
+		printf("SQLITE3 multithreading is not supported!\n");
+	}
+
+	ret = sqlite3_open(connection_str.c_str(), &conn);
+}
+
+QueryResult *SQLite3Database::query(const std::string &query) {
+	return nullptr;
+}
+
+void SQLite3Database::query_run(const std::string &query) {
+}
+
+SQLite3Database::SQLite3Database() :
+		Database() {
+}
+
+SQLite3Database::~SQLite3Database() {
+	if (conn)
+		sqlite3_close(conn);
+}

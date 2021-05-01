@@ -19,20 +19,12 @@ public:
 	static void _register();
 	static void _unregister();
 
-	SQLite3Database() :
-			Database() {
+	void connect(const std::string &connection_str);
+	QueryResult *query(const std::string &query);
+	void query_run(const std::string &query);
 
-		int ret = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
-		if (ret != SQLITE_OK) {
-			printf("SQLITE3 multithreading is not supported!\n");
-		}
-
-		ret = sqlite3_open("", &conn);
-	}
-
-	~SQLite3Database() {
-		sqlite3_close(conn);
-	}
+	SQLite3Database();
+	~SQLite3Database();
 
 	sqlite3 *conn;
 };
