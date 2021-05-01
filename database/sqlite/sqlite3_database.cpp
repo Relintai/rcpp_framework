@@ -2,6 +2,8 @@
 
 #include "core/database_manager.h"
 
+#include "sqlite3_query_result.h"
+
 Database *SQLite3Database::_creation_func() {
 	return new SQLite3Database();
 }
@@ -24,10 +26,20 @@ void SQLite3Database::connect(const std::string &connection_str) {
 }
 
 QueryResult *SQLite3Database::query(const std::string &query) {
-	return nullptr;
+	Sqlite3QueryResult *res = new Sqlite3QueryResult();
+
+	res->query(query, conn);
+
+	return res;
 }
 
 void SQLite3Database::query_run(const std::string &query) {
+	char *err_msg;
+
+    if (sqlite3_exec(conn, query.c_str(), NULL, NULL, &err_msg) != SQLITE_OK) {
+		printf("SQLite3Database::query_run error: \nQuery: %s \n Error:\n %s\n", query.c_str(), err_msg);
+		sqlite3_free(err_msg);
+	}
 }
 
 SQLite3Database::SQLite3Database() :
