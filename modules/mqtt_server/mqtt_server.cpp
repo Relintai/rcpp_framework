@@ -14,9 +14,9 @@ void MQTTServer::initialize() {
 	sin.sin_port = htons(port);
 
 	listener = evconnlistener_new_bind(evloop, MQTTServer::listener_cb,
-                    (void *)this,
-                    LEV_OPT_REUSEABLE | LEV_OPT_CLOSE_ON_FREE, -1,
-                    (struct sockaddr *)&sin, sizeof(sin));
+			(void *)this,
+			LEV_OPT_REUSEABLE | LEV_OPT_CLOSE_ON_FREE, -1,
+			(struct sockaddr *)&sin, sizeof(sin));
 
 	if (!listener) {
 		std::cerr << "Could not create listener!\n";
@@ -40,27 +40,42 @@ void MQTTServer::listener_cb(struct evconnlistener *listener, evutil_socket_t fd
 	server->session_manager->accept_connection(bev);
 }
 
-void MQTTServer::loop_once() {
-	event_base_dispatch(evloop);
+void MQTTServer::run_async() {
+    if (_thread) {
+        printf("MQTTServer::run_async Error! A thread is already runnig!\n");
+        return;
+    }
+
+    _thread = new std::thread([this]() { event_base_dispatch(this->evloop); });
 }
 
 MQTTServer::MQTTServer() {
 	bind_address = "0";
 	port = 1883;
+	_thread = nullptr;
 
-    session_manager = new SessionManager();
+	session_manager = new SessionManager();
 
 	evloop = nullptr;
 	listener = nullptr;
 }
 
 MQTTServer::~MQTTServer() {
-    if (event_base_loopexit(evloop, NULL)) {
-        std::cerr << "failed to exit event loop\n";
-    }
+    //this first, as evloop runs in _thread
+	if (evloop && event_base_loopexit(evloop, NULL)) {
+		std::cout << "failed to exit event loop\n";
+	}
 
-	evconnlistener_free(listener);
-	event_base_free(evloop);
+	if (_thread) {
+		_thread->join();
+		delete _thread;
+	}
 
-    delete session_manager;
+	if (listener)
+		evconnlistener_free(listener);
+
+	if (evloop)
+		event_base_free(evloop);
+
+	delete session_manager;
 }

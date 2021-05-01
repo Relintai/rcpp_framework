@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <string>
 #include <vector>
+#include <thread>
 
 #include "./mqtt_broker/src/broker_session.h"
 #include "./mqtt_broker/src/session_manager.h"
@@ -31,10 +32,12 @@ public:
 	void on_error() { printf("on_error\n"); }
 
 	void initialize();
-	void loop_once();
+	void run_async();
 
 	MQTTServer();
 	~MQTTServer();
+
+	std::thread *_thread;
 
 	SessionManager *session_manager;
 	std::string bind_address;
