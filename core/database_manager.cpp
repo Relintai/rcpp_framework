@@ -12,7 +12,14 @@ uint32_t DatabaseManager::create_database(const std::string &name) {
         return -1;
 	}
 
+	printf("Database %s successfully created!\n", name.c_str());
+
     databases.push_back(db);
+
+	if (ddb == nullptr) {
+		printf("Database %s has been set as the default database!\n", name.c_str());
+		ddb = db;
+	}
 
     return databases.size() - 1;
 }
@@ -53,6 +60,8 @@ Database *DatabaseManager::_create_database(const std::string &name) {
 
 DatabaseManager::DatabaseManager() {
 	_instance = this;
+
+	ddb = nullptr;
 }
 
 DatabaseManager::~DatabaseManager() {

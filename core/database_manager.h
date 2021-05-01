@@ -10,6 +10,7 @@
 class DatabaseManager {
 public:
     std::vector<Database *> databases;
+    Database *ddb;
 
     void load();
 
