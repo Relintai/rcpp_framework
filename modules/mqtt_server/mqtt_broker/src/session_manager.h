@@ -15,8 +15,9 @@
 #pragma once
 
 #include <list>
-#include <string>
 #include <memory>
+#include <string>
+#include <vector>
 
 struct bufferevent;
 
@@ -28,11 +29,9 @@ class PublishPacket;
  *
  * Composes a container of broker sessions and methods to manage them.
  */
-class SessionManager
-{
+class SessionManager {
 public:
-
-    /**
+	/**
      * Accept a new network connection.
      *
      * Creates a new BrokerSession instance and adds it to the container of sessions.  The session instance will manage
@@ -40,17 +39,17 @@ public:
      *
      * @param bev Pointer to a bufferevent
      */
-    void accept_connection(struct bufferevent * bev);
+	void accept_connection(struct bufferevent *bev);
 
-    /**
+	/**
      * Find a session in the session container.
      *
      * @param client_id Unique client id to find.
      * @return          Iterator to BrokerSession.
      */
-    std::list<std::unique_ptr<BrokerSession>>::iterator find_session(const std::string & client_id);
+	std::list<std::unique_ptr<BrokerSession> >::iterator find_session(const std::string &client_id);
 
-    /**
+	/**
      * Delete a session
      *
      * Given a pointer to a BrokerSession, finds that session in the session container and removes it from the
@@ -58,17 +57,17 @@ public:
      *
      * @param session Pointer to a BrokerSession;
      */
-    void erase_session(const BrokerSession *session);
+	void erase_session(const BrokerSession *session);
 
-    /**
+	/**
      * Finds a session in the session container with the given client id.  If found the session is removed from the
      * container.  The session instance will be deleted.
      *
      * @param client_id A Client id.
      */
-    void erase_session(const std::string &client_id);
+	void erase_session(const std::string &client_id);
 
-    /**
+	/**
      * Forward a message to subsribed clients.
      *
      * Searches through each session and their subscriptions and invokes the forward_packet method on each session
@@ -77,9 +76,27 @@ public:
      *
      * @param publish_packet Reference to a PublishPacket;
      */
-    void handle_publish(const PublishPacket & publish_packet);
+	void handle_publish(const PublishPacket &publish_packet);
 
-    /** Container of BrokerSessions. */
-    std::list<std::unique_ptr<BrokerSession>> sessions;
+    void handle_local_publish(const std::string &client_id, const PublishPacket &packet);
 
+	/** Container of BrokerSessions. */
+	std::list<std::unique_ptr<BrokerSession> > sessions;
+
+public:
+	void add_local_session(const std::string &filter, void (*func)(const std::string &client_id, const std::vector<uint8_t> &data)) {
+		LocalSession l;
+
+        l.filter = filter;
+        l.func = func;
+
+        local_sessions.push_back(l);
+	}
+
+	struct LocalSession {
+		std::string filter;
+		void (*func)(const std::string &client_id, const std::vector<uint8_t> &data);
+	};
+
+	std::vector<LocalSession> local_sessions;
 };

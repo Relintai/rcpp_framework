@@ -143,6 +143,7 @@ void BrokerSession::handle_publish(const PublishPacket &packet) {
 
     }
 
+    session_manager.handle_local_publish(client_id, packet);
 }
 
 void BrokerSession::handle_puback(const PubackPacket &packet) {
