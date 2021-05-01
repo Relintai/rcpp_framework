@@ -103,6 +103,10 @@ void HTTPServer::initialize() {
 	listenBuilder->asyncRun();
 }
 
+void HTTPServer::loop_once() {
+	application->update();
+}
+
 void HTTPServer::main_loop() {
 	while (true) {
 		//std::this_thread::sleep_for(std::chrono::seconds(1));

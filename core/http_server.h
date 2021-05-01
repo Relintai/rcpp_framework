@@ -37,6 +37,7 @@ public:
 	virtual void configure();
 	virtual void initialize();
 
+	void loop_once();
 	void main_loop();
 
 	HTTPServer();
