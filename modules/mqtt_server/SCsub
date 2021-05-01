@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+Import("env_mod")
+Import("env")
+
+env_mod.core_sources = []
+
+env_mod.add_source_files(env_mod.core_sources, "*.cpp")
+env_mod.add_source_files(env_mod.core_sources, "./mqtt_broker/src/*.cc")
+
+# Build it all as a library
+lib = env_mod.add_library("mqtt_server", env_mod.core_sources)
+env.Prepend(LIBS=[lib])

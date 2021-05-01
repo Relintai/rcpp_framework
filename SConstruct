@@ -137,6 +137,7 @@ env_base.Prepend(LINKFLAGS=["-lpthread"])
 env_base.Append(CXX=["-o3"])
 #env_base.Append(CXX=["-g"])
 #env_base.Append(CXX=["-g2"])
+#env_base.Append(CXX=["-fno-rtti"])
 
 # Compilation DB requires SCons 3.1.1+.
 from SCons import __version__ as scons_raw_version
