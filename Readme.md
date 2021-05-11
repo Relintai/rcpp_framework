@@ -44,6 +44,72 @@ If you pass true to it's constructor like `FileCache(true);` that instance will 
 
 You can evaluate a directory structure using `void wwwroot_evaluate_dir(const char *path, const bool should_exist = true);`.
 
+### Form Validator
+
+It's a wip class. Doesn't work yet.
+
+### HTMLBuilder
+
+Helps with creating htmls.
+
+It has methods for all standard html tags, and has methods for all closing tags aswell.
+
+A little example:
+
+```
+	HTMLBuilder b;
+
+    //Add a div, with the class content: <div class="content">
+	b.div()->cls("content");
+
+    //header html tag: <header>
+	b.header();
+
+    //just write the string "My webpage"
+	b.w("My webpage");
+
+    //Add a span tag, with the class header_link: <span class="header_link">
+	b.span()->cls("header_link");
+
+    //Add a [ into the html: [
+	b.w(" [ ");
+
+    //Add a link: <a href="https://github.com/Relintai">
+	b.a()->href("https://github.com/Relintai");
+
+    //just write the Github string: Github
+	b.w("Github");
+
+    //Close the a tag: </a>
+	b.ca();
+
+    //Add a ] into the html: ]
+	b.w(" ]");
+
+    //close the header tag </header>
+	b.cheader();
+
+    //close the content div: </div>
+    b.cdiv();
+
+    //Finish the currently open tag:
+    b.write_tag();
+
+    //print the resulting string
+	printf("%s\n", b.result.c_str());
+```
+
+The resulting html should look like this:
+(Note that the generated string doesn't actually have newlines!)
+
+```
+<div class="content">
+    <header> 
+        My webpage<span class="header_link"> [ <a href="https://github.com/Relintai">Github</a> ]
+    </header>
+</div>
+```
+
 ### Application
 
 Think about this class as a complete web application.
