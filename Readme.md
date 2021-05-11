@@ -71,6 +71,95 @@ Common static utilities.
 
 ### Request
 
+An HTTP request. It contains every information for http sessions.
+
+Requests are pooled by default, you should now allocate them directly, instead
+you should grab one from the `RequestPool` like: `Request *request = RequestPool::get_request();`.
+
+#### Sending Data
+
+It has these methods for sending data:
+
+```
+    void send();
+    void send_file(const std::string &p_file_path);
+    void send_error(int error_code);
+```
+
+`send()` will send the string that's set into `response`'s body.
+If you want to set this directly do it like this: `request->response->setBody("<html>...etc</html>");`
+
+After sending a request, it will automatically return to the pool.
+
+Note: Later they'll probably be refcounted, but right now you need to make sure to call
+one of the send() like methods, as without it, the connection will be kept alive for quite awhile.
+Also it will lead to memory leaks.
+
+#### HTTP Helpers
+
+It also contains a few strings to help with the handling of http pages:
+
+```
+    std::string head;
+    std::string body;
+    std::string footer;
+```
+
+These can be compiled into `std::string compiled_body;` with using `void compile_body();`.
+
+```
+void Request::compile_body() {
+	compiled_body.reserve(body.size() + head.size() + 13 + 14 + 15);
+
+	//13
+	compiled_body += "<html>"
+					 "<head>";
+
+	compiled_body += head;
+
+	//14
+	compiled_body += "</head>"
+					 "<body>";
+
+	compiled_body += body;
+	compiled_body += footer;
+
+	//15
+	compiled_body += "</body>"
+					 "</html>";
+
+	response->setBody(compiled_body);
+}
+```
+
+You can also use `void compile_and_send_body();` to both compile, and send the html.
+
+#### URI stacks.
+
+A Request contains a few helper methods to help with URI handling. These are:
+
+```
+    void setup_url_stack();
+    std::string get_path() const;
+    const std::string &get_path_full() const;
+    const std::string &get_path_segment(const uint32_t i) const;
+    const std::string &get_current_path_segment() const;
+    uint32_t get_path_segment_count() const;
+    uint32_t get_current_segment_index() const;
+    uint32_t get_remaining_segment_count() const;
+    void pop_path();
+    void push_path();
+```
+
+With this URI's can be thought as a stack. You can push and pop path segments.
+
+For example let's take this path: 'Test/Data/Id/2'.
+
+By default `get_path()` will return the full string, and `get_current_path_segment()` will return `Test`.
+
+However if we now use `push_path();` `get_path()` will return 'Data/Id/2', and `get_current_path_segment()` will return `Data`.
+
+`pop_path();` is the opposite of `push_path();`.
 
 
 ### Settings
