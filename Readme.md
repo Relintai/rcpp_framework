@@ -47,6 +47,48 @@ Note: I'll add an async version later.
 You can override `virtual void configure()` and `virtual void initialize();` to customize
 the server's settings.
 
+### Database
+
+The core Database class contains the api for querying database backends.
+
+These are the methods that backends inplement right now:
+
+```
+    virtual void connect(const std::string &connection_str);
+    virtual QueryResult *query(const std::string &query);
+    virtual void query_run(const std::string &query);
+```
+
+Use these to set up database connections, and also to query the database.
+
+You can also grab a proper `QueryBuilder` or `TableBuilder` instance for the backend using:
+
+```
+    virtual QueryBuilder *get_query_builder();
+    virtual TableBuilder *get_table_builder();
+```
+
+### DatabaseManager
+
+Can contain the active database backends. You should create one in your main, and set up
+any active database backends with it.
+
+It can instance database backends, so you don't need to include them. This is so later
+these can be created from config files.
+
+If you want to create an sqlite database, do it like:
+
+```
+    DatabaseManager *dbm = DatabaseManager::get_singleton();
+
+    uint32_t index = dbm->create_database("sqlite");
+    Database *db = dbm->databases[index];
+    db->connect("database.sqlite");
+```
+
+The first created database will be set as default. This can be accesses using the `DatabaseManager`'s `ddb`
+member variable. Like: DatabaseManager::get_singleton()->ddb;
+
 ### QueryBuilder
 
 WIP, not yet finished. Will be used to provide an abstraction layer for the different database engines.
@@ -331,9 +373,7 @@ Note `Application::update();` will get called by the http server.
 
 ## Databases
 
-
-
-Eventually you will be able to disable these.
+Note: Eventually you will be able to disable these one by one even if they can be compiled.
 
 ### Sqlite3
 
@@ -352,4 +392,9 @@ Install PostgreSQL for your linux distro, you should also get a package which co
 It should be picked up by default if present.
 
 Note that helper classes are not yet implemented for this backend right now.
+
+## Libs
+
+Don't forget to check the libraries in the libs folder, they can be directly included and used.
+
 
