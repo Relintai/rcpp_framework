@@ -57,37 +57,37 @@ It has methods for all standard html tags, and has methods for all closing tags 
 A little example:
 
 ```
-	HTMLBuilder b;
+    HTMLBuilder b;
 
     //Add a div, with the class content: <div class="content">
-	b.div()->cls("content");
+    b.div()->cls("content");
 
     //header html tag: <header>
-	b.header();
+    b.header();
 
     //just write the string "My webpage"
-	b.w("My webpage");
+    b.w("My webpage");
 
     //Add a span tag, with the class header_link: <span class="header_link">
-	b.span()->cls("header_link");
+    b.span()->cls("header_link");
 
     //Add a [ into the html: [
-	b.w(" [ ");
+    b.w(" [ ");
 
     //Add a link: <a href="https://github.com/Relintai">
-	b.a()->href("https://github.com/Relintai");
+    b.a()->href("https://github.com/Relintai");
 
     //just write the Github string: Github
-	b.w("Github");
+    b.w("Github");
 
     //Close the a tag: </a>
-	b.ca();
+    b.ca();
 
     //Add a ] into the html: ]
-	b.w(" ]");
+    b.w(" ]");
 
     //close the header tag </header>
-	b.cheader();
+    b.cheader();
 
     //close the content div: </div>
     b.cdiv();
@@ -96,7 +96,7 @@ A little example:
     b.write_tag();
 
     //print the resulting string
-	printf("%s\n", b.result.c_str());
+    printf("%s\n", b.result.c_str());
 ```
 
 The resulting html should look like this:
