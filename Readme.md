@@ -35,6 +35,48 @@ Check the https://github.com/Relintai/rcpp_cms_project for actual compilation in
 
 Contains core classes.
 
+### HTTPServer
+
+A simple HTTP server class. Create one in your `main()`, set up it's `application` pointer, to
+actually point to a proper application instance, then you can call `main_loop()`.
+
+`main_loop()` runs on the main thread, so this will be the main loop in your app.
+
+Note: I'll add an async version later.
+
+You can override `virtual void configure()` and `virtual void initialize();` to customize
+the server's settings.
+
+### QueryBuilder
+
+WIP, not yet finished. Will be used to provide an abstraction layer for the different database engines.
+
+Similar to CodeIgniter 3's query builders.
+
+### QueryResult
+
+This is the base class for getting results from your database backend. The backends contain
+the actual implementation for this. They'll also instance the proper one for themselves.
+
+### TableBuilder
+
+WIP, not yet finished. Will be used to provide an abstraction layer for the different database engines, 
+but this one will help with table creation / manipulation.
+
+Similar to how CodeIgniter 3 handles this.
+
+### Utils
+
+Common static utilities.
+
+### Request
+
+
+
+### Settings
+
+WIP, not yet finished.
+
 ### FileCahce
 
 Will store all existing files from a directory, so you don't have to constantly check the existence
