@@ -7,7 +7,7 @@ It's more similar to Codeigniter 3, but of course it's still different, because 
 Since it's a normal c++ app, lots of things can be implemented in an unusual (compared to how html frameworks work) 
 albeit lot more efficient way. Also standard app/game like optimizations can be implemented.
 For example it's possible to load and cache users, and only save them in a 
-diffrent thread when necessary (they get dirty).
+different thread when necessary (they get dirty).
 
 It's still in an experimental state, it should be expected to change a lot.
 
@@ -51,7 +51,7 @@ the server's settings.
 
 The core Database class contains the api for querying database backends.
 
-These are the methods that backends inplement right now:
+These are the methods that backends implement right now:
 
 ```
     virtual void connect(const std::string &connection_str);
@@ -308,7 +308,7 @@ The HTTP server will turn an http request into a `Request`, then it will call th
 The `handle_request` method will set up request's middleware stack, and then
 it will call `request->next_stage();`.
 
-Note: the middlware stack might be removed later, as Request now contains a pointer
+Note: the middleware stack might be removed later, as Request now contains a pointer
 to it's owner application.
 
 #### Middlewares
