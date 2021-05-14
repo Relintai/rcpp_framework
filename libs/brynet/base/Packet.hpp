@@ -9,12 +9,8 @@
 
 class BasePacketWriter : public NonCopyable {
 public:
-	BasePacketWriter(char *buffer,
-			size_t len,
-			bool useBigEndian = false,
-			bool isAutoMalloc = false) :
-			mIsAutoMalloc(isAutoMalloc),
-			mBigEndian(useBigEndian) {
+	BasePacketWriter(char *buffer, size_t len, bool useBigEndian = false, bool isAutoMalloc = false) :
+			mIsAutoMalloc(isAutoMalloc), mBigEndian(useBigEndian) {
 		mMaxLen = len;
 		mPos = 0;
 		mBuffer = buffer;
