@@ -4,10 +4,6 @@
 #include <brynet/net/wrapper/ConnectionBuilder.hpp>
 #include <utility>
 
-namespace brynet {
-namespace net {
-namespace wrapper {
-
 class HttpConnectionBuilder {
 public:
 	HttpConnectionBuilder &WithService(TcpService::Ptr service) {
@@ -35,7 +31,7 @@ public:
 		return *this;
 	}
 
-	HttpConnectionBuilder &WithEnterCallback(http::HttpSession::EnterCallback &&callback) {
+	HttpConnectionBuilder &WithEnterCallback(HttpSession::EnterCallback &&callback) {
 		mHttpEnterCallback = std::move(callback);
 		return *this;
 	}
@@ -69,16 +65,13 @@ public:
 		auto callback = mHttpEnterCallback;
 		auto builder = mBuilder;
 		builder.AddEnterCallback([callback](const TcpConnection::Ptr &session) {
-			http::HttpService::setup(session, callback);
+			HttpService::setup(session, callback);
 		});
 		builder.asyncConnect();
 	}
 
 private:
-	http::HttpSession::EnterCallback mHttpEnterCallback;
+	HttpSession::EnterCallback mHttpEnterCallback;
 	ConnectionBuilder mBuilder;
 };
 
-} // namespace wrapper
-} // namespace net
-} // namespace brynet

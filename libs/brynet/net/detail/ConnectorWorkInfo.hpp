@@ -16,10 +16,6 @@
 #include <mutex>
 #endif
 
-namespace brynet {
-namespace net {
-namespace detail {
-
 class AsyncConnectAddr final {
 public:
 	using CompletedCallback = std::function<void(TcpSocket::Ptr)>;
@@ -74,13 +70,13 @@ private:
 	const std::vector<ProcessTcpSocketCallback> mProcessCallbacks;
 };
 
-class ConnectorWorkInfo final : public brynet::base::NonCopyable {
+class ConnectorWorkInfo final : public NonCopyable {
 public:
 	using Ptr = std::shared_ptr<ConnectorWorkInfo>;
 
 	ConnectorWorkInfo() BRYNET_NOEXCEPT {
-		mPoller.reset(brynet::base::poller_new());
-		mPollResult.reset(brynet::base::stack_new(1024, sizeof(BrynetSocketFD)));
+		mPoller.reset(poller_new());
+		mPollResult.reset(stack_new(1024, sizeof(BrynetSocketFD)));
 	}
 
 	void checkConnectStatus(int millSecond) {
@@ -91,7 +87,7 @@ public:
 		std::set<BrynetSocketFD> totalFds;
 		std::set<BrynetSocketFD> successFds;
 
-		poller_visitor(mPoller.get(), brynet::base::WriteCheck, mPollResult.get());
+		poller_visitor(mPoller.get(), WriteCheck, mPollResult.get());
 		while (true) {
 			auto p = stack_popfront(mPollResult.get());
 			if (p == nullptr) {
@@ -101,7 +97,7 @@ public:
 			const auto fd = *(BrynetSocketFD *)p;
 			totalFds.insert(fd);
 			if (isConnectSuccess(fd, false) &&
-					!brynet::net::base::IsSelfConnect(fd)) {
+					!IsSelfConnect(fd)) {
 				successFds.insert(fd);
 			}
 		}
@@ -134,7 +130,7 @@ public:
 	}
 
 	bool isConnectSuccess(BrynetSocketFD clientfd, bool willCheckWrite) const {
-		if (willCheckWrite && !poller_check(mPoller.get(), clientfd, brynet::base::WriteCheck)) {
+		if (willCheckWrite && !poller_check(mPoller.get(), clientfd, WriteCheck)) {
 			return false;
 		}
 
@@ -165,7 +161,7 @@ public:
 			poller_remove(mPoller.get(), fd);
 			mConnectingInfos.erase(it++);
 
-			brynet::net::base::SocketClose(fd);
+			SocketClose(fd);
 			if (cb != nullptr) {
 				//TODO::don't modify mConnectingInfos in cb
 				cb();
@@ -184,21 +180,21 @@ public:
 #endif
 		int n = 0;
 
-		brynet::net::base::InitSocket();
+		InitSocket();
 
-		clientfd = brynet::net::base::SocketCreate(AF_INET, SOCK_STREAM, 0);
+		clientfd = SocketCreate(AF_INET, SOCK_STREAM, 0);
 		if (clientfd == BRYNET_INVALID_SOCKET) {
 			goto FAILED;
 		}
 
-		brynet::net::base::SocketNonblock(clientfd);
+		SocketNonblock(clientfd);
 		server_addr.sin_family = AF_INET;
 		inet_pton(AF_INET, addr.getIP().c_str(), &server_addr.sin_addr.s_addr);
 		server_addr.sin_port = static_cast<decltype(server_addr.sin_port)>(htons(addr.getPort()));
 
 		n = connect(clientfd, (struct sockaddr *)&server_addr, sizeof(struct sockaddr));
 		if (n == 0) {
-			if (brynet::net::base::IsSelfConnect(clientfd)) {
+			if (IsSelfConnect(clientfd)) {
 				goto FAILED;
 			}
 		} else if (BRYNET_ERRNO != ExpectedError) {
@@ -212,7 +208,7 @@ public:
 			ci.processCallbacks = addr.getProcessCallbacks();
 
 			mConnectingInfos[clientfd] = ci;
-			poller_add(mPoller.get(), clientfd, brynet::base::WriteCheck);
+			poller_add(mPoller.get(), clientfd, WriteCheck);
 
 			return;
 		}
@@ -228,7 +224,7 @@ public:
 
 	FAILED:
 		if (clientfd != BRYNET_INVALID_SOCKET) {
-			brynet::net::base::SocketClose(clientfd);
+			SocketClose(clientfd);
 			clientfd = BRYNET_INVALID_SOCKET;
 			(void)clientfd;
 		}
@@ -246,7 +242,7 @@ public:
 			auto cb = v.second.failedCB;
 
 			poller_remove(mPoller.get(), fd);
-			brynet::net::base::SocketClose(fd);
+			SocketClose(fd);
 			if (cb != nullptr) {
 				cb();
 			}
@@ -271,23 +267,23 @@ private:
 
 	class PollerDeleter {
 	public:
-		void operator()(struct brynet::base::poller_s *ptr) const {
-			brynet::base::poller_delete(ptr);
+		void operator()(struct poller_s *ptr) const {
+			poller_delete(ptr);
 		}
 	};
 	class StackDeleter {
 	public:
-		void operator()(struct brynet::base::stack_s *ptr) const {
-			brynet::base::stack_delete(ptr);
+		void operator()(struct stack_s *ptr) const {
+			stack_delete(ptr);
 		}
 	};
 
-	std::unique_ptr<struct brynet::base::poller_s, PollerDeleter> mPoller;
-	std::unique_ptr<struct brynet::base::stack_s, StackDeleter> mPollResult;
+	std::unique_ptr<struct poller_s, PollerDeleter> mPoller;
+	std::unique_ptr<struct stack_s, StackDeleter> mPollResult;
 };
 
 static void RunOnceCheckConnect(
-		const std::shared_ptr<brynet::net::EventLoop> &eventLoop,
+		const std::shared_ptr<EventLoop> &eventLoop,
 		const std::shared_ptr<ConnectorWorkInfo> &workerInfo) {
 	eventLoop->loop(std::chrono::milliseconds(10).count());
 	workerInfo->checkConnectStatus(0);
@@ -303,7 +299,3 @@ public:
 	AsyncConnectAddr::CompletedCallback completedCallback;
 	AsyncConnectAddr::FailedCallback failedCallback;
 };
-
-} // namespace detail
-} // namespace net
-} // namespace brynet

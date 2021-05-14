@@ -3,9 +3,6 @@
 #include <stdexcept>
 #include <string>
 
-namespace brynet {
-namespace net {
-
 class ConnectException : public std::runtime_error {
 public:
 	explicit ConnectException(const std::string &message) :
@@ -27,6 +24,3 @@ public:
 			std::runtime_error(message) {
 	}
 };
-
-} // namespace net
-} // namespace brynet

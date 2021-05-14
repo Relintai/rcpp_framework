@@ -2,9 +2,6 @@
 
 #include <brynet/net/SocketLibTypes.hpp>
 
-namespace brynet {
-namespace net {
-namespace port {
 
 #ifdef BRYNET_PLATFORM_WINDOWS
 class Win {
@@ -25,7 +22,3 @@ public:
 	};
 };
 #endif
-
-} // namespace port
-} // namespace net
-} // namespace brynet

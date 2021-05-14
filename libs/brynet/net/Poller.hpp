@@ -9,9 +9,6 @@
 #include <poll.h>
 #endif
 
-namespace brynet {
-namespace base {
-
 #ifdef BRYNET_PLATFORM_WINDOWS
 const static int CHECK_READ_FLAG = (POLLIN | POLLRDNORM | POLLRDBAND);
 const static int CHECK_WRITE_FLAG = (POLLOUT | POLLWRNORM);
@@ -213,6 +210,3 @@ static bool poller_check(struct poller_s *self, BrynetSocketFD fd, enum CheckTyp
 	}
 	return check_event(pf, type);
 }
-
-} // namespace base
-} // namespace brynet

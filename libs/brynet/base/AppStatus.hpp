@@ -14,9 +14,6 @@
 #include <unistd.h>
 #endif
 
-namespace brynet {
-namespace base {
-
 static bool app_kbhit() {
 #ifdef BRYNET_PLATFORM_WINDOWS
 	return _kbhit();
@@ -42,6 +39,3 @@ static bool app_kbhit() {
 	return false;
 #endif
 }
-
-} // namespace base
-} // namespace brynet

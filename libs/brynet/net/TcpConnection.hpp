@@ -34,17 +34,14 @@ extern "C" {
 
 #endif
 
-namespace brynet {
-namespace net {
-
 class TcpConnection : public Channel,
-					  public brynet::base::NonCopyable,
+					  public NonCopyable,
 					  public std::enable_shared_from_this<TcpConnection> {
 public:
 	using Ptr = std::shared_ptr<TcpConnection>;
 
 	using EnterCallback = std::function<void(Ptr)>;
-	using DataCallback = std::function<void(brynet::base::BasePacketReader &)>;
+	using DataCallback = std::function<void(BasePacketReader &)>;
 	using DisconnectedCallback = std::function<void(Ptr)>;
 	using PacketSendedCallback = std::function<void(void)>;
 	using HighWaterCallback = std::function<void(void)>;
@@ -132,7 +129,7 @@ public:
 		send(MakeStringMsg(std::move(buffer)), std::move(callback));
 	}
 
-	// setDataCallback(std::function<void(brynet::base::BasePacketReader&)>）
+	// setDataCallback(std::function<void(BasePacketReader&)>）
 	template <typename Callback>
 	void setDataCallback(Callback &&cb) {
 		verifyArgType(cb, &Callback::operator());
@@ -280,7 +277,7 @@ private:
 
 	void growRecvBuffer() {
 		if (mRecvBuffer == nullptr) {
-			mRecvBuffer.reset(brynet::base::buffer_new(std::min<size_t>(16 * 1024, mMaxRecvBufferSize)));
+			mRecvBuffer.reset(buffer_new(std::min<size_t>(16 * 1024, mMaxRecvBufferSize)));
 			mRecvBuffOriginSize = buffer_getsize(mRecvBuffer.get());
 		} else {
 			if (buffer_getsize(mRecvBuffer.get()) >= mMaxRecvBufferSize) {
@@ -293,7 +290,7 @@ private:
 			const auto NewSize = mRecvBuffOriginSize + (maxSizeDiff * newTanh);
 
 			assert(NewSize <= mMaxRecvBufferSize);
-			std::unique_ptr<struct brynet::base::buffer_s, BufferDeleter> newBuffer(brynet::base::buffer_new(NewSize));
+			std::unique_ptr<struct buffer_s, BufferDeleter> newBuffer(buffer_new(NewSize));
 			buffer_write(newBuffer.get(),
 					buffer_getreadptr(mRecvBuffer.get()),
 					buffer_getreadvalidcount(mRecvBuffer.get()));
@@ -310,8 +307,8 @@ private:
 			return;
 		}
 
-		std::unique_ptr<struct brynet::base::buffer_s, BufferDeleter>
-				newBuffer(brynet::base::buffer_new(newSize));
+		std::unique_ptr<struct buffer_s, BufferDeleter>
+				newBuffer(buffer_new(newSize));
 		buffer_write(newBuffer.get(),
 				buffer_getreadptr(mRecvBuffer.get()),
 				buffer_getreadvalidcount(mRecvBuffer.get()));
@@ -328,7 +325,7 @@ private:
 			return false;
 		}
 
-		if (!brynet::net::base::SocketNonblock(mSocket->getFD()) ||
+		if (!SocketNonblock(mSocket->getFD()) ||
 				!mEventLoop->linkChannel(mSocket->getFD(), this)) {
 			return false;
 		}
@@ -975,7 +972,7 @@ private:
 
 	void processRecvMessage() {
 		if (mDataCallback != nullptr && buffer_getreadvalidcount(mRecvBuffer.get()) > 0) {
-			auto reader = brynet::base::BasePacketReader(buffer_getreadptr(mRecvBuffer.get()),
+			auto reader = BasePacketReader(buffer_getreadptr(mRecvBuffer.get()),
 					buffer_getreadvalidcount(mRecvBuffer.get()), false);
 			mDataCallback(reader);
 			const auto consumedLen = reader.savedPos();
@@ -1009,11 +1006,11 @@ private:
 
 	class BufferDeleter {
 	public:
-		void operator()(struct brynet::base::buffer_s *ptr) const {
-			brynet::base::buffer_delete(ptr);
+		void operator()(struct buffer_s *ptr) const {
+			buffer_delete(ptr);
 		}
 	};
-	std::unique_ptr<struct brynet::base::buffer_s, BufferDeleter> mRecvBuffer;
+	std::unique_ptr<struct buffer_s, BufferDeleter> mRecvBuffer;
 	double mCurrentTanhXDiff = 0;
 	size_t mRecvBuffOriginSize = 0;
 	const size_t mMaxRecvBufferSize;
@@ -1043,8 +1040,5 @@ private:
 #endif
 	bool mRecvData;
 	std::chrono::nanoseconds mCheckTime{};
-	brynet::base::Timer::WeakPtr mTimer;
+	Timer::WeakPtr mTimer;
 };
-
-} // namespace net
-} // namespace brynet

@@ -7,9 +7,6 @@
 #include <memory>
 #include <mutex>
 
-namespace brynet {
-namespace base {
-
 class WaitGroup : public NonCopyable {
 public:
 	typedef std::shared_ptr<WaitGroup> Ptr;
@@ -57,5 +54,3 @@ private:
 	std::atomic<int> mCounter;
 	std::condition_variable mCond;
 };
-} // namespace base
-} // namespace brynet

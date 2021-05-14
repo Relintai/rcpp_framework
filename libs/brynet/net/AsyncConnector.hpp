@@ -2,25 +2,23 @@
 
 #include <brynet/net/detail/ConnectorDetail.hpp>
 
-namespace brynet {
-namespace net {
+using ConnectOption = ConnectOption;
 
-using ConnectOption = detail::ConnectOption;
-class AsyncConnector : public detail::AsyncConnectorDetail,
+class AsyncConnector : public AsyncConnectorDetail,
 					   public std::enable_shared_from_this<AsyncConnector> {
 public:
 	using Ptr = std::shared_ptr<AsyncConnector>;
 
 	void startWorkerThread() {
-		detail::AsyncConnectorDetail::startWorkerThread();
+		AsyncConnectorDetail::startWorkerThread();
 	}
 
 	void stopWorkerThread() {
-		detail::AsyncConnectorDetail::stopWorkerThread();
+		AsyncConnectorDetail::stopWorkerThread();
 	}
 
 	void asyncConnect(const ConnectOption &option) {
-		detail::AsyncConnectorDetail::asyncConnect(option);
+		AsyncConnectorDetail::asyncConnect(option);
 	}
 
 	static Ptr Create() {
@@ -32,6 +30,3 @@ public:
 private:
 	AsyncConnector() = default;
 };
-
-} // namespace net
-} // namespace brynet

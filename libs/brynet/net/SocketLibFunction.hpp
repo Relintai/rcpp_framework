@@ -5,10 +5,6 @@
 #include <brynet/net/SocketLibTypes.hpp>
 #include <string>
 
-namespace brynet {
-namespace net {
-namespace base {
-
 static bool InitSocket() {
 	bool ret = true;
 #ifdef BRYNET_PLATFORM_WINDOWS
@@ -289,7 +285,3 @@ static bool IsSelfConnect(BrynetSocketFD fd) {
 		return false;
 	}
 }
-
-} // namespace base
-} // namespace net
-} // namespace brynet

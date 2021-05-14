@@ -6,10 +6,6 @@
 #include <brynet/net/detail/ConnectionOption.hpp>
 #include <utility>
 
-namespace brynet {
-namespace net {
-namespace wrapper {
-
 template <typename Derived>
 class BaseListenerBuilder {
 public:
@@ -72,7 +68,7 @@ public:
 				mIsIpV6,
 				mListenAddr,
 				mPort,
-				[service, option](brynet::net::TcpSocket::Ptr socket) {
+				[service, option](TcpSocket::Ptr socket) {
 					service->addTcpConnection(std::move(socket), option);
 				},
 				mSocketProcessCallbacks,
@@ -99,7 +95,3 @@ private:
 
 class ListenerBuilder : public BaseListenerBuilder<ListenerBuilder> {
 };
-
-} // namespace wrapper
-} // namespace net
-} // namespace brynet

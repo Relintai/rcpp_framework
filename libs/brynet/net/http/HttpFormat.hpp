@@ -5,10 +5,6 @@
 #include <map>
 #include <string>
 
-namespace brynet {
-namespace net {
-namespace http {
-
 class HttpQueryParameter final {
 public:
 	void add(const std::string &k, const std::string &v) {
@@ -198,7 +194,3 @@ private:
 	std::map<std::string, std::string> mHeadField;
 	std::string mBody;
 };
-
-} // namespace http
-} // namespace net
-} // namespace brynet

@@ -22,9 +22,6 @@ extern "C" {
 
 #endif
 
-namespace brynet {
-namespace net {
-
 #ifdef BRYNET_USE_OPENSSL
 
 #ifndef CRYPTO_THREADID_set_callback
@@ -69,7 +66,7 @@ static void InitCryptoThreadSafeSupport() {
 }
 #endif
 
-class SSLHelper : public brynet::base::NonCopyable,
+class SSLHelper : public NonCopyable,
 				  public std::enable_shared_from_this<SSLHelper> {
 public:
 	using Ptr = std::shared_ptr<SSLHelper>;
@@ -152,5 +149,3 @@ private:
 #endif
 };
 
-} // namespace net
-} // namespace brynet

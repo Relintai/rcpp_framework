@@ -6,14 +6,10 @@
 #include <brynet/net/http/WebSocketFormat.hpp>
 #include <memory>
 
-namespace brynet {
-namespace net {
-namespace http {
-
 class HttpService;
 class HttpSessionHandlers;
 
-class HttpSession : public brynet::base::NonCopyable {
+class HttpSession : public NonCopyable {
 public:
 	using Ptr = std::shared_ptr<HttpSession>;
 
@@ -172,7 +168,7 @@ private:
 		});
 
 		session->setDataCallback([httpSession, httpParser](
-										 brynet::base::BasePacketReader &reader) {
+										 BasePacketReader &reader) {
 			size_t retLen = 0;
 
 			if (httpParser->isWebSocket()) {
@@ -301,6 +297,3 @@ private:
 	}
 };
 
-} // namespace http
-} // namespace net
-} // namespace brynet

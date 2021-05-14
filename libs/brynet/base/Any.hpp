@@ -8,9 +8,6 @@
 #include <cstdint>
 #endif
 
-namespace brynet {
-namespace base {
-
 #ifdef BRYNET_HAVE_LANG_CXX17
 using BrynetAny = std::any;
 
@@ -25,6 +22,3 @@ const T *cast(const BrynetAny &ud) {
 	return static_cast<const T *>(&ud);
 }
 #endif
-
-} // namespace base
-} // namespace brynet

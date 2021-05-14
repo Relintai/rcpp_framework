@@ -18,14 +18,11 @@
 #include <unordered_map>
 #include <vector>
 
-namespace brynet {
-namespace net {
-
 class Channel;
 class TcpConnection;
 using TcpConnectionPtr = std::shared_ptr<TcpConnection>;
 
-class EventLoop : public brynet::base::NonCopyable {
+class EventLoop : public NonCopyable {
 public:
 	using Ptr = std::shared_ptr<EventLoop>;
 	using UserFunctor = std::function<void(void)>;
@@ -54,11 +51,11 @@ public:
 		}
 #elif defined BRYNET_PLATFORM_LINUX
 		auto eventfd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
-		mWakeupChannel.reset(new detail::WakeupChannel(eventfd));
+		mWakeupChannel.reset(new WakeupChannel(eventfd));
 		linkChannel(eventfd, mWakeupChannel.get());
 #elif defined BRYNET_PLATFORM_DARWIN
 		const int NOTIFY_IDENT = 42; // Magic number we use for our filter ID.
-		mWakeupChannel.reset(new detail::WakeupChannel(mKqueueFd, NOTIFY_IDENT));
+		mWakeupChannel.reset(new WakeupChannel(mKqueueFd, NOTIFY_IDENT));
 		//Add user event
 		struct kevent ev;
 		EV_SET(&ev, NOTIFY_IDENT, EVFILT_USER, EV_ADD | EV_CLEAR, 0, 0, NULL);
@@ -72,7 +69,7 @@ public:
 
 		reAllocEventSize(1024);
 		mSelfThreadID = -1;
-		mTimer = std::make_shared<brynet::base::TimerMgr>();
+		mTimer = std::make_shared<TimerMgr>();
 	}
 
 	virtual ~EventLoop() BRYNET_NOEXCEPT {
@@ -247,8 +244,8 @@ public:
 
 		mAfterLoopFunctors.emplace_back(std::move(f));
 	}
-	brynet::base::Timer::WeakPtr runAfter(std::chrono::nanoseconds timeout, UserFunctor &&callback) {
-		auto timer = std::make_shared<brynet::base::Timer>(
+	Timer::WeakPtr runAfter(std::chrono::nanoseconds timeout, UserFunctor &&callback) {
+		auto timer = std::make_shared<Timer>(
 				std::chrono::steady_clock::now(),
 				std::chrono::nanoseconds(timeout),
 				std::move(callback));
@@ -266,7 +263,7 @@ public:
 	}
 
 	inline bool isInLoopThread() const {
-		return mSelfThreadID == current_thread::tid();
+		return mSelfThreadID == tid();
 	}
 
 private:
@@ -345,7 +342,7 @@ private:
 	}
 	void tryInitThreadID() {
 		std::call_once(mOnceInitThreadID, [this]() {
-			mSelfThreadID = current_thread::tid();
+			mSelfThreadID = tid();
 		});
 	}
 
@@ -363,7 +360,7 @@ private:
 	std::vector<struct kevent> mEventEntries;
 	int mKqueueFd;
 #endif
-	std::unique_ptr<detail::WakeupChannel> mWakeupChannel;
+	std::unique_ptr<WakeupChannel> mWakeupChannel;
 
 	std::atomic_bool mIsInBlock;
 	std::atomic_bool mIsAlreadyPostWakeup;
@@ -376,13 +373,10 @@ private:
 	std::vector<UserFunctor> mCopyAfterLoopFunctors;
 
 	std::once_flag mOnceInitThreadID;
-	current_thread::THREAD_ID_TYPE mSelfThreadID;
+	THREAD_ID_TYPE mSelfThreadID;
 
-	brynet::base::TimerMgr::Ptr mTimer;
+	TimerMgr::Ptr mTimer;
 	std::unordered_map<BrynetSocketFD, TcpConnectionPtr> mTcpConnections;
 
 	friend class TcpConnection;
 };
-
-} // namespace net
-} // namespace brynet

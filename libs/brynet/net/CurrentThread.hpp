@@ -18,10 +18,6 @@
 #include <unistd.h>
 #endif
 
-namespace brynet {
-namespace net {
-namespace current_thread {
-
 #ifdef BRYNET_PLATFORM_WINDOWS
 using THREAD_ID_TYPE = DWORD;
 #elif defined BRYNET_PLATFORM_LINUX || defined BRYNET_PLATFORM_DARWIN
@@ -52,7 +48,3 @@ static THREAD_ID_TYPE &tid() {
 
 	return cachedTid;
 }
-
-} // namespace current_thread
-} // namespace net
-} // namespace brynet

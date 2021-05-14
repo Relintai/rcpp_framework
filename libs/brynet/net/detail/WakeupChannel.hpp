@@ -8,12 +8,8 @@
 #include <brynet/net/Channel.hpp>
 #include <brynet/net/Socket.hpp>
 
-namespace brynet {
-namespace net {
-namespace detail {
-
 #ifdef BRYNET_PLATFORM_WINDOWS
-class WakeupChannel final : public Channel, public brynet::base::NonCopyable {
+class WakeupChannel final : public Channel, public NonCopyable {
 public:
 	explicit WakeupChannel(HANDLE iocp) :
 			mIOCP(iocp),
@@ -44,7 +40,7 @@ private:
 	port::Win::OverlappedExt mWakeupOvl;
 };
 #elif defined BRYNET_PLATFORM_LINUX
-class WakeupChannel final : public Channel, public brynet::base::NonCopyable {
+class WakeupChannel final : public Channel, public NonCopyable {
 public:
 	explicit WakeupChannel(BrynetSocketFD fd) :
 			mUniqueFd(fd) {
@@ -77,7 +73,7 @@ private:
 };
 
 #elif defined BRYNET_PLATFORM_DARWIN
-class WakeupChannel final : public Channel, public brynet::base::NonCopyable {
+class WakeupChannel final : public Channel, public NonCopyable {
 public:
 	explicit WakeupChannel(int kqueuefd, int ident) :
 			mKqueueFd(kqueuefd),
@@ -108,6 +104,3 @@ private:
 };
 #endif
 
-} // namespace detail
-} // namespace net
-} // namespace brynet

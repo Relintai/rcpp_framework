@@ -3,9 +3,6 @@
 #include <cstdlib>
 #include <cstring>
 
-namespace brynet {
-namespace base {
-
 struct buffer_s {
 	char *data;
 	size_t data_len;
@@ -142,6 +139,3 @@ static bool buffer_write(struct buffer_s *self, const char *data, size_t len) {
 
 	return write_ret;
 }
-
-} // namespace base
-} // namespace brynet

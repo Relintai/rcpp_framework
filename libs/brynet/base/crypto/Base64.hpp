@@ -3,10 +3,6 @@
 
 #include <string>
 
-namespace brynet {
-namespace base {
-namespace crypto {
-
 static const std::string base64_chars =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 		"abcdefghijklmnopqrstuvwxyz"
@@ -98,9 +94,5 @@ static std::string base64_decode(std::string const &encoded_string) {
 
 	return ret;
 }
-
-} // namespace crypto
-} // namespace base
-} // namespace brynet
 
 #endif

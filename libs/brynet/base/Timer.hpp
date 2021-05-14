@@ -8,9 +8,6 @@
 #include <queue>
 #include <vector>
 
-namespace brynet {
-namespace base {
-
 class TimerMgr;
 
 class Timer final {
@@ -140,6 +137,3 @@ private:
 
 	std::priority_queue<Timer::Ptr, std::vector<Timer::Ptr>, CompareTimer> mTimers;
 };
-
-} // namespace base
-} // namespace brynet

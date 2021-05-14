@@ -6,13 +6,9 @@
 #include <future>
 #include <utility>
 
-namespace brynet {
-namespace net {
-namespace wrapper {
-
-using CompletedCallback = detail::AsyncConnectAddr::CompletedCallback;
-using ProcessTcpSocketCallback = detail::AsyncConnectAddr::ProcessTcpSocketCallback;
-using FailedCallback = detail::AsyncConnectAddr::FailedCallback;
+using CompletedCallback = AsyncConnectAddr::CompletedCallback;
+using ProcessTcpSocketCallback = AsyncConnectAddr::ProcessTcpSocketCallback;
+using FailedCallback = AsyncConnectAddr::FailedCallback;
 
 template <typename Derived>
 class BaseSocketConnectBuilder {
@@ -179,7 +175,3 @@ private:
 
 class ConnectionBuilder : public BaseConnectionBuilder<ConnectionBuilder> {
 };
-
-} // namespace wrapper
-} // namespace net
-} // namespace brynet

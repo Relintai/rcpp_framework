@@ -3,9 +3,6 @@
 #include <brynet/base/Array.hpp>
 #include <cstdlib>
 
-namespace brynet {
-namespace base {
-
 struct stack_s {
 	struct array_s *array;
 	size_t element_size;
@@ -141,6 +138,3 @@ static void *stack_popback(struct stack_s *self) {
 
 	return ret;
 }
-
-} // namespace base
-} // namespace brynet

@@ -84,7 +84,7 @@ void HTTPServer::initialize() {
 	if (listenBuilder)
 		delete listenBuilder;
 
-	listenBuilder = new wrapper::HttpListenerBuilder();
+	listenBuilder = new HttpListenerBuilder();
 	listenBuilder->WithService(service);
 
 	listenBuilder->AddSocketProcess([](TcpSocket &socket) {
@@ -112,7 +112,7 @@ void HTTPServer::main_loop() {
 		//std::this_thread::sleep_for(std::chrono::seconds(1));
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-		if (brynet::base::app_kbhit()) {
+		if (app_kbhit()) {
 			break;
 		}
 

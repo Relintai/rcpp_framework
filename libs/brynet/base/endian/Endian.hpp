@@ -12,9 +12,6 @@
 #include <sys/_endian.h>
 #endif
 
-namespace brynet {
-namespace base {
-namespace endian {
 
 inline uint64_t hl64ton(uint64_t hostValue) {
 	uint64_t ret = 0;
@@ -116,7 +113,3 @@ inline uint16_t networkToHost16(uint16_t net16, bool convert = true) {
 	return convert ? ntohs(net16) : net16;
 }
 #endif
-
-} // namespace endian
-} // namespace base
-} // namespace brynet

@@ -1,8 +1,5 @@
 #pragma once
 
-namespace brynet {
-namespace net {
-
 class EventLoop;
 
 class Channel {
@@ -16,6 +13,3 @@ private:
 
 	friend class EventLoop;
 };
-
-} // namespace net
-} // namespace brynet

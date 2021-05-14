@@ -3,10 +3,6 @@
 #include <brynet/net/SSLHelper.hpp>
 #include <brynet/net/TcpConnection.hpp>
 
-namespace brynet {
-namespace net {
-namespace detail {
-
 class ConnectionOption final {
 public:
 	std::vector<TcpConnection::EnterCallback> enterCallback;
@@ -15,7 +11,3 @@ public:
 	bool forceSameThreadLoop = false;
 	size_t maxRecvBufferSize = 128;
 };
-
-} // namespace detail
-} // namespace net
-} // namespace brynet

@@ -15,11 +15,7 @@
 #include <mutex>
 #endif
 
-namespace brynet {
-namespace net {
-namespace detail {
-
-class AsyncConnectorDetail : public brynet::base::NonCopyable {
+class AsyncConnectorDetail : public NonCopyable {
 protected:
 	void startWorkerThread() {
 #ifdef BRYNET_HAVE_LANG_CXX17
@@ -33,7 +29,7 @@ protected:
 		}
 
 		mIsRun = std::make_shared<bool>(true);
-		mWorkInfo = std::make_shared<detail::ConnectorWorkInfo>();
+		mWorkInfo = std::make_shared<ConnectorWorkInfo>();
 		mEventLoop = std::make_shared<EventLoop>();
 
 		auto eventLoop = mEventLoop;
@@ -42,7 +38,7 @@ protected:
 
 		mThread = std::make_shared<std::thread>([eventLoop, workerInfo, isRun]() {
 			while (*isRun) {
-				detail::RunOnceCheckConnect(eventLoop, workerInfo);
+				RunOnceCheckConnect(eventLoop, workerInfo);
 			}
 
 			workerInfo->causeAllFailed();
@@ -78,7 +74,7 @@ protected:
 		mThread = nullptr;
 	}
 
-	void asyncConnect(detail::ConnectOption option) {
+	void asyncConnect(ConnectOption option) {
 #ifdef BRYNET_HAVE_LANG_CXX17
 		std::shared_lock<std::shared_mutex> lck(mThreadGuard);
 #else
@@ -97,7 +93,7 @@ protected:
 		}
 
 		auto workInfo = mWorkInfo;
-		auto address = detail::AsyncConnectAddr(std::move(option.ip),
+		auto address = AsyncConnectAddr(std::move(option.ip),
 				option.port,
 				option.timeout,
 				std::move(option.completedCallback),
@@ -120,7 +116,7 @@ protected:
 private:
 	std::shared_ptr<EventLoop> mEventLoop;
 
-	std::shared_ptr<detail::ConnectorWorkInfo> mWorkInfo;
+	std::shared_ptr<ConnectorWorkInfo> mWorkInfo;
 	std::shared_ptr<std::thread> mThread;
 #ifdef BRYNET_HAVE_LANG_CXX17
 	std::shared_mutex mThreadGuard;
@@ -130,6 +126,3 @@ private:
 	std::shared_ptr<bool> mIsRun;
 };
 
-} // namespace detail
-} // namespace net
-} // namespace brynet

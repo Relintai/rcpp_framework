@@ -14,11 +14,7 @@
 #include <thread>
 #include <vector>
 
-namespace brynet {
-namespace net {
-namespace detail {
-
-class ListenThreadDetail : public brynet::base::NonCopyable {
+class ListenThreadDetail : public NonCopyable {
 protected:
 	using AccepCallback = std::function<void(TcpSocket::Ptr)>;
 	using TcpSocketProcessCallback = std::function<void(TcpSocket &)>;
@@ -30,7 +26,7 @@ protected:
 			return;
 		}
 
-		const auto fd = brynet::net::base::Listen(mIsIPV6, mIP.c_str(), mPort, 512, mEnabledReusePort);
+		const auto fd = Listen(mIsIPV6, mIP.c_str(), mPort, 512, mEnabledReusePort);
 		if (fd == BRYNET_INVALID_SOCKET) {
 			throw BrynetCommonException(
 					std::string("listen error of:") + std::to_string(BRYNET_ERRNO));
@@ -77,7 +73,7 @@ protected:
 		connector->startWorkerThread();
 
 		//TODO:: if the listen enable reuse_port, one time connect may be can't wakeup listen.
-		wrapper::SocketConnectBuilder connectBuilder;
+		SocketConnectBuilder connectBuilder;
 		(void)connectBuilder
 				.WithConnector(connector)
 				.WithTimeout(std::chrono::seconds(2))
@@ -118,7 +114,7 @@ protected:
 	}
 
 private:
-	static brynet::net::TcpSocket::Ptr runOnceListen(const std::shared_ptr<ListenSocket> &listenSocket) {
+	static TcpSocket::Ptr runOnceListen(const std::shared_ptr<ListenSocket> &listenSocket) {
 		try {
 			return listenSocket->accept();
 		} catch (const EintrError &e) {
@@ -142,7 +138,3 @@ private:
 	std::shared_ptr<std::thread> mListenThread;
 	std::mutex mListenThreadGuard;
 };
-
-} // namespace detail
-} // namespace net
-} // namespace brynet

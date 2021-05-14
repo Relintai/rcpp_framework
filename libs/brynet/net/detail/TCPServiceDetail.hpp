@@ -13,11 +13,7 @@
 #include <thread>
 #include <vector>
 
-namespace brynet {
-namespace net {
-namespace detail {
-
-class TcpServiceDetail : public brynet::base::NonCopyable {
+class TcpServiceDetail : public NonCopyable {
 protected:
 	using FrameCallback = std::function<void(const EventLoop::Ptr &)>;
 	const static unsigned int sDefaultLoopTimeOutMS = 100;
@@ -144,7 +140,3 @@ private:
 	std::mutex mServiceGuard;
 	std::mt19937 mRandom;
 };
-
-} // namespace detail
-} // namespace net
-} // namespace brynet

@@ -4,9 +4,6 @@
 #include <cstdlib>
 #include <cstring>
 
-namespace brynet {
-namespace base {
-
 struct array_s {
 	void *buffer;
 	size_t buffer_size;
@@ -102,6 +99,3 @@ static bool array_increase(struct array_s *self, size_t increase_num) {
 static size_t array_num(const struct array_s *self) {
 	return self->element_num;
 }
-
-} // namespace base
-} // namespace brynet

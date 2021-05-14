@@ -2,9 +2,6 @@
 
 #include <brynet/net/TcpService.hpp>
 
-namespace brynet {
-namespace net {
-
 /* binary search in memory */
 void memsearch(const char *hay, size_t haysize, const char *needle, size_t needlesize, size_t &result, bool &isOK) {
 	size_t haypos, needlepos;
@@ -121,7 +118,7 @@ private:
 
 std::shared_ptr<PromiseReceive> setupPromiseReceive(const TcpConnection::Ptr &session) {
 	auto promiseReceive = std::make_shared<PromiseReceive>();
-	session->setDataCallback([promiseReceive](brynet::base::BasePacketReader &reader) {
+	session->setDataCallback([promiseReceive](BasePacketReader &reader) {
 		auto procLen = promiseReceive->process(reader.begin(), reader.size());
 		reader.addPos(procLen);
 		reader.savePos();
@@ -129,6 +126,3 @@ std::shared_ptr<PromiseReceive> setupPromiseReceive(const TcpConnection::Ptr &se
 
 	return promiseReceive;
 }
-
-} // namespace net
-} // namespace brynet

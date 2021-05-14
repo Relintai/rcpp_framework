@@ -5,13 +5,9 @@
 #include <memory>
 #include <thread>
 
-namespace brynet {
-namespace net {
-namespace detail {
-
 class TcpServiceDetail;
 
-class IOLoopData : public brynet::base::NonCopyable,
+class IOLoopData : public NonCopyable,
 				   public std::enable_shared_from_this<IOLoopData> {
 public:
 	using Ptr = std::shared_ptr<IOLoopData>;
@@ -53,7 +49,3 @@ private:
 };
 
 using IOLoopDataPtr = std::shared_ptr<IOLoopData>;
-
-} // namespace detail
-} // namespace net
-} // namespace brynet

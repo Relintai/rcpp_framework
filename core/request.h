@@ -9,10 +9,6 @@
 
 #include "handler_instance.h"
 
-using namespace brynet;
-using namespace brynet::net;
-using namespace brynet::net::http;
-
 class Application;
 
 class Request {

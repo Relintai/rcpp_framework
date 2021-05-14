@@ -14,10 +14,6 @@
 #include <brynet/net/wrapper/HttpServiceBuilder.hpp>
 #include <brynet/net/wrapper/ServiceBuilder.hpp>
 
-using namespace brynet;
-using namespace brynet::net;
-using namespace brynet::net::http;
-
 class Request;
 class Application;
 
@@ -26,7 +22,7 @@ public:
 	int port;
 	int threads;
 	std::shared_ptr<TcpService> service;
-	wrapper::HttpListenerBuilder *listenBuilder;
+	HttpListenerBuilder *listenBuilder;
 
 	void http_callback_handler(Request *response);
 

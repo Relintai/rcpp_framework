@@ -1,8 +1,5 @@
 #pragma once
 
-namespace brynet {
-namespace base {
-
 class NonCopyable {
 public:
 	NonCopyable(const NonCopyable &) = delete;
@@ -13,5 +10,3 @@ protected:
 	~NonCopyable() = default;
 };
 
-} // namespace base
-} // namespace brynet

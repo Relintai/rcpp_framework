@@ -7,9 +7,6 @@
 #include <stdexcept>
 #include <string>
 
-namespace brynet {
-namespace base {
-
 class BasePacketWriter : public NonCopyable {
 public:
 	BasePacketWriter(char *buffer,
@@ -62,27 +59,27 @@ public:
 		return writeBuffer((char *)&value, sizeof(value));
 	}
 	bool writeINT16(int16_t value) {
-		value = endian::hostToNetwork16(value, mBigEndian);
+		value = hostToNetwork16(value, mBigEndian);
 		return writeBuffer((char *)&value, sizeof(value));
 	}
 	bool writeUINT16(uint16_t value) {
-		value = endian::hostToNetwork16(value, mBigEndian);
+		value = hostToNetwork16(value, mBigEndian);
 		return writeBuffer((char *)&value, sizeof(value));
 	}
 	bool writeINT32(int32_t value) {
-		value = endian::hostToNetwork32(value, mBigEndian);
+		value = hostToNetwork32(value, mBigEndian);
 		return writeBuffer((char *)&value, sizeof(value));
 	}
 	bool writeUINT32(uint32_t value) {
-		value = endian::hostToNetwork32(value, mBigEndian);
+		value = hostToNetwork32(value, mBigEndian);
 		return writeBuffer((char *)&value, sizeof(value));
 	}
 	bool writeINT64(int64_t value) {
-		value = endian::hostToNetwork64(value, mBigEndian);
+		value = hostToNetwork64(value, mBigEndian);
 		return writeBuffer((char *)&value, sizeof(value));
 	}
 	bool writeUINT64(uint64_t value) {
-		value = endian::hostToNetwork64(value, mBigEndian);
+		value = hostToNetwork64(value, mBigEndian);
 		return writeBuffer((char *)&value, sizeof(value));
 	}
 
@@ -294,32 +291,32 @@ public:
 	int16_t readINT16() {
 		int16_t value = 0;
 		read(value);
-		return endian::networkToHost16(value, mBigEndian);
+		return networkToHost16(value, mBigEndian);
 	}
 	uint16_t readUINT16() {
 		uint16_t value = 0;
 		read(value);
-		return endian::networkToHost16(value, mBigEndian);
+		return networkToHost16(value, mBigEndian);
 	}
 	int32_t readINT32() {
 		int32_t value = 0;
 		read(value);
-		return endian::networkToHost32(value, mBigEndian);
+		return networkToHost32(value, mBigEndian);
 	}
 	uint32_t readUINT32() {
 		uint32_t value = 0;
 		read(value);
-		return endian::networkToHost32(value, mBigEndian);
+		return networkToHost32(value, mBigEndian);
 	}
 	int64_t readINT64() {
 		int64_t value = 0;
 		read(value);
-		return endian::networkToHost64(value, mBigEndian);
+		return networkToHost64(value, mBigEndian);
 	}
 	uint64_t readUINT64() {
 		uint64_t value = 0;
 		read(value);
-		return endian::networkToHost64(value, mBigEndian);
+		return networkToHost64(value, mBigEndian);
 	}
 
 private:
@@ -359,6 +356,3 @@ private:
 };
 
 using BigPacket = AutoMallocPacket<32 * 1024>;
-
-} // namespace base
-} // namespace brynet

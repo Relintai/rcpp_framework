@@ -1,9 +1,6 @@
 #include <memory>
 #include <string>
 
-namespace brynet {
-namespace net {
-
 class SendableMsg {
 public:
 	using Ptr = std::shared_ptr<SendableMsg>;
@@ -48,5 +45,3 @@ static SendableMsg::Ptr MakeStringMsg(std::string &&buffer) {
 	return std::make_shared<StringSendMsg>(std::move(buffer));
 }
 
-} // namespace net
-} // namespace brynet

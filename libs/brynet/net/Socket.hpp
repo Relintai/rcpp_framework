@@ -7,18 +7,15 @@
 #include <stdexcept>
 #include <string>
 
-namespace brynet {
-namespace net {
-
 class TcpConnection;
 
-class UniqueFd final : public brynet::base::NonCopyable {
+class UniqueFd final : public NonCopyable {
 public:
 	explicit UniqueFd(BrynetSocketFD fd) :
 			mFD(fd) {}
 
 	~UniqueFd() {
-		brynet::net::base::SocketClose(mFD);
+		SocketClose(mFD);
 	}
 
 	UniqueFd(const UniqueFd &other) = delete;
@@ -32,7 +29,7 @@ private:
 	BrynetSocketFD mFD;
 };
 
-class TcpSocket : public brynet::base::NonCopyable {
+class TcpSocket : public NonCopyable {
 private:
 	class TcpSocketDeleter {
 	public:
@@ -57,23 +54,23 @@ public:
 
 public:
 	void setNodelay() const {
-		brynet::net::base::SocketNodelay(mFD);
+		SocketNodelay(mFD);
 	}
 
 	bool setNonblock() const {
-		return brynet::net::base::SocketNonblock(mFD);
+		return SocketNonblock(mFD);
 	}
 
 	void setSendSize(int sdSize) const {
-		brynet::net::base::SocketSetSendSize(mFD, sdSize);
+		SocketSetSendSize(mFD, sdSize);
 	}
 
 	void setRecvSize(int rdSize) const {
-		brynet::net::base::SocketSetRecvSize(mFD, rdSize);
+		SocketSetRecvSize(mFD, rdSize);
 	}
 
 	std::string getRemoteIP() const {
-		return brynet::net::base::GetIPOfSocket(mFD);
+		return GetIPOfSocket(mFD);
 	}
 
 	bool isServerSide() const {
@@ -87,7 +84,7 @@ protected:
 	}
 
 	virtual ~TcpSocket() {
-		brynet::net::base::SocketClose(mFD);
+		SocketClose(mFD);
 	}
 
 	BrynetSocketFD getFD() const {
@@ -118,7 +115,7 @@ private:
 	int mErrorCode;
 };
 
-class ListenSocket : public brynet::base::NonCopyable {
+class ListenSocket : public NonCopyable {
 private:
 	class ListenSocketDeleter {
 	public:
@@ -132,7 +129,7 @@ public:
 
 public:
 	TcpSocket::Ptr accept() {
-		const auto clientFD = brynet::net::base::Accept(mFD, nullptr, nullptr);
+		const auto clientFD = Accept(mFD, nullptr, nullptr);
 		if (clientFD == BRYNET_INVALID_SOCKET) {
 #if defined BRYNET_PLATFORM_LINUX || defined BRYNET_PLATFORM_DARWIN
 			if (BRYNET_ERRNO == EMFILE) {
@@ -141,8 +138,8 @@ public:
 				// accept()ing when you can't" in libev's doc.
 				// By Marc Lehmann, author of libev.
 				mIdle.reset();
-				TcpSocket::Create(brynet::net::base::Accept(mFD, nullptr, nullptr), true);
-				mIdle = brynet::net::TcpSocket::Create(::open("/dev/null", O_RDONLY | O_CLOEXEC), true);
+				TcpSocket::Create(Accept(mFD, nullptr, nullptr), true);
+				mIdle = TcpSocket::Create(::open("/dev/null", O_RDONLY | O_CLOEXEC), true);
 			}
 #endif
 			if (BRYNET_ERRNO == EINTR) {
@@ -170,22 +167,20 @@ protected:
 	explicit ListenSocket(BrynetSocketFD fd) :
 			mFD(fd) {
 #if defined BRYNET_PLATFORM_LINUX || defined BRYNET_PLATFORM_DARWIN
-		mIdle = brynet::net::TcpSocket::Create(::open("/dev/null", O_RDONLY | O_CLOEXEC), true);
+		mIdle = TcpSocket::Create(::open("/dev/null", O_RDONLY | O_CLOEXEC), true);
 #endif
 	}
 
 	virtual ~ListenSocket() {
-		brynet::net::base::SocketClose(mFD);
+		SocketClose(mFD);
 	}
 
 private:
 	const BrynetSocketFD mFD;
 #if defined BRYNET_PLATFORM_LINUX || defined BRYNET_PLATFORM_DARWIN
-	brynet::net::TcpSocket::Ptr mIdle;
+	TcpSocket::Ptr mIdle;
 #endif
 
 	friend class TcpConnection;
 };
 
-} // namespace net
-} // namespace brynet

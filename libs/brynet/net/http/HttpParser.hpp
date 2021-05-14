@@ -8,10 +8,6 @@
 
 #include "http_parser.h"
 
-namespace brynet {
-namespace net {
-namespace http {
-
 class HttpService;
 
 class HTTPParser {
@@ -284,7 +280,3 @@ private:
 private:
 	friend class HttpService;
 };
-
-} // namespace http
-} // namespace net
-} // namespace brynet

@@ -2,10 +2,7 @@
 
 #include <brynet/net/detail/ListenThreadDetail.hpp>
 
-namespace brynet {
-namespace net {
-
-class ListenThread : public detail::ListenThreadDetail,
+class ListenThread : public ListenThreadDetail,
 					 public std::enable_shared_from_this<ListenThread> {
 public:
 	using Ptr = std::shared_ptr<ListenThread>;
@@ -13,11 +10,11 @@ public:
 	using TcpSocketProcessCallback = std::function<void(TcpSocket &)>;
 
 	void startListen() {
-		detail::ListenThreadDetail::startListen();
+		ListenThreadDetail::startListen();
 	}
 
 	void stopListen() {
-		detail::ListenThreadDetail::stopListen();
+		ListenThreadDetail::stopListen();
 	}
 
 public:
@@ -47,8 +44,5 @@ protected:
 			const AccepCallback &callback,
 			const std::vector<TcpSocketProcessCallback> &processCallbacks,
 			bool enabledReusePort) :
-			detail::ListenThreadDetail(isIPV6, ip, port, callback, processCallbacks, enabledReusePort) {}
+			ListenThreadDetail(isIPV6, ip, port, callback, processCallbacks, enabledReusePort) {}
 };
-
-} // namespace net
-} // namespace brynet
