@@ -15,133 +15,121 @@
 #include <mutex>
 #endif
 
-namespace brynet { namespace net { namespace detail {
+namespace brynet {
+namespace net {
+namespace detail {
 
-class AsyncConnectorDetail : public brynet::base::NonCopyable
-{
+class AsyncConnectorDetail : public brynet::base::NonCopyable {
 protected:
-    void startWorkerThread()
-    {
+	void startWorkerThread() {
 #ifdef BRYNET_HAVE_LANG_CXX17
-        std::lock_guard<std::shared_mutex> lck(mThreadGuard);
+		std::lock_guard<std::shared_mutex> lck(mThreadGuard);
 #else
-        std::lock_guard<std::mutex> lck(mThreadGuard);
+		std::lock_guard<std::mutex> lck(mThreadGuard);
 #endif
 
-        if (mThread != nullptr)
-        {
-            return;
-        }
+		if (mThread != nullptr) {
+			return;
+		}
 
-        mIsRun = std::make_shared<bool>(true);
-        mWorkInfo = std::make_shared<detail::ConnectorWorkInfo>();
-        mEventLoop = std::make_shared<EventLoop>();
+		mIsRun = std::make_shared<bool>(true);
+		mWorkInfo = std::make_shared<detail::ConnectorWorkInfo>();
+		mEventLoop = std::make_shared<EventLoop>();
 
-        auto eventLoop = mEventLoop;
-        auto workerInfo = mWorkInfo;
-        auto isRun = mIsRun;
+		auto eventLoop = mEventLoop;
+		auto workerInfo = mWorkInfo;
+		auto isRun = mIsRun;
 
-        mThread = std::make_shared<std::thread>([eventLoop, workerInfo, isRun]() {
-            while (*isRun)
-            {
-                detail::RunOnceCheckConnect(eventLoop, workerInfo);
-            }
+		mThread = std::make_shared<std::thread>([eventLoop, workerInfo, isRun]() {
+			while (*isRun) {
+				detail::RunOnceCheckConnect(eventLoop, workerInfo);
+			}
 
-            workerInfo->causeAllFailed();
-        });
-    }
+			workerInfo->causeAllFailed();
+		});
+	}
 
-    void stopWorkerThread()
-    {
+	void stopWorkerThread() {
 #ifdef BRYNET_HAVE_LANG_CXX17
-        std::lock_guard<std::shared_mutex> lck(mThreadGuard);
+		std::lock_guard<std::shared_mutex> lck(mThreadGuard);
 #else
-        std::lock_guard<std::mutex> lck(mThreadGuard);
+		std::lock_guard<std::mutex> lck(mThreadGuard);
 #endif
 
-        if (mThread == nullptr)
-        {
-            return;
-        }
+		if (mThread == nullptr) {
+			return;
+		}
 
-        mEventLoop->runAsyncFunctor([this]() {
-            *mIsRun = false;
-        });
+		mEventLoop->runAsyncFunctor([this]() {
+			*mIsRun = false;
+		});
 
-        try
-        {
-            if (mThread->joinable())
-            {
-                mThread->join();
-            }
-        }
-        catch (std::system_error& e)
-        {
-            (void) e;
-        }
+		try {
+			if (mThread->joinable()) {
+				mThread->join();
+			}
+		} catch (std::system_error &e) {
+			(void)e;
+		}
 
-        mEventLoop = nullptr;
-        mWorkInfo = nullptr;
-        mIsRun = nullptr;
-        mThread = nullptr;
-    }
+		mEventLoop = nullptr;
+		mWorkInfo = nullptr;
+		mIsRun = nullptr;
+		mThread = nullptr;
+	}
 
-    void asyncConnect(detail::ConnectOption option)
-    {
+	void asyncConnect(detail::ConnectOption option) {
 #ifdef BRYNET_HAVE_LANG_CXX17
-        std::shared_lock<std::shared_mutex> lck(mThreadGuard);
+		std::shared_lock<std::shared_mutex> lck(mThreadGuard);
 #else
-        std::lock_guard<std::mutex> lck(mThreadGuard);
+		std::lock_guard<std::mutex> lck(mThreadGuard);
 #endif
 
-        if (option.completedCallback == nullptr && option.failedCallback == nullptr)
-        {
-            throw ConnectException("all callback is nullptr");
-        }
-        if (option.ip.empty())
-        {
-            throw ConnectException("addr is empty");
-        }
+		if (option.completedCallback == nullptr && option.failedCallback == nullptr) {
+			throw ConnectException("all callback is nullptr");
+		}
+		if (option.ip.empty()) {
+			throw ConnectException("addr is empty");
+		}
 
-        if (!(*mIsRun))
-        {
-            throw ConnectException("work thread already stop");
-        }
+		if (!(*mIsRun)) {
+			throw ConnectException("work thread already stop");
+		}
 
-        auto workInfo = mWorkInfo;
-        auto address = detail::AsyncConnectAddr(std::move(option.ip),
-                                                option.port,
-                                                option.timeout,
-                                                std::move(option.completedCallback),
-                                                std::move(option.failedCallback),
-                                                std::move(option.processCallbacks));
-        mEventLoop->runAsyncFunctor([workInfo, address]() {
-            workInfo->processConnect(address);
-        });
-    }
+		auto workInfo = mWorkInfo;
+		auto address = detail::AsyncConnectAddr(std::move(option.ip),
+				option.port,
+				option.timeout,
+				std::move(option.completedCallback),
+				std::move(option.failedCallback),
+				std::move(option.processCallbacks));
+		mEventLoop->runAsyncFunctor([workInfo, address]() {
+			workInfo->processConnect(address);
+		});
+	}
 
 protected:
-    AsyncConnectorDetail()
-    {
-        mIsRun = std::make_shared<bool>(false);
-    }
+	AsyncConnectorDetail() {
+		mIsRun = std::make_shared<bool>(false);
+	}
 
-    virtual ~AsyncConnectorDetail()
-    {
-        stopWorkerThread();
-    }
+	virtual ~AsyncConnectorDetail() {
+		stopWorkerThread();
+	}
 
 private:
-    std::shared_ptr<EventLoop> mEventLoop;
+	std::shared_ptr<EventLoop> mEventLoop;
 
-    std::shared_ptr<detail::ConnectorWorkInfo> mWorkInfo;
-    std::shared_ptr<std::thread> mThread;
+	std::shared_ptr<detail::ConnectorWorkInfo> mWorkInfo;
+	std::shared_ptr<std::thread> mThread;
 #ifdef BRYNET_HAVE_LANG_CXX17
-    std::shared_mutex mThreadGuard;
+	std::shared_mutex mThreadGuard;
 #else
-    std::mutex mThreadGuard;
+	std::mutex mThreadGuard;
 #endif
-    std::shared_ptr<bool> mIsRun;
+	std::shared_ptr<bool> mIsRun;
 };
 
-}}}// namespace brynet::net::detail
+} // namespace detail
+} // namespace net
+} // namespace brynet
