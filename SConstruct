@@ -130,7 +130,7 @@ opts.Add("LINKFLAGS", "Custom flags for the linker")
 opts.Update(env_base)
 
 # add default include paths
-env_base.Prepend(CPPPATH=["#", "libs"])
+env_base.Prepend(CPPPATH=["#"])
 env_base.Prepend(CPPPATH=["#libs"])
 env_base.Prepend(LINKFLAGS=["-lpthread"])
 

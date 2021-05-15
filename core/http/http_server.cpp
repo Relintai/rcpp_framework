@@ -1,7 +1,7 @@
 #include "http_server.h"
 
-#include "application.h"
-#include "request.h"
+#include "core/application.h"
+#include "core/request.h"
 
 #define LOG_VERBOSE 0
 
