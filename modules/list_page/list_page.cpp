@@ -1,8 +1,8 @@
 #include "list_page.h"
 
-#include "core/query_builder.h"
-#include "core/query_result.h"
-#include "core/table_builder.h"
+#include "core/database/query_builder.h"
+#include "core/database/query_result.h"
+#include "core/database/table_builder.h"
 #include "core/utils.h"
 
 #include <tinydir/tinydir.h>

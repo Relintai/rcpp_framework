@@ -1,6 +1,6 @@
 #include "object.h"
 
-#include "database.h"
+#include "core/database/database.h"
 
 void Object::migrate() {
 

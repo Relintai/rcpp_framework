@@ -1,10 +1,10 @@
 #include "message_page.h"
 
-#include "core/database.h"
+#include "core/database/database.h"
 
-#include "core/query_builder.h"
-#include "core/table_builder.h"
-#include "core/query_result.h"
+#include "core/database/query_builder.h"
+#include "core/database/table_builder.h"
+#include "core/database/query_result.h"
 
 void MessagePage::index(Request *request) {
 	QueryBuilder *b = db->get_query_builder();

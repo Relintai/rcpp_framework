@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "core/query_result.h"
+#include "core/database/query_result.h"
 
 #include "./sqlite/sqlite3.h"
 

@@ -1,7 +1,7 @@
 #ifndef MYSQL_CONNECTION
 #define MYSQL_CONNECTION
 
-#include "core/database.h"
+#include "core/database/database.h"
 
 #include <memory>
 

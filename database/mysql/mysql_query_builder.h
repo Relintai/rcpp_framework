@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "core/query_builder.h"
+#include "core/database/query_builder.h"
 
 class MysqlQueryBuilder : public QueryBuilder {
 public:

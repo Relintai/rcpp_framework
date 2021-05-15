@@ -1,7 +1,7 @@
 #ifndef MYSQL_QUERY_RESULT_H
 #define MYSQL_QUERY_RESULT_H
 
-#include "core/query_result.h"
+#include "core/database/query_result.h"
 
 #include <mysql.h>
 

@@ -2,7 +2,7 @@
 
 #include <cstdio>
 
-#include "core/database_manager.h"
+#include "core/database/database_manager.h"
 
 #include "mysql_query_builder.h"
 #include "mysql_table_builder.h"

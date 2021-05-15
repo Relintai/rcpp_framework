@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "core/table_builder.h"
+#include "core/database/table_builder.h"
 
 class MysqlTableBuilder : public TableBuilder {
 public:
