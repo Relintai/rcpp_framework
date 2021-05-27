@@ -15,7 +15,7 @@
 #include <brynet/net/wrapper/ServiceBuilder.hpp>
 
 class Request;
-class BryWebApplication;
+class WebApplication;
 
 class HTTPServer {
 public:
@@ -40,7 +40,7 @@ public:
 	virtual ~HTTPServer();
 
 	//move this to a sublcass
-	BryWebApplication *application;
+	WebApplication *application;
 
 protected:
 	std::map<HttpSession *, Request *> _request_map;

@@ -1,4 +1,4 @@
-#include "bry_web_application.h"
+#include "web_application.h"
 
 #include <functional>
 #include <string>
@@ -12,20 +12,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void BryWebApplication::load_settings() {
+void WebApplication::load_settings() {
 }
 
-void BryWebApplication::setup_routes() {
-	default_error_handler_func = BryWebApplication::default_fallback_error_handler;
+void WebApplication::setup_routes() {
+	default_error_handler_func = WebApplication::default_fallback_error_handler;
 
-	error_handler_map[404] = BryWebApplication::default_404_error_handler;
+	error_handler_map[404] = WebApplication::default_404_error_handler;
 }
 
-void BryWebApplication::setup_middleware() {
+void WebApplication::setup_middleware() {
 	middlewares.push_back(HandlerInstance([this](Object *instance, Request *request){ this->default_routing_middleware(instance, request); }));
 }
 
-void BryWebApplication::default_routing_middleware(Object *instance, Request *request) {
+void WebApplication::default_routing_middleware(Object *instance, Request *request) {
 	std::string path = request->http_parser->getPath();
 
 	if (FileCache::get_singleton()->wwwroot_has_file(path)) {
@@ -60,24 +60,24 @@ void BryWebApplication::default_routing_middleware(Object *instance, Request *re
 	request->next_stage();
 }
 
-void BryWebApplication::default_fallback_error_handler(int error_code, Request *request) {
+void WebApplication::default_fallback_error_handler(int error_code, Request *request) {
 	request->response->setBody(default_generic_error_body);
 	request->send();
 }
 
-void BryWebApplication::default_404_error_handler(int error_code, Request *request) {
+void WebApplication::default_404_error_handler(int error_code, Request *request) {
 	request->response->setBody(default_error_404_body);
 	request->send();
 }
 
-void BryWebApplication::handle_request(Request *request) {
+void WebApplication::handle_request(Request *request) {
 	request->middleware_stack = &middlewares;
 
-	//note that middlewares handle the routing -> BryWebApplication::default_routing_middleware by default
+	//note that middlewares handle the routing -> WebApplication::default_routing_middleware by default
 	request->next_stage();
 }
 
-void BryWebApplication::send_error(int error_code, Request *request) {
+void WebApplication::send_error(int error_code, Request *request) {
 	std::function<void(int, Request *)> func = error_handler_map[error_code];
 
 	if (!func) {
@@ -88,21 +88,21 @@ void BryWebApplication::send_error(int error_code, Request *request) {
 	func(error_code, request);
 }
 
-void BryWebApplication::send_file(const std::string &path, Request *request) {
+void WebApplication::send_file(const std::string &path, Request *request) {
 	std::string fp = FileCache::get_singleton()->wwwroot + path;
 
 	request->send_file(fp);
 }
 
-void BryWebApplication::migrate() {
+void WebApplication::migrate() {
 }
 
-void BryWebApplication::register_request_update(Request *request) {
+void WebApplication::register_request_update(Request *request) {
 	std::lock_guard<std::mutex> lock(_update_registered_requests_mutex);
 
 	_update_registered_requests.push_back(request);
 }
-void BryWebApplication::unregister_request_update(Request *request) {
+void WebApplication::unregister_request_update(Request *request) {
 	std::lock_guard<std::mutex> lock(_update_registered_requests_mutex);
 
 	std::size_t s = _update_registered_requests.size();
@@ -119,7 +119,7 @@ void BryWebApplication::unregister_request_update(Request *request) {
 	}
 }
 
-void BryWebApplication::update() {
+void WebApplication::update() {
 	for (std::size_t i = 0; i < _update_registered_requests.size(); ++i) {
 		Request *r = _update_registered_requests[i];
 
@@ -127,14 +127,14 @@ void BryWebApplication::update() {
 	}
 }
 
-BryWebApplication::BryWebApplication() {
+WebApplication::WebApplication() {
 }
 
-BryWebApplication::~BryWebApplication() {
+WebApplication::~WebApplication() {
 	main_route_map.clear();
 	error_handler_map.clear();
 	middlewares.clear();
 }
 
-std::string BryWebApplication::default_error_404_body = "<html><body>404 :(</body></html>";
-std::string BryWebApplication::default_generic_error_body = "<html><body>Internal server error! :(</body></html>";
+std::string WebApplication::default_error_404_body = "<html><body>404 :(</body></html>";
+std::string WebApplication::default_generic_error_body = "<html><body>Internal server error! :(</body></html>";

@@ -8,7 +8,7 @@
 #include "core/file_cache.h"
 #include "core/object.h"
 
-#include "core/bry_http/request.h"
+#include "core/http/request.h"
 
 struct Article {
 	std::string url;

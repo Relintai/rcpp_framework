@@ -1,6 +1,6 @@
 #include "request.h"
 
-#include "bry_web_application.h"
+#include "web_application.h"
 
 void Request::compile_body() {
 	compiled_body.reserve(body.size() + head.size() + 13 + 14 + 15);
