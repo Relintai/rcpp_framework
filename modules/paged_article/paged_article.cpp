@@ -8,7 +8,7 @@
 #include <tinydir/tinydir.h>
 #include <iostream>
 
-#include "core/bry_web_application.h"
+#include "core/bry_http/bry_web_application.h"
 
 void PagedArticle::index(Request *request) {
 	const std::string r = request->get_current_path_segment();

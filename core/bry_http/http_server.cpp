@@ -1,7 +1,7 @@
 #include "http_server.h"
 
-#include "core/bry_web_application.h"
-#include "core/request.h"
+#include "bry_web_application.h"
+#include "request.h"
 
 #define LOG_VERBOSE 0
 

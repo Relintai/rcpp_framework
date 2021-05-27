@@ -1,7 +1,7 @@
 #ifndef BRY_WEB_APPLICATION_H
 #define BRY_WEB_APPLICATION_H
 
-#include "object.h"
+#include "core/object.h"
 #include <functional>
 #include <map>
 #include <string>

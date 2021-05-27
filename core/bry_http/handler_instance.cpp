@@ -1,7 +1,7 @@
 #include "handler_instance.h"
 
 #include "request.h"
-#include "object.h"
+#include "core/object.h"
 
 HandlerInstance::HandlerInstance() {
 	instance = nullptr;

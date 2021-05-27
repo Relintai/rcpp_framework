@@ -6,7 +6,7 @@
 
 #include "core/object.h"
 
-#include "core/request.h"
+#include "core/bry_http/request.h"
 
 
 class MessagePage : public Object {
