@@ -1,5 +1,5 @@
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#ifndef BRY_WEB_APPLICATION_H
+#define BRY_WEB_APPLICATION_H
 
 #include "object.h"
 #include <functional>
@@ -13,7 +13,7 @@
 
 class Request;
 
-class Application {
+class BryWebApplication {
 public:
 	static std::string default_error_404_body;
 	static std::string default_generic_error_body;
@@ -37,8 +37,8 @@ public:
 	void unregister_request_update(Request *request);
 	void update();
 
-	Application();
-	virtual ~Application();
+	BryWebApplication();
+	virtual ~BryWebApplication();
 
 public:
 	HandlerInstance index_func;

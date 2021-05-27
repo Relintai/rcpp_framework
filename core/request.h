@@ -9,14 +9,14 @@
 
 #include "handler_instance.h"
 
-class Application;
+class BryWebApplication;
 
 class Request {
 public:
 	HTTPParser::Ptr http_parser;
 	HttpSession::Ptr session;
 	HttpResponse *response;
-	Application *application;
+	BryWebApplication *application;
 
 	uint32_t current_middleware_index;
 	HandlerInstance handler_instance;
