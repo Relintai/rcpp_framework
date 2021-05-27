@@ -1,6 +1,6 @@
 #include "utils.h"
 
-#include "html_builder.h"
+#include "html/html_builder.h"
 #include <maddy/parser.h>
 #include <memory>
 #include <sstream>
