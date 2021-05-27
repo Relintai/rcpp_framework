@@ -71,44 +71,6 @@ env_base.msvc = False
 # avoid issues when building with different versions of python out of the same directory
 env_base.SConsignFile(".sconsign{0}.dblite".format(pickle.HIGHEST_PROTOCOL))
 
-database_list = []
-
-for x in sorted(glob.glob("database/*")):
-    if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
-        continue
-    tmppath = "./" + x
-
-    sys.path.insert(0, tmppath)
-    import detect
-
-    if detect.is_active() and detect.can_build():
-        x = x.replace("database/", "")  # rest of world
-        x = x.replace("database\\", "")  # win32
-        database_list += [x]
-
-    sys.path.remove(tmppath)
-    sys.modules.pop("detect")
-
-module_list = []
-
-for x in sorted(glob.glob("modules/*")):
-    if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
-        continue
-
-    tmppath = "./" + x
-
-    sys.path.insert(0, tmppath)
-    import detect
-
-    if detect.is_active() and detect.can_build():
-        x = x.replace("modules/", "")  # rest of world
-        x = x.replace("modules\\", "")  # win32
-        module_list += [x]
-
-    sys.path.remove(tmppath)
-    sys.modules.pop("detect")
-
-
 # Build options
 
 opts = Variables([], ARGUMENTS)
@@ -117,6 +79,7 @@ opts.Add(EnumVariable("target", "Compilation target", "debug", ("debug", "releas
 
 opts.Add("folders", "App folders to compile", "")
 opts.Add("main_file", "The main file", "")
+opts.Add("module_folders", "App module folders to compile", "")
 
 # Compilation environment setup
 opts.Add("CXX", "C++ compiler")
@@ -147,6 +110,60 @@ scons_ver = env_base._get_major_minor_revision(scons_raw_version)
 if scons_ver >= (4, 0, 0):
     env_base.Tool("compilation_db")
 
+
+database_list = []
+
+for x in sorted(glob.glob("database/*")):
+    if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
+        continue
+    tmppath = "./" + x
+
+    sys.path.insert(0, tmppath)
+    import detect
+
+    if detect.is_active() and detect.can_build():
+        x = x.replace("database/", "")  # rest of world
+        x = x.replace("database\\", "")  # win32
+        database_list += [x]
+
+    sys.path.remove(tmppath)
+    sys.modules.pop("detect")
+
+
+modfol = env_base["module_folders"].split(";")
+modfol.append("modules")
+module_folders = list()
+
+for fol in modfol:
+    folt = fol.strip()
+
+    if folt == "":
+        continue
+
+    module_folders.append(os.path.abspath(folt) + "/*")
+
+module_list = []
+
+for mf in module_folders:
+    for x in sorted(glob.glob(mf)):
+        if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
+            continue
+
+        tmppath = os.path.realpath(os.path.expanduser(os.path.expandvars(x))) + "/"
+
+        sys.path.insert(0, tmppath)
+        import detect
+
+        if detect.is_active() and detect.can_build():
+            #x = x.replace("/", "")  # rest of world
+            x = x.replace("\\", "/")  # win32
+
+            tx = x.split("/")
+
+            module_list.append([ tx[len(tx) - 1], tmppath ])
+
+        sys.path.remove(tmppath)
+        sys.modules.pop("detect")
 
 env = env_base.Clone()
 
@@ -181,7 +198,7 @@ for d in database_list:
     sys.modules.pop("detect")
 
 for m in module_list:
-    tmppath = "./modules/" + m
+    tmppath = m[1]
     sys.path.insert(0, tmppath)
 
     import detect
@@ -202,7 +219,7 @@ for m in module_list:
 
     Export("env_mod")
 
-    SConscript("modules/" + m + "/SCsub")
+    SConscript(m[1] + "/SCsub")
 
     sys.path.remove(tmppath)
     sys.modules.pop("detect")
