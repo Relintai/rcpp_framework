@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+
+Import("env_mod")
+Import("env")
+
+env_mod.core_sources = []
+
+env_mod.add_source_files(env_mod.core_sources, "*.cc")
+env_mod.add_source_files(env_mod.core_sources, "trantor/net/*.cc")
+env_mod.add_source_files(env_mod.core_sources, "trantor/net/inner/*.cc")
+env_mod.add_source_files(env_mod.core_sources, "trantor/net/inner/poller/*.cpp")
+env_mod.add_source_files(env_mod.core_sources, "utils/*.cc")
+#windows only
+#env_mod.add_source_files(env_mod.core_sources, "third_party/wepoll/*.c")
+
+# Build it all as a library
+lib = env_mod.add_library("trantor", env_mod.core_sources)
+env.Prepend(LIBS=[lib])
