@@ -19,11 +19,10 @@
 #include <boost/optional.hpp>
 #endif
 
-namespace drogon
-{
+namespace drogon {
 #if __cplusplus >= 201703L || (defined _MSC_VER && _MSC_VER > 1900)
 using std::optional;
 #else
 using boost::optional;
 #endif
-}  // namespace drogon
+} // namespace drogon

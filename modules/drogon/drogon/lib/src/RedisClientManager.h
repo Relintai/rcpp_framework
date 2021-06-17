@@ -14,59 +14,53 @@
 
 #pragma once
 
-#include <drogon/nosql/RedisClient.h>
 #include <drogon/HttpAppFramework.h>
 #include <drogon/IOThreadStorage.h>
-#include <trantor/utils/NonCopyable.h>
+#include <drogon/nosql/RedisClient.h>
 #include <trantor/net/EventLoop.h>
-#include <string>
+#include <trantor/utils/NonCopyable.h>
 #include <memory>
+#include <string>
 
-namespace drogon
-{
-namespace nosql
-{
-class RedisClientManager : public trantor::NonCopyable
-{
-  public:
-    void createRedisClients(const std::vector<trantor::EventLoop *> &ioLoops);
-    RedisClientPtr getRedisClient(const std::string &name)
-    {
-        assert(redisClientsMap_.find(name) != redisClientsMap_.end());
-        return redisClientsMap_[name];
-    }
+namespace drogon {
+namespace nosql {
+class RedisClientManager : public trantor::NonCopyable {
+public:
+	void createRedisClients(const std::vector<trantor::EventLoop *> &ioLoops);
+	RedisClientPtr getRedisClient(const std::string &name) {
+		assert(redisClientsMap_.find(name) != redisClientsMap_.end());
+		return redisClientsMap_[name];
+	}
 
-    RedisClientPtr getFastRedisClient(const std::string &name)
-    {
-        auto iter = redisFastClientsMap_.find(name);
-        assert(iter != redisFastClientsMap_.end());
-        return iter->second.getThreadData();
-    }
-    void createRedisClient(const std::string &name,
-                           const std::string &host,
-                           unsigned short port,
-                           const std::string &password,
-                           size_t connectionNum,
-                           bool isFast,
-                           double timeout,
-                           unsigned int db);
-    // bool areAllRedisClientsAvailable() const noexcept;
+	RedisClientPtr getFastRedisClient(const std::string &name) {
+		auto iter = redisFastClientsMap_.find(name);
+		assert(iter != redisFastClientsMap_.end());
+		return iter->second.getThreadData();
+	}
+	void createRedisClient(const std::string &name,
+			const std::string &host,
+			unsigned short port,
+			const std::string &password,
+			size_t connectionNum,
+			bool isFast,
+			double timeout,
+			unsigned int db);
+	// bool areAllRedisClientsAvailable() const noexcept;
 
-  private:
-    std::map<std::string, RedisClientPtr> redisClientsMap_;
-    std::map<std::string, IOThreadStorage<RedisClientPtr>> redisFastClientsMap_;
-    struct RedisInfo
-    {
-        std::string name_;
-        std::string addr_;
-        std::string password_;
-        unsigned short port_;
-        bool isFast_;
-        size_t connectionNumber_;
-        double timeout_;
-        unsigned int db_;
-    };
-    std::vector<RedisInfo> redisInfos_;
+private:
+	std::map<std::string, RedisClientPtr> redisClientsMap_;
+	std::map<std::string, IOThreadStorage<RedisClientPtr> > redisFastClientsMap_;
+	struct RedisInfo {
+		std::string name_;
+		std::string addr_;
+		std::string password_;
+		unsigned short port_;
+		bool isFast_;
+		size_t connectionNumber_;
+		double timeout_;
+		unsigned int db_;
+	};
+	std::vector<RedisInfo> redisInfos_;
 };
-}  // namespace nosql
-}  // namespace drogon
+} // namespace nosql
+} // namespace drogon

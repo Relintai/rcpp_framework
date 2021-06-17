@@ -16,23 +16,21 @@
 #include <drogon/plugins/Plugin.h>
 #include <map>
 
-namespace drogon
-{
+namespace drogon {
 using PluginBasePtr = std::unique_ptr<PluginBase>;
 
-class PluginsManager : trantor::NonCopyable
-{
-  public:
-    void initializeAllPlugins(
-        const Json::Value &configs,
-        const std::function<void(PluginBase *)> &forEachCallback);
+class PluginsManager : trantor::NonCopyable {
+public:
+	void initializeAllPlugins(
+			const Json::Value &configs,
+			const std::function<void(PluginBase *)> &forEachCallback);
 
-    PluginBase *getPlugin(const std::string &pluginName);
-    ~PluginsManager();
+	PluginBase *getPlugin(const std::string &pluginName);
+	~PluginsManager();
 
-  private:
-    std::map<std::string, PluginBasePtr> pluginsMap_;
-    std::vector<PluginBase *> initializedPlugins_;
+private:
+	std::map<std::string, PluginBasePtr> pluginsMap_;
+	std::vector<PluginBase *> initializedPlugins_;
 };
 
-}  // namespace drogon
+} // namespace drogon

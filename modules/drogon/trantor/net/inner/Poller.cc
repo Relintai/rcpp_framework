@@ -22,11 +22,10 @@
 #include "poller/KQueue.h"
 #endif
 using namespace trantor;
-Poller *Poller::newPoller(EventLoop *loop)
-{
+Poller *Poller::newPoller(EventLoop *loop) {
 #if defined __linux__ || defined _WIN32
-    return new EpollPoller(loop);
+	return new EpollPoller(loop);
 #else
-    return new KQueue(loop);
+	return new KQueue(loop);
 #endif
 }

@@ -1,10 +1,9 @@
 #pragma once
 
-#include <memory>
 #include <functional>
+#include <memory>
 
-namespace drogon
-{
+namespace drogon {
 class HttpRequest;
 using HttpRequestPtr = std::shared_ptr<HttpRequest>;
 class HttpResponse;
@@ -36,35 +35,31 @@ class SharedLibManager;
 class SessionManager;
 class HttpServer;
 
-namespace orm
-{
+namespace orm {
 class DbClient;
 using DbClientPtr = std::shared_ptr<DbClient>;
 class DbClientManager;
-}  // namespace orm
-namespace nosql
-{
+} // namespace orm
+namespace nosql {
 class RedisClient;
 using RedisClientPtr = std::shared_ptr<RedisClient>;
 class RedisClientManager;
-}  // namespace nosql
-}  // namespace drogon
+} // namespace nosql
+} // namespace drogon
 
-namespace trantor
-{
+namespace trantor {
 class EventLoop;
 class TcpConnection;
 using TcpConnectionPtr = std::shared_ptr<TcpConnection>;
 class Resolver;
-}  // namespace trantor
+} // namespace trantor
 
-namespace drogon
-{
+namespace drogon {
 using HttpAsyncCallback =
-    std::function<void(const HttpRequestImplPtr &,
-                       std::function<void(const HttpResponsePtr &)> &&)>;
+		std::function<void(const HttpRequestImplPtr &,
+				std::function<void(const HttpResponsePtr &)> &&)>;
 using WebSocketNewAsyncCallback =
-    std::function<void(const HttpRequestImplPtr &,
-                       std::function<void(const HttpResponsePtr &)> &&,
-                       const WebSocketConnectionImplPtr &)>;
-}  // namespace drogon
+		std::function<void(const HttpRequestImplPtr &,
+				std::function<void(const HttpResponsePtr &)> &&,
+				const WebSocketConnectionImplPtr &)>;
+} // namespace drogon

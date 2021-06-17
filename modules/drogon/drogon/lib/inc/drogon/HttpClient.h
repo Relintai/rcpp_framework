@@ -14,45 +14,41 @@
  */
 #pragma once
 
-#include <drogon/exports.h>
+#include "drogon/HttpBinder.h"
+#include <drogon/HttpRequest.h>
+#include <drogon/HttpResponse.h>
 #include <drogon/HttpTypes.h>
 #include <drogon/drogon_callbacks.h>
-#include <drogon/HttpResponse.h>
-#include <drogon/HttpRequest.h>
-#include <trantor/utils/NonCopyable.h>
+#include <drogon/exports.h>
 #include <trantor/net/EventLoop.h>
+#include <trantor/utils/NonCopyable.h>
 #include <functional>
-#include <memory>
 #include <future>
-#include "drogon/HttpBinder.h"
+#include <memory>
 
 #ifdef __cpp_impl_coroutine
 #include <drogon/utils/coroutine.h>
 #endif
 
-namespace drogon
-{
+namespace drogon {
 class HttpClient;
 using HttpClientPtr = std::shared_ptr<HttpClient>;
 #ifdef __cpp_impl_coroutine
-namespace internal
-{
-struct HttpRespAwaiter : public CallbackAwaiter<HttpResponsePtr>
-{
-    HttpRespAwaiter(HttpClient *client, HttpRequestPtr req, double timeout)
-        : client_(client), req_(std::move(req)), timeout_(timeout)
-    {
-    }
+namespace internal {
+struct HttpRespAwaiter : public CallbackAwaiter<HttpResponsePtr> {
+	HttpRespAwaiter(HttpClient *client, HttpRequestPtr req, double timeout) :
+			client_(client), req_(std::move(req)), timeout_(timeout) {
+	}
 
-    void await_suspend(std::coroutine_handle<> handle);
+	void await_suspend(std::coroutine_handle<> handle);
 
-  private:
-    HttpClient *client_;
-    HttpRequestPtr req_;
-    double timeout_;
+private:
+	HttpClient *client_;
+	HttpRequestPtr req_;
+	double timeout_;
 };
 
-}  // namespace internal
+} // namespace internal
 #endif
 
 /// Asynchronous http client
@@ -68,10 +64,9 @@ struct HttpRespAwaiter : public CallbackAwaiter<HttpResponsePtr>
  * response callbacks are invoked without fear of accidental deconstruction.
  *
  */
-class DROGON_EXPORT HttpClient : public trantor::NonCopyable
-{
-  public:
-    /**
+class DROGON_EXPORT HttpClient : public trantor::NonCopyable {
+public:
+	/**
      * @brief Send a request asynchronously to the server
      *
      * @param req The request sent to the server.
@@ -87,11 +82,11 @@ class DROGON_EXPORT HttpClient : public trantor::NonCopyable
      * thread is dangerous.
      * Please be careful when using timeout on an non-idempotent request.
      */
-    virtual void sendRequest(const HttpRequestPtr &req,
-                             const HttpReqCallback &callback,
-                             double timeout = 0) = 0;
+	virtual void sendRequest(const HttpRequestPtr &req,
+			const HttpReqCallback &callback,
+			double timeout = 0) = 0;
 
-    /**
+	/**
      * @brief Send a request asynchronously to the server
      *
      * @param req The request sent to the server.
@@ -107,11 +102,11 @@ class DROGON_EXPORT HttpClient : public trantor::NonCopyable
      * thread is dangerous.
      * Please be careful when using timeout on an non-idempotent request.
      */
-    virtual void sendRequest(const HttpRequestPtr &req,
-                             HttpReqCallback &&callback,
-                             double timeout = 0) = 0;
+	virtual void sendRequest(const HttpRequestPtr &req,
+			HttpReqCallback &&callback,
+			double timeout = 0) = 0;
 
-    /**
+	/**
      * @brief Send a request synchronously to the server and return the
      * response.
      *
@@ -126,22 +121,21 @@ class DROGON_EXPORT HttpClient : public trantor::NonCopyable
      * sendRequest method), otherwise the thread will be blocked forever.
      * Please be careful when using timeout on an non-idempotent request.
      */
-    std::pair<ReqResult, HttpResponsePtr> sendRequest(const HttpRequestPtr &req,
-                                                      double timeout = 0)
-    {
-        std::promise<std::pair<ReqResult, HttpResponsePtr>> prom;
-        auto f = prom.get_future();
-        sendRequest(
-            req,
-            [&prom](ReqResult r, const HttpResponsePtr &resp) {
-                prom.set_value({r, resp});
-            },
-            timeout);
-        return f.get();
-    }
+	std::pair<ReqResult, HttpResponsePtr> sendRequest(const HttpRequestPtr &req,
+			double timeout = 0) {
+		std::promise<std::pair<ReqResult, HttpResponsePtr> > prom;
+		auto f = prom.get_future();
+		sendRequest(
+				req,
+				[&prom](ReqResult r, const HttpResponsePtr &resp) {
+					prom.set_value({ r, resp });
+				},
+				timeout);
+		return f.get();
+	}
 
 #ifdef __cpp_impl_coroutine
-    /**
+	/**
      * @brief Send a request via coroutines to the server and return an
      * awaiter what could be `co_await`-ed to retrieve the response
      * (HttpResponsePtr)
@@ -153,59 +147,58 @@ class DROGON_EXPORT HttpClient : public trantor::NonCopyable
      *
      * @return internal::HttpRespAwaiter. Await on it to get the response
      */
-    internal::HttpRespAwaiter sendRequestCoro(HttpRequestPtr req,
-                                              double timeout = 0)
-    {
-        return internal::HttpRespAwaiter(this, std::move(req), timeout);
-    }
+	internal::HttpRespAwaiter sendRequestCoro(HttpRequestPtr req,
+			double timeout = 0) {
+		return internal::HttpRespAwaiter(this, std::move(req), timeout);
+	}
 #endif
 
-    /// Set the pipelining depth, which is the number of requests that are not
-    /// responding.
-    /**
+	/// Set the pipelining depth, which is the number of requests that are not
+	/// responding.
+	/**
      * If this method is not called, the default depth value is 0 which means
      * the pipelining is disabled. For details about pipelining, see
      * rfc2616-8.1.2.2
      */
-    virtual void setPipeliningDepth(size_t depth) = 0;
+	virtual void setPipeliningDepth(size_t depth) = 0;
 
-    /// Enable cookies for the client
-    /**
+	/// Enable cookies for the client
+	/**
      * @param flag if the parameter is true, all requests sent by the client
      * carry the cookies set by the server side. Cookies are disabled by
      * default.
      */
-    virtual void enableCookies(bool flag = true) = 0;
+	virtual void enableCookies(bool flag = true) = 0;
 
-    /// Add a cookie to the client
-    /**
+	/// Add a cookie to the client
+	/**
      * @note
      * These methods are independent of the enableCookies() method. Whether the
      * enableCookies() is called with true or false, the cookies added by these
      * methods will be sent to the server.
      */
-    virtual void addCookie(const std::string &key,
-                           const std::string &value) = 0;
+	virtual void addCookie(const std::string &key,
+			const std::string &value) = 0;
 
-    /// Add a cookie to the client
-    /**
+	/// Add a cookie to the client
+	/**
      * @note
      * These methods are independent of the enableCookies() method. Whether the
      * enableCookies() is called with true or false, the cookies added by these
      * methods will be sent to the server.
      */
-    virtual void addCookie(const Cookie &cookie) = 0;
+	virtual void addCookie(const Cookie &cookie) = 0;
 
-    /**
+	/**
      * @brief Set the user_agent header, the default value is 'DrogonClient' if
      * this method is not used.
      *
      * @param userAgent The user_agent value, if it is empty, the user_agent
      * header is not sent to the server.
      */
-    virtual void setUserAgent(const std::string &userAgent) = 0;
+	virtual void setUserAgent(const std::string &userAgent) = 0;
 
-    /**
+	/**
      * @brief Creaet a new HTTP client which use ip and port to connect to
      * server
      *
@@ -223,22 +216,22 @@ class DROGON_EXPORT HttpClient : public trantor::NonCopyable
      * @return HttpClientPtr The smart pointer to the new client object.
      * @note: The ip parameter support for both ipv4 and ipv6 address
      */
-    static HttpClientPtr newHttpClient(const std::string &ip,
-                                       uint16_t port,
-                                       bool useSSL = false,
-                                       trantor::EventLoop *loop = nullptr,
-                                       bool useOldTLS = false,
-                                       bool validateCert = true);
+	static HttpClientPtr newHttpClient(const std::string &ip,
+			uint16_t port,
+			bool useSSL = false,
+			trantor::EventLoop *loop = nullptr,
+			bool useOldTLS = false,
+			bool validateCert = true);
 
-    /// Get the event loop of the client;
-    virtual trantor::EventLoop *getLoop() = 0;
+	/// Get the event loop of the client;
+	virtual trantor::EventLoop *getLoop() = 0;
 
-    /// Get the number of bytes sent or received
-    virtual size_t bytesSent() const = 0;
-    virtual size_t bytesReceived() const = 0;
+	/// Get the number of bytes sent or received
+	virtual size_t bytesSent() const = 0;
+	virtual size_t bytesReceived() const = 0;
 
-    /// Create a Http client using the hostString to connect to server
-    /**
+	/// Create a Http client using the hostString to connect to server
+	/**
      *
      * @param hostString this parameter must be prefixed by 'http://' or
      * 'https://'.
@@ -268,49 +261,46 @@ class DROGON_EXPORT HttpClient : public trantor::NonCopyable
      * method.
      *
      */
-    static HttpClientPtr newHttpClient(const std::string &hostString,
-                                       trantor::EventLoop *loop = nullptr,
-                                       bool useOldTLS = false,
-                                       bool validateCert = true);
+	static HttpClientPtr newHttpClient(const std::string &hostString,
+			trantor::EventLoop *loop = nullptr,
+			bool useOldTLS = false,
+			bool validateCert = true);
 
-    virtual ~HttpClient()
-    {
-    }
+	virtual ~HttpClient() {
+	}
 
-  protected:
-    HttpClient() = default;
+protected:
+	HttpClient() = default;
 };
 
 #ifdef __cpp_impl_coroutine
 inline void internal::HttpRespAwaiter::await_suspend(
-    std::coroutine_handle<> handle)
-{
-    assert(client_ != nullptr);
-    assert(req_ != nullptr);
-    client_->sendRequest(
-        req_,
-        [handle = std::move(handle), this](ReqResult result,
-                                           const HttpResponsePtr &resp) {
-            if (result == ReqResult::Ok)
-                setValue(resp);
-            else
-            {
-                std::string reason;
-                if (result == ReqResult::BadResponse)
-                    reason = "BadResponse";
-                else if (result == ReqResult::NetworkFailure)
-                    reason = "NetworkFailure";
-                else if (result == ReqResult::BadServerAddress)
-                    reason = "BadServerAddress";
-                else if (result == ReqResult::Timeout)
-                    reason = "Timeout";
-                setException(
-                    std::make_exception_ptr(std::runtime_error(reason)));
-            }
-            handle.resume();
-        },
-        timeout_);
+		std::coroutine_handle<> handle) {
+	assert(client_ != nullptr);
+	assert(req_ != nullptr);
+	client_->sendRequest(
+			req_,
+			[handle = std::move(handle), this](ReqResult result,
+					const HttpResponsePtr &resp) {
+				if (result == ReqResult::Ok)
+					setValue(resp);
+				else {
+					std::string reason;
+					if (result == ReqResult::BadResponse)
+						reason = "BadResponse";
+					else if (result == ReqResult::NetworkFailure)
+						reason = "NetworkFailure";
+					else if (result == ReqResult::BadServerAddress)
+						reason = "BadServerAddress";
+					else if (result == ReqResult::Timeout)
+						reason = "Timeout";
+					setException(
+							std::make_exception_ptr(std::runtime_error(reason)));
+				}
+				handle.resume();
+			},
+			timeout_);
 }
 #endif
 
-}  // namespace drogon
+} // namespace drogon

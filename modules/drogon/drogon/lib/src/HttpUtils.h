@@ -14,54 +14,46 @@
 
 #pragma once
 
-#include <drogon/utils/string_view.h>
 #include <drogon/HttpTypes.h>
-#include <string>
+#include <drogon/utils/string_view.h>
 #include <trantor/utils/MsgBuffer.h>
+#include <string>
 
-namespace drogon
-{
+namespace drogon {
 const string_view &webContentTypeToString(ContentType contenttype);
 const string_view &statusCodeToString(int code);
 ContentType getContentType(const std::string &fileName);
 ContentType parseContentType(const string_view &contentType);
 FileType parseFileType(const string_view &fileExtension);
-inline string_view getFileExtension(const std::string &fileName)
-{
-    auto pos = fileName.rfind('.');
-    if (pos == std::string::npos)
-        return "";
-    return string_view(&fileName[pos + 1], fileName.length() - pos - 1);
+inline string_view getFileExtension(const std::string &fileName) {
+	auto pos = fileName.rfind('.');
+	if (pos == std::string::npos)
+		return "";
+	return string_view(&fileName[pos + 1], fileName.length() - pos - 1);
 }
 
 template <typename T>
-inline constexpr const char *contentLengthFormatString()
-{
-    return "content-length: %d\r\n";
+inline constexpr const char *contentLengthFormatString() {
+	return "content-length: %d\r\n";
 }
 template <>
-inline constexpr const char *contentLengthFormatString<unsigned int>()
-{
-    return "content-length: %u\r\n";
+inline constexpr const char *contentLengthFormatString<unsigned int>() {
+	return "content-length: %u\r\n";
 }
 template <>
-inline constexpr const char *contentLengthFormatString<long>()
-{
-    return "content-length: %ld\r\n";
+inline constexpr const char *contentLengthFormatString<long>() {
+	return "content-length: %ld\r\n";
 }
 template <>
-inline constexpr const char *contentLengthFormatString<unsigned long>()
-{
-    return "content-length: %lu\r\n";
+inline constexpr const char *contentLengthFormatString<unsigned long>() {
+	return "content-length: %lu\r\n";
 }
 template <>
-inline constexpr const char *contentLengthFormatString<long long>()
-{
-    return "content-length: %lld\r\n";
+inline constexpr const char *contentLengthFormatString<long long>() {
+	return "content-length: %lld\r\n";
 }
 template <>
-inline constexpr const char *contentLengthFormatString<unsigned long long>()
-{
-    return "content-length: %llu\r\n";
+inline constexpr const char *contentLengthFormatString<unsigned long long>() {
+	return "content-length: %llu\r\n";
 }
-}  // namespace drogon
+} // namespace drogon

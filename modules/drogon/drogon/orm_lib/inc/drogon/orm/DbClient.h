@@ -22,77 +22,70 @@
 #include <drogon/orm/Row.h>
 #include <drogon/orm/RowIterator.h>
 #include <drogon/orm/SqlBinder.h>
+#include <trantor/utils/Logger.h>
+#include <trantor/utils/NonCopyable.h>
 #include <exception>
 #include <functional>
 #include <future>
 #include <string>
-#include <trantor/utils/Logger.h>
-#include <trantor/utils/NonCopyable.h>
 
 #ifdef __cpp_impl_coroutine
 #include <drogon/utils/coroutine.h>
 #endif
 
-namespace drogon
-{
-namespace orm
-{
+namespace drogon {
+namespace orm {
 using ResultCallback = std::function<void(const Result &)>;
 using ExceptionCallback = std::function<void(const DrogonDbException &)>;
 
 class Transaction;
 class DbClient;
 
-namespace internal
-{
+namespace internal {
 #ifdef __cpp_impl_coroutine
-struct SqlAwaiter : public CallbackAwaiter<Result>
-{
-    SqlAwaiter(internal::SqlBinder &&binder) : binder_(std::move(binder))
-    {
-    }
+struct SqlAwaiter : public CallbackAwaiter<Result> {
+	SqlAwaiter(internal::SqlBinder &&binder) :
+			binder_(std::move(binder)) {
+	}
 
-    void await_suspend(std::coroutine_handle<> handle)
-    {
-        binder_ >> [handle, this](const drogon::orm::Result &result) {
-            setValue(result);
-            handle.resume();
-        };
-        binder_ >> [handle, this](const std::exception_ptr &e) {
-            setException(e);
-            handle.resume();
-        };
-        binder_.exec();
-    }
+	void await_suspend(std::coroutine_handle<> handle) {
+		binder_ >> [handle, this](const drogon::orm::Result &result) {
+			setValue(result);
+			handle.resume();
+		};
+		binder_ >> [handle, this](const std::exception_ptr &e) {
+			setException(e);
+			handle.resume();
+		};
+		binder_.exec();
+	}
 
-  private:
-    internal::SqlBinder binder_;
+private:
+	internal::SqlBinder binder_;
 };
 
 struct TransactionAwaiter
-    : public CallbackAwaiter<std::shared_ptr<Transaction> >
-{
-    TransactionAwaiter(DbClient *client) : client_(client)
-    {
-    }
+		: public CallbackAwaiter<std::shared_ptr<Transaction> > {
+	TransactionAwaiter(DbClient *client) :
+			client_(client) {
+	}
 
-    void await_suspend(std::coroutine_handle<> handle);
+	void await_suspend(std::coroutine_handle<> handle);
 
-  private:
-    DbClient *client_;
+private:
+	DbClient *client_;
 };
 
 #endif
 
-}  // namespace internal
+} // namespace internal
 
 /// Database client abstract class
-class DROGON_EXPORT DbClient : public trantor::NonCopyable
-{
-  public:
-    virtual ~DbClient(){};
-    /// Create a new database client with multiple connections;
-    /**
+class DROGON_EXPORT DbClient : public trantor::NonCopyable {
+public:
+	virtual ~DbClient(){};
+	/// Create a new database client with multiple connections;
+	/**
      * @param connInfo: Connection string with some parameters,
      * each parameter setting is in the form keyword = value. Spaces around the
      * equal sign are optional.
@@ -117,16 +110,16 @@ class DROGON_EXPORT DbClient : public trantor::NonCopyable
      *
      * @param connNum: The number of connections to database server;
      */
-    static std::shared_ptr<DbClient> newPgClient(const std::string &connInfo,
-                                                 const size_t connNum);
-    static std::shared_ptr<DbClient> newMysqlClient(const std::string &connInfo,
-                                                    const size_t connNum);
-    static std::shared_ptr<DbClient> newSqlite3Client(
-        const std::string &connInfo,
-        const size_t connNum);
+	static std::shared_ptr<DbClient> newPgClient(const std::string &connInfo,
+			const size_t connNum);
+	static std::shared_ptr<DbClient> newMysqlClient(const std::string &connInfo,
+			const size_t connNum);
+	static std::shared_ptr<DbClient> newSqlite3Client(
+			const std::string &connInfo,
+			const size_t connNum);
 
-    /// Async and nonblocking method
-    /**
+	/// Async and nonblocking method
+	/**
      * @param sql is the SQL statement to be executed;
      * @param FUNCTION1 is usually the ResultCallback type;
      * @param FUNCTION2 is usually the ExceptionCallback type;
@@ -151,83 +144,81 @@ class DROGON_EXPORT DbClient : public trantor::NonCopyable
      * and users should follow this rule when calling all methods of DbClient.
      *
      */
-    template <typename FUNCTION1, typename FUNCTION2, typename... Arguments>
-    void execSqlAsync(const std::string &sql,
-                      FUNCTION1 &&rCallback,
-                      FUNCTION2 &&exceptCallback,
-                      Arguments &&...args) noexcept
-    {
-        auto binder = *this << sql;
-        (void)std::initializer_list<int>{
-            (binder << std::forward<Arguments>(args), 0)...};
-        binder >> std::forward<FUNCTION1>(rCallback);
-        binder >> std::forward<FUNCTION2>(exceptCallback);
-    }
+	template <typename FUNCTION1, typename FUNCTION2, typename... Arguments>
+	void execSqlAsync(const std::string &sql,
+			FUNCTION1 &&rCallback,
+			FUNCTION2 &&exceptCallback,
+			Arguments &&...args) noexcept {
+		auto binder = *this << sql;
+		(void)std::initializer_list<int>{
+			(binder << std::forward<Arguments>(args), 0)...
+		};
+		binder >> std::forward<FUNCTION1>(rCallback);
+		binder >> std::forward<FUNCTION2>(exceptCallback);
+	}
 
-    /// Async and nonblocking method
-    template <typename... Arguments>
-    std::future<Result> execSqlAsyncFuture(const std::string &sql,
-                                           Arguments &&...args) noexcept
-    {
-        auto binder = *this << sql;
-        (void)std::initializer_list<int>{
-            (binder << std::forward<Arguments>(args), 0)...};
-        std::shared_ptr<std::promise<Result> > prom =
-            std::make_shared<std::promise<Result> >();
-        binder >> [prom](const Result &r) { prom->set_value(r); };
-        binder >>
-            [prom](const std::exception_ptr &e) { prom->set_exception(e); };
-        binder.exec();
-        return prom->get_future();
-    }
+	/// Async and nonblocking method
+	template <typename... Arguments>
+	std::future<Result> execSqlAsyncFuture(const std::string &sql,
+			Arguments &&...args) noexcept {
+		auto binder = *this << sql;
+		(void)std::initializer_list<int>{
+			(binder << std::forward<Arguments>(args), 0)...
+		};
+		std::shared_ptr<std::promise<Result> > prom =
+				std::make_shared<std::promise<Result> >();
+		binder >> [prom](const Result &r) { prom->set_value(r); };
+		binder >>
+				[prom](const std::exception_ptr &e) { prom->set_exception(e); };
+		binder.exec();
+		return prom->get_future();
+	}
 
-    // Sync and blocking method
-    template <typename... Arguments>
-    const Result execSqlSync(const std::string &sql,
-                             Arguments &&...args) noexcept(false)
-    {
-        Result r(nullptr);
-        {
-            auto binder = *this << sql;
-            (void)std::initializer_list<int>{
-                (binder << std::forward<Arguments>(args), 0)...};
-            // Use blocking mode
-            binder << Mode::Blocking;
+	// Sync and blocking method
+	template <typename... Arguments>
+	const Result execSqlSync(const std::string &sql,
+			Arguments &&...args) noexcept(false) {
+		Result r(nullptr);
+		{
+			auto binder = *this << sql;
+			(void)std::initializer_list<int>{
+				(binder << std::forward<Arguments>(args), 0)...
+			};
+			// Use blocking mode
+			binder << Mode::Blocking;
 
-            binder >> [&r](const Result &result) { r = result; };
-            binder.exec();  // exec may be throw exception;
-        }
-        return r;
-    }
+			binder >> [&r](const Result &result) { r = result; };
+			binder.exec(); // exec may be throw exception;
+		}
+		return r;
+	}
 
 #ifdef __cpp_impl_coroutine
-    template <typename... Arguments>
-    internal::SqlAwaiter execSqlCoro(const std::string &sql,
-                                     Arguments &&...args) noexcept
-    {
-        auto binder = *this << sql;
-        (void)std::initializer_list<int>{
-            (binder << std::forward<Arguments>(args), 0)...};
-        return internal::SqlAwaiter(std::move(binder));
-    }
+	template <typename... Arguments>
+	internal::SqlAwaiter execSqlCoro(const std::string &sql,
+			Arguments &&...args) noexcept {
+		auto binder = *this << sql;
+		(void)std::initializer_list<int>{
+			(binder << std::forward<Arguments>(args), 0)...
+		};
+		return internal::SqlAwaiter(std::move(binder));
+	}
 #endif
 
-    /// Streaming-like method for sql execution. For more information, see the
-    /// wiki page.
-    internal::SqlBinder operator<<(const std::string &sql);
-    internal::SqlBinder operator<<(std::string &&sql);
-    template <int N>
-    internal::SqlBinder operator<<(const char (&sql)[N])
-    {
-        return internal::SqlBinder(sql, N - 1, *this, type_);
-    }
-    internal::SqlBinder operator<<(const string_view &sql)
-    {
-        return internal::SqlBinder(sql.data(), sql.length(), *this, type_);
-    }
+	/// Streaming-like method for sql execution. For more information, see the
+	/// wiki page.
+	internal::SqlBinder operator<<(const std::string &sql);
+	internal::SqlBinder operator<<(std::string &&sql);
+	template <int N>
+	internal::SqlBinder operator<<(const char (&sql)[N]) {
+		return internal::SqlBinder(sql, N - 1, *this, type_);
+	}
+	internal::SqlBinder operator<<(const string_view &sql) {
+		return internal::SqlBinder(sql.data(), sql.length(), *this, type_);
+	}
 
-    /// Create a transaction object.
-    /**
+	/// Create a transaction object.
+	/**
      * @param commitCallback: the callback with which user can get the
      * submitting result, The Boolean type parameter in the callback function
      * indicates whether the transaction was submitted successfully.
@@ -239,44 +230,41 @@ class DROGON_EXPORT DbClient : public trantor::NonCopyable
      * transaction object to set the callback.
      * @note A TimeoutError exception is thrown if the operation is timed out.
      */
-    virtual std::shared_ptr<Transaction> newTransaction(
-        const std::function<void(bool)> &commitCallback =
-            std::function<void(bool)>()) noexcept(false) = 0;
+	virtual std::shared_ptr<Transaction> newTransaction(
+			const std::function<void(bool)> &commitCallback =
+					std::function<void(bool)>()) noexcept(false) = 0;
 
-    /// Create a transaction object in asynchronous mode.
-    /**
+	/// Create a transaction object in asynchronous mode.
+	/**
      * @note An empty shared_ptr object is returned via the callback if the
      * operation is timed out.
      */
-    virtual void newTransactionAsync(
-        const std::function<void(const std::shared_ptr<Transaction> &)>
-            &callback) = 0;
+	virtual void newTransactionAsync(
+			const std::function<void(const std::shared_ptr<Transaction> &)>
+					&callback) = 0;
 
 #ifdef __cpp_impl_coroutine
-    orm::internal::TransactionAwaiter newTransactionCoro()
-    {
-        return orm::internal::TransactionAwaiter(this);
-    }
+	orm::internal::TransactionAwaiter newTransactionCoro() {
+		return orm::internal::TransactionAwaiter(this);
+	}
 #endif
 
-    /**
+	/**
      * @brief Check if there is a connection successfully established.
      *
      * @return true
      * @return false
      */
-    virtual bool hasAvailableConnections() const noexcept = 0;
+	virtual bool hasAvailableConnections() const noexcept = 0;
 
-    ClientType type() const
-    {
-        return type_;
-    }
-    const std::string &connectionInfo()
-    {
-        return connectionInfo_;
-    }
+	ClientType type() const {
+		return type_;
+	}
+	const std::string &connectionInfo() {
+		return connectionInfo_;
+	}
 
-    /**
+	/**
      * @brief Set the Timeout value of execution of a SQL.
      *
      * @param timeout in seconds, if the SQL result is not returned from the
@@ -286,51 +274,49 @@ class DROGON_EXPORT DbClient : public trantor::NonCopyable
      * default value is -1.0, this means there is no time limit if this method
      * is not called.
      */
-    virtual void setTimeout(double timeout) = 0;
+	virtual void setTimeout(double timeout) = 0;
 
-  private:
-    friend internal::SqlBinder;
-    virtual void execSql(
-        const char *sql,
-        size_t sqlLength,
-        size_t paraNum,
-        std::vector<const char *> &&parameters,
-        std::vector<int> &&length,
-        std::vector<int> &&format,
-        ResultCallback &&rcb,
-        std::function<void(const std::exception_ptr &)> &&exceptCallback) = 0;
+private:
+	friend internal::SqlBinder;
+	virtual void execSql(
+			const char *sql,
+			size_t sqlLength,
+			size_t paraNum,
+			std::vector<const char *> &&parameters,
+			std::vector<int> &&length,
+			std::vector<int> &&format,
+			ResultCallback &&rcb,
+			std::function<void(const std::exception_ptr &)> &&exceptCallback) = 0;
 
-  protected:
-    ClientType type_;
-    std::string connectionInfo_;
+protected:
+	ClientType type_;
+	std::string connectionInfo_;
 };
 using DbClientPtr = std::shared_ptr<DbClient>;
 
-class Transaction : public DbClient
-{
-  public:
-    virtual void rollback() = 0;
-    // virtual void commit() = 0;
-    virtual void setCommitCallback(
-        const std::function<void(bool)> &commitCallback) = 0;
+class Transaction : public DbClient {
+public:
+	virtual void rollback() = 0;
+	// virtual void commit() = 0;
+	virtual void setCommitCallback(
+			const std::function<void(bool)> &commitCallback) = 0;
 };
 
 #ifdef __cpp_impl_coroutine
 inline void internal::TransactionAwaiter::await_suspend(
-    std::coroutine_handle<> handle)
-{
-    assert(client_ != nullptr);
-    client_->newTransactionAsync(
-        [this, handle](const std::shared_ptr<Transaction> &transaction) {
-            if (transaction == nullptr)
-                setException(std::make_exception_ptr(TimeoutError(
-                    "Timeout, no connection available for transaction")));
-            else
-                setValue(transaction);
-            handle.resume();
-        });
+		std::coroutine_handle<> handle) {
+	assert(client_ != nullptr);
+	client_->newTransactionAsync(
+			[this, handle](const std::shared_ptr<Transaction> &transaction) {
+				if (transaction == nullptr)
+					setException(std::make_exception_ptr(TimeoutError(
+							"Timeout, no connection available for transaction")));
+				else
+					setValue(transaction);
+				handle.resume();
+			});
 }
 #endif
 
-}  // namespace orm
-}  // namespace drogon
+} // namespace orm
+} // namespace drogon

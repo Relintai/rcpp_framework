@@ -22,34 +22,31 @@
 #include <unordered_map>
 #include <vector>
 
-namespace drogon
-{
-namespace orm
-{
-class Sqlite3ResultImpl : public ResultImpl
-{
-  public:
-    Sqlite3ResultImpl() = default;
-    virtual SizeType size() const noexcept override;
-    virtual RowSizeType columns() const noexcept override;
-    virtual const char *columnName(RowSizeType number) const override;
-    virtual SizeType affectedRows() const noexcept override;
-    virtual RowSizeType columnNumber(const char colName[]) const override;
-    virtual const char *getValue(SizeType row,
-                                 RowSizeType column) const override;
-    virtual bool isNull(SizeType row, RowSizeType column) const override;
-    virtual FieldSizeType getLength(SizeType row,
-                                    RowSizeType column) const override;
-    virtual unsigned long long insertId() const noexcept override;
+namespace drogon {
+namespace orm {
+class Sqlite3ResultImpl : public ResultImpl {
+public:
+	Sqlite3ResultImpl() = default;
+	virtual SizeType size() const noexcept override;
+	virtual RowSizeType columns() const noexcept override;
+	virtual const char *columnName(RowSizeType number) const override;
+	virtual SizeType affectedRows() const noexcept override;
+	virtual RowSizeType columnNumber(const char colName[]) const override;
+	virtual const char *getValue(SizeType row,
+			RowSizeType column) const override;
+	virtual bool isNull(SizeType row, RowSizeType column) const override;
+	virtual FieldSizeType getLength(SizeType row,
+			RowSizeType column) const override;
+	virtual unsigned long long insertId() const noexcept override;
 
-  private:
-    friend class Sqlite3Connection;
-    std::vector<std::vector<std::shared_ptr<std::string>>> result_;
-    std::string query_;
-    std::vector<std::string> columnNames_;
-    std::unordered_map<std::string, size_t> columnNamesMap_;
-    size_t affectedRows_{0};
-    size_t insertId_{0};
+private:
+	friend class Sqlite3Connection;
+	std::vector<std::vector<std::shared_ptr<std::string> > > result_;
+	std::string query_;
+	std::vector<std::string> columnNames_;
+	std::unordered_map<std::string, size_t> columnNamesMap_;
+	size_t affectedRows_{ 0 };
+	size_t insertId_{ 0 };
 };
-}  // namespace orm
-}  // namespace drogon
+} // namespace orm
+} // namespace drogon

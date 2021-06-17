@@ -15,26 +15,23 @@
 #pragma once
 
 #include <json/json.h>
-#include <string>
 #include <trantor/utils/NonCopyable.h>
+#include <string>
 
-namespace drogon
-{
-class ConfigLoader : public trantor::NonCopyable
-{
-  public:
-    explicit ConfigLoader(const std::string &configFile);
-    explicit ConfigLoader(const Json::Value &data);
-    explicit ConfigLoader(Json::Value &&data);
-    ~ConfigLoader();
-    const Json::Value &jsonValue() const
-    {
-        return configJsonRoot_;
-    }
-    void load();
+namespace drogon {
+class ConfigLoader : public trantor::NonCopyable {
+public:
+	explicit ConfigLoader(const std::string &configFile);
+	explicit ConfigLoader(const Json::Value &data);
+	explicit ConfigLoader(Json::Value &&data);
+	~ConfigLoader();
+	const Json::Value &jsonValue() const {
+		return configJsonRoot_;
+	}
+	void load();
 
-  private:
-    std::string configFile_;
-    Json::Value configJsonRoot_;
+private:
+	std::string configFile_;
+	Json::Value configJsonRoot_;
 };
-}  // namespace drogon
+} // namespace drogon

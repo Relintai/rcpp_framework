@@ -19,14 +19,13 @@
 using namespace drogon;
 
 HttpFileUploadRequest::HttpFileUploadRequest(
-    const std::vector<UploadFile> &files)
-    : HttpRequestImpl(nullptr),
-      boundary_(utils::genRandomString(32)),
-      files_(files)
-{
-    setMethod(drogon::Post);
-    setVersion(drogon::Version::kHttp11);
-    setContentType("content-type: multipart/form-data; boundary=" + boundary_ +
-                   "\r\n");
-    contentType_ = CT_MULTIPART_FORM_DATA;
+		const std::vector<UploadFile> &files) :
+		HttpRequestImpl(nullptr),
+		boundary_(utils::genRandomString(32)),
+		files_(files) {
+	setMethod(drogon::Post);
+	setVersion(drogon::Version::kHttp11);
+	setContentType("content-type: multipart/form-data; boundary=" + boundary_ +
+				   "\r\n");
+	contentType_ = CT_MULTIPART_FORM_DATA;
 }

@@ -11,29 +11,27 @@
  *  Drogon
  *
  */
-#include <trantor/utils/NonCopyable.h>
 #include <trantor/net/EventLoop.h>
+#include <trantor/utils/NonCopyable.h>
+#include <atomic>
 #include <chrono>
 #include <functional>
-#include <atomic>
 #include <memory>
 
-namespace drogon
-{
+namespace drogon {
 class TaskTimeoutFlag : public trantor::NonCopyable,
-                        public std::enable_shared_from_this<TaskTimeoutFlag>
-{
-  public:
-    TaskTimeoutFlag(trantor::EventLoop *loop,
-                    const std::chrono::duration<double> &timeout,
-                    std::function<void()> timeoutCallback);
-    bool done();
-    void runTimer();
+						public std::enable_shared_from_this<TaskTimeoutFlag> {
+public:
+	TaskTimeoutFlag(trantor::EventLoop *loop,
+			const std::chrono::duration<double> &timeout,
+			std::function<void()> timeoutCallback);
+	bool done();
+	void runTimer();
 
-  private:
-    std::atomic<bool> isDone_{false};
-    trantor::EventLoop *loop_;
-    std::chrono::duration<double> timeout_;
-    std::function<void()> timeoutFunc_;
+private:
+	std::atomic<bool> isDone_{ false };
+	trantor::EventLoop *loop_;
+	std::chrono::duration<double> timeout_;
+	std::function<void()> timeoutFunc_;
 };
-}  // namespace drogon
+} // namespace drogon

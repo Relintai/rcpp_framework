@@ -17,44 +17,38 @@
 #include <drogon/nosql/RedisClient.h>
 #include <memory>
 
-namespace drogon
-{
-namespace nosql
-{
+namespace drogon {
+namespace nosql {
 class RedisTransactionImpl final
-    : public RedisTransaction,
-      public std::enable_shared_from_this<RedisTransactionImpl>
-{
-  public:
-    explicit RedisTransactionImpl(RedisConnectionPtr connection) noexcept;
-    // virtual void cancel() override;
-    void execute(RedisResultCallback &&resultCallback,
-                 RedisExceptionCallback &&exceptionCallback) override;
-    void execCommandAsync(RedisResultCallback &&resultCallback,
-                          RedisExceptionCallback &&exceptionCallback,
-                          string_view command,
-                          ...) noexcept override;
-    std::shared_ptr<RedisTransaction> newTransaction() override
-    {
-        return shared_from_this();
-    }
-    void newTransactionAsync(
-        const std::function<void(const std::shared_ptr<RedisTransaction> &)>
-            &callback) override
-    {
-        callback(shared_from_this());
-    }
-    void setTimeout(double timeout) override
-    {
-        timeout_ = timeout;
-    }
-    void doBegin();
-    ~RedisTransactionImpl() override;
+		: public RedisTransaction,
+		  public std::enable_shared_from_this<RedisTransactionImpl> {
+public:
+	explicit RedisTransactionImpl(RedisConnectionPtr connection) noexcept;
+	// virtual void cancel() override;
+	void execute(RedisResultCallback &&resultCallback,
+			RedisExceptionCallback &&exceptionCallback) override;
+	void execCommandAsync(RedisResultCallback &&resultCallback,
+			RedisExceptionCallback &&exceptionCallback,
+			string_view command,
+			...) noexcept override;
+	std::shared_ptr<RedisTransaction> newTransaction() override {
+		return shared_from_this();
+	}
+	void newTransactionAsync(
+			const std::function<void(const std::shared_ptr<RedisTransaction> &)>
+					&callback) override {
+		callback(shared_from_this());
+	}
+	void setTimeout(double timeout) override {
+		timeout_ = timeout;
+	}
+	void doBegin();
+	~RedisTransactionImpl() override;
 
-  private:
-    bool isExecutedOrCancelled_{false};
-    RedisConnectionPtr connPtr_;
-    double timeout_{-1.0};
+private:
+	bool isExecutedOrCancelled_{ false };
+	RedisConnectionPtr connPtr_;
+	double timeout_{ -1.0 };
 };
-}  // namespace nosql
-}  // namespace drogon
+} // namespace nosql
+} // namespace drogon

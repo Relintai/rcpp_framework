@@ -15,22 +15,20 @@
 #pragma once
 
 #include <drogon/DrObject.h>
-#include <drogon/drogon_callbacks.h>
 #include <drogon/HttpRequest.h>
 #include <drogon/HttpResponse.h>
+#include <drogon/drogon_callbacks.h>
 #include <memory>
 
-namespace drogon
-{
+namespace drogon {
 /**
  * @brief The abstract base class for filters
  * For more details on the class, see the wiki site (the 'Filter' section)
  */
-class DROGON_EXPORT HttpFilterBase : public virtual DrObjectBase
-{
-  public:
-    /// This virtual function should be overrided in subclasses.
-    /**
+class DROGON_EXPORT HttpFilterBase : public virtual DrObjectBase {
+public:
+	/// This virtual function should be overrided in subclasses.
+	/**
      * This method is an asynchronous interface, user should return the result
      * via 'FilterCallback' or 'FilterChainCallback'.
      * @param req is the request object processed by the filter
@@ -40,12 +38,11 @@ class DROGON_EXPORT HttpFilterBase : public virtual DrObjectBase
      * @param fccb if this callback is called, the next filter's doFilter method
      * or the handler registered on the path is called.
      */
-    virtual void doFilter(const HttpRequestPtr &req,
-                          FilterCallback &&fcb,
-                          FilterChainCallback &&fccb) = 0;
-    virtual ~HttpFilterBase()
-    {
-    }
+	virtual void doFilter(const HttpRequestPtr &req,
+			FilterCallback &&fcb,
+			FilterChainCallback &&fccb) = 0;
+	virtual ~HttpFilterBase() {
+	}
 };
 
 /**
@@ -56,12 +53,10 @@ class DROGON_EXPORT HttpFilterBase : public virtual DrObjectBase
  * flag to false for classes that have nondefault constructors.
  */
 template <typename T, bool AutoCreation = true>
-class HttpFilter : public DrObject<T>, public HttpFilterBase
-{
-  public:
-    static constexpr bool isAutoCreation{AutoCreation};
-    virtual ~HttpFilter()
-    {
-    }
+class HttpFilter : public DrObject<T>, public HttpFilterBase {
+public:
+	static constexpr bool isAutoCreation{ AutoCreation };
+	virtual ~HttpFilter() {
+	}
 };
-}  // namespace drogon
+} // namespace drogon

@@ -18,8 +18,7 @@
 #include <functional>
 #include <memory>
 
-namespace drogon
-{
+namespace drogon {
 class HttpResponse;
 using HttpResponsePtr = std::shared_ptr<HttpResponse>;
 class HttpRequest;
@@ -29,4 +28,4 @@ using AdviceChainCallback = std::function<void()>;
 using FilterCallback = std::function<void(const HttpResponsePtr &)>;
 using FilterChainCallback = std::function<void()>;
 using HttpReqCallback = std::function<void(ReqResult, const HttpResponsePtr &)>;
-}  // namespace drogon
+} // namespace drogon

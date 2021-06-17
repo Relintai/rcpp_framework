@@ -14,85 +14,82 @@
 
 #pragma once
 
-#include <drogon/exports.h>
 #include <drogon/HttpRequest.h>
+#include <drogon/exports.h>
 #include <drogon/utils/string_view.h>
 #include <map>
-#include <unordered_map>
-#include <string>
-#include <vector>
 #include <memory>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
-namespace drogon
-{
+namespace drogon {
 class HttpFileImpl;
 /**
  * @brief This class represents a uploaded file by a HTTP request.
  *
  */
-class DROGON_EXPORT HttpFile
-{
-  public:
-    HttpFile(std::shared_ptr<HttpFileImpl> &&implPtr);
-    /// Return the file name;
-    const std::string &getFileName() const;
+class DROGON_EXPORT HttpFile {
+public:
+	HttpFile(std::shared_ptr<HttpFileImpl> &&implPtr);
+	/// Return the file name;
+	const std::string &getFileName() const;
 
-    /// Return the file extension;
-    /// Note: After the HttpFile object is destroyed, do not use this
-    /// string_view object.
-    string_view getFileExtension() const;
+	/// Return the file extension;
+	/// Note: After the HttpFile object is destroyed, do not use this
+	/// string_view object.
+	string_view getFileExtension() const;
 
-    /// Return the name of the item in multiple parts.
-    const std::string &getItemName() const;
+	/// Return the name of the item in multiple parts.
+	const std::string &getItemName() const;
 
-    /// Return the type of file.
-    FileType getFileType() const;
+	/// Return the type of file.
+	FileType getFileType() const;
 
-    /// Set the file name, usually called by the MultiPartParser parser.
-    void setFileName(const std::string &fileName);
+	/// Set the file name, usually called by the MultiPartParser parser.
+	void setFileName(const std::string &fileName);
 
-    /// Set the contents of the file, usually called by the MultiPartParser
-    /// parser.
-    void setFile(const char *data, size_t length);
+	/// Set the contents of the file, usually called by the MultiPartParser
+	/// parser.
+	void setFile(const char *data, size_t length);
 
-    /// Save the file to the file system.
-    /**
+	/// Save the file to the file system.
+	/**
      * The folder saving the file is app().getUploadPath().
      * The full path is app().getUploadPath()+"/"+this->getFileName()
      */
-    int save() const;
+	int save() const;
 
-    /// Save the file to @param path
-    /**
+	/// Save the file to @param path
+	/**
      * @param path if the parameter is prefixed with "/", "./" or "../", or is
      * "." or "..", the full path is path+"/"+this->getFileName(),
      * otherwise the file is saved as
      * app().getUploadPath()+"/"+path+"/"+this->getFileName()
      */
-    int save(const std::string &path) const;
+	int save(const std::string &path) const;
 
-    /// Save the file to file system with a new name
-    /**
+	/// Save the file to file system with a new name
+	/**
      * @param fileName if the parameter isn't prefixed with "/", "./" or "../",
      * the full path is app().getUploadPath()+"/"+filename, otherwise the file
      * is saved as the filename
      */
-    int saveAs(const std::string &fileName) const;
+	int saveAs(const std::string &fileName) const;
 
-    /**
+	/**
      * @brief return the content of the file.
      *
      * @return string_view
      */
-    string_view fileContent() const
-    {
-        return string_view{fileData(), fileLength()};
-    }
+	string_view fileContent() const {
+		return string_view{ fileData(), fileLength() };
+	}
 
-    /// Return the file length.
-    size_t fileLength() const noexcept;
+	/// Return the file length.
+	size_t fileLength() const noexcept;
 
-    /**
+	/**
      * @brief return the pointer of the file data.
      *
      * @return const char*
@@ -102,47 +99,46 @@ class DROGON_EXPORT HttpFile
      * length of the file by the fileLength() method, or use the fileContent()
      * method.
      */
-    const char *fileData() const noexcept;
+	const char *fileData() const noexcept;
 
-    /// Return the md5 string of the file
-    std::string getMd5() const;
+	/// Return the md5 string of the file
+	std::string getMd5() const;
 
-  private:
-    std::shared_ptr<HttpFileImpl> implPtr_;
+private:
+	std::shared_ptr<HttpFileImpl> implPtr_;
 };
 
 /// A parser class which help the user to get the files and the parameters in
 /// the multipart format request.
-class DROGON_EXPORT MultiPartParser
-{
-  public:
-    MultiPartParser(){};
-    ~MultiPartParser(){};
-    /// Get files, This method should be called after calling the parse()
-    /// method.
-    const std::vector<HttpFile> &getFiles() const;
+class DROGON_EXPORT MultiPartParser {
+public:
+	MultiPartParser(){};
+	~MultiPartParser(){};
+	/// Get files, This method should be called after calling the parse()
+	/// method.
+	const std::vector<HttpFile> &getFiles() const;
 
-    /// Get files in a map, the keys of the map are item names of the files.
-    std::unordered_map<std::string, HttpFile> getFilesMap() const;
+	/// Get files in a map, the keys of the map are item names of the files.
+	std::unordered_map<std::string, HttpFile> getFilesMap() const;
 
-    /// Get parameters, This method should be called after calling the parse ()
-    /// method.
-    const std::map<std::string, std::string> &getParameters() const;
+	/// Get parameters, This method should be called after calling the parse ()
+	/// method.
+	const std::map<std::string, std::string> &getParameters() const;
 
-    /// Parse the http request stream to get files and parameters.
-    int parse(const HttpRequestPtr &req);
+	/// Parse the http request stream to get files and parameters.
+	int parse(const HttpRequestPtr &req);
 
-  protected:
-    std::vector<HttpFile> files_;
-    std::map<std::string, std::string> parameters_;
-    int parse(const HttpRequestPtr &req,
-              const char *boundaryData,
-              size_t boundaryLen);
-    int parseEntity(const char *begin, const char *end);
-    HttpRequestPtr requestPtr_;
+protected:
+	std::vector<HttpFile> files_;
+	std::map<std::string, std::string> parameters_;
+	int parse(const HttpRequestPtr &req,
+			const char *boundaryData,
+			size_t boundaryLen);
+	int parseEntity(const char *begin, const char *end);
+	HttpRequestPtr requestPtr_;
 };
 
 /// In order to be compatible with old interfaces
 using FileUpload = MultiPartParser;
 
-}  // namespace drogon
+} // namespace drogon

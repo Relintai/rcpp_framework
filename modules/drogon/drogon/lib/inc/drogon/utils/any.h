@@ -19,8 +19,7 @@
 #include <boost/any.hpp>
 #endif
 
-namespace drogon
-{
+namespace drogon {
 #if __cplusplus >= 201703L || (defined _MSC_VER && _MSC_VER > 1900)
 using std::any;
 using std::any_cast;
@@ -28,4 +27,4 @@ using std::any_cast;
 using boost::any;
 using boost::any_cast;
 #endif
-}  // namespace drogon
+} // namespace drogon

@@ -15,26 +15,21 @@
 #pragma once
 
 #include <drogon/DrObject.h>
-#include <vector>
 #include <string>
+#include <vector>
 
-class CommandHandler : public virtual drogon::DrObjectBase
-{
-  public:
-    virtual void handleCommand(std::vector<std::string> &parameters) = 0;
-    virtual bool isTopCommand()
-    {
-        return false;
-    }
-    virtual std::string script()
-    {
-        return "";
-    }
-    virtual std::string detail()
-    {
-        return "";
-    }
-    virtual ~CommandHandler()
-    {
-    }
+class CommandHandler : public virtual drogon::DrObjectBase {
+public:
+	virtual void handleCommand(std::vector<std::string> &parameters) = 0;
+	virtual bool isTopCommand() {
+		return false;
+	}
+	virtual std::string script() {
+		return "";
+	}
+	virtual std::string detail() {
+		return "";
+	}
+	virtual ~CommandHandler() {
+	}
 };

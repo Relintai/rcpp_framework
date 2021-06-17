@@ -14,27 +14,22 @@
 
 #pragma once
 
-namespace drogon
-{
-namespace orm
-{
-class DefaultValue
-{
+namespace drogon {
+namespace orm {
+class DefaultValue {
 };
 
-namespace internal
-{
-enum FieldType
-{
-    MySqlTiny,
-    MySqlShort,
-    MySqlLong,
-    MySqlLongLong,
-    MySqlNull,
-    MySqlString,
-    DrogonDefaultValue,
+namespace internal {
+enum FieldType {
+	MySqlTiny,
+	MySqlShort,
+	MySqlLong,
+	MySqlLongLong,
+	MySqlNull,
+	MySqlString,
+	DrogonDefaultValue,
 };
 
-}  // namespace internal
-}  // namespace orm
-}  // namespace drogon
+} // namespace internal
+} // namespace orm
+} // namespace drogon
