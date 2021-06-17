@@ -12,7 +12,7 @@ def get_name():
 
 
 def can_build():
-    return True
+    return False
 
 
 def get_opts():
@@ -24,6 +24,8 @@ def get_flags():
 
 
 def configure(env):
+    #env.Append(CXX=["-std=c++17"])
+
     env.Prepend(CPPPATH=["#modules/trantor"])
     env.Prepend(CPPPATH=["#modules/trantor/trantor/net"])
     env.Prepend(CPPPATH=["#modules/trantor/trantor/net/inner"])
