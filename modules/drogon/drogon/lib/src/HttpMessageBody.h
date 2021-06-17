@@ -15,6 +15,7 @@
 #pragma once
 #include <drogon/utils/string_view.h>
 #include <string>
+#include <memory>
 
 namespace drogon {
 class HttpMessageBody {

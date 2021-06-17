@@ -15,6 +15,9 @@
 #pragma once
 #include <algorithm>
 #include <vector>
+#include <cstdint>
+#include <string>
+
 namespace trantor
 {
 inline uint64_t hton64(uint64_t n)
