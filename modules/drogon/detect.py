@@ -61,27 +61,8 @@ def configure(env):
 
     if not err:
         env.ParseConfig("pkg-config libcares --cflags --libs")
-
-    #env.Append(CXX=["-std=c++17"])
-
-    mariadb_error = os.system("pkg-config mariadb --modversion --silence-errors > /dev/null ")
-    mysql_error = os.system("pkg-config mysql --modversion --silence-errors > /dev/null ")
-
-    if not mariadb_error:
-        env.ParseConfig("pkg-config mariadb --cflags --libs")
-       # env.Append(CPPDEFINES=["USE_MYSQL"])
-        env.mysql_available = True
-
-    if not mysql_error:
-        env.ParseConfig("pkg-config mysql --cflags --libs")
-       # env.Append(CPPDEFINES=["USE_MYSQL"])
-        env.mysql_available = True
-
-    #USE_SQLITE3
     
     env.Prepend(CPPPATH=["#modules/drogon/drogon/lib/inc"])
-    env.Prepend(CPPPATH=["#modules/drogon/drogon/orm_lib/inc"])
-    env.Prepend(CPPPATH=["#modules/drogon/drogon/nosql_lib/redis/inc"])
     env.Prepend(CPPPATH=["#modules/drogon/drogon/config"])
     env.Prepend(CPPPATH=["#modules/drogon"])
 
