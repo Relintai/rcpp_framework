@@ -25,8 +25,6 @@
 #include <drogon/NotFound.h>
 #include <drogon/drogon_callbacks.h>
 #include <drogon/exports.h>
-#include <drogon/nosql/RedisClient.h>
-#include <drogon/orm/DbClient.h>
 #include <drogon/plugins/Plugin.h>
 #include <drogon/utils/HttpConstraint.h>
 #include <drogon/utils/Utilities.h>
@@ -1132,44 +1130,6 @@ public:
      */
 	virtual const std::string &getImplicitPage() const = 0;
 
-	/// Get a database client by name
-	/**
-     * @note
-     * This method must be called after the framework has been run.
-     */
-	virtual orm::DbClientPtr getDbClient(
-			const std::string &name = "default") = 0;
-
-	/// Get a 'fast' database client by name
-	/**
-     * @note
-     * This method must be called after the framework has been run.
-     */
-	virtual orm::DbClientPtr getFastDbClient(
-			const std::string &name = "default") = 0;
-
-	/**
-     * @brief Check if all database clients in the framework are available
-     * (connect to the database successfully).
-     */
-	virtual bool areAllDbClientsAvailable() const noexcept = 0;
-
-	/// Get a redis client by name
-	/**
-     * @note
-     * This method must be called after the framework has been run.
-     */
-	virtual nosql::RedisClientPtr getRedisClient(
-			const std::string &name = "default") = 0;
-
-	/// Get a 'fast' redis client by name
-	/**
-     * @note
-     * This method must be called after the framework has been run.
-     */
-	virtual nosql::RedisClientPtr getFastRedisClient(
-			const std::string &name = "default") = 0;
-
 	/**
      * @brief This method is to enable or disable the unicode escaping (\u) in
      * the json string of HTTP responses or requests. it works (disable
@@ -1205,63 +1165,8 @@ public:
      */
 	virtual const std::pair<unsigned int, std::string>
 			&getFloatPrecisionInJson() const noexcept = 0;
-	/// Create a database client
-	/**
-     * @param dbType The database type is one of
-     * "postgresql","mysql","sqlite3".
-     * @param host IP or host name.
-     * @param port The port on which the database server is listening.
-     * @databaseName Database name
-     * @param userName User name
-     * @param password Password for the database server
-     * @param connectionNum The number of connections to the database server.
-     * It's valid only if @param isFast is false.
-     * @param filename The file name of sqlite3 database file.
-     * @param name The client name.
-     * @param isFast Indicates if the client is a fast database client.
-     * @param characterSet The character set of the database server.
-     * @param timeout The timeout in seconds for executing SQL queries. zero or
-     * negative value means no timeout.
-     *
-     * @note
-     * This operation can be performed by an option in the configuration file.
-     */
-	virtual HttpAppFramework &createDbClient(
-			const std::string &dbType,
-			const std::string &host,
-			const unsigned short port,
-			const std::string &databaseName,
-			const std::string &userName,
-			const std::string &password,
-			const size_t connectionNum = 1,
-			const std::string &filename = "",
-			const std::string &name = "default",
-			const bool isFast = false,
-			const std::string &characterSet = "",
-			double timeout = -1.0) = 0;
 
-	/// Create a redis client
-	/**
-     * @param ip IP of redis server.
-     * @param port The port on which the redis server is listening.
-     * @param name The client name.
-     * @param password Password for the redis server
-     * @param connectionNum The number of connections to the redis server.
-     * @param isFast Indicates if the client is a fast database client.
-     *
-     * @note
-     * This operation can be performed by an option in the configuration file.
-     */
-	virtual HttpAppFramework &createRedisClient(
-			const std::string &ip,
-			unsigned short port,
-			const std::string &name = "default",
-			const std::string &password = "",
-			size_t connectionNum = 1,
-			bool isFast = false,
-			double timeout = -1.0,
-			unsigned int db = 0) = 0;
-
+       
 	/// Get the DNS resolver
 	/**
      * @note

@@ -29,7 +29,6 @@
 #include <drogon/MultiPart.h>
 #include <drogon/Session.h>
 #include <drogon/UploadFile.h>
-#include <drogon/orm/DbClient.h>
 #include <drogon/plugins/AccessLogger.h>
 #include <drogon/plugins/Plugin.h>
 #include <drogon/plugins/SecureSSLRedirector.h>

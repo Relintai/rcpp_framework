@@ -15,7 +15,6 @@
 #include "HttpAppFrameworkImpl.h"
 #include "AOPAdvice.h"
 #include "ConfigLoader.h"
-#include "DbClientManager.h"
 #include "HttpClientImpl.h"
 #include "HttpControllersRouter.h"
 #include "HttpRequestImpl.h"
@@ -24,7 +23,6 @@
 #include "HttpSimpleControllersRouter.h"
 #include "ListenerManager.h"
 #include "PluginsManager.h"
-#include "RedisClientManager.h"
 #include "SessionManager.h"
 #include "SharedLibManager.h"
 #include "StaticFileRouter.h"
@@ -85,8 +83,6 @@ HttpAppFrameworkImpl::HttpAppFrameworkImpl() :
 						postRoutingObservers_)),
 		listenerManagerPtr_(new ListenerManager),
 		pluginsManagerPtr_(new PluginsManager),
-		dbClientManagerPtr_(new orm::DbClientManager),
-		redisClientManagerPtr_(new nosql::RedisClientManager),
 		uploadPath_(rootPath_ + "uploads") {
 }
 
@@ -491,8 +487,7 @@ void HttpAppFrameworkImpl::run() {
 	// A fast database client instance should be created in the main event
 	// loop, so put the main loop into ioLoops.
 	ioLoops.push_back(getLoop());
-	dbClientManagerPtr_->createDbClients(ioLoops);
-	redisClientManagerPtr_->createRedisClients(ioLoops);
+
 	if (useSession_) {
 		sessionManagerPtr_ =
 				std::make_unique<SessionManager>(getLoop(), sessionTimeout_);
@@ -805,63 +800,6 @@ void HttpAppFrameworkImpl::forward(
 	}
 }
 
-orm::DbClientPtr HttpAppFrameworkImpl::getDbClient(const std::string &name) {
-	return dbClientManagerPtr_->getDbClient(name);
-}
-orm::DbClientPtr HttpAppFrameworkImpl::getFastDbClient(const std::string &name) {
-	return dbClientManagerPtr_->getFastDbClient(name);
-}
-nosql::RedisClientPtr HttpAppFrameworkImpl::getRedisClient(
-		const std::string &name) {
-	return redisClientManagerPtr_->getRedisClient(name);
-}
-nosql::RedisClientPtr HttpAppFrameworkImpl::getFastRedisClient(
-		const std::string &name) {
-	return redisClientManagerPtr_->getFastRedisClient(name);
-}
-HttpAppFramework &HttpAppFrameworkImpl::createDbClient(
-		const std::string &dbType,
-		const std::string &host,
-		const unsigned short port,
-		const std::string &databaseName,
-		const std::string &userName,
-		const std::string &password,
-		const size_t connectionNum,
-		const std::string &filename,
-		const std::string &name,
-		const bool isFast,
-		const std::string &characterSet,
-		double timeout) {
-	assert(!running_);
-	dbClientManagerPtr_->createDbClient(dbType,
-			host,
-			port,
-			databaseName,
-			userName,
-			password,
-			connectionNum,
-			filename,
-			name,
-			isFast,
-			characterSet,
-			timeout);
-	return *this;
-}
-
-HttpAppFramework &HttpAppFrameworkImpl::createRedisClient(
-		const std::string &ip,
-		unsigned short port,
-		const std::string &name,
-		const std::string &password,
-		size_t connectionNum,
-		bool isFast,
-		double timeout,
-		unsigned int db) {
-	assert(!running_);
-	redisClientManagerPtr_->createRedisClient(
-			name, ip, port, password, connectionNum, isFast, timeout, db);
-	return *this;
-}
 void HttpAppFrameworkImpl::quit() {
 	if (getLoop()->isRunning()) {
 		getLoop()->queueInLoop([this]() {
@@ -915,10 +853,6 @@ HttpAppFramework &HttpAppFrameworkImpl::addALocation(
 			isRecursive,
 			filters);
 	return *this;
-}
-
-bool HttpAppFrameworkImpl::areAllDbClientsAvailable() const noexcept {
-	return dbClientManagerPtr_->areAllDbClientsAvailable();
 }
 
 HttpAppFramework &HttpAppFrameworkImpl::setCustomErrorHandler(

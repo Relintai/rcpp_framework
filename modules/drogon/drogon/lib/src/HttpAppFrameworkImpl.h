@@ -391,30 +391,6 @@ public:
 		return serverHeader_;
 	}
 
-	orm::DbClientPtr getDbClient(const std::string &name) override;
-	orm::DbClientPtr getFastDbClient(const std::string &name) override;
-	HttpAppFramework &createDbClient(const std::string &dbType,
-			const std::string &host,
-			unsigned short port,
-			const std::string &databaseName,
-			const std::string &userName,
-			const std::string &password,
-			size_t connectionNum,
-			const std::string &filename,
-			const std::string &name,
-			bool isFast,
-			const std::string &characterSet,
-			double timeout) override;
-	HttpAppFramework &createRedisClient(const std::string &ip,
-			unsigned short port,
-			const std::string &name,
-			const std::string &password,
-			size_t connectionNum,
-			bool isFast,
-			double timeout,
-			unsigned int db) override;
-	nosql::RedisClientPtr getRedisClient(const std::string &name) override;
-	nosql::RedisClientPtr getFastRedisClient(const std::string &name) override;
 	std::vector<trantor::InetAddress> getListeners() const override;
 	inline static HttpAppFrameworkImpl &instance() {
 		static HttpAppFrameworkImpl instance;
@@ -443,7 +419,6 @@ public:
 		return (std::numeric_limits<size_t>::max)();
 	}
 
-	bool areAllDbClientsAvailable() const noexcept override;
 	const std::function<HttpResponsePtr(HttpStatusCode)>
 			&getCustomErrorHandler() const override;
 	bool isUsingCustomErrorHandler() const {
@@ -504,8 +479,7 @@ private:
 
 	const std::unique_ptr<ListenerManager> listenerManagerPtr_;
 	const std::unique_ptr<PluginsManager> pluginsManagerPtr_;
-	const std::unique_ptr<orm::DbClientManager> dbClientManagerPtr_;
-	const std::unique_ptr<nosql::RedisClientManager> redisClientManagerPtr_;
+
 	std::string rootPath_{ "./" };
 	std::string uploadPath_;
 	std::atomic_bool running_{ false };

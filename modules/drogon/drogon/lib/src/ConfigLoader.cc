@@ -399,74 +399,6 @@ static void loadApp(const Json::Value &app) {
 	drogon::app().setImplicitPage(
 			app.get("implicit_page", "index.html").asString());
 }
-static void loadDbClients(const Json::Value &dbClients) {
-	if (!dbClients)
-		return;
-	for (auto const &client : dbClients) {
-		auto type = client.get("rdbms", "postgresql").asString();
-		std::transform(type.begin(), type.end(), type.begin(), ::tolower);
-		auto host = client.get("host", "127.0.0.1").asString();
-		auto port = client.get("port", 5432).asUInt();
-		auto dbname = client.get("dbname", "").asString();
-		if (dbname == "" && type != "sqlite3") {
-			std::cerr << "Please configure dbname in the configuration file"
-					  << std::endl;
-			exit(1);
-		}
-		auto user = client.get("user", "postgres").asString();
-		auto password = client.get("passwd", "").asString();
-		if (password.empty()) {
-			password = client.get("password", "").asString();
-		}
-		auto connNum = client.get("connection_number", 1).asUInt();
-		if (connNum == 1) {
-			connNum = client.get("number_of_connections", 1).asUInt();
-		}
-		auto name = client.get("name", "default").asString();
-		auto filename = client.get("filename", "").asString();
-		auto isFast = client.get("is_fast", false).asBool();
-		auto characterSet = client.get("characterSet", "").asString();
-		if (characterSet.empty()) {
-			characterSet = client.get("client_encoding", "").asString();
-		}
-		auto timeout = client.get("timeout", -1.0).asDouble();
-		drogon::app().createDbClient(type,
-				host,
-				(unsigned short)port,
-				dbname,
-				user,
-				password,
-				connNum,
-				filename,
-				name,
-				isFast,
-				characterSet,
-				timeout);
-	}
-}
-
-static void loadRedisClients(const Json::Value &redisClients) {
-	if (!redisClients)
-		return;
-	for (auto const &client : redisClients) {
-		auto host = client.get("host", "127.0.0.1").asString();
-		auto port = client.get("port", 6379).asUInt();
-		auto password = client.get("passwd", "").asString();
-		if (password.empty()) {
-			password = client.get("password", "").asString();
-		}
-		auto connNum = client.get("connection_number", 1).asUInt();
-		if (connNum == 1) {
-			connNum = client.get("number_of_connections", 1).asUInt();
-		}
-		auto name = client.get("name", "default").asString();
-		auto isFast = client.get("is_fast", false).asBool();
-		auto timeout = client.get("timeout", -1.0).asDouble();
-		auto db = client.get("db", 0).asUInt();
-		drogon::app().createRedisClient(
-				host, port, name, password, connNum, isFast, timeout, db);
-	}
-}
 
 static void loadListeners(const Json::Value &listeners) {
 	if (!listeners)
@@ -521,6 +453,6 @@ void ConfigLoader::load() {
 	loadApp(configJsonRoot_["app"]);
 	loadSSL(configJsonRoot_["ssl"]);
 	loadListeners(configJsonRoot_["listeners"]);
-	loadDbClients(configJsonRoot_["db_clients"]);
-	loadRedisClients(configJsonRoot_["redis_clients"]);
+	//loadDbClients(configJsonRoot_["db_clients"]);
+	//loadRedisClients(configJsonRoot_["redis_clients"]);
 }

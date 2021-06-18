@@ -1,8 +1,3 @@
-/**
- *
- *  drogon_plugin_SecureSSLRedirector.cc
- *
- */
 #include <drogon/drogon.h>
 #include <drogon/plugins/SecureSSLRedirector.h>
 #include <string>
