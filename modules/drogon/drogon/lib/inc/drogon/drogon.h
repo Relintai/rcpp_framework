@@ -23,8 +23,6 @@
 #include <drogon/Cookie.h>
 #include <drogon/HttpAppFramework.h>
 #include <drogon/HttpClient.h>
-#include <drogon/HttpController.h>
-#include <drogon/HttpSimpleController.h>
 #include <drogon/IOThreadStorage.h>
 #include <drogon/MultiPart.h>
 #include <drogon/Session.h>

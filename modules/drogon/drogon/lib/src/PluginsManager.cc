@@ -56,10 +56,12 @@ void PluginsManager::initializeAllPlugins(
 				}
 			}
 		}
+
 		pluginPtr->setInitializedCallback([this](PluginBase *p) {
-			LOG_TRACE << "Plugin " << p->className() << " initialized!";
+			//LOG_TRACE << "Plugin " << p->className() << " initialized!";
 			initializedPlugins_.push_back(p);
 		});
+
 		plugins.push_back(pluginPtr);
 	}
 	// Initialize them, Depth first
@@ -70,6 +72,8 @@ void PluginsManager::initializeAllPlugins(
 }
 
 PluginBase *PluginsManager::getPlugin(const std::string &pluginName) {
+/*
+
 	auto iter = pluginsMap_.find(pluginName);
 	if (iter == pluginsMap_.end()) {
 		auto *p = DrClassMap::newObject(pluginName);
@@ -85,5 +89,8 @@ PluginBase *PluginsManager::getPlugin(const std::string &pluginName) {
 	} else {
 		return iter->second.get();
 	}
+
+*/
+
 	return nullptr;
 }

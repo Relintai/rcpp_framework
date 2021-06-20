@@ -14,7 +14,6 @@
 
 #pragma once
 
-#include <drogon/DrObject.h>
 #include <drogon/HttpRequest.h>
 #include <drogon/HttpResponse.h>
 #include <drogon/drogon_callbacks.h>
@@ -25,7 +24,7 @@ namespace drogon {
  * @brief The abstract base class for filters
  * For more details on the class, see the wiki site (the 'Filter' section)
  */
-class DROGON_EXPORT HttpFilterBase : public virtual DrObjectBase {
+class DROGON_EXPORT HttpFilterBase {
 public:
 	/// This virtual function should be overrided in subclasses.
 	/**
@@ -53,7 +52,7 @@ public:
  * flag to false for classes that have nondefault constructors.
  */
 template <typename T, bool AutoCreation = true>
-class HttpFilter : public DrObject<T>, public HttpFilterBase {
+class HttpFilter : public HttpFilterBase {
 public:
 	static constexpr bool isAutoCreation{ AutoCreation };
 	virtual ~HttpFilter() {

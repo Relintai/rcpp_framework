@@ -15,7 +15,6 @@
 #pragma once
 
 #include <drogon/Attribute.h>
-#include <drogon/DrClassMap.h>
 #include <drogon/HttpTypes.h>
 #include <drogon/Session.h>
 #include <drogon/UploadFile.h>
@@ -38,8 +37,8 @@ using HttpRequestPtr = std::shared_ptr<HttpRequest>;
  */
 template <typename T>
 T fromRequest(const HttpRequest &req) {
-	LOG_ERROR << "You must specialize the fromRequest template for the type of "
-			  << DrClassMap::demangle(typeid(T).name());
+	LOG_ERROR << "You must specialize the fromRequest template for the type of ";
+			 // << DrClassMap::demangle(typeid(T).name());
 	exit(1);
 }
 
@@ -50,8 +49,8 @@ T fromRequest(const HttpRequest &req) {
  */
 template <typename T>
 HttpRequestPtr toRequest(T &&) {
-	LOG_ERROR << "You must specialize the toRequest template for the type of "
-			  << DrClassMap::demangle(typeid(T).name());
+	LOG_ERROR << "You must specialize the toRequest template for the type of ";
+			//  << DrClassMap::demangle(typeid(T).name());
 	exit(1);
 }
 

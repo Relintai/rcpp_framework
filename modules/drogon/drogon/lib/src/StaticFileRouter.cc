@@ -136,7 +136,7 @@ void StaticFileRouter::route(
 					}
 				}
 			}
-
+/*
 			if (location.filters_.empty()) {
 				sendStaticFileResponse(filePath,
 						req,
@@ -144,9 +144,11 @@ void StaticFileRouter::route(
 						string_view{
 								location.defaultContentType_ });
 			} else {
+				
 				auto callbackPtr = std::make_shared<
 						std::function<void(const drogon::HttpResponsePtr &)> >(
 						std::move(callback));
+						
 				filters_function::doFilters(
 						location.filters_,
 						req,
@@ -161,7 +163,7 @@ void StaticFileRouter::route(
 									std::move(*callbackPtr),
 									string_view{ contentType });
 						});
-			}
+			}*/
 
 			return;
 		}
@@ -205,6 +207,7 @@ void StaticFileRouter::sendStaticFileResponse(
 		const HttpRequestImplPtr &req,
 		std::function<void(const HttpResponsePtr &)> &&callback,
 		const string_view &defaultContentType) { // find cached response
+
 	HttpResponsePtr cachedResp;
 	auto &cacheMap = staticFilesCache_->getThreadData();
 	auto iter = cacheMap.find(filePath);

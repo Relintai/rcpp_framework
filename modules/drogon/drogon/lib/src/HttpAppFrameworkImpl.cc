@@ -16,11 +16,9 @@
 #include "AOPAdvice.h"
 #include "ConfigLoader.h"
 #include "HttpClientImpl.h"
-#include "HttpControllersRouter.h"
 #include "HttpRequestImpl.h"
 #include "HttpResponseImpl.h"
 #include "HttpServer.h"
-#include "HttpSimpleControllersRouter.h"
 #include "ListenerManager.h"
 #include "PluginsManager.h"
 #include "SessionManager.h"
@@ -29,7 +27,6 @@
 #include "WebSocketConnectionImpl.h"
 #include "WebsocketControllersRouter.h"
 #include <drogon/CacheMap.h>
-#include <drogon/DrClassMap.h>
 #include <drogon/HttpRequest.h>
 #include <drogon/HttpResponse.h>
 #include <drogon/HttpTypes.h>
@@ -65,6 +62,7 @@ using namespace std::placeholders;
 
 HttpAppFrameworkImpl::HttpAppFrameworkImpl() :
 		staticFileRouterPtr_(new StaticFileRouter{}),
+		/*
 		httpCtrlsRouterPtr_(new HttpControllersRouter(*staticFileRouterPtr_,
 				postRoutingAdvices_,
 				postRoutingObservers_,
@@ -77,7 +75,7 @@ HttpAppFrameworkImpl::HttpAppFrameworkImpl() :
 						postRoutingObservers_,
 						preHandlingAdvices_,
 						preHandlingObservers_,
-						postHandlingAdvices_)),
+						postHandlingAdvices_)),*/
 		websockCtrlsRouterPtr_(
 				new WebsocketControllersRouter(postRoutingAdvices_,
 						postRoutingObservers_)),
@@ -256,12 +254,13 @@ HttpAppFramework &HttpAppFrameworkImpl::registerHttpSimpleController(
 		const std::string &ctrlName,
 		const std::vector<internal::HttpConstraint> &filtersAndMethods) {
 	assert(!running_);
-	httpSimpleCtrlsRouterPtr_->registerHttpSimpleController(pathName,
-			ctrlName,
-			filtersAndMethods);
+
+	//httpSimpleCtrlsRouterPtr_->registerHttpSimpleController(pathName, ctrlName, filtersAndMethods);
+
 	return *this;
 }
 
+/*
 void HttpAppFrameworkImpl::registerHttpController(
 		const std::string &pathPattern,
 		const internal::HttpBinderBasePtr &binder,
@@ -287,6 +286,7 @@ void HttpAppFrameworkImpl::registerHttpControllerViaRegex(
 	httpCtrlsRouterPtr_->addHttpRegex(
 			regExp, binder, validMethods, filters, handlerName);
 }
+*/
 
 HttpAppFramework &HttpAppFrameworkImpl::setThreadNum(size_t threadNum) {
 	if (threadNum == 0) {
@@ -448,11 +448,13 @@ void HttpAppFrameworkImpl::run() {
 			}
 			asyncFileLogger.setFileName(baseName, ".log", logPath_);
 			asyncFileLogger.startLogging();
+
 			trantor::Logger::setOutputFunction(
 					[&](const char *msg, const uint64_t len) {
 						asyncFileLogger.output(msg, len);
 					},
 					[&]() { asyncFileLogger.flush(); });
+
 			asyncFileLogger.setFileSizeLimit(logfileSize_);
 		}
 	}
@@ -500,13 +502,15 @@ void HttpAppFrameworkImpl::run() {
 		pluginsManagerPtr_->initializeAllPlugins(pluginConfig,
 				[](PluginBase *plugin) {
 					LOG_TRACE
-							<< "new plugin:"
-							<< plugin->className();
+							<< "new plugin:";
+						//	<< plugin->className();
 					// TODO: new plugin
 				});
 	}
-	httpCtrlsRouterPtr_->init(ioLoops);
-	httpSimpleCtrlsRouterPtr_->init(ioLoops);
+
+	//httpCtrlsRouterPtr_->init(ioLoops);
+	//httpSimpleCtrlsRouterPtr_->init(ioLoops);
+
 	staticFileRouterPtr_->init(ioLoops);
 	websockCtrlsRouterPtr_->init();
 	getLoop()->queueInLoop([this]() {
@@ -634,12 +638,13 @@ void HttpAppFrameworkImpl::onNewWebsockRequest(
 
 std::vector<std::tuple<std::string, HttpMethod, std::string> >
 HttpAppFrameworkImpl::getHandlersInfo() const {
-	auto ret = httpSimpleCtrlsRouterPtr_->getHandlersInfo();
+	//auto ret = httpSimpleCtrlsRouterPtr_->getHandlersInfo();
+	/*
 	auto v = httpCtrlsRouterPtr_->getHandlersInfo();
-	ret.insert(ret.end(), v.begin(), v.end());
-	v = websockCtrlsRouterPtr_->getHandlersInfo();
-	ret.insert(ret.end(), v.begin(), v.end());
-	return ret;
+	ret.insert(ret.end(), v.begin(), v.end());*/
+	auto v = websockCtrlsRouterPtr_->getHandlersInfo();
+	//v.insert(ret.end(), v.begin(), v.end());
+	return v;
 }
 void HttpAppFrameworkImpl::callCallback(
 		const HttpRequestImplPtr &req,
@@ -709,6 +714,8 @@ void HttpAppFrameworkImpl::onAsyncRequest(
 		callback(resp);
 		return;
 	}
+
+	/*
 	findSessionForRequest(req);
 	// Route to controller
 	if (!preRoutingObservers_.empty()) {
@@ -733,7 +740,7 @@ void HttpAppFrameworkImpl::onAsyncRequest(
 				[this, callbackPtr, req]() {
 					httpSimpleCtrlsRouterPtr_->route(req, std::move(*callbackPtr));
 				});
-	}
+	}*/
 }
 
 trantor::EventLoop *HttpAppFrameworkImpl::getLoop() const {

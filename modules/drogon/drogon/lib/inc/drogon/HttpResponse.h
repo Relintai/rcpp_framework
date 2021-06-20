@@ -14,7 +14,6 @@
 #pragma once
 
 #include <drogon/Cookie.h>
-#include <drogon/DrClassMap.h>
 #include <drogon/HttpTypes.h>
 #include <drogon/HttpViewData.h>
 #include <drogon/exports.h>
@@ -35,8 +34,8 @@ using HttpResponsePtr = std::shared_ptr<HttpResponse>;
 template <typename T>
 T fromResponse(const HttpResponse &resp) {
 	LOG_ERROR
-			<< "You must specialize the fromResponse template for the type of "
-			<< DrClassMap::demangle(typeid(T).name());
+			<< "You must specialize the fromResponse template for the type of ";
+			//<< DrClassMap::demangle(typeid(T).name());
 	exit(1);
 }
 
@@ -47,8 +46,8 @@ T fromResponse(const HttpResponse &resp) {
  */
 template <typename T>
 HttpResponsePtr toResponse(T &&) {
-	LOG_ERROR << "You must specialize the toResponse template for the type of "
-			  << DrClassMap::demangle(typeid(T).name());
+	LOG_ERROR << "You must specialize the toResponse template for the type of ";
+			 // << DrClassMap::demangle(typeid(T).name());
 	exit(1);
 }
 template <>

@@ -43,12 +43,13 @@ static inline void doResponseCreateAdvices(
 }
 static inline HttpResponsePtr genHttpResponse(const std::string &viewName,
 		const HttpViewData &data) {
+			/*
 	auto templ = DrTemplateBase::newTemplate(viewName);
 	if (templ) {
 		auto res = HttpResponse::newHttpResponse();
 		res->setBody(templ->genText(data));
 		return res;
-	}
+	}*/
 	return drogon::HttpResponse::newNotFoundResponse();
 }
 } // namespace drogon

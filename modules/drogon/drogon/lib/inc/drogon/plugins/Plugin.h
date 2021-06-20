@@ -13,7 +13,6 @@
 
 #pragma once
 
-#include <drogon/DrObject.h>
 #include <json/json.h>
 #include <trantor/utils/Logger.h>
 #include <trantor/utils/NonCopyable.h>
@@ -30,8 +29,7 @@ enum class PluginStatus {
  * @brief The abstract base class for plugins.
  *
  */
-class DROGON_EXPORT PluginBase : public virtual DrObjectBase,
-								 public trantor::NonCopyable {
+class PluginBase : public trantor::NonCopyable {
 public:
 	/// This method must be called by drogon.
 	void initialize() {
@@ -105,7 +103,7 @@ struct IsPlugin {
  * @tparam T The type of the implementation plugin classes.
  */
 template <typename T>
-class Plugin : public PluginBase, public DrObject<T> {
+class Plugin : public PluginBase {
 public:
 	virtual ~Plugin() {
 	}

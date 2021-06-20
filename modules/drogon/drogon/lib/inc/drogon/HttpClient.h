@@ -14,7 +14,6 @@
  */
 #pragma once
 
-#include "drogon/HttpBinder.h"
 #include <drogon/HttpRequest.h>
 #include <drogon/HttpResponse.h>
 #include <drogon/HttpTypes.h>

@@ -440,6 +440,7 @@ public:
 	}
 
 private:
+/*
 	void registerHttpController(const std::string &pathPattern,
 			const internal::HttpBinderBasePtr &binder,
 			const std::vector<HttpMethod> &validMethods,
@@ -451,6 +452,8 @@ private:
 			const std::vector<HttpMethod> &validMethods,
 			const std::vector<std::string> &filters,
 			const std::string &handlerName) override;
+*/
+
 	void onAsyncRequest(
 			const HttpRequestImplPtr &req,
 			std::function<void(const HttpResponsePtr &)> &&callback);
@@ -472,9 +475,9 @@ private:
 							   "\r\n" };
 
 	const std::unique_ptr<StaticFileRouter> staticFileRouterPtr_;
-	const std::unique_ptr<HttpControllersRouter> httpCtrlsRouterPtr_;
-	const std::unique_ptr<HttpSimpleControllersRouter>
-			httpSimpleCtrlsRouterPtr_;
+	//const std::unique_ptr<HttpControllersRouter> httpCtrlsRouterPtr_;
+	//const std::unique_ptr<HttpSimpleControllersRouter>
+//			httpSimpleCtrlsRouterPtr_;
 	const std::unique_ptr<WebsocketControllersRouter> websockCtrlsRouterPtr_;
 
 	const std::unique_ptr<ListenerManager> listenerManagerPtr_;

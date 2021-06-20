@@ -14,7 +14,6 @@
 
 #pragma once
 
-#include <drogon/DrObject.h>
 #include <functional>
 #include <memory>
 #include <tuple>

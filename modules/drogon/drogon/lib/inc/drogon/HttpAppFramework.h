@@ -15,14 +15,11 @@
 #pragma once
 
 #include <drogon/CacheMap.h>
-#include <drogon/DrObject.h>
-#include <drogon/HttpBinder.h>
 #include <drogon/HttpRequest.h>
 #include <drogon/HttpResponse.h>
 #include <drogon/IntranetIpFilter.h>
 #include <drogon/LocalHostFilter.h>
 #include <drogon/MultiPart.h>
-#include <drogon/NotFound.h>
 #include <drogon/drogon_callbacks.h>
 #include <drogon/exports.h>
 #include <drogon/plugins/Plugin.h>
@@ -431,6 +428,8 @@ public:
 					std::vector<internal::HttpConstraint>{},
 			const std::string &handlerName = "") {
 		LOG_TRACE << "pathPattern:" << pathPattern;
+
+          /*
 		auto binder = std::make_shared<internal::HttpBinder<FUNCTION> >(
 				std::forward<FUNCTION>(function));
 
@@ -449,8 +448,10 @@ public:
 				exit(1);
 			}
 		}
-		registerHttpController(
-				pathPattern, binder, validMethods, filters, handlerName);
+*/
+
+		//registerHttpController(
+		//		pathPattern, binder, validMethods, filters, handlerName);
 		return *this;
 	}
 	/**
@@ -476,11 +477,13 @@ public:
 					std::vector<internal::HttpConstraint>{},
 			const std::string &handlerName = "") {
 		LOG_TRACE << "regex:" << regExp;
+
+          /*
 		internal::HttpBinderBasePtr binder;
 
 		binder = std::make_shared<internal::HttpBinder<FUNCTION> >(
 				std::forward<FUNCTION>(function));
-
+*/
 		std::vector<HttpMethod> validMethods;
 		std::vector<std::string> filters;
 		for (auto const &filterOrMethod : filtersAndMethods) {
@@ -494,8 +497,8 @@ public:
 				exit(1);
 			}
 		}
-		registerHttpControllerViaRegex(
-				regExp, binder, validMethods, filters, handlerName);
+	//	registerHttpControllerViaRegex(
+		//		regExp, binder, validMethods, filters, handlerName);
 		return *this;
 	}
 
@@ -548,8 +551,11 @@ public:
 				"Controllers created and initialized "
 				"automatically by drogon cannot be "
 				"registered here");
-		DrClassMap::setSingleInstance(ctrlPtr);
+
+		//DrClassMap::setSingleInstance(ctrlPtr);
+
 		T::initPathRouting();
+
 		return *this;
 	}
 
@@ -565,7 +571,7 @@ public:
 				"Filters created and initialized "
 				"automatically by drogon cannot be "
 				"registered here");
-		DrClassMap::setSingleInstance(filterPtr);
+		//DrClassMap::setSingleInstance(filterPtr);
 		return *this;
 	}
 
@@ -1230,6 +1236,7 @@ public:
 	virtual const ExceptionHandler &getExceptionHandler() const = 0;
 
 private:
+/*
 	virtual void registerHttpController(
 			const std::string &pathPattern,
 			const internal::HttpBinderBasePtr &binder,
@@ -1241,7 +1248,7 @@ private:
 			const internal::HttpBinderBasePtr &binder,
 			const std::vector<HttpMethod> &validMethods,
 			const std::vector<std::string> &filters,
-			const std::string &handlerName) = 0;
+			const std::string &handlerName) = 0;*/
 };
 
 /// A wrapper of the instance() method

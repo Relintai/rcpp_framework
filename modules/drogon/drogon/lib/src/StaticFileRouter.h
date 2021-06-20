@@ -14,7 +14,6 @@
 
 #pragma once
 
-#include "FiltersFunction.h"
 #include "impl_forwards.h"
 #include <drogon/CacheMap.h>
 #include <drogon/IOThreadStorage.h>
@@ -123,7 +122,9 @@ private:
 	std::vector<std::pair<std::string, std::string> > headers_;
 	bool implicitPageEnable_{ true };
 	std::string implicitPage_{ "index.html" };
+
 	DefaultHandler defaultHandler_ = StaticFileRouter::defaultHandler;
+
 	struct Location {
 		std::string uriPrefix_;
 		std::string defaultContentType_;
@@ -132,7 +133,8 @@ private:
 		bool isCaseSensitive_;
 		bool allowAll_;
 		bool isRecursive_;
-		std::vector<std::shared_ptr<drogon::HttpFilterBase> > filters_;
+		//std::vector<std::shared_ptr<drogon::HttpFilterBase> > filters_;
+
 		Location(const std::string &uriPrefix,
 				const std::string &defaultContentType,
 				const std::string &alias,
@@ -144,13 +146,14 @@ private:
 				alias_(alias),
 				isCaseSensitive_(isCaseSensitive),
 				allowAll_(allowAll),
-				isRecursive_(isRecursive),
-				filters_(filters_function::createFilters(filters)) {
-			if (!defaultContentType.empty()) {
-				defaultContentType_ =
-						std::string{ "content-type: " } + defaultContentType + "\r\n";
-			}
-		}
+				isRecursive_(isRecursive)
+				/*filters_(filters_function::createFilters(filters))*/ {
+					if (!defaultContentType.empty()) {
+						defaultContentType_ =
+								std::string{ "content-type: " } + defaultContentType + "\r\n";
+					}
+				}
+
 	};
 	std::unique_ptr<IOThreadStorage<std::vector<Location> > > ioLocationsPtr_;
 	std::vector<Location> locations_;

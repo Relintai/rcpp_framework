@@ -14,12 +14,10 @@
 
 #include "WebsocketControllersRouter.h"
 #include "AOPAdvice.h"
-#include "FiltersFunction.h"
 #include "HttpRequestImpl.h"
 #include "HttpResponseImpl.h"
 #include "WebSocketConnectionImpl.h"
 #include <drogon/HttpFilter.h>
-#include <drogon/WebSocketController.h>
 #include <drogon/config.h>
 #ifdef OpenSSL_FOUND
 #include <openssl/sha.h>
@@ -52,12 +50,15 @@ void WebsocketControllersRouter::registerWebSocketController(
 	auto binder = std::make_shared<CtrlBinder>();
 	binder->controllerName_ = ctrlName;
 	binder->filterNames_ = filters;
+
+/*
 	drogon::app().getLoop()->queueInLoop([binder, ctrlName]() {
 		auto &object_ = DrClassMap::getSingleInstance(ctrlName);
 		auto controller =
 				std::dynamic_pointer_cast<WebSocketControllerBase>(object_);
 		binder->controller_ = controller;
-	});
+	});*/
+
 
 	if (validMethods.size() > 0) {
 		for (auto const &method : validMethods) {
@@ -90,6 +91,8 @@ void WebsocketControllersRouter::route(
 		if (iter != wsCtrlMap_.end()) {
 			auto &ctrlInfo = iter->second;
 			req->setMatchedPathPattern(iter->first);
+
+/*
 			auto &binder = ctrlInfo.binders_[req->method()];
 			if (!binder) {
 				// Invalid Http Method
@@ -101,12 +104,17 @@ void WebsocketControllersRouter::route(
 				}
 				return;
 			}
+*/
+
 			// Do post routing advices.
 			if (!postRoutingObservers_.empty()) {
 				for (auto &observer : postRoutingObservers_) {
 					observer(req);
 				}
 			}
+
+/*
+
 			auto &filters = ctrlInfo.binders_[req->method()]->filters_;
 			if (postRoutingAdvices_.empty()) {
 				if (!filters.empty()) {
@@ -176,6 +184,8 @@ void WebsocketControllersRouter::route(
 							}
 						});
 			}
+
+			*/
 			return;
 		}
 	}
@@ -187,6 +197,7 @@ void WebsocketControllersRouter::route(
 std::vector<std::tuple<std::string, HttpMethod, std::string> >
 WebsocketControllersRouter::getHandlersInfo() const {
 	std::vector<std::tuple<std::string, HttpMethod, std::string> > ret;
+	/*
 	for (auto &item : wsCtrlMap_) {
 		for (size_t i = 0; i < Invalid; ++i) {
 			if (item.second.binders_[i]) {
@@ -198,7 +209,7 @@ WebsocketControllersRouter::getHandlersInfo() const {
 				ret.emplace_back(std::move(info));
 			}
 		}
-	}
+	}*/
 	return ret;
 }
 
@@ -257,29 +268,34 @@ void WebsocketControllersRouter::doControllerHandler(
 	resp->addHeader("Sec-WebSocket-Accept", base64Key);
 	callback(resp);
 	auto ctrlPtr = routerItem.binders_[req->method()]->controller_;
+
+	/*
 	wsConnPtr->setMessageCallback(
 			[ctrlPtr](std::string &&message,
 					const WebSocketConnectionImplPtr &connPtr,
 					const WebSocketMessageType &type) {
 				ctrlPtr->handleNewMessage(connPtr, std::move(message), type);
 			});
+
 	wsConnPtr->setCloseCallback(
 			[ctrlPtr](const WebSocketConnectionImplPtr &connPtr) {
 				ctrlPtr->handleConnectionClosed(connPtr);
 			});
 	ctrlPtr->handleNewConnection(req, wsConnPtr);
+	*/
 	return;
 }
 
 void WebsocketControllersRouter::init() {
+	/*
 	for (auto &iter : wsCtrlMap_) {
 		auto &item = iter.second;
 		for (size_t i = 0; i < Invalid; ++i) {
 			auto &binder = item.binders_[i];
 			if (binder) {
-				binder->filters_ =
-						filters_function::createFilters(binder->filterNames_);
+				binder->filters_ = filters_function::createFilters(binder->filterNames_);
 			}
 		}
 	}
+	*/
 }
