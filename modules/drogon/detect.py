@@ -61,7 +61,13 @@ def configure(env):
 
     if not err:
         env.ParseConfig("pkg-config libcares --cflags --libs")
-    
+
+    err = os.system("pkg-config openssl --modversion --silence-errors > /dev/null ")
+
+    if not err:
+        env.ParseConfig("pkg-config openssl --cflags --libs")
+        env.Append(CPPDEFINES=["OPENSSL_FOUND"])
+
     env.Prepend(CPPPATH=["#modules/drogon/drogon/lib/inc"])
     env.Prepend(CPPPATH=["#modules/drogon/drogon/config"])
     env.Prepend(CPPPATH=["#modules/drogon"])
