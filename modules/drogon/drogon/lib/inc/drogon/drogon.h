@@ -19,14 +19,14 @@
 #include <trantor/utils/Date.h>
 #include <trantor/utils/Logger.h>
 
-#include <drogon/CacheMap.h>
-#include <drogon/Cookie.h>
+#include <http/CacheMap.h>
+#include <http/Cookie.h>
 #include <drogon/HttpAppFramework.h>
 #include <drogon/HttpClient.h>
 #include <drogon/IOThreadStorage.h>
-#include <drogon/MultiPart.h>
-#include <drogon/Session.h>
-#include <drogon/UploadFile.h>
+#include <http/MultiPart.h>
+#include <http/Session.h>
+#include <http/UploadFile.h>
 #include <drogon/plugins/AccessLogger.h>
 #include <drogon/plugins/Plugin.h>
 #include <drogon/plugins/SecureSSLRedirector.h>

@@ -13,11 +13,11 @@
  */
 
 #include "HttpRequestParser.h"
-#include "HttpAppFrameworkImpl.h"
+#include "../src/HttpAppFrameworkImpl.h"
 #include "HttpRequestImpl.h"
 #include "HttpResponseImpl.h"
 #include "HttpUtils.h"
-#include <drogon/HttpTypes.h>
+#include <http/HttpTypes.h>
 #include <trantor/utils/Logger.h>
 #include <trantor/utils/MsgBuffer.h>
 #include <iostream>

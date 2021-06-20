@@ -15,7 +15,7 @@
 #pragma once
 
 #include "impl_forwards.h"
-#include <drogon/CacheMap.h>
+#include <http/CacheMap.h>
 #include <drogon/IOThreadStorage.h>
 #include <functional>
 #include <memory>

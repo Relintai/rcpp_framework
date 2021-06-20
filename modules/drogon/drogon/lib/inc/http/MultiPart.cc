@@ -12,11 +12,11 @@
  *
  */
 
-#include "HttpAppFrameworkImpl.h"
+#include "../src/HttpAppFrameworkImpl.h"
 #include "HttpFileImpl.h"
 #include "HttpRequestImpl.h"
 #include "HttpUtils.h"
-#include <drogon/MultiPart.h>
+#include <http/MultiPart.h>
 
 #include <drogon/utils/Utilities.h>
 #include <fcntl.h>

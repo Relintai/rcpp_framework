@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "impl_forwards.h"
+#include "../src/impl_forwards.h"
 #include <trantor/net/TcpConnection.h>
 #include <trantor/utils/MsgBuffer.h>
 #include <trantor/utils/NonCopyable.h>

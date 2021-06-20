@@ -16,7 +16,7 @@
 
 #include "HttpMessageBody.h"
 #include "HttpUtils.h"
-#include <drogon/HttpResponse.h>
+#include <http/HttpResponse.h>
 
 #include <drogon/utils/Utilities.h>
 #include <trantor/net/InetAddress.h>

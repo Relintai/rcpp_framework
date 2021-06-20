@@ -13,8 +13,8 @@
  */
 
 #include "AOPAdvice.h"
-#include "HttpRequestImpl.h"
-#include "HttpResponseImpl.h"
+#include "http/HttpRequestImpl.h"
+#include "http/HttpResponseImpl.h"
 
 namespace drogon {
 void doAdvicesChain(

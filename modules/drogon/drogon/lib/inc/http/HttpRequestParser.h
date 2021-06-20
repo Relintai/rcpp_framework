@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include "impl_forwards.h"
-#include <drogon/HttpTypes.h>
+#include "../src/impl_forwards.h"
+#include <http/HttpTypes.h>
 #include <trantor/net/TcpConnection.h>
 #include <trantor/utils/MsgBuffer.h>
 #include <trantor/utils/NonCopyable.h>

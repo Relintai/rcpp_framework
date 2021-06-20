@@ -14,12 +14,12 @@
 
 #pragma once
 
-#include <drogon/CacheMap.h>
-#include <drogon/HttpRequest.h>
-#include <drogon/HttpResponse.h>
+#include <http/CacheMap.h>
+#include <http/HttpRequest.h>
+#include <http/HttpResponse.h>
 #include <drogon/IntranetIpFilter.h>
 #include <drogon/LocalHostFilter.h>
-#include <drogon/MultiPart.h>
+#include <http/MultiPart.h>
 #include <drogon/drogon_callbacks.h>
 
 #include <drogon/plugins/Plugin.h>

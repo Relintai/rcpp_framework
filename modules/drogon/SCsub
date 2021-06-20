@@ -6,6 +6,7 @@ Import("env")
 env_mod.core_sources = []
 
 env_mod.add_source_files(env_mod.core_sources, "drogon/lib/src/*.cc")
+env_mod.add_source_files(env_mod.core_sources, "drogon/lib/inc/http/*.cc")
 env_mod.add_source_files(env_mod.core_sources, "drogon/lib/src/ssl_funcs/*.cc")
 
 env_mod.add_source_files(env_mod.core_sources, "trantor/net/*.cc")

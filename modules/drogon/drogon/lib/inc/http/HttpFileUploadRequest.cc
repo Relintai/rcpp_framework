@@ -13,7 +13,7 @@
  */
 
 #include "HttpFileUploadRequest.h"
-#include <drogon/UploadFile.h>
+#include <http/UploadFile.h>
 #include <drogon/utils/Utilities.h>
 
 using namespace drogon;

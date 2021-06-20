@@ -14,12 +14,12 @@
 
 #include "HttpServer.h"
 #include "HttpAppFrameworkImpl.h"
-#include "HttpRequestImpl.h"
-#include "HttpRequestParser.h"
-#include "HttpResponseImpl.h"
+#include "http/HttpRequestImpl.h"
+#include "http/HttpRequestParser.h"
+#include "http/HttpResponseImpl.h"
 #include "WebSocketConnectionImpl.h"
-#include <drogon/HttpRequest.h>
-#include <drogon/HttpResponse.h>
+#include <http/HttpRequest.h>
+#include <http/HttpResponse.h>
 #include <drogon/utils/Utilities.h>
 #include <trantor/utils/Logger.h>
 #include <functional>

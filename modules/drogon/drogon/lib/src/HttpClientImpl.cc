@@ -14,9 +14,9 @@
 
 #include "HttpClientImpl.h"
 #include "HttpAppFrameworkImpl.h"
-#include "HttpRequestImpl.h"
-#include "HttpResponseImpl.h"
-#include "HttpResponseParser.h"
+#include "http/HttpRequestImpl.h"
+#include "http/HttpResponseImpl.h"
+#include "http/HttpResponseParser.h"
 
 #include <stdlib.h>
 #include <algorithm>

@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include <drogon/CacheMap.h>
-#include <drogon/Session.h>
+#include "CacheMap.h"
+#include "Session.h"
 #include <trantor/net/EventLoop.h>
 #include <trantor/utils/NonCopyable.h>
 #include <memory>

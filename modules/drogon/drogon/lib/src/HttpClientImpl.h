@@ -15,7 +15,7 @@
 #pragma once
 
 #include "impl_forwards.h"
-#include <drogon/Cookie.h>
+#include <http/Cookie.h>
 #include <drogon/HttpClient.h>
 #include <trantor/net/EventLoop.h>
 #include <trantor/net/Resolver.h>

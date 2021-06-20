@@ -13,7 +13,7 @@
  */
 
 #include "HttpResponseImpl.h"
-#include "HttpAppFrameworkImpl.h"
+#include "../src/HttpAppFrameworkImpl.h"
 #include "HttpUtils.h"
 #include <drogon/HttpViewData.h>
 #include <drogon/IOThreadStorage.h>

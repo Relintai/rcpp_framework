@@ -12,7 +12,7 @@
  *
  */
 
-#include "HttpUtils.h"
+#include <http/HttpUtils.h>
 #include <drogon/drogon.h>
 #include <drogon/plugins/AccessLogger.h>
 #include <regex>

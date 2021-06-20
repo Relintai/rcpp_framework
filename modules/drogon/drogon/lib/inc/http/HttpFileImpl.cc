@@ -13,8 +13,8 @@
  */
 
 #include "HttpFileImpl.h"
-#include "HttpAppFrameworkImpl.h"
-#include <drogon/MultiPart.h>
+#include "../src/HttpAppFrameworkImpl.h"
+#include <http/MultiPart.h>
 #include <fstream>
 #include <iostream>
 

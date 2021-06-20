@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include <drogon/HttpRequest.h>
-#include <drogon/HttpResponse.h>
+#include <http/HttpRequest.h>
+#include <http/HttpResponse.h>
 #include <drogon/drogon_callbacks.h>
 #include <memory>
 

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <drogon/HttpRequest.h>
-#include <drogon/HttpResponse.h>
+#include <http/HttpRequest.h>
+#include <http/HttpResponse.h>
 #include <drogon/plugins/Plugin.h>
 #include <trantor/utils/AsyncFileLogger.h>
 #include <vector>

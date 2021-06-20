@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <drogon/HttpTypes.h>
+#include <http/HttpTypes.h>
 #include <trantor/net/InetAddress.h>
 #include <trantor/utils/NonCopyable.h>
 #include <memory>

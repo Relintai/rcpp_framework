@@ -17,7 +17,7 @@
 #include "CacheFile.h"
 #include "HttpUtils.h"
 #include <assert.h>
-#include <drogon/HttpRequest.h>
+#include <http/HttpRequest.h>
 #include <drogon/utils/Utilities.h>
 #include <stdio.h>
 #include <trantor/net/EventLoop.h>

@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include <drogon/HttpRequest.h>
-#include <drogon/HttpResponse.h>
-#include <drogon/HttpTypes.h>
+#include <http/HttpRequest.h>
+#include <http/HttpResponse.h>
+#include <http/HttpTypes.h>
 #include <drogon/WebSocketConnection.h>
 #ifdef __cpp_impl_coroutine
 #include <drogon/utils/coroutine.h>

@@ -14,8 +14,8 @@
 
 #include "StaticFileRouter.h"
 #include "HttpAppFrameworkImpl.h"
-#include "HttpRequestImpl.h"
-#include "HttpResponseImpl.h"
+#include "http/HttpRequestImpl.h"
+#include "http/HttpResponseImpl.h"
 #include <fcntl.h>
 #include <algorithm>
 #include <fstream>

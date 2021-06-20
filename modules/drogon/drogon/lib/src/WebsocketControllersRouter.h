@@ -15,7 +15,7 @@
 #pragma once
 
 #include "impl_forwards.h"
-#include <drogon/HttpTypes.h>
+#include <http/HttpTypes.h>
 #include <drogon/drogon_callbacks.h>
 #include <drogon/utils/HttpConstraint.h>
 #include <trantor/utils/NonCopyable.h>

@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <drogon/HttpTypes.h>
+#include "HttpTypes.h"
 #include <drogon/utils/string_view.h>
 #include <trantor/utils/MsgBuffer.h>
 #include <string>

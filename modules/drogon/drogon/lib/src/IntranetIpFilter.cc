@@ -12,7 +12,7 @@
  *
  */
 
-#include "HttpResponseImpl.h"
+#include "http/HttpResponseImpl.h"
 #include <drogon/IntranetIpFilter.h>
 using namespace drogon;
 void IntranetIpFilter::doFilter(const HttpRequestPtr &req,
