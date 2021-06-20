@@ -69,7 +69,6 @@ def configure(env):
         env.Append(CPPDEFINES=["OPENSSL_FOUND"])
 
     env.Prepend(CPPPATH=["#modules/drogon/drogon/lib/inc"])
-    env.Prepend(CPPPATH=["#modules/drogon/drogon/config"])
     env.Prepend(CPPPATH=["#modules/drogon"])
 
     env.Prepend(CPPPATH=["#modules/drogon/trantor"])

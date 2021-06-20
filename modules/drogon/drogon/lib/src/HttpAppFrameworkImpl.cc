@@ -33,7 +33,6 @@
 #include <drogon/Session.h>
 
 #include <drogon/utils/Utilities.h>
-#include <drogon/version.h>
 #include <json/json.h>
 #include <trantor/utils/AsyncFileLogger.h>
 #include <algorithm>
@@ -95,11 +94,11 @@ drogon::InitBeforeMainFunction drogon::HttpAppFrameworkImpl::initFirst_([]() {
 
 namespace drogon {
 std::string getVersion() {
-	return DROGON_VERSION;
+	return "1";
 }
 
 std::string getGitCommit() {
-	return DROGON_VERSION_SHA1;
+	return "DROGON_VERSION_SHA1";
 }
 
 HttpResponsePtr defaultErrorHandler(HttpStatusCode code) {
