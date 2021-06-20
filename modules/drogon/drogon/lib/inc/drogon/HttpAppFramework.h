@@ -21,7 +21,7 @@
 #include <drogon/LocalHostFilter.h>
 #include <drogon/MultiPart.h>
 #include <drogon/drogon_callbacks.h>
-#include <drogon/exports.h>
+
 #include <drogon/plugins/Plugin.h>
 #include <drogon/utils/HttpConstraint.h>
 #include <drogon/utils/Utilities.h>
@@ -59,7 +59,7 @@ using DefaultHandler =
 		std::function<void(const HttpRequestPtr &,
 				std::function<void(const HttpResponsePtr &)> &&)>;
 
-class DROGON_EXPORT HttpAppFramework : public trantor::NonCopyable {
+class HttpAppFramework : public trantor::NonCopyable {
 public:
 	virtual ~HttpAppFramework() = default;
 	/// Get the instance of HttpAppFramework

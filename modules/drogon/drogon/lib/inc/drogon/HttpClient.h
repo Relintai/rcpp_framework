@@ -18,7 +18,7 @@
 #include <drogon/HttpResponse.h>
 #include <drogon/HttpTypes.h>
 #include <drogon/drogon_callbacks.h>
-#include <drogon/exports.h>
+
 #include <trantor/net/EventLoop.h>
 #include <trantor/utils/NonCopyable.h>
 #include <functional>
@@ -63,7 +63,7 @@ private:
  * response callbacks are invoked without fear of accidental deconstruction.
  *
  */
-class DROGON_EXPORT HttpClient : public trantor::NonCopyable {
+class HttpClient : public trantor::NonCopyable {
 public:
 	/**
      * @brief Send a request asynchronously to the server

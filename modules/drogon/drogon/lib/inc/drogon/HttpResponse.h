@@ -16,7 +16,7 @@
 #include <drogon/Cookie.h>
 #include <drogon/HttpTypes.h>
 #include <drogon/HttpViewData.h>
-#include <drogon/exports.h>
+
 #include <drogon/utils/string_view.h>
 #include <json/json.h>
 #include <memory>
@@ -59,7 +59,7 @@ inline HttpResponsePtr toResponse<Json::Value &>(Json::Value &pJson) {
 	return toResponse((const Json::Value &)pJson);
 }
 
-class DROGON_EXPORT HttpResponse {
+class HttpResponse {
 public:
 	/**
      * @brief This template enables automatic type conversion. For using this

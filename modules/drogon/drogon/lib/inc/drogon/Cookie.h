@@ -13,7 +13,7 @@
  */
 #pragma once
 
-#include <drogon/exports.h>
+
 #include <trantor/utils/Date.h>
 #include <limits>
 #include <string>
@@ -22,7 +22,7 @@ namespace drogon {
 /**
  * @brief this class represents a cookie entity.
  */
-class DROGON_EXPORT Cookie {
+class Cookie {
 public:
 	/// Constructor
 	/**

@@ -18,7 +18,7 @@
 #include <drogon/HttpTypes.h>
 #include <drogon/Session.h>
 #include <drogon/UploadFile.h>
-#include <drogon/exports.h>
+
 #include <drogon/utils/string_view.h>
 #include <json/json.h>
 #include <trantor/net/InetAddress.h>
@@ -67,7 +67,7 @@ template <>
 std::shared_ptr<Json::Value> fromRequest(const HttpRequest &req);
 
 /// Abstract class for webapp developer to get or set the Http request;
-class DROGON_EXPORT HttpRequest {
+class HttpRequest {
 public:
 	/**
      * @brief This template enables implicit type conversion. For using this

@@ -15,7 +15,7 @@
 #pragma once
 
 #include <drogon/HttpRequest.h>
-#include <drogon/exports.h>
+
 #include <drogon/utils/string_view.h>
 #include <map>
 #include <memory>
@@ -29,7 +29,7 @@ class HttpFileImpl;
  * @brief This class represents a uploaded file by a HTTP request.
  *
  */
-class DROGON_EXPORT HttpFile {
+class HttpFile {
 public:
 	HttpFile(std::shared_ptr<HttpFileImpl> &&implPtr);
 	/// Return the file name;
@@ -110,7 +110,7 @@ private:
 
 /// A parser class which help the user to get the files and the parameters in
 /// the multipart format request.
-class DROGON_EXPORT MultiPartParser {
+class MultiPartParser {
 public:
 	MultiPartParser(){};
 	~MultiPartParser(){};

@@ -24,7 +24,7 @@ namespace drogon {
  * @brief The abstract base class for filters
  * For more details on the class, see the wiki site (the 'Filter' section)
  */
-class DROGON_EXPORT HttpFilterBase {
+class HttpFilterBase {
 public:
 	/// This virtual function should be overrided in subclasses.
 	/**

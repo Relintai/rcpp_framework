@@ -17,7 +17,7 @@
 #include "HttpMessageBody.h"
 #include "HttpUtils.h"
 #include <drogon/HttpResponse.h>
-#include <drogon/exports.h>
+
 #include <drogon/utils/Utilities.h>
 #include <trantor/net/InetAddress.h>
 #include <trantor/utils/Date.h>
@@ -29,7 +29,7 @@
 #include <unordered_map>
 
 namespace drogon {
-class DROGON_EXPORT HttpResponseImpl : public HttpResponse {
+class HttpResponseImpl : public HttpResponse {
 	friend class HttpResponseParser;
 
 public:

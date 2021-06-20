@@ -15,13 +15,13 @@
 #pragma once
 
 #include <drogon/HttpFilter.h>
-#include <drogon/exports.h>
+
 
 namespace drogon {
 /**
  * @brief A filter that prohibit access from external networks
  */
-class DROGON_EXPORT IntranetIpFilter : public HttpFilter<IntranetIpFilter> {
+class IntranetIpFilter : public HttpFilter<IntranetIpFilter> {
 public:
 	IntranetIpFilter() {
 	}

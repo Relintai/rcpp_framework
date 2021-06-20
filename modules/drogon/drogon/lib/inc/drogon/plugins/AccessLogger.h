@@ -76,7 +76,7 @@ namespace plugin {
  * configuration file.
  *
  */
-class DROGON_EXPORT AccessLogger : public drogon::Plugin<AccessLogger> {
+class AccessLogger : public drogon::Plugin<AccessLogger> {
 public:
 	AccessLogger() {
 	}

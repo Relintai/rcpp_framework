@@ -15,13 +15,13 @@
 #pragma once
 
 #include <drogon/HttpFilter.h>
-#include <drogon/exports.h>
+
 
 namespace drogon {
 /**
  * @brief A filter that prohibit access from other hosts.
  */
-class DROGON_EXPORT LocalHostFilter : public HttpFilter<LocalHostFilter> {
+class LocalHostFilter : public HttpFilter<LocalHostFilter> {
 public:
 	LocalHostFilter() {
 	}

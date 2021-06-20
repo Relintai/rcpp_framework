@@ -53,7 +53,7 @@ private:
  * @brief WebSocket client abstract class
  *
  */
-class DROGON_EXPORT WebSocketClient {
+class WebSocketClient {
 public:
 	/// Get the WebSocket connection that is typically used to send messages.
 	virtual WebSocketConnectionPtr getConnection() = 0;
