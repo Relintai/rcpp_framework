@@ -14,7 +14,6 @@
 
 #include "HttpAppFrameworkImpl.h"
 #include "AOPAdvice.h"
-#include "ConfigLoader.h"
 #include "HttpClientImpl.h"
 #include "http/HttpRequestImpl.h"
 #include "http/HttpResponseImpl.h"
@@ -323,21 +322,15 @@ HttpAppFramework &HttpAppFrameworkImpl::setMaxConnectionNumPerIP(
 }
 HttpAppFramework &HttpAppFrameworkImpl::loadConfigFile(
 		const std::string &fileName) {
-	ConfigLoader loader(fileName);
-	loader.load();
-	jsonConfig_ = loader.jsonValue();
+
 	return *this;
 }
 HttpAppFramework &HttpAppFrameworkImpl::loadConfigJson(const Json::Value &data) {
-	ConfigLoader loader(data);
-	loader.load();
-	jsonConfig_ = loader.jsonValue();
+
 	return *this;
 }
 HttpAppFramework &HttpAppFrameworkImpl::loadConfigJson(Json::Value &&data) {
-	ConfigLoader loader(std::move(data));
-	loader.load();
-	jsonConfig_ = loader.jsonValue();
+
 	return *this;
 }
 HttpAppFramework &HttpAppFrameworkImpl::setLogPath(
