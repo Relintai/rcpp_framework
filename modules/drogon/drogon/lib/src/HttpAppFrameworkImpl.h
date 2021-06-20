@@ -60,12 +60,16 @@ public:
 	size_t getThreadNum() const override {
 		return threadNum_;
 	}
+
 	HttpAppFramework &setSSLConfigCommands(
 			const std::vector<std::pair<std::string, std::string> > &sslConfCmds)
 			override;
+
 	HttpAppFramework &setSSLFiles(const std::string &certPath,
 			const std::string &keyPath) override;
+
 	void run() override;
+	
 	HttpAppFramework &registerWebSocketController(
 			const std::string &pathName,
 			const std::string &ctrlName,

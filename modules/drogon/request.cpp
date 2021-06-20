@@ -47,6 +47,7 @@ void DRequest::send() {
 	//	return;
 	//}
 
+/*
 	if (http_parser->isKeepAlive()) {
 		response->addHeadValue("Connection", "Keep-Alive");
 
@@ -62,7 +63,7 @@ void DRequest::send() {
 
 		session->send(result.c_str(), result.size(), [lsession]() { lsession->postShutdown(); });
 	}
-
+*/
 	DRequestPool::return_request(this);
 }
 
@@ -71,7 +72,7 @@ void DRequest::send_file(const std::string &p_file_path) {
 	//	DRequestPool::return_request(this);
 	//	return;
 	//}
-
+/*
 	file_path = p_file_path;
 
 	FILE *f = fopen(file_path.c_str(), "rb");
@@ -92,6 +93,7 @@ void DRequest::send_file(const std::string &p_file_path) {
 	application->register_request_update(this);
 
 	session->send(result.c_str(), result.size(), [this]() { this->_file_chunk_sent(); });
+	*/
 }
 
 void DRequest::send_error(int error_code) {
@@ -100,8 +102,6 @@ void DRequest::send_error(int error_code) {
 
 void DRequest::reset() {
 	application = nullptr;
-	http_parser = nullptr;
-	session = nullptr;
 	current_middleware_index = 0;
 	middleware_stack = nullptr;
 	_path_stack.clear();
@@ -118,10 +118,11 @@ void DRequest::reset() {
 	if (response)
 		delete response;
 
-	response = new HttpResponse();
+	//response = new HttpResponse();
 }
 
 void DRequest::setup_url_stack() {
+	/*
 	std::string path = http_parser->getPath();
 
 	size_t pos = 0;
@@ -137,6 +138,7 @@ void DRequest::setup_url_stack() {
 
 	if (path.size() != 0)
 		_path_stack.push_back(path);
+		*/
 }
 
 std::string DRequest::get_path() const {
@@ -151,7 +153,9 @@ std::string DRequest::get_path() const {
 }
 
 const std::string &DRequest::get_path_full() const {
-	return http_parser->getPath();
+	static std::string a = "";
+	return a;
+	//return http_parser->getPath();
 }
 
 const std::string &DRequest::get_path_segment(const uint32_t i) const {
@@ -215,6 +219,7 @@ DRequest::~DRequest() {
 }
 
 void DRequest::_progress_send_file() {
+	/*
 	if (connection_closed) {
 		DRequestPool::return_request(this);
 		return;
@@ -259,6 +264,7 @@ void DRequest::_progress_send_file() {
 	current_file_progress = nfp;
 
 	session->send(body.c_str(), body.size(), [this]() { this->_file_chunk_sent(); });
+	*/
 }
 
 void DRequest::_file_chunk_sent() {

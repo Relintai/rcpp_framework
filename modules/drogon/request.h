@@ -4,17 +4,16 @@
 #include <mutex>
 #include <vector>
 
-#include <brynet/net/http/HttpFormat.hpp>
-#include <brynet/net/http/HttpService.hpp>
+#include "http/HttpResponse.h"
 
 #include "handler_instance.h"
+
+using namespace drogon;
 
 class DWebApplication;
 
 class DRequest {
 public:
-	HTTPParser::Ptr http_parser;
-	HttpSession::Ptr session;
 	HttpResponse *response;
 	DWebApplication *application;
 

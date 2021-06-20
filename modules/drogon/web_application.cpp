@@ -26,6 +26,7 @@ void DWebApplication::setup_middleware() {
 }
 
 void DWebApplication::default_routing_middleware(Object *instance, DRequest *request) {
+	/*
 	std::string path = request->http_parser->getPath();
 
 	if (FileCache::get_singleton()->wwwroot_has_file(path)) {
@@ -58,6 +59,7 @@ void DWebApplication::default_routing_middleware(Object *instance, DRequest *req
 
 	request->handler_instance = handler_data;
 	request->next_stage();
+	*/
 }
 
 void DWebApplication::default_fallback_error_handler(int error_code, DRequest *request) {
