@@ -19,10 +19,6 @@
 #include <tuple>
 #include <type_traits>
 
-#ifdef __cpp_impl_coroutine
-#include <drogon/utils/coroutine.h>
-#endif
-
 namespace drogon {
 class HttpRequest;
 class HttpResponse;
@@ -30,14 +26,11 @@ using HttpRequestPtr = std::shared_ptr<HttpRequest>;
 using HttpResponsePtr = std::shared_ptr<HttpResponse>;
 
 namespace internal {
-#ifdef __cpp_impl_coroutine
-template <typename T>
-using resumable_type = is_resumable<T>;
-#else
+
+
 template <typename T>
 struct resumable_type : std::false_type {
 };
-#endif
 
 template <typename>
 struct FunctionTraits;
@@ -101,41 +94,6 @@ struct FunctionTraits<
 	static const bool isHTTPFunction = false;
 	using class_type = void;
 };
-
-#ifdef __cpp_impl_coroutine
-template <typename... Arguments>
-struct FunctionTraits<
-		AsyncTask (*)(HttpRequestPtr req,
-				std::function<void(const HttpResponsePtr &)> callback,
-				Arguments...)> : FunctionTraits<AsyncTask (*)(Arguments...)> {
-	static const bool isHTTPFunction = true;
-	static const bool isCoroutine = true;
-	using class_type = void;
-	using first_param_type = HttpRequestPtr;
-	using return_type = AsyncTask;
-};
-template <typename... Arguments>
-struct FunctionTraits<
-		Task<> (*)(HttpRequestPtr req,
-				std::function<void(const HttpResponsePtr &)> callback,
-				Arguments...)> : FunctionTraits<AsyncTask (*)(Arguments...)> {
-	static const bool isHTTPFunction = true;
-	static const bool isCoroutine = true;
-	using class_type = void;
-	using first_param_type = HttpRequestPtr;
-	using return_type = Task<>;
-};
-template <typename... Arguments>
-struct FunctionTraits<Task<HttpResponsePtr> (*)(HttpRequestPtr req,
-		Arguments...)>
-		: FunctionTraits<AsyncTask (*)(Arguments...)> {
-	static const bool isHTTPFunction = true;
-	static const bool isCoroutine = true;
-	using class_type = void;
-	using first_param_type = HttpRequestPtr;
-	using return_type = Task<HttpResponsePtr>;
-};
-#endif
 
 template <typename ReturnType, typename... Arguments>
 struct FunctionTraits<
