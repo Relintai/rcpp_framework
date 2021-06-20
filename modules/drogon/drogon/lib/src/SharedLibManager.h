@@ -20,6 +20,23 @@
 #include <unordered_map>
 #include <vector>
 
+//not sure wheter these are needed or not yet
+#ifndef COMPILER_COMMAND
+#define COMPILER_COMMAND "/usr/bin/c++"
+#endif
+
+#ifndef COMPILATION_FLAGS
+#define COMPILATION_FLAGS "-std=c++17"
+#endif
+
+#ifndef COMPILER_ID
+#define COMPILER_ID "GNU"
+#endif
+
+#ifndef INCLUDING_DIRS
+#define INCLUDING_DIRS " -I/usr/include -I/usr/local/include"
+#endif
+
 namespace drogon {
 class SharedLibManager : public trantor::NonCopyable {
 public:

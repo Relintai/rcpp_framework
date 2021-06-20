@@ -12,10 +12,10 @@
  *
  */
 
-#include <drogon/config.h>
+
 #include <drogon/utils/Utilities.h>
 #include <trantor/utils/Logger.h>
-#ifdef OpenSSL_FOUND
+#ifdef OPENSSL_FOUND
 #include <openssl/md5.h>
 #include <openssl/rand.h>
 #else
@@ -1023,7 +1023,7 @@ std::string brotliDecompress(const char * /*data*/, const size_t /*ndata*/) {
 #endif
 
 std::string getMd5(const char *data, const size_t dataLen) {
-#ifdef OpenSSL_FOUND
+#ifdef OPENSSL_FOUND
 	MD5_CTX c;
 	unsigned char md5[16] = { 0 };
 	MD5_Init(&c);
@@ -1074,7 +1074,7 @@ static bool systemRandomBytes(void *ptr, size_t size) {
 }
 
 bool secureRandomBytes(void *ptr, size_t size) {
-#ifdef OpenSSL_FOUND
+#ifdef OPENSSL_FOUND
 	if (RAND_bytes((unsigned char *)ptr, size) == 0)
 		return true;
 #endif

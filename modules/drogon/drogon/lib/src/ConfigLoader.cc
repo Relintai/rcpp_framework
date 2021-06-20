@@ -14,7 +14,7 @@
 
 #include "ConfigLoader.h"
 #include "HttpAppFrameworkImpl.h"
-#include <drogon/config.h>
+
 #include <trantor/utils/Logger.h>
 #include <fstream>
 #include <iostream>

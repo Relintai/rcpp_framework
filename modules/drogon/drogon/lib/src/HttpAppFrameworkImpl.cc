@@ -31,7 +31,7 @@
 #include <drogon/HttpResponse.h>
 #include <drogon/HttpTypes.h>
 #include <drogon/Session.h>
-#include <drogon/config.h>
+
 #include <drogon/utils/Utilities.h>
 #include <drogon/version.h>
 #include <json/json.h>

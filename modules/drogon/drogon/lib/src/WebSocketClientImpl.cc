@@ -19,10 +19,10 @@
 #include "HttpResponseParser.h"
 #include "HttpUtils.h"
 #include "WebSocketConnectionImpl.h"
-#include <drogon/config.h>
+
 #include <drogon/utils/Utilities.h>
 #include <trantor/net/InetAddress.h>
-#ifdef OpenSSL_FOUND
+#ifdef OPENSSL_FOUND
 #include <openssl/sha.h>
 #else
 #include "ssl_funcs/Sha1.h"

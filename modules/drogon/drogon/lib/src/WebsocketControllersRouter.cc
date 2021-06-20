@@ -18,8 +18,8 @@
 #include "HttpResponseImpl.h"
 #include "WebSocketConnectionImpl.h"
 #include <drogon/HttpFilter.h>
-#include <drogon/config.h>
-#ifdef OpenSSL_FOUND
+
+#ifdef OPENSSL_FOUND
 #include <openssl/sha.h>
 #else
 #include "ssl_funcs/Sha1.h"

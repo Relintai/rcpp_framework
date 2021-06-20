@@ -15,7 +15,7 @@
 #include "SharedLibManager.h"
 #include <dirent.h>
 #include <dlfcn.h>
-#include <drogon/config.h>
+
 #include <sys/types.h>
 #include <trantor/utils/Logger.h>
 #include <unistd.h>

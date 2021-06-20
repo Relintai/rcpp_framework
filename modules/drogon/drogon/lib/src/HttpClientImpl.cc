@@ -17,7 +17,7 @@
 #include "HttpRequestImpl.h"
 #include "HttpResponseImpl.h"
 #include "HttpResponseParser.h"
-#include <drogon/config.h>
+
 #include <stdlib.h>
 #include <algorithm>
 
@@ -32,7 +32,7 @@ void HttpClientImpl::createTcpClient() {
 	tcpClientPtr_ =
 			std::make_shared<trantor::TcpClient>(loop_, serverAddr_, "httpClient");
 
-#ifdef OpenSSL_FOUND
+#ifdef OPENSSL_FOUND
 	if (useSSL_) {
 		LOG_TRACE << "useOldTLS=" << useOldTLS_;
 		LOG_TRACE << "domain=" << domain_;

@@ -16,7 +16,7 @@
 
 #include "impl_forwards.h"
 #include <drogon/HttpAppFramework.h>
-#include <drogon/config.h>
+
 #include <json/json.h>
 #include <functional>
 #include <limits>
@@ -405,7 +405,7 @@ public:
 			const std::function<void(const HttpResponsePtr &)> &callback);
 
 	bool supportSSL() const override {
-#ifdef OpenSSL_FOUND
+#ifdef OPENSSL_FOUND
 		return true;
 #endif
 		return false;

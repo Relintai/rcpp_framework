@@ -15,7 +15,7 @@
 #include "ListenerManager.h"
 #include "HttpAppFrameworkImpl.h"
 #include "HttpServer.h"
-#include <drogon/config.h>
+
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -56,7 +56,7 @@ void ListenerManager::addListener(
 		const std::string &keyFile,
 		bool useOldTLS,
 		const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
-#ifndef OpenSSL_FOUND
+#ifndef OPENSSL_FOUND
 	if (useSSL) {
 		LOG_ERROR << "Can't use SSL without OpenSSL found in your system";
 	}
@@ -70,7 +70,7 @@ std::vector<trantor::EventLoop *> ListenerManager::createListeners(
 		const WebSocketNewAsyncCallback &webSocketCallback,
 		const ConnectionCallback &connectionCallback,
 		size_t connectionTimeout,
-#ifdef OpenSSL_FOUND
+#ifdef OPENSSL_FOUND
 		const std::string &globalCertFile,
 		const std::string &globalKeyFile,
 		const std::vector<std::pair<std::string, std::string> > &sslConfCmds,
@@ -126,7 +126,7 @@ std::vector<trantor::EventLoop *> ListenerManager::createListeners(
 			}
 
 			if (listener.useSSL_) {
-#ifdef OpenSSL_FOUND
+#ifdef OPENSSL_FOUND
 				auto cert = listener.certFile_;
 				auto key = listener.keyFile_;
 				if (cert == "")
@@ -172,7 +172,7 @@ std::vector<trantor::EventLoop *> ListenerManager::createListeners(
 					syncAdvices,
 					preSendingAdvices);
 			if (listener.useSSL_) {
-#ifdef OpenSSL_FOUND
+#ifdef OPENSSL_FOUND
 				auto cert = listener.certFile_;
 				auto key = listener.keyFile_;
 				if (cert.empty())
