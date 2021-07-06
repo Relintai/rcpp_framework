@@ -8,7 +8,9 @@ void DRequest::send() {
 	//	return;
 	//}
 
-	//response->setExpiredTime(0);
+	response->setBody(compiled_body);
+
+	response->setExpiredTime(0);
 	callback(response);
 
 	pool();
@@ -42,6 +44,8 @@ void DRequest::send_file(const std::string &p_file_path) {
 	session->send(result.c_str(), result.size(), [this]() { this->_file_chunk_sent(); });
 	*/
 
+	send_error(404);
+
 	pool();
 }
 
@@ -52,6 +56,10 @@ void DRequest::reset() {
 	request.reset();
 
 	//response = new HttpResponse();
+}
+
+std::string DRequest::parser_get_path() {
+	return request->getPath();
 }
 
 void DRequest::update() {

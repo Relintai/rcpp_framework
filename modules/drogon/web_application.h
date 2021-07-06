@@ -29,23 +29,13 @@ using namespace drogon;
 
 class Request;
 
-class DWebApplication : WebApplication {
+class DWebApplication : public WebApplication {
 public:
-	void handle_request(Request *request);
-	void send_error(int error_code, Request *request);
-	void send_file(const std::string &path, Request *request);
+	void load_settings();
+	void setup_routes();
+	void setup_middleware();
 
-	virtual void load_settings();
-	virtual void setup_routes();
-	virtual void setup_middleware();
-
-	void default_routing_middleware(Object *instance, Request *request);
-
-	virtual void migrate();
-
-	void register_request_update(Request *request);
-	void unregister_request_update(Request *request);
-	void update();
+	void migrate();
 
 	void add_listener(const std::string &ip, uint16_t port, 
 						bool useSSL = false, const std::string &certFile = "", const std::string &keyFile = "", bool useOldTLS = false, 
@@ -164,9 +154,6 @@ public:
 	virtual ~DWebApplication();
 
 protected:
-	std::mutex _update_registered_requests_mutex;
-	std::vector<Request *> _update_registered_requests;
-
 	// We use a uuid string as session id;
 	// set sessionTimeout_=0 to make location session valid forever based on
 	// cookies;

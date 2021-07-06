@@ -31,6 +31,10 @@ void Request::compile_and_send_body() {
 }
 
 void Request::next_stage() {
+	//if (middleware_stack == nullptr) {
+	//	printf("Error Request::next_stage-> middleware_stack == nullptr\n");
+	//}
+
 	if (current_middleware_index == (*middleware_stack).size()) {
 		handler_instance.handler_func(handler_instance.instance, this);
 		return;
