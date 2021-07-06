@@ -162,8 +162,6 @@ Request::Request() {
 	//It is a tradeoff on server memory though, as every active download will consume this amount of memory
 	//where the file is bigger than this number
 	file_chunk_size = 1 << 21; //2MB
-
-	reset();
 }
 
 Request::~Request() {

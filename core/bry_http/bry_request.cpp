@@ -9,17 +9,17 @@ void BryRequest::send() {
 	//}
 
 	if (http_parser->isKeepAlive()) {
-		response->addHeadValue("Connection", "Keep-Alive");
-
 		response->setBody(compiled_body);
+
+		response->addHeadValue("Connection", "Keep-Alive");
 
 		std::string result = response->getResult();
 
 		session->send(result.c_str(), result.size());
 	} else {
-		response->addHeadValue("Connection", "Close");
-
 		response->setBody(compiled_body);
+
+		response->addHeadValue("Connection", "Close");
 
 		std::string result = response->getResult();
 
@@ -102,6 +102,8 @@ void BryRequest::pool() {
 BryRequest::BryRequest() :
 		Request() {
 	response = nullptr;
+
+	reset();
 }
 
 BryRequest::~BryRequest() {
