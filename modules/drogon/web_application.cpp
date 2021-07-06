@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <trantor/utils/AsyncFileLogger.h>
+
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -142,6 +144,9 @@ void DWebApplication::update() {
 }
 
 void DWebApplication::add_listener(const std::string &ip, uint16_t port, bool useSSL, const std::string &certFile, const std::string &keyFile, bool useOldTLS, const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
+	assert(!_running);
+
+	_listener_manager->addListener(ip, port, useSSL, certFile, keyFile, useOldTLS, sslConfCmds);
 }
 
 void DWebApplication::set_thread_num(size_t thread_num) {
@@ -164,27 +169,34 @@ void DWebApplication::set_ssl_files(const std::string &certPath, const std::stri
 }
 
 void DWebApplication::run() {
-	/*
-	if (!getLoop()->isInLoopThread()) {
-		getLoop()->moveToCurrentThread();
+	if (!get_loop()->isInLoopThread()) {
+		get_loop()->moveToCurrentThread();
 	}
+
 	LOG_TRACE << "Start to run...";
+
 	trantor::AsyncFileLogger asyncFileLogger;
+
 	// Create dirs for cache files
 	for (int i = 0; i < 256; ++i) {
 		char dirName[4];
 		snprintf(dirName, sizeof(dirName), "%02x", i);
+
 		std::transform(dirName, dirName + 2, dirName, toupper);
-		utils::createPath(getUploadPath() + "/tmp/" + dirName);
+
+		utils::createPath(get_upload_path() + "/tmp/" + dirName);
 	}
+
+	/*
 	if (runAsDaemon_) {
 		// go daemon!
 		godaemon();
 #ifdef __linux__
-		getLoop()->resetTimerQueue();
+		get_loop()->resetTimerQueue();
 #endif
-		getLoop()->resetAfterFork();
+		get_loop()->resetAfterFork();
 	}
+
 	// set relaunching
 	if (relaunchOnError_) {
 #ifndef _WIN32
@@ -202,28 +214,33 @@ void DWebApplication::run() {
 			sleep(1);
 			LOG_INFO << "start new process";
 		}
-		getLoop()->resetAfterFork();
+		get_loop()->resetAfterFork();
 #endif
 	}
+
 	if (handleSigterm_) {
 		signal(SIGTERM, TERMFunction);
 	}
+*/
+
 	// set logger
-	if (!logPath_.empty()) {
+	if (!_log_path.empty()) {
 #ifdef _WIN32
-		if (_access(logPath_.c_str(), 06) != 0)
+		if (_access(_log_path.c_str(), 06) != 0)
 #else
-		if (access(logPath_.c_str(), R_OK | W_OK) != 0)
+		if (access(_log_path.c_str(), R_OK | W_OK) != 0)
 #endif
 		{
 			LOG_ERROR << "log file path not exist";
 			abort();
 		} else {
-			std::string baseName = logfileBaseName_;
+			std::string baseName = _logfile_base_name;
+
 			if (baseName.empty()) {
-				baseName = "drogon";
+				baseName = "rcpp_fw";
 			}
-			asyncFileLogger.setFileName(baseName, ".log", logPath_);
+
+			asyncFileLogger.setFileName(baseName, ".log", _log_path);
 			asyncFileLogger.startLogging();
 
 			trantor::Logger::setOutputFunction(
@@ -232,13 +249,17 @@ void DWebApplication::run() {
 					},
 					[&]() { asyncFileLogger.flush(); });
 
-			asyncFileLogger.setFileSizeLimit(logfileSize_);
+			asyncFileLogger.setFileSizeLimit(_logfile_size);
 		}
 	}
+
+	/*
 	if (relaunchOnError_) {
 		LOG_INFO << "Start child process";
 	}
+*/
 
+	/*
 #ifndef _WIN32
 	if (!libFilePaths_.empty()) {
 		sharedLibManagerPtr_ =
@@ -246,33 +267,37 @@ void DWebApplication::run() {
 						libFileOutputPath_);
 	}
 #endif
+*/
+
 	// Create all listeners.
-	auto ioLoops = listenerManagerPtr_->createListeners(
-			std::bind(&HttpAppFrameworkImpl::onAsyncRequest, this, _1, _2),
-			std::bind(&HttpAppFrameworkImpl::onNewWebsockRequest, this, _1, _2, _3),
-			std::bind(&HttpAppFrameworkImpl::onConnection, this, _1),
-			idleConnectionTimeout_,
-			sslCertPath_,
-			sslKeyPath_,
-			sslConfCmds_,
-			threadNum_,
-			syncAdvices_,
-			preSendingAdvices_);
-	assert(ioLoops.size() == threadNum_);
-	for (size_t i = 0; i < threadNum_; ++i) {
+	auto ioLoops = _listener_manager->createListeners(get_loop(),
+			std::bind(&DWebApplication::on_async_request, this, std::placeholders::_1, std::placeholders::_2),
+			std::bind(&DWebApplication::on_new_websock_request, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
+			std::bind(&DWebApplication::on_connection, this, std::placeholders::_1),
+			_idle_connection_timeout, _ssl_cert_path, _ssl_key_path, _ssl_conf_cmds, _thread_num, _sync_advices, _pre_sending_advices);
+
+
+
+	assert(ioLoops.size() == _thread_num);
+
+	for (size_t i = 0; i < _thread_num; ++i) {
 		ioLoops[i]->setIndex(i);
 	}
-	getLoop()->setIndex(threadNum_);
+
+	get_loop()->setIndex(_thread_num);
+
 	// A fast database client instance should be created in the main event
 	// loop, so put the main loop into ioLoops.
-	ioLoops.push_back(getLoop());
+	ioLoops.push_back(get_loop());
 
-	if (useSession_) {
-		sessionManagerPtr_ =
-				std::make_unique<SessionManager>(getLoop(), sessionTimeout_);
+	if (_use_session) {
+		_session_manager = std::make_unique<SessionManager>(get_loop(), _session_timeout);
 	}
+
 	// now start runing!!
-	running_ = true;
+	_running = true;
+
+	/*
 	// Initialize plugins
 	const auto &pluginConfig = jsonConfig_["plugins"];
 	if (!pluginConfig.isNull()) {
@@ -283,23 +308,26 @@ void DWebApplication::run() {
 						//	<< plugin->className();
 					// TODO: new plugin
 				});
-	}
+	}*/
 
 	//httpCtrlsRouterPtr_->init(ioLoops);
 	//httpSimpleCtrlsRouterPtr_->init(ioLoops);
 
-	staticFileRouterPtr_->init(ioLoops);
-	websockCtrlsRouterPtr_->init();
-	getLoop()->queueInLoop([this]() {
+	//staticFileRouterPtr_->init(ioLoops);
+	//websockCtrlsRouterPtr_->init();
+
+	get_loop()->queueInLoop([this]() {
 		// Let listener event loops run when everything is ready.
-		listenerManagerPtr_->startListening();
-		for (auto &adv : beginningAdvices_) {
+		_listener_manager->startListening();
+
+		for (auto &adv : _beginning_advices) {
 			adv();
 		}
-		beginningAdvices_.clear();
+
+		_beginning_advices.clear();
 	});
-	getLoop()->loop();
-	*/
+
+	get_loop()->loop();
 }
 
 void DWebApplication::stop() {
@@ -448,6 +476,7 @@ void DWebApplication::set_implicit_page_enable(bool useImplicitPage) {
 }
 bool DWebApplication::is_implicit_page_enabled() const {
 	//return staticFileRouterPtr_->isImplicitPageEnabled();
+	return false;
 }
 void DWebApplication::set_implicit_page(const std::string &implicitPageFile) {
 	//staticFileRouterPtr_->setImplicitPage(implicitPageFile);
@@ -455,6 +484,8 @@ void DWebApplication::set_implicit_page(const std::string &implicitPageFile) {
 
 const std::string &DWebApplication::get_implicit_page() const {
 	//return staticFileRouterPtr_->getImplicitPage();
+	static std::string s = "";
+	return s;
 }
 size_t DWebApplication::get_client_max_body_size() const {
 	return _client_max_body_size;
@@ -493,9 +524,7 @@ const std::pair<unsigned int, std::string> &DWebApplication::get_float_precision
 }
 
 trantor::EventLoop *DWebApplication::get_loop() const {
-	static trantor::EventLoop loop;
-
-	return &loop;
+	return _loop;
 }
 trantor::EventLoop *DWebApplication::get_io_loop(size_t id) const {
 	assert(_listener_manager);
@@ -635,6 +664,8 @@ void DWebApplication::on_new_websock_request(const HttpRequestImplPtr &req, std:
 	}*/
 }
 void DWebApplication::on_connection(const trantor::TcpConnectionPtr &conn) {
+	LOG_INFO << "on_connection";
+
 	/*
 	static std::mutex mtx;
 	LOG_TRACE << "connect!!!" << maxConnectionNum_
@@ -652,7 +683,7 @@ void DWebApplication::on_connection(const trantor::TcpConnectionPtr &conn) {
 				if (iter == connectionsNumMap_.end()) {
 					connectionsNumMap_[conn->peerAddr().toIp()] = 1;
 				} else if (iter->second++ > maxConnectionNumPerIP_) {
-					conn->getLoop()->queueInLoop(
+					conn->get_loop()->queueInLoop(
 							[conn]() { conn->forceClose(); });
 					return;
 				}
@@ -703,9 +734,10 @@ void DWebApplication::find_session_for_request(const HttpRequestImplPtr &req) {
 //void forward(const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout);
 //void forward(const HttpRequestImplPtr &req,std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout = 0);
 
-DWebApplication::DWebApplication() : _listener_manager(new ListenerManager()) {
-		//staticFileRouterPtr_(new StaticFileRouter{}),
-		/*
+DWebApplication::DWebApplication() :
+		_listener_manager(new ListenerManager()) {
+	//staticFileRouterPtr_(new StaticFileRouter{}),
+	/*
 		httpCtrlsRouterPtr_(new HttpControllersRouter(*staticFileRouterPtr_,
 				postRoutingAdvices_,
 				postRoutingObservers_,
@@ -719,18 +751,18 @@ DWebApplication::DWebApplication() : _listener_manager(new ListenerManager()) {
 						preHandlingAdvices_,
 						preHandlingObservers_,
 						postHandlingAdvices_)),*/
-		//websockCtrlsRouterPtr_(
-		//		new WebsocketControllersRouter(postRoutingAdvices_,
-		//				postRoutingObservers_)),
-		//listenerManagerPtr_(new ListenerManager),
-		//pluginsManagerPtr_(new PluginsManager),
-		//uploadPath_(rootPath_ + "uploads") {
+	//websockCtrlsRouterPtr_(
+	//		new WebsocketControllersRouter(postRoutingAdvices_,
+	//				postRoutingObservers_)),
+	//listenerManagerPtr_(new ListenerManager),
+	//pluginsManagerPtr_(new PluginsManager),
+	//uploadPath_(rootPath_ + "uploads") {
 
+	_loop = new trantor::EventLoop();
 
 	//_listener_manager = new ListenerManager();
 	_upload_path = _root_path + "uploads";
 }
-
 
 DWebApplication::~DWebApplication() {
 	main_route_map.clear();

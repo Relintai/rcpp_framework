@@ -159,6 +159,7 @@ HttpServer::HttpServer(
 }
 
 HttpServer::~HttpServer() {
+		LOG_WARN << "HttpServer desxtr";
 }
 
 void HttpServer::start() {

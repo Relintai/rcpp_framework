@@ -65,7 +65,7 @@ void ListenerManager::addListener(
 			ip, port, useSSL, certFile, keyFile, useOldTLS, sslConfCmds);
 }
 
-std::vector<trantor::EventLoop *> ListenerManager::createListeners(
+std::vector<trantor::EventLoop *> ListenerManager::createListeners(trantor::EventLoop *event_loop,
 		const HttpAsyncCallback &httpCallback,
 		const WebSocketNewAsyncCallback &webSocketCallback,
 		const ConnectionCallback &connectionCallback,
@@ -86,43 +86,53 @@ std::vector<trantor::EventLoop *> ListenerManager::createListeners(
 				std::function<void(const HttpRequestPtr &, const HttpResponsePtr &)> >
 				&preSendingAdvices) {
 #ifdef __linux__
+
+
 	for (size_t i = 0; i < threadNum; ++i) {
+
 		LOG_TRACE << "thread num=" << threadNum;
+
 		auto loopThreadPtr = std::make_shared<EventLoopThread>("DrogonIoLoop");
+
 		listeningloopThreads_.push_back(loopThreadPtr);
 		ioLoops_.push_back(loopThreadPtr->getLoop());
+
 		for (auto const &listener : listeners_) {
+
 			auto const &ip = listener.ip_;
 			bool isIpv6 = ip.find(':') == std::string::npos ? false : true;
 			std::shared_ptr<HttpServer> serverPtr;
 			InetAddress listenAddress(ip, listener.port_, isIpv6);
+
 			if (listenAddress.isUnspecified()) {
 				LOG_FATAL << "Failed to parse IP address '" << ip
 						  << "'. (Note: FQDN/domain names/hostnames are not "
 							 "supported. Including 'localhost')";
 				abort();
 			}
+
 			if (i == 0 && !app().reusePort()) {
 				DrogonFileLocker lock;
 				// Check whether the port is in use.
-				TcpServer server(HttpAppFrameworkImpl::instance().getLoop(),
+				TcpServer server(event_loop,
 						std::move(listenAddress),
 						"drogonPortTest",
 						true,
 						false);
-				serverPtr =
-						std::make_shared<HttpServer>(loopThreadPtr->getLoop(),
+
+				serverPtr = std::make_shared<HttpServer>(loopThreadPtr->getLoop(),
 								std::move(listenAddress),
 								"drogon",
 								syncAdvices,
 								preSendingAdvices);
 			} else {
-				serverPtr =
-						std::make_shared<HttpServer>(loopThreadPtr->getLoop(),
+
+				serverPtr = std::make_shared<HttpServer>(loopThreadPtr->getLoop(),
 								std::move(listenAddress),
 								"drogon",
 								syncAdvices,
 								preSendingAdvices);
+
 			}
 
 			if (listener.useSSL_) {

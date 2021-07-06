@@ -35,7 +35,7 @@ public:
 			bool useOldTLS = false,
 			const std::vector<std::pair<std::string, std::string> >
 					&sslConfCmds = {});
-	std::vector<trantor::EventLoop *> createListeners(
+	std::vector<trantor::EventLoop *> createListeners(trantor::EventLoop *event_loop,
 			const HttpAsyncCallback &httpCallback,
 			const WebSocketNewAsyncCallback &webSocketCallback,
 			const trantor::ConnectionCallback &connectionCallback,

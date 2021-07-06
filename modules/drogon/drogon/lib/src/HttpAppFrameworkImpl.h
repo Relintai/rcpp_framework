@@ -32,12 +32,13 @@ void defaultExceptionHandler(const std::exception &,
 		const HttpRequestPtr &,
 		std::function<void(const HttpResponsePtr &)> &&);
 
+/*
 struct InitBeforeMainFunction {
 	explicit InitBeforeMainFunction(const std::function<void()> &func) {
 		func();
 	}
 };
-
+*/
 class HttpAppFrameworkImpl final : public HttpAppFramework {
 public:
 	HttpAppFrameworkImpl();
@@ -533,7 +534,7 @@ private:
 	HttpResponsePtr custom404_;
 	std::function<HttpResponsePtr(HttpStatusCode)> customErrorHandler_ =
 			&defaultErrorHandler;
-	static InitBeforeMainFunction initFirst_;
+	//static InitBeforeMainFunction initFirst_;
 	bool enableServerHeader_{ true };
 	bool enableDateHeader_{ true };
 	bool reusePort_{ false };

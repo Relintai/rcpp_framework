@@ -82,6 +82,7 @@ HttpAppFrameworkImpl::HttpAppFrameworkImpl() :
 		uploadPath_(rootPath_ + "uploads") {
 }
 
+/*
 static std::function<void()> f = [] {
 	LOG_TRACE << "Initialize the main event loop in the main thread";
 };
@@ -90,6 +91,7 @@ static std::function<void()> f = [] {
 drogon::InitBeforeMainFunction drogon::HttpAppFrameworkImpl::initFirst_([]() {
 	HttpAppFrameworkImpl::instance().getLoop()->runInLoop(f);
 });
+*/
 
 namespace drogon {
 std::string getVersion() {
@@ -462,7 +464,7 @@ void HttpAppFrameworkImpl::run() {
 	}
 #endif
 	// Create all listeners.
-	auto ioLoops = listenerManagerPtr_->createListeners(
+	auto ioLoops = listenerManagerPtr_->createListeners(getLoop(),
 			std::bind(&HttpAppFrameworkImpl::onAsyncRequest, this, _1, _2),
 			std::bind(&HttpAppFrameworkImpl::onNewWebsockRequest, this, _1, _2, _3),
 			std::bind(&HttpAppFrameworkImpl::onConnection, this, _1),
@@ -736,8 +738,9 @@ void HttpAppFrameworkImpl::onAsyncRequest(
 }
 
 trantor::EventLoop *HttpAppFrameworkImpl::getLoop() const {
-	static trantor::EventLoop loop;
-	return &loop;
+	//static trantor::EventLoop loop;
+	//return &loop;]
+	return nullptr;
 }
 
 trantor::EventLoop *HttpAppFrameworkImpl::getIOLoop(size_t id) const {

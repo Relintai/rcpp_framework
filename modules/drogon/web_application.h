@@ -11,15 +11,15 @@
 
 #include "handler_instance.h"
 
-#include <trantor/utils/Logger.h>
 #include <trantor/net/InetAddress.h>
 #include <trantor/net/Resolver.h>
+#include <trantor/utils/Logger.h>
 
 #include "http/HttpRequestImpl.h"
 #include "http/HttpResponse.h"
 
-#include "./drogon/lib/src/impl_forwards.h"
 #include "./drogon/lib/src/ListenerManager.h"
+#include "./drogon/lib/src/impl_forwards.h"
 
 #include "http/SessionManager.h"
 
@@ -51,9 +51,11 @@ public:
 	void unregister_request_update(DRequest *request);
 	void update();
 
-//-------
+	//-------
 
-	void add_listener(const std::string &ip, uint16_t port, bool useSSL, const std::string &certFile, const std::string &keyFile, bool useOldTLS, const std::vector<std::pair<std::string, std::string> > &sslConfCmds);
+	void add_listener(const std::string &ip, uint16_t port, 
+						bool useSSL = false, const std::string &certFile = "", const std::string &keyFile = "", bool useOldTLS = false, 
+						const std::vector<std::pair<std::string, std::string> > &sslConfCmds = {});
 
 	void set_thread_num(size_t thread_num);
 	size_t get_thread_num() const;
@@ -185,11 +187,11 @@ protected:
 	size_t _session_timeout{ 0 };
 	size_t _idle_connection_timeout{ 60 };
 	bool _use_session{ false };
-	std::string _server_header { "server: rcpp_framework\r\n" };
+	std::string _server_header{ "server: rcpp_framework\r\n" };
 
-	std::string _root_path { "./" };
+	std::string _root_path{ "./" };
 	std::string _upload_path;
-	std::atomic_bool _running { false };
+	std::atomic_bool _running{ false };
 
 	size_t _thread_num{ 1 };
 
@@ -213,7 +215,7 @@ protected:
 	bool _use_brotli{ false };
 	bool _using_unicode_escaping{ true };
 
-	std::pair<unsigned int, std::string> _float_precision_in_json { 0, "significant" };
+	std::pair<unsigned int, std::string> _float_precision_in_json{ 0, "significant" };
 
 	size_t _client_max_body_size{ 1024 * 1024 };
 	size_t _client_max_memory_body_size{ 64 * 1024 };
@@ -226,6 +228,12 @@ protected:
 	bool _enable_server_header{ true };
 	bool _enable_date_header{ true };
 	bool _reuse_port{ false };
+
+	trantor::EventLoop *_loop;
+
+	std::vector<std::function<void()> > _beginning_advices;
+	std::vector<std::function<HttpResponsePtr(const HttpRequestPtr &)> > _sync_advices;
+	std::vector<std::function<void(const HttpRequestPtr &, const HttpResponsePtr &)> > _pre_sending_advices;
 };
 
 #endif
