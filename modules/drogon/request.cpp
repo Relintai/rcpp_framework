@@ -46,19 +46,7 @@ void DRequest::send_file(const std::string &p_file_path) {
 }
 
 void DRequest::reset() {
-	application = nullptr;
-	current_middleware_index = 0;
-	middleware_stack = nullptr;
-	_path_stack.clear();
-	_path_stack_pointer = 0;
-	file_size = 0;
-	current_file_progress = 0;
-	connection_closed = false;
-
-	head.clear();
-	body.clear();
-	footer.clear();
-	compiled_body.clear();
+	Request::reset();
 
 	response.reset();
 	request.reset();

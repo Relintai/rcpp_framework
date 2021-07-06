@@ -67,6 +67,7 @@ void Request::reset() {
 	file_size = 0;
 	current_file_progress = 0;
 	connection_closed = false;
+	_full_path = "";
 
 	head.clear();
 	body.clear();
@@ -76,7 +77,6 @@ void Request::reset() {
 
 std::string Request::parser_get_path() {
 	return "";
-	//return http_parser->getPath();
 }
 
 void Request::setup_url_stack() {
