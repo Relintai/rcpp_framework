@@ -31,16 +31,16 @@ void DWebApplication::load_settings() {
 }
 
 void DWebApplication::setup_routes() {
-	default_error_handler_func = DWebApplication::default_fallback_error_handler;
+	default_error_handler_func = WebApplication::default_fallback_error_handler;
 
-	error_handler_map[404] = DWebApplication::default_404_error_handler;
+	error_handler_map[404] = WebApplication::default_404_error_handler;
 }
 
 void DWebApplication::setup_middleware() {
-	middlewares.push_back(DHandlerInstance([this](Object *instance, DRequest *request) { this->default_routing_middleware(instance, request); }));
+	middlewares.push_back(HandlerInstance([this](Object *instance, Request *request) { this->default_routing_middleware(instance, request); }));
 }
 
-void DWebApplication::default_routing_middleware(Object *instance, DRequest *request) {
+void DWebApplication::default_routing_middleware(Object *instance, Request *request) {
 	/*
 	std::string path = request->http_parser->getPath();
 
@@ -77,17 +77,7 @@ void DWebApplication::default_routing_middleware(Object *instance, DRequest *req
 	*/
 }
 
-void DWebApplication::default_fallback_error_handler(int error_code, DRequest *request) {
-	request->response->setBody(default_generic_error_body);
-	request->send();
-}
-
-void DWebApplication::default_404_error_handler(int error_code, DRequest *request) {
-	request->response->setBody(default_error_404_body);
-	request->send();
-}
-
-void DWebApplication::handle_request(DRequest *request) {
+void DWebApplication::handle_request(Request *request) {
 	request->middleware_stack = &middlewares;
 
 	//note that middlewares handle the routing -> DWebApplication::default_routing_middleware by default
@@ -102,11 +92,11 @@ void DWebApplication::handle_request(DRequest *request) {
 	//request->response->setExpiredTime(0);
 	//request->callback(request->response);
 
-	DRequestPool::return_request(request);
+	request->pool();
 }
 
-void DWebApplication::send_error(int error_code, DRequest *request) {
-	std::function<void(int, DRequest *)> func = error_handler_map[error_code];
+void DWebApplication::send_error(int error_code, Request *request) {
+	std::function<void(int, Request *)> func = error_handler_map[error_code];
 
 	if (!func) {
 		default_error_handler_func(error_code, request);
@@ -116,7 +106,7 @@ void DWebApplication::send_error(int error_code, DRequest *request) {
 	func(error_code, request);
 }
 
-void DWebApplication::send_file(const std::string &path, DRequest *request) {
+void DWebApplication::send_file(const std::string &path, Request *request) {
 	std::string fp = FileCache::get_singleton()->wwwroot + path;
 
 	request->send_file(fp);
@@ -125,17 +115,17 @@ void DWebApplication::send_file(const std::string &path, DRequest *request) {
 void DWebApplication::migrate() {
 }
 
-void DWebApplication::register_request_update(DRequest *request) {
+void DWebApplication::register_request_update(Request *request) {
 	std::lock_guard<std::mutex> lock(_update_registered_requests_mutex);
 
 	_update_registered_requests.push_back(request);
 }
-void DWebApplication::unregister_request_update(DRequest *request) {
+void DWebApplication::unregister_request_update(Request *request) {
 	std::lock_guard<std::mutex> lock(_update_registered_requests_mutex);
 
 	std::size_t s = _update_registered_requests.size();
 	for (std::size_t i = 0; i < s; ++i) {
-		DRequest *r = _update_registered_requests[i];
+		Request *r = _update_registered_requests[i];
 
 		if (r == request) {
 			_update_registered_requests[i] = _update_registered_requests[s - 1];
@@ -149,7 +139,7 @@ void DWebApplication::unregister_request_update(DRequest *request) {
 
 void DWebApplication::update() {
 	for (std::size_t i = 0; i < _update_registered_requests.size(); ++i) {
-		DRequest *r = _update_registered_requests[i];
+		Request *r = _update_registered_requests[i];
 
 		r->update();
 	}
@@ -654,7 +644,7 @@ void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::funct
     //resp->setExpiredTime(0);
     //callback(resp);
 
-	DRequest *request = DRequestPool::get_request();
+	DRequest *request = DRequest::get();
 	request->application = this;
 	request->response = HttpResponse::newHttpResponse();
 	request->request = std::shared_ptr<drogon::HttpRequestImpl>(req);
@@ -807,6 +797,3 @@ DWebApplication::~DWebApplication() {
 	error_handler_map.clear();
 	middlewares.clear();
 }
-
-std::string DWebApplication::default_error_404_body = "<html><body>404 :(</body></html>";
-std::string DWebApplication::default_generic_error_body = "<html><body>Internal server error! :(</body></html>";

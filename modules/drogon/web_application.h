@@ -1,6 +1,8 @@
 #ifndef DWEB_APPLICATION_H
 #define DWEB_APPLICATION_H
 
+#include "core/http/web_application.h"
+
 #include "core/object.h"
 #include <functional>
 #include <map>
@@ -9,7 +11,7 @@
 
 #include <mutex>
 
-#include "handler_instance.h"
+#include "core/http/handler_instance.h"
 
 #include <trantor/net/InetAddress.h>
 #include <trantor/net/Resolver.h>
@@ -25,33 +27,25 @@
 
 using namespace drogon;
 
-class DRequest;
+class Request;
 
-class DWebApplication {
+class DWebApplication : WebApplication {
 public:
-	static std::string default_error_404_body;
-	static std::string default_generic_error_body;
-
-	void handle_request(DRequest *request);
-	void send_error(int error_code, DRequest *request);
-	void send_file(const std::string &path, DRequest *request);
-
-	static void default_fallback_error_handler(int error_code, DRequest *request);
-	static void default_404_error_handler(int error_code, DRequest *request);
+	void handle_request(Request *request);
+	void send_error(int error_code, Request *request);
+	void send_file(const std::string &path, Request *request);
 
 	virtual void load_settings();
 	virtual void setup_routes();
 	virtual void setup_middleware();
 
-	void default_routing_middleware(Object *instance, DRequest *request);
+	void default_routing_middleware(Object *instance, Request *request);
 
 	virtual void migrate();
 
-	void register_request_update(DRequest *request);
-	void unregister_request_update(DRequest *request);
+	void register_request_update(Request *request);
+	void unregister_request_update(Request *request);
 	void update();
-
-	//-------
 
 	void add_listener(const std::string &ip, uint16_t port, 
 						bool useSSL = false, const std::string &certFile = "", const std::string &keyFile = "", bool useOldTLS = false, 
@@ -169,17 +163,9 @@ public:
 	DWebApplication();
 	virtual ~DWebApplication();
 
-public:
-	DHandlerInstance index_func;
-	std::map<std::string, DHandlerInstance> main_route_map;
-	std::vector<DHandlerInstance> middlewares;
-
-	std::map<int, std::function<void(int, DRequest *)> > error_handler_map;
-	std::function<void(int, DRequest *)> default_error_handler_func;
-
 protected:
 	std::mutex _update_registered_requests_mutex;
-	std::vector<DRequest *> _update_registered_requests;
+	std::vector<Request *> _update_registered_requests;
 
 	// We use a uuid string as session id;
 	// set sessionTimeout_=0 to make location session valid forever based on

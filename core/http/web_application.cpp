@@ -26,7 +26,7 @@ void WebApplication::setup_middleware() {
 }
 
 void WebApplication::default_routing_middleware(Object *instance, Request *request) {
-	std::string path = request->http_parser->getPath();
+	std::string path = request->get_path_full();
 
 	if (FileCache::get_singleton()->wwwroot_has_file(path)) {
 		send_file(path, request);
@@ -61,12 +61,13 @@ void WebApplication::default_routing_middleware(Object *instance, Request *reque
 }
 
 void WebApplication::default_fallback_error_handler(int error_code, Request *request) {
-	request->response->setBody(default_generic_error_body);
+	request->compiled_body = default_generic_error_body;
+	
 	request->send();
 }
 
 void WebApplication::default_404_error_handler(int error_code, Request *request) {
-	request->response->setBody(default_error_404_body);
+	request->compiled_body = default_error_404_body;
 	request->send();
 }
 

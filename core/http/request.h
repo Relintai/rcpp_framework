@@ -4,18 +4,12 @@
 #include <mutex>
 #include <vector>
 
-#include <brynet/net/http/HttpFormat.hpp>
-#include <brynet/net/http/HttpService.hpp>
-
 #include "handler_instance.h"
 
 class WebApplication;
 
 class Request {
 public:
-	HTTPParser::Ptr http_parser;
-	HttpSession::Ptr session;
-	HttpResponse *response;
 	WebApplication *application;
 
 	uint32_t current_middleware_index;
@@ -35,17 +29,18 @@ public:
 
 	bool connection_closed;
 
-	void compile_body();
-	void compile_and_send_body();
-	void next_stage();
-	void send();
-	void send_file(const std::string &p_file_path);
-	void send_error(int error_code);
-	void reset();
+	virtual void compile_body();
+	virtual void compile_and_send_body();
+	virtual void next_stage();
+	virtual void send();
+	virtual void send_file(const std::string &p_file_path);
+	virtual void send_error(int error_code);
+	virtual void reset();
+	virtual std::string parser_get_path();
 
 	void setup_url_stack();
 	std::string get_path() const;
-	const std::string &get_path_full() const;
+	virtual const std::string &get_path_full() const;
 	const std::string &get_path_segment(const uint32_t i) const;
 	const std::string &get_current_path_segment() const;
 	uint32_t get_path_segment_count() const;
@@ -54,30 +49,76 @@ public:
 	void pop_path();
 	void push_path();
 
-	void update();
+	virtual void update();
+	virtual void pool();
 
 	Request();
-	~Request();
+	virtual ~Request();
 
 protected:
-	void _progress_send_file();
-	void _file_chunk_sent();
-
+	std::string _full_path;
 	std::vector<std::string> _path_stack;
 	uint32_t _path_stack_pointer;
 };
 
+template<class T>
 class RequestPool {
 public:
-	static Request *get_request();
-	static void return_request(Request *request);
+	T *get_request();
+	void return_request(T *request);
 
 	RequestPool();
 	~RequestPool();
 
 protected:
-	static std::mutex _mutex;
-	static std::vector<Request *> _requests;
+	std::mutex _mutex;
+	std::vector<T *> _requests;
 };
+
+template<class T>
+T *RequestPool<T>::get_request() {
+	_mutex.lock();
+
+	T *request;
+
+	if (_requests.size() == 0) {
+		_mutex.unlock();
+
+		request = new T();
+
+		return request;
+	}
+
+	request = _requests[_requests.size() - 1];
+	_requests.pop_back();
+
+	_mutex.unlock();
+
+	request->reset();
+
+	return request;
+}
+
+template<class T>
+void RequestPool<T>::return_request(T *request) {
+	_mutex.lock();
+	_requests.push_back(request);
+	_mutex.unlock();
+}
+
+template<class T>
+RequestPool<T>::RequestPool() {
+}
+
+template<class T>
+RequestPool<T>::~RequestPool() {
+	for (uint32_t i = 0; i < _requests.size(); ++i) {
+		delete _requests[i];
+	}
+
+	_requests.clear();
+}
+
+
 
 #endif

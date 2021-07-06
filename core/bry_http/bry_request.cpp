@@ -1,25 +1,42 @@
-#include "request.h"
+#include "bry_request.h"
 
 #include "web_application.h"
 
-void DRequest::send() {
+void BryRequest::send() {
 	//if (connection_closed) {
-	//	DRequestPool::return_request(this);
+	//	RequestPool::return_request(this);
 	//	return;
 	//}
 
-	//response->setExpiredTime(0);
-	callback(response);
+	if (http_parser->isKeepAlive()) {
+		response->addHeadValue("Connection", "Keep-Alive");
+
+		response->setBody(compiled_body);
+
+		std::string result = response->getResult();
+
+		session->send(result.c_str(), result.size());
+	} else {
+		response->addHeadValue("Connection", "Close");
+
+		response->setBody(compiled_body);
+
+		std::string result = response->getResult();
+
+		HttpSession::Ptr lsession = session;
+
+		session->send(result.c_str(), result.size(), [lsession]() { lsession->postShutdown(); });
+	}
 
 	pool();
 }
 
-void DRequest::send_file(const std::string &p_file_path) {
+void BryRequest::send_file(const std::string &p_file_path) {
 	//if (connection_closed) {
-	//	DRequestPool::return_request(this);
+	//	RequestPool::return_request(this);
 	//	return;
 	//}
-/*
+
 	file_path = p_file_path;
 
 	FILE *f = fopen(file_path.c_str(), "rb");
@@ -40,13 +57,12 @@ void DRequest::send_file(const std::string &p_file_path) {
 	application->register_request_update(this);
 
 	session->send(result.c_str(), result.size(), [this]() { this->_file_chunk_sent(); });
-	*/
-
-	pool();
 }
 
-void DRequest::reset() {
+void BryRequest::reset() {
 	application = nullptr;
+	http_parser = nullptr;
+	session = nullptr;
 	current_middleware_index = 0;
 	middleware_stack = nullptr;
 	_path_stack.clear();
@@ -60,53 +76,49 @@ void DRequest::reset() {
 	footer.clear();
 	compiled_body.clear();
 
-	response.reset();
-	request.reset();
+	if (response)
+		delete response;
 
+//todo fix
 	//response = new HttpResponse();
 }
 
-void DRequest::update() {
+void BryRequest::update() {
 	if (file_next) {
 		file_next = false;
 		_progress_send_file();
 	}
 }
 
-DRequest *DRequest::get() {
+BryRequest *BryRequest::get() {
 	return _request_pool.get_request();
 }
-void DRequest::pool(DRequest *request) {
+void BryRequest::pool(BryRequest *request) {
 	return _request_pool.return_request(request);
 }
-void DRequest::pool() {
-	DRequest::pool(this);
+void BryRequest::pool() {
+	BryRequest::pool(this);
 }
 
-DRequest::DRequest() {
-
-	//This value will need benchmarks, 2 MB seems to be just as fast for me as 4 MB, but 1MB is slower
-	//It is a tradeoff on server memory though, as every active download will consume this amount of memory
-	//where the file is bigger than this number
-	file_chunk_size = 1 << 21; //2MB
-
-	reset();
+BryRequest::BryRequest() :
+		Request() {
+	response = nullptr;
 }
 
-DRequest::~DRequest() {
+BryRequest::~BryRequest() {
+	delete response;
 }
 
-void DRequest::_progress_send_file() {
-	/*
+void BryRequest::_progress_send_file() {
 	if (connection_closed) {
-		DRequestPool::return_request(this);
+		pool();
 		return;
 	}
 
 	if (current_file_progress >= file_size) {
 		session->postShutdown();
 
-		DRequestPool::return_request(this);
+		pool();
 
 		return;
 	}
@@ -120,7 +132,7 @@ void DRequest::_progress_send_file() {
 
 		session->postShutdown();
 
-		DRequestPool::return_request(this);
+		pool();
 
 		return;
 	}
@@ -142,12 +154,10 @@ void DRequest::_progress_send_file() {
 	current_file_progress = nfp;
 
 	session->send(body.c_str(), body.size(), [this]() { this->_file_chunk_sent(); });
-	*/
 }
 
-void DRequest::_file_chunk_sent() {
+void BryRequest::_file_chunk_sent() {
 	file_next = true;
 }
 
-
-RequestPool<DRequest> DRequest::_request_pool;
+RequestPool<BryRequest> BryRequest::_request_pool;

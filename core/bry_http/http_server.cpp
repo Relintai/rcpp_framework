@@ -1,7 +1,7 @@
 #include "http_server.h"
 
 #include "core/http/web_application.h"
-#include "core/http/request.h"
+#include "bry_request.h"
 
 #define LOG_VERBOSE 0
 
@@ -12,7 +12,7 @@ void HTTPServer::http_callback_handler(Request *request) {
 void HTTPServer::httpEnterCallbackDefault(const HTTPParser &httpParser, const HttpSession::Ptr &session) {
 	std::unique_lock<std::mutex> lock(_request_map_mutex, std::defer_lock);
 
-	Request *request = RequestPool::get_request();
+	BryRequest *request = BryRequest::get();
 
 	HttpSession *s = session.get();
 
