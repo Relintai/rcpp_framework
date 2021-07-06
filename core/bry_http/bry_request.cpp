@@ -79,8 +79,7 @@ void BryRequest::reset() {
 	if (response)
 		delete response;
 
-//todo fix
-	//response = new HttpResponse();
+	response = new ::HttpResponse();
 }
 
 void BryRequest::update() {
