@@ -1,9 +1,10 @@
 #ifndef DREQUEST_H
-#define REQUEST_H
+#define DREQUEST_H
 
 #include <mutex>
 #include <vector>
 
+#include "http/HttpRequestImpl.h"
 #include "http/HttpResponse.h"
 
 #include "handler_instance.h"
@@ -14,7 +15,10 @@ class DWebApplication;
 
 class DRequest {
 public:
-	HttpResponse *response;
+	HttpResponsePtr response;
+	HttpRequestImplPtr request;
+	std::function<void(const HttpResponsePtr &)> *callback;
+
 	DWebApplication *application;
 
 	uint32_t current_middleware_index;

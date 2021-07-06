@@ -115,8 +115,8 @@ void DRequest::reset() {
 	footer.clear();
 	compiled_body.clear();
 
-	if (response)
-		delete response;
+	response.reset();
+	request.reset();
 
 	//response = new HttpResponse();
 }
@@ -204,7 +204,6 @@ void DRequest::update() {
 }
 
 DRequest::DRequest() {
-	response = nullptr;
 
 	//This value will need benchmarks, 2 MB seems to be just as fast for me as 4 MB, but 1MB is slower
 	//It is a tradeoff on server memory though, as every active download will consume this amount of memory
@@ -215,7 +214,6 @@ DRequest::DRequest() {
 }
 
 DRequest::~DRequest() {
-	delete response;
 }
 
 void DRequest::_progress_send_file() {

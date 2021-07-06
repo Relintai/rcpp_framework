@@ -88,10 +88,21 @@ void DWebApplication::default_404_error_handler(int error_code, DRequest *reques
 }
 
 void DWebApplication::handle_request(DRequest *request) {
-	request->middleware_stack = &middlewares;
+	//request->middleware_stack = &middlewares;
 
 	//note that middlewares handle the routing -> DWebApplication::default_routing_middleware by default
-	request->next_stage();
+	//request->next_stage();
+
+		//auto resp = HttpResponse::newHttpResponse();
+    //resp->setBody("<p>Hello, world!</p>");
+    //resp->setExpiredTime(0);
+    //callback(resp);
+
+	request->response->setBody("<p>Hello, world!</p>");
+	request->response->setExpiredTime(0);
+	request->callback->operator()(request->response);
+
+	DRequestPool::return_request(request);
 }
 
 void DWebApplication::send_error(int error_code, DRequest *request) {
@@ -592,8 +603,7 @@ void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::funct
 
 	LOG_INFO << "on_async_request";
 
-	LOG_TRACE << "new request:" << req->peerAddr().toIpPort() << "->"
-			  << req->localAddr().toIpPort();
+	LOG_TRACE << "new request:" << req->peerAddr().toIpPort() << "->" << req->localAddr().toIpPort();
 	LOG_TRACE << "Headers " << req->methodString() << " " << req->path();
 	LOG_TRACE << "http path=" << req->path();
 
@@ -606,14 +616,16 @@ void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::funct
 		return;
 	}
 
+	find_session_for_request(req);
+
 	/*
-	findSessionForRequest(req);
 	// Route to controller
 	if (!preRoutingObservers_.empty()) {
 		for (auto &observer : preRoutingObservers_) {
 			observer(req);
 		}
 	}
+
 	if (preRoutingAdvices_.empty()) {
 		httpSimpleCtrlsRouterPtr_->route(req, std::move(callback));
 	} else {
@@ -631,7 +643,26 @@ void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::funct
 				[this, callbackPtr, req]() {
 					httpSimpleCtrlsRouterPtr_->route(req, std::move(*callbackPtr));
 				});
-	}*/
+	}
+	*/
+
+	//void HttpSimpleControllersRouter::route(const HttpRequestImplPtr &req,std::function<void(const HttpResponsePtr &)> &&callback)
+
+
+	//auto resp = HttpResponse::newHttpResponse();
+    //resp->setBody("<p>Hello, world!</p>");
+    //resp->setExpiredTime(0);
+    //callback(resp);
+
+	DRequest *request = DRequestPool::get_request();
+	request->application = this;
+	request->response = HttpResponse::newHttpResponse();
+	request->request = std::shared_ptr<drogon::HttpRequestImpl>(req);
+	request->callback = &callback;//std::move(callback);
+
+	request->setup_url_stack();
+
+	handle_request(request);
 }
 
 void DWebApplication::on_new_websock_request(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback, const WebSocketConnectionImplPtr &wsConnPtr) {
