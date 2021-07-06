@@ -49,112 +49,114 @@ public:
 	void unregister_request_update(DRequest *request);
 	void update();
 
-	void addListener(const std::string &ip, uint16_t port, bool useSSL, const std::string &certFile, const std::string &keyFile, bool useOldTLS, const std::vector<std::pair<std::string, std::string> > &sslConfCmds);
+//-------
 
-	void setThreadNum(size_t threadNum);
-	size_t getThreadNum() const;
+	void add_listener(const std::string &ip, uint16_t port, bool useSSL, const std::string &certFile, const std::string &keyFile, bool useOldTLS, const std::vector<std::pair<std::string, std::string> > &sslConfCmds);
 
-	void setSSLConfigCommands(const std::vector<std::pair<std::string, std::string> > &sslConfCmds);
-	void setSSLFiles(const std::string &certPath, const std::string &keyPath);
+	void set_thread_num(size_t threadNum);
+	size_t get_thread_num() const;
+
+	void set_ssl_config_commands(const std::vector<std::pair<std::string, std::string> > &sslConfCmds);
+	void set_ssl_files(const std::string &certPath, const std::string &keyPath);
 
 	void run();
 	void stop();
 
-	void enableSession(const size_t timeout);
-	void disableSession();
+	void enable_session(const size_t timeout);
+	void disable_session();
 
 	//todo think about it
-	const std::string &getDocumentRoot() const;
-	void setDocumentRoot(const std::string &rootPath);
+	const std::string &get_document_root() const;
+	void set_document_root(const std::string &rootPath);
 
-	void setStaticFileHeaders(const std::vector<std::pair<std::string, std::string> > &headers);
+	void set_static_file_headers(const std::vector<std::pair<std::string, std::string> > &headers);
 
-	const std::string &getUploadPath() const;
+	const std::string &get_upload_path() const;
 
-	const std::shared_ptr<trantor::Resolver> &getResolver() const;
+	const std::shared_ptr<trantor::Resolver> &get_resolver() const;
 
-	void setUploadPath(const std::string &uploadPath);
-	void setFileTypes(const std::vector<std::string> &types);
+	void set_upload_path(const std::string &uploadPath);
+	void set_file_types(const std::vector<std::string> &types);
 
-	void setMaxConnectionNum(size_t maxConnections);
-	void setMaxConnectionNumPerIP(size_t maxConnectionsPerIP);
+	void set_max_connection_num(size_t maxConnections);
+	void set_max_connection_num_per_ip(size_t maxConnectionsPerIP);
 
-	void setLogPath(const std::string &logPath, const std::string &logfileBaseName, size_t logfileSize);
-	void setLogLevel(trantor::Logger::LogLevel level);
-	void enableSendfile(bool sendFile);
-	void enableGzip(bool useGzip);
-	bool isGzipEnabled() const;
-	void enableBrotli(bool useBrotli);
-	bool isBrotliEnabled() const;
+	void set_log_path(const std::string &logPath, const std::string &logfileBaseName, size_t logfileSize);
+	void set_log_level(trantor::Logger::LogLevel level);
+	void enable_sendfile(bool sendFile);
+	void enable_gzip(bool useGzip);
+	bool is_gzip_enabled() const;
+	void enable_brotli(bool useBrotli);
+	bool is_brotli_enabled() const;
 
-	void setStaticFilesCacheTime(int cacheTime);
-	int staticFilesCacheTime() const;
+	void set_static_files_cache_time(int cacheTime);
+	int static_files_cache_time() const;
 
-	void setIdleConnectionTimeout(size_t timeout);
-	void setKeepaliveRequestsNumber(const size_t number);
-	void setPipeliningRequestsNumber(const size_t number);
+	void set_idle_connection_timeout(size_t timeout);
+	void set_keepalive_requests_number(const size_t number);
+	void set_pipelining_requests_number(const size_t number);
 
-	void setGzipStatic(bool useGzipStatic);
-	void setBrStatic(bool useGzipStatic);
+	void set_gzip_static(bool useGzipStatic);
+	void set_br_static(bool useGzipStatic);
 
-	void setClientMaxBodySize(size_t maxSize);
-	void setClientMaxMemoryBodySize(size_t maxSize);
-	void setClientMaxWebSocketMessageSize(size_t maxSize);
+	void set_client_max_body_size(size_t maxSize);
+	void set_client_max_memory_body_size(size_t maxSize);
+	void set_client_max_web_socket_message_size(size_t maxSize);
 
-	void setHomePage(const std::string &homePageFile);
-	const std::string &getHomePage() const;
+	void set_home_page(const std::string &homePageFile);
+	const std::string &get_home_page() const;
 
-	void setImplicitPageEnable(bool useImplicitPage);
-	bool isImplicitPageEnabled() const;
-	void setImplicitPage(const std::string &implicitPageFile);
+	void set_implicit_page_enable(bool useImplicitPage);
+	bool is_implicit_page_enabled() const;
+	void set_implicit_page(const std::string &implicitPageFile);
 
-	const std::string &getImplicitPage() const;
-	size_t getClientMaxBodySize() const;
-	size_t getClientMaxMemoryBodySize() const;
-	size_t getClientMaxWebSocketMessageSize() const;
+	const std::string &get_implicit_page() const;
+	size_t get_client_max_body_size() const;
+	size_t get_client_max_memory_body_size() const;
+	size_t get_client_max_web_socket_message_size() const;
 
-	size_t keepaliveRequestsNumber() const;
-	size_t pipeliningRequestsNumber() const;
+	size_t keepalive_requests_number() const;
+	size_t pipelining_requests_number() const;
 
-	bool isRunning();
+	bool is_running();
 
-	void setUnicodeEscapingInJson(bool enable);
+	void set_unicode_escaping_in_json(bool enable);
 
-	bool isUnicodeEscapingUsedInJson() const;
-	void setFloatPrecisionInJson(unsigned int precision, const std::string &precisionType);
+	bool is_unicode_escaping_used_in_json() const;
+	void set_float_precision_in_json(unsigned int precision, const std::string &precisionType);
 
-	const std::pair<unsigned int, std::string> &getFloatPrecisionInJson() const;
+	const std::pair<unsigned int, std::string> &get_float_precision_in_json() const;
 
-	trantor::EventLoop *getLoop() const;
-	trantor::EventLoop *getIOLoop(size_t id) const;
+	trantor::EventLoop *get_loop() const;
+	trantor::EventLoop *get_io_loop(size_t id) const;
 
-	void setServerHeaderField(const std::string &server);
+	void set_server_header_field(const std::string &server);
 
-	void enableServerHeader(bool flag);
-	void enableDateHeader(bool flag);
+	void enable_server_header(bool flag);
+	void enable_date_header(bool flag);
 
-	bool sendServerHeader() const;
-	bool sendDateHeader() const;
+	bool send_server_header() const;
+	bool send_date_header() const;
 
-	const std::string &getServerHeaderString() const;
+	const std::string &get_server_header_string() const;
 
-	std::vector<trantor::InetAddress> getListeners() const;
+	std::vector<trantor::InetAddress> get_listeners() const;
 
-	bool useSendfile() const;
+	bool use_sendfile() const;
 
-	bool supportSSL() const;
+	bool support_ssl() const;
 
-	size_t getCurrentThreadIndex() const;
+	size_t get_current_thread_index() const;
 
-	void enableReusePort(bool enable);
+	void enable_reuse_port(bool enable);
 
-	bool reusePort() const;
+	bool reuse_port() const;
 
-	void onAsyncRequest(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback);
-	void onNewWebsockRequest(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback, const WebSocketConnectionImplPtr &wsConnPtr);
-	void onConnection(const trantor::TcpConnectionPtr &conn);
+	void on_async_request(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback);
+	void on_new_websock_request(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback, const WebSocketConnectionImplPtr &wsConnPtr);
+	void on_connection(const trantor::TcpConnectionPtr &conn);
 
-	void findSessionForRequest(const HttpRequestImplPtr &req);
+	void find_session_for_request(const HttpRequestImplPtr &req);
 
 	//to request
 	//void forward(const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout);
