@@ -489,8 +489,6 @@ bool DWebApplication::reuse_port() const {
 
 void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback) {
 
-	LOG_INFO << "on_async_request";
-
 	LOG_TRACE << "new request:" << req->peerAddr().toIpPort() << "->" << req->localAddr().toIpPort();
 	LOG_TRACE << "Headers " << req->methodString() << " " << req->path();
 	LOG_TRACE << "http path=" << req->path();
