@@ -8,6 +8,8 @@ void DRequest::send() {
 	//	return;
 	//}
 
+	HttpResponsePtr response = HttpResponse::newHttpResponse();
+
 	response->setBody(compiled_body);
 
 	response->setExpiredTime(0);
@@ -17,34 +19,9 @@ void DRequest::send() {
 }
 
 void DRequest::send_file(const std::string &p_file_path) {
-	//if (connection_closed) {
-	//	DRequestPool::return_request(this);
-	//	return;
-	//}
-/*
-	file_path = p_file_path;
+	HttpResponsePtr response = HttpResponse::newFileResponse(p_file_path ,"",drogon::getContentType(p_file_path));
 
-	FILE *f = fopen(file_path.c_str(), "rb");
-
-	if (!f) {
-		printf("send_file: Error: Download: file doesn't exists! %s\n", file_path.c_str());
-
-		return;
-	}
-
-	fseek(f, 0, SEEK_END);
-	file_size = ftell(f);
-	fclose(f);
-
-	response->addHeadValue("Connection", "Close");
-	std::string result = "HTTP/1.1 200 OK\r\nConnection: Close\r\n\r\n";
-
-	application->register_request_update(this);
-
-	session->send(result.c_str(), result.size(), [this]() { this->_file_chunk_sent(); });
-	*/
-
-	send_error(404);
+	callback(response);
 
 	pool();
 }
@@ -52,7 +29,6 @@ void DRequest::send_file(const std::string &p_file_path) {
 void DRequest::reset() {
 	Request::reset();
 
-	response.reset();
 	request.reset();
 
 	//response = new HttpResponse();

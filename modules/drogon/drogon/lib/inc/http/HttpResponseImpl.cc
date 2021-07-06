@@ -195,20 +195,21 @@ HttpResponsePtr HttpResponse::newFileResponse(
 	return resp;
 }
 
-HttpResponsePtr HttpResponse::newFileResponse(
-		const std::string &fullPath,
-		const std::string &attachmentFileName,
-		ContentType type) {
+HttpResponsePtr HttpResponse::newFileResponse(const std::string &fullPath, const std::string &attachmentFileName, ContentType type) {
+
 	std::ifstream infile(fullPath, std::ifstream::binary);
 	LOG_TRACE << "send http file:" << fullPath;
+
 	if (!infile) {
 		auto resp = HttpResponse::newNotFoundResponse();
 		return resp;
 	}
+
 	auto resp = std::make_shared<HttpResponseImpl>();
 	std::streambuf *pbuf = infile.rdbuf();
 	std::streamsize filesize = pbuf->pubseekoff(0, std::ifstream::end);
 	pbuf->pubseekoff(0, std::ifstream::beg); // rewind
+	
 	if (HttpAppFrameworkImpl::instance().useSendfile() && filesize > 1024 * 200)
 	// TODO : Is 200k an appropriate value? Or set it to be configurable
 	{

@@ -544,7 +544,6 @@ void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::funct
 
 	DRequest *request = DRequest::get();
 	request->application = this;
-	request->response = HttpResponse::newHttpResponse();
 	request->request = std::shared_ptr<drogon::HttpRequestImpl>(req);
 	request->callback = callback;//std::move(callback);
 
