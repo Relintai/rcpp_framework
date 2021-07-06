@@ -232,6 +232,7 @@ protected:
 	trantor::EventLoop *_loop;
 
 	std::vector<std::function<void()> > _beginning_advices;
+	std::vector<std::function<bool(const trantor::InetAddress &, const trantor::InetAddress &)> > _new_connection_advices;
 	std::vector<std::function<HttpResponsePtr(const HttpRequestPtr &)> > _sync_advices;
 	std::vector<std::function<void(const HttpRequestPtr &, const HttpResponsePtr &)> > _pre_sending_advices;
 };

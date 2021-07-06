@@ -13,6 +13,7 @@
 #include <stdlib.h>
 
 #include <trantor/utils/AsyncFileLogger.h>
+#include <trantor/net/TcpConnection.h>
 
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -275,8 +276,6 @@ void DWebApplication::run() {
 			std::bind(&DWebApplication::on_new_websock_request, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
 			std::bind(&DWebApplication::on_connection, this, std::placeholders::_1),
 			_idle_connection_timeout, _ssl_cert_path, _ssl_key_path, _ssl_conf_cmds, _thread_num, _sync_advices, _pre_sending_advices);
-
-
 
 	assert(ioLoops.size() == _thread_num);
 
@@ -591,6 +590,8 @@ bool DWebApplication::reuse_port() const {
 
 void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback) {
 
+	LOG_INFO << "on_async_request";
+
 	LOG_TRACE << "new request:" << req->peerAddr().toIpPort() << "->"
 			  << req->localAddr().toIpPort();
 	LOG_TRACE << "Headers " << req->methodString() << " " << req->path();
@@ -634,6 +635,8 @@ void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::funct
 }
 
 void DWebApplication::on_new_websock_request(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback, const WebSocketConnectionImplPtr &wsConnPtr) {
+	LOG_INFO << "on_new_websock_request";
+
 	/*
 	findSessionForRequest(req);
 	// Route to controller
@@ -664,56 +667,60 @@ void DWebApplication::on_new_websock_request(const HttpRequestImplPtr &req, std:
 	}*/
 }
 void DWebApplication::on_connection(const trantor::TcpConnectionPtr &conn) {
-	LOG_INFO << "on_connection";
-
-	/*
 	static std::mutex mtx;
-	LOG_TRACE << "connect!!!" << maxConnectionNum_
-			  << " num=" << connectionNum_.load();
+	LOG_TRACE << "connect!!!" << _max_connection_num
+			  << " num=" << _connection_num.load();
+
 	if (conn->connected()) {
-		if (connectionNum_.fetch_add(1, std::memory_order_relaxed) >=
-				maxConnectionNum_) {
+		if (_connection_num.fetch_add(1, std::memory_order_relaxed) >= _max_connection_num) {
 			LOG_ERROR << "too much connections!force close!";
 			conn->forceClose();
 			return;
-		} else if (maxConnectionNumPerIP_ > 0) {
+		} else if (_max_connection_num_per_ip > 0) {
 			{
 				std::lock_guard<std::mutex> lock(mtx);
-				auto iter = connectionsNumMap_.find(conn->peerAddr().toIp());
-				if (iter == connectionsNumMap_.end()) {
-					connectionsNumMap_[conn->peerAddr().toIp()] = 1;
-				} else if (iter->second++ > maxConnectionNumPerIP_) {
-					conn->get_loop()->queueInLoop(
-							[conn]() { conn->forceClose(); });
+				auto iter = _connections_num_map.find(conn->peerAddr().toIp());
+
+				if (iter == _connections_num_map.end()) {
+					_connections_num_map[conn->peerAddr().toIp()] = 1;
+				} else if (iter->second++ > _max_connection_num_per_ip) {
+					conn->getLoop()->queueInLoop([conn]() { conn->forceClose(); });
+
 					return;
 				}
 			}
 		}
-		for (auto &advice : newConnectionAdvices_) {
+
+		for (auto &advice : _new_connection_advices) {
 			if (!advice(conn->peerAddr(), conn->localAddr())) {
 				conn->forceClose();
 				return;
 			}
 		}
+
 	} else {
+
 		if (!conn->hasContext()) {
 			// If the connection is connected to the SSL port and then
 			// disconnected before the SSL handshake.
 			return;
 		}
-		connectionNum_.fetch_sub(1, std::memory_order_relaxed);
-		if (maxConnectionNumPerIP_ > 0) {
+
+		_connection_num.fetch_sub(1, std::memory_order_relaxed);
+
+		if (_max_connection_num_per_ip > 0) {
 			std::lock_guard<std::mutex> lock(mtx);
-			auto iter = connectionsNumMap_.find(conn->peerAddr().toIp());
-			if (iter != connectionsNumMap_.end()) {
+
+			auto iter = _connections_num_map.find(conn->peerAddr().toIp());
+
+			if (iter != _connections_num_map.end()) {
 				--iter->second;
 				if (iter->second <= 0) {
-					connectionsNumMap_.erase(iter);
+					_connections_num_map.erase(iter);
 				}
 			}
 		}
 	}
-	*/
 }
 
 void DWebApplication::find_session_for_request(const HttpRequestImplPtr &req) {
