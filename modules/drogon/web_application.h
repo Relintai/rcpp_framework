@@ -13,11 +13,13 @@
 
 #include <trantor/utils/Logger.h>
 #include <trantor/net/InetAddress.h>
+#include <trantor/net/Resolver.h>
 
 #include "http/HttpRequestImpl.h"
 #include "http/HttpResponse.h"
 
 #include "./drogon/lib/src/impl_forwards.h"
+#include "./drogon/lib/src/ListenerManager.h"
 
 #include "http/SessionManager.h"
 
@@ -53,7 +55,7 @@ public:
 
 	void add_listener(const std::string &ip, uint16_t port, bool useSSL, const std::string &certFile, const std::string &keyFile, bool useOldTLS, const std::vector<std::pair<std::string, std::string> > &sslConfCmds);
 
-	void set_thread_num(size_t threadNum);
+	void set_thread_num(size_t thread_num);
 	size_t get_thread_num() const;
 
 	void set_ssl_config_commands(const std::vector<std::pair<std::string, std::string> > &sslConfCmds);
@@ -211,12 +213,15 @@ protected:
 	bool _use_brotli{ false };
 	bool _using_unicode_escaping{ true };
 
+	std::pair<unsigned int, std::string> _float_precision_in_json { 0, "significant" };
+
 	size_t _client_max_body_size{ 1024 * 1024 };
 	size_t _client_max_memory_body_size{ 64 * 1024 };
 	size_t _client_max_web_socket_message_size{ 128 * 1024 };
 	std::string _home_page_file{ "index.html" };
 
-	std::unique_ptr<SessionManager> _sessionManagerPtr;
+	const std::unique_ptr<ListenerManager> _listener_manager;
+	std::unique_ptr<SessionManager> _session_manager;
 
 	bool _enable_server_header{ true };
 	bool _enable_date_header{ true };
