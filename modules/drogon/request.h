@@ -17,7 +17,7 @@ class DRequest {
 public:
 	HttpResponsePtr response;
 	HttpRequestImplPtr request;
-	std::function<void(const HttpResponsePtr &)> *callback;
+	std::function<void(const HttpResponsePtr &)> callback;
 
 	DWebApplication *application;
 

@@ -88,19 +88,19 @@ void DWebApplication::default_404_error_handler(int error_code, DRequest *reques
 }
 
 void DWebApplication::handle_request(DRequest *request) {
-	//request->middleware_stack = &middlewares;
+	request->middleware_stack = &middlewares;
 
 	//note that middlewares handle the routing -> DWebApplication::default_routing_middleware by default
-	//request->next_stage();
+	request->next_stage();
 
 		//auto resp = HttpResponse::newHttpResponse();
     //resp->setBody("<p>Hello, world!</p>");
     //resp->setExpiredTime(0);
     //callback(resp);
 
-	request->response->setBody("<p>Hello, world!</p>");
-	request->response->setExpiredTime(0);
-	request->callback->operator()(request->response);
+	//request->response->setBody("<p>Hello, world!</p>");
+	//request->response->setExpiredTime(0);
+	//request->callback(request->response);
 
 	DRequestPool::return_request(request);
 }
@@ -658,7 +658,7 @@ void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::funct
 	request->application = this;
 	request->response = HttpResponse::newHttpResponse();
 	request->request = std::shared_ptr<drogon::HttpRequestImpl>(req);
-	request->callback = &callback;//std::move(callback);
+	request->callback = callback;//std::move(callback);
 
 	request->setup_url_stack();
 

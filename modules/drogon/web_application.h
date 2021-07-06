@@ -1,5 +1,5 @@
 #ifndef DWEB_APPLICATION_H
-#define WEB_APPLICATION_H
+#define DWEB_APPLICATION_H
 
 #include "core/object.h"
 #include <functional>

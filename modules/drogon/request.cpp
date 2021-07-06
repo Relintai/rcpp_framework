@@ -23,6 +23,10 @@ void DRequest::compile_body() {
 					 "</html>";
 
 	response->setBody(compiled_body);
+
+		//request->response->setBody("<p>Hello, world!</p>");
+	//request->response->setExpiredTime(0);
+	//request->callback(request->response);
 }
 
 void DRequest::compile_and_send_body() {
@@ -47,23 +51,9 @@ void DRequest::send() {
 	//	return;
 	//}
 
-/*
-	if (http_parser->isKeepAlive()) {
-		response->addHeadValue("Connection", "Keep-Alive");
+	//response->setExpiredTime(0);
+	callback(response);
 
-		std::string result = response->getResult();
-
-		session->send(result.c_str(), result.size());
-	} else {
-		response->addHeadValue("Connection", "Close");
-
-		std::string result = response->getResult();
-
-		HttpSession::Ptr lsession = session;
-
-		session->send(result.c_str(), result.size(), [lsession]() { lsession->postShutdown(); });
-	}
-*/
 	DRequestPool::return_request(this);
 }
 
