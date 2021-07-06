@@ -37,9 +37,9 @@ public:
 
 	void migrate();
 
-	void add_listener(const std::string &ip, uint16_t port, 
-						bool useSSL = false, const std::string &certFile = "", const std::string &keyFile = "", bool useOldTLS = false, 
-						const std::vector<std::pair<std::string, std::string> > &sslConfCmds = {});
+	void add_listener(const std::string &ip, uint16_t port,
+			bool useSSL = false, const std::string &certFile = "", const std::string &keyFile = "", bool useOldTLS = false,
+			const std::vector<std::pair<std::string, std::string> > &sslConfCmds = {});
 
 	void set_thread_num(size_t thread_num);
 	size_t get_thread_num() const;

@@ -12,8 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <trantor/utils/AsyncFileLogger.h>
 #include <trantor/net/TcpConnection.h>
+#include <trantor/utils/AsyncFileLogger.h>
 
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -536,16 +536,15 @@ void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::funct
 
 	//void HttpSimpleControllersRouter::route(const HttpRequestImplPtr &req,std::function<void(const HttpResponsePtr &)> &&callback)
 
-
 	//auto resp = HttpResponse::newHttpResponse();
-    //resp->setBody("<p>Hello, world!</p>");
-    //resp->setExpiredTime(0);
-    //callback(resp);
+	//resp->setBody("<p>Hello, world!</p>");
+	//resp->setExpiredTime(0);
+	//callback(resp);
 
 	DRequest *request = DRequest::get();
 	request->application = this;
 	request->request = std::shared_ptr<drogon::HttpRequestImpl>(req);
-	request->callback = callback;//std::move(callback);
+	request->callback = callback; //std::move(callback);
 
 	request->setup_url_stack();
 
