@@ -132,6 +132,8 @@ for x in sorted(glob.glob("database/*")):
 
 modfol = env_base["module_folders"].split(";")
 modfol.append("modules")
+#temporarily, these should be handled in a different pass
+modfol.append("backends")
 module_folders = list()
 
 for fol in modfol:
