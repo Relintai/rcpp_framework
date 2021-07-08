@@ -23,6 +23,9 @@ public:
 	QueryResult *query(const std::string &query);
 	void query_run(const std::string &query);
 
+	std::string escape(const std::string str);
+	void escape(const std::string str, std::string *to);
+
 	SQLite3Database();
 	~SQLite3Database();
 

@@ -5,8 +5,8 @@
 #include "core/database/database_manager.h"
 
 #include "mysql_query_builder.h"
-#include "mysql_table_builder.h"
 #include "mysql_query_result.h"
+#include "mysql_table_builder.h"
 
 void MysqlDatabase::connect(const std::string &connection_str) {
 	mysql = mysql_init(mysql);
@@ -56,7 +56,7 @@ void MysqlDatabase::query_run(const std::string &query) {
 		return;
 
 	//printf("%s\n", query.c_str());
-	
+
 	int error = mysql_real_query(mysql, query.c_str(), query.length());
 
 	if (error) {
@@ -69,7 +69,7 @@ void MysqlDatabase::query_run(const std::string &query) {
 	//printf("query OK\n");
 	//printf("----------------\n");
 
-/*
+	/*
 	printf("----------------\n");
 
 	MYSQL_RES *result = mysql_use_result(mysql);
@@ -93,6 +93,20 @@ QueryBuilder *MysqlDatabase::get_query_builder() {
 
 TableBuilder *MysqlDatabase::get_table_builder() {
 	return new MysqlTableBuilder();
+}
+
+std::string MysqlDatabase::escape(const std::string str) {
+	std::string res;
+	res.reserve(str.size() + 100);
+
+	mysql_real_escape_string(mysql, res.data(), str.c_str(), str.size());
+
+	return res;
+}
+void MysqlDatabase::escape(const std::string str, std::string *to) {
+	to->reserve(str.size() + 100);
+
+	mysql_real_escape_string(mysql, to->data(), str.c_str(), str.size());
 }
 
 MysqlDatabase::MysqlDatabase() :

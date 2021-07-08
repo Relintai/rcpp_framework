@@ -35,6 +35,9 @@ public:
 	virtual QueryBuilder *get_query_builder();
 	virtual TableBuilder *get_table_builder();
 
+	virtual std::string escape(const std::string str);
+	virtual void escape(const std::string str, std::string *to);
+
 	Database();
 	~Database();
 

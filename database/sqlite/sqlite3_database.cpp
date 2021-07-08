@@ -36,9 +36,36 @@ QueryResult *SQLite3Database::query(const std::string &query) {
 void SQLite3Database::query_run(const std::string &query) {
 	char *err_msg;
 
-    if (sqlite3_exec(conn, query.c_str(), NULL, NULL, &err_msg) != SQLITE_OK) {
+	if (sqlite3_exec(conn, query.c_str(), NULL, NULL, &err_msg) != SQLITE_OK) {
 		printf("SQLite3Database::query_run error: \nQuery: %s \n Error:\n %s\n", query.c_str(), err_msg);
 		sqlite3_free(err_msg);
+	}
+}
+
+std::string SQLite3Database::escape(const std::string str) {
+	char *ret;
+
+	ret = sqlite3_mprintf("%q", str.c_str());
+
+	if (ret) {
+		std::string res(ret);
+
+		sqlite3_free(ret);
+
+		return res;
+	}
+
+	return "";
+}
+void SQLite3Database::escape(const std::string str, std::string *to) {
+	char *ret;
+
+	ret = sqlite3_mprintf("%q", str.c_str());
+
+	if (ret) {
+		to->operator=(ret); 
+
+		sqlite3_free(ret);
 	}
 }
 

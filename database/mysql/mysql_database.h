@@ -22,6 +22,9 @@ public:
 	QueryBuilder *get_query_builder();
 	TableBuilder *get_table_builder();
 
+	std::string escape(const std::string str);
+	void escape(const std::string str, std::string *to);
+
 	static Database *_creation_func();
 	static void _register();
 	static void _unregister();

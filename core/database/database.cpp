@@ -21,6 +21,14 @@ TableBuilder *Database::get_table_builder() {
 	return new TableBuilder();
 }
 
+std::string Database::escape(const std::string str) {
+	return std::string();
+}
+
+void Database::escape(const std::string str, std::string *to) {
+
+}
+
 Database::Database() {
 }
 
