@@ -62,8 +62,13 @@ def configure(env):
     if not err:
         env.ParseConfig("pkg-config libcares --cflags --libs")
 
-    err = os.system("pkg-config openssl --modversion --silence-errors > /dev/null ")
+    err = os.system("pkg-config zlib --modversion --silence-errors > /dev/null ")
 
+    if not err:
+        env.ParseConfig("pkg-config zlib --cflags --libs")
+
+    err = os.system("pkg-config openssl --modversion --silence-errors > /dev/null ")
+    
     if not err:
         env.ParseConfig("pkg-config openssl --cflags --libs")
         env.Append(CPPDEFINES=["OPENSSL_FOUND"])
@@ -75,4 +80,6 @@ def configure(env):
     env.Prepend(CPPPATH=["#modules/drogon/trantor/net"])
     env.Prepend(CPPPATH=["#modules/drogon/trantor/net/inner"])
     env.Prepend(CPPPATH=["#modules/drogon/trantor/utils"])
+
+    env.Append(LINKFLAGS=["-ldl"])
     

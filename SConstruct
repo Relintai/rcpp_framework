@@ -80,6 +80,7 @@ opts.Add(EnumVariable("target", "Compilation target", "debug", ("debug", "releas
 opts.Add("folders", "App folders to compile", "")
 opts.Add("main_file", "The main file", "")
 opts.Add("module_folders", "App module folders to compile", "")
+opts.Add("databases", "Whether to have database support", False)
 
 # Compilation environment setup
 opts.Add("CXX", "C++ compiler")
@@ -110,24 +111,26 @@ scons_ver = env_base._get_major_minor_revision(scons_raw_version)
 if scons_ver >= (4, 0, 0):
     env_base.Tool("compilation_db")
 
-
 database_list = []
 
-for x in sorted(glob.glob("database/*")):
-    if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
-        continue
-    tmppath = "./" + x
+if env_base["databases"]:
+    env_base.Append(CPPDEFINES=["DATABASES_ENABLED"])
 
-    sys.path.insert(0, tmppath)
-    import detect
+    for x in sorted(glob.glob("database/*")):
+        if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
+            continue
+        tmppath = "./" + x
 
-    if detect.is_active() and detect.can_build():
-        x = x.replace("database/", "")  # rest of world
-        x = x.replace("database\\", "")  # win32
-        database_list += [x]
+        sys.path.insert(0, tmppath)
+        import detect
 
-    sys.path.remove(tmppath)
-    sys.modules.pop("detect")
+        if detect.is_active() and detect.can_build():
+            x = x.replace("database/", "")  # rest of world
+            x = x.replace("database\\", "")  # win32
+            database_list += [x]
+
+        sys.path.remove(tmppath)
+        sys.modules.pop("detect")
 
 
 modfol = env_base["module_folders"].split(";")
@@ -177,27 +180,28 @@ Export("env")
 
 SConscript("core/SCsub")
 
-for d in database_list:
-    tmppath = "./database/" + d
-    sys.path.insert(0, tmppath)
+if env_base["databases"]:
+    for d in database_list:
+        tmppath = "./database/" + d
+        sys.path.insert(0, tmppath)
 
-    import detect
+        import detect
 
-    env_db = env_base.Clone()
+        env_db = env_base.Clone()
 
-    if scons_ver >= (4, 0, 0):
-        env_db.Tool("compilation_db")
-        env_db.Alias("compiledb", env_base.CompilationDatabase())
+        if scons_ver >= (4, 0, 0):
+            env_db.Tool("compilation_db")
+            env_db.Alias("compiledb", env_base.CompilationDatabase())
 
-    detect.configure(env_db)
-    detect.configure(env)
+        detect.configure(env_db)
+        detect.configure(env)
 
-    Export("env_db")
+        Export("env_db")
 
-    SConscript("database/" + d + "/SCsub")
+        SConscript("database/" + d + "/SCsub")
 
-    sys.path.remove(tmppath)
-    sys.modules.pop("detect")
+        sys.path.remove(tmppath)
+        sys.modules.pop("detect")
 
 for m in module_list:
     tmppath = m[1]
