@@ -4,9 +4,9 @@
 #include "core/object.h"
 
 #include <map>
+#include <mutex>
 #include <string>
 #include <vector>
-#include <mutex>
 
 class User;
 
@@ -14,25 +14,21 @@ class UserManager : public Object {
 public:
 	void add_user(User *user);
 	void remove_user(User *user);
-	void logout_user(User *user);
+	User *get_user(const std::string &user_name);
 
-	User *get_user_for_session(const std::string &session_id);
-	User *get_user_with_id(const int user_id);
-
-	void logout_all();
 	void clear();
 
-	static UserManager* get_singleton();
+	static UserManager *get_singleton();
 
 	UserManager();
 	~UserManager();
 
-	std::map<std::string, User *> _sessions;
-	std::vector<User *> _users;
+	std::map<std::string, User *> _users;
+	std::vector<User *> _users_vec;
 	std::mutex _mutex;
 
 protected:
-	static UserManager* _self;
+	static UserManager *_self;
 };
 
 #endif
