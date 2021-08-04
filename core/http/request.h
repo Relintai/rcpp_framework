@@ -3,6 +3,9 @@
 
 #include <mutex>
 #include <vector>
+#include <map>
+
+#include "core/object.h"
 
 #include "handler_instance.h"
 
@@ -29,6 +32,8 @@ public:
 	bool file_next;
 
 	bool connection_closed;
+
+	std::map<std::string, Object*> data;
 
 	virtual const std::string &get_cookie(const std::string &key);
 	virtual void add_cookie(const ::Cookie &cookie);

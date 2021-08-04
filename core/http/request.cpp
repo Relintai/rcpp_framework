@@ -87,6 +87,8 @@ void Request::reset() {
 	body.clear();
 	footer.clear();
 	compiled_body.clear();
+
+	data.clear();
 }
 
 std::string Request::parser_get_path() {
