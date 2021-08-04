@@ -22,6 +22,9 @@ void WebApplication::setup_routes() {
 }
 
 void WebApplication::setup_middleware() {
+	//If you want sessions add this to your inherited class. Should probably be the first one.
+	//middlewares.push_back(HandlerInstance(::SessionManager::session_setup_middleware));
+
 	middlewares.push_back(HandlerInstance([this](Object *instance, Request *request){ this->default_routing_middleware(instance, request); }));
 }
 

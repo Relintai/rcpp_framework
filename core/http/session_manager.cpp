@@ -8,6 +8,8 @@
 
 #include "request.h"
 
+#include "cookie.h"
+
 void SessionManager::add_session(HTTPSession *session) {
 	if (!session) {
 		printf("SessionManager::add_session: ERROR, session is null!\n");
@@ -72,8 +74,6 @@ HTTPSession *SessionManager::create_session() {
 			_sessions_vec.push_back(session);
 			_sessions[session->session_id] = session;
 
-			add_session(session);
-
 			lock.unlock();
 
 			return session;
@@ -114,13 +114,23 @@ std::string SessionManager::generate_session_id(const std::string &base) {
 }
 
 void SessionManager::session_setup_middleware(Object *instance, Request *request) {
-	const std::string &sid = request->get_cookie("session");
+	const std::string &sid = request->get_cookie("session_id");
 
 	if (sid == "") {
+		//You could create a session here if you want to always have sessions
+		//Example code:
+		//HTTPSession *session = SessionManager::get_singleton()->create_session();
+		//request->session = session;
+		//request->add_cookie(::Cookie("session_id", session->session_id));
+
+		request->next_stage();
+		
 		return;
 	}
 
 	request->session = SessionManager::get_singleton()->get_session(sid);
+
+	request->next_stage();
 }
 
 SessionManager *SessionManager::get_singleton() {
