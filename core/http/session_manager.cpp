@@ -6,6 +6,8 @@
 
 #include "core/hash/sha256.h"
 
+#include "request.h"
+
 void SessionManager::add_session(HTTPSession *session) {
 	if (!session) {
 		printf("SessionManager::add_session: ERROR, session is null!\n");
@@ -94,7 +96,7 @@ void SessionManager::clear() {
 	_sessions_vec.clear();
 }
 
-std::string generate_session_id(const std::string &base) {
+std::string SessionManager::generate_session_id(const std::string &base) {
 	//todo make something simpler / better
 
 	SHA256 *h = SHA256::get();
@@ -109,6 +111,16 @@ std::string generate_session_id(const std::string &base) {
 	delete h;
 
 	return sid;
+}
+
+void SessionManager::session_setup_middleware(Object *instance, Request *request) {
+	const std::string &sid = request->get_cookie("session");
+
+	if (sid == "") {
+		return;
+	}
+
+	request->session = SessionManager::get_singleton()->get_session(sid);
 }
 
 SessionManager *SessionManager::get_singleton() {

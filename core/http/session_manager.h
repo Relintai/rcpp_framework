@@ -9,6 +9,7 @@
 #include <vector>
 
 class HTTPSession;
+class Request;
 
 class SessionManager : public Object {
 public:
@@ -21,6 +22,8 @@ public:
 	void clear();
 
 	virtual std::string generate_session_id(const std::string &base = "");
+
+	static void session_setup_middleware(Object *instance, Request *request);
 
 	static SessionManager *get_singleton();
 
