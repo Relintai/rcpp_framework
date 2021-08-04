@@ -7,6 +7,7 @@
 #include "handler_instance.h"
 
 class WebApplication;
+class Cookie;
 
 class Request {
 public:
@@ -28,6 +29,10 @@ public:
 	bool file_next;
 
 	bool connection_closed;
+
+	virtual const std::string &get_cookie(const std::string &key);
+	virtual void add_cookie(const ::Cookie &cookie);
+	virtual void remove_cookie(const std::string &key);
 
 	virtual void compile_body();
 	virtual void compile_and_send_body();
@@ -61,7 +66,7 @@ protected:
 	uint32_t _path_stack_pointer;
 };
 
-template<class T>
+template <class T>
 class RequestPool {
 public:
 	T *get_request();
@@ -75,7 +80,7 @@ protected:
 	std::vector<T *> _requests;
 };
 
-template<class T>
+template <class T>
 T *RequestPool<T>::get_request() {
 	_mutex.lock();
 
@@ -99,18 +104,18 @@ T *RequestPool<T>::get_request() {
 	return request;
 }
 
-template<class T>
+template <class T>
 void RequestPool<T>::return_request(T *request) {
 	_mutex.lock();
 	_requests.push_back(request);
 	_mutex.unlock();
 }
 
-template<class T>
+template <class T>
 RequestPool<T>::RequestPool() {
 }
 
-template<class T>
+template <class T>
 RequestPool<T>::~RequestPool() {
 	for (uint32_t i = 0; i < _requests.size(); ++i) {
 		delete _requests[i];
@@ -118,7 +123,5 @@ RequestPool<T>::~RequestPool() {
 
 	_requests.clear();
 }
-
-
 
 #endif

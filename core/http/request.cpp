@@ -1,6 +1,16 @@
 #include "request.h"
 
+#include "core/http/cookie.h"
 #include "web_application.h"
+
+const std::string &Request::get_cookie(const std::string &key) {
+}
+
+void Request::add_cookie(const ::Cookie &cookie) {
+}
+
+void Request::remove_cookie(const std::string &key) {
+}
 
 void Request::compile_body() {
 	compiled_body.reserve(body.size() + head.size() + 13 + 14 + 15);

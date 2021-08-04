@@ -2,13 +2,27 @@
 
 #include "web_application.h"
 
+#include "core/http/cookie.h"
+
+const std::string &DRequest::get_cookie(const std::string &key) {
+	return request->getCookie(key);
+}
+void DRequest::add_cookie(const ::Cookie &cookie) {
+	_added_cookies.push_back(cookie);
+}
+void DRequest::remove_cookie(const std::string &key) {
+	_removed_cookies.push_back(key);
+}
+
 void DRequest::send() {
 	//if (connection_closed) {
 	//	DRequestPool::return_request(this);
 	//	return;
 	//}
 
-	HttpResponsePtr response = HttpResponse::newHttpResponse();
+	drogon::HttpResponsePtr response = drogon::HttpResponse::newHttpResponse();
+
+	_response_additional_setup(response);
 
 	response->setBody(compiled_body);
 
@@ -19,7 +33,9 @@ void DRequest::send() {
 }
 
 void DRequest::send_file(const std::string &p_file_path) {
-	HttpResponsePtr response = HttpResponse::newFileResponse(p_file_path, "", drogon::getContentType(p_file_path));
+	drogon::HttpResponsePtr response = drogon::HttpResponse::newFileResponse(p_file_path, "", drogon::getContentType(p_file_path));
+
+	_response_additional_setup(response);
 
 	callback(response);
 
@@ -120,6 +136,27 @@ void DRequest::_progress_send_file() {
 
 void DRequest::_file_chunk_sent() {
 	file_next = true;
+}
+
+void DRequest::_response_additional_setup(const drogon::HttpResponsePtr &req) {
+	for (int i = 0; i < _added_cookies.size(); ++i) {
+		::Cookie &co = _added_cookies[i];
+		drogon::Cookie c;
+		c.setDomain(co.domain);
+		//todo
+		//c.setExpiresDate
+		c.setHttpOnly(co.http_only);
+		c.setKey(co.key);
+		c.setPath(co.path);
+		c.setSecure(co.secure);
+		c.setValue(co.value);
+
+		req->addCookie(c);
+	}
+
+	for (int i = 0; i < _removed_cookies.size(); ++i) {
+		req->removeCookie(_removed_cookies[i]);
+	}
 }
 
 RequestPool<DRequest> DRequest::_request_pool;

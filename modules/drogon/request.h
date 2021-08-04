@@ -11,14 +11,18 @@
 
 #include "core/http/handler_instance.h"
 
-using namespace drogon;
+//using namespace drogon;
 
 class DWebApplication;
 
 class DRequest : public Request {
 public:
-	HttpRequestImplPtr request;
-	std::function<void(const HttpResponsePtr &)> callback;
+	drogon::HttpRequestImplPtr request;
+	std::function<void(const drogon::HttpResponsePtr &)> callback;
+
+	const std::string &get_cookie(const std::string &key);
+	void add_cookie(const ::Cookie &cookie);
+	void remove_cookie(const std::string &key);
 
 	void send();
 	void send_file(const std::string &p_file_path);
@@ -37,9 +41,13 @@ public:
 protected:
 	void _progress_send_file();
 	void _file_chunk_sent();
+	void _response_additional_setup(const drogon::HttpResponsePtr &req);
 
 	std::vector<std::string> _path_stack;
 	uint32_t _path_stack_pointer;
+
+	std::vector<::Cookie> _added_cookies;
+	std::vector<std::string> _removed_cookies;
 
 private:
 	static RequestPool<DRequest> _request_pool;
