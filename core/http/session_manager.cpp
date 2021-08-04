@@ -129,6 +129,10 @@ SessionManager::SessionManager() :
 
 SessionManager::~SessionManager() {
 	clear();
+
+	if (_self == this) {
+		_self = nullptr;
+	}
 }
 
 SessionManager *SessionManager::_self = nullptr;
