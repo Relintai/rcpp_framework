@@ -117,14 +117,14 @@ void SessionManager::session_setup_middleware(Object *instance, Request *request
 	const std::string &sid = request->get_cookie("session_id");
 
 	if (sid == "") {
-		//You could create a session here if you want to always have sessions
+		//You could create a session here if you want to always assign sessions to visitors.
 		//Example code:
 		//HTTPSession *session = SessionManager::get_singleton()->create_session();
 		//request->session = session;
 		//request->add_cookie(::Cookie("session_id", session->session_id));
 
 		request->next_stage();
-		
+
 		return;
 	}
 
