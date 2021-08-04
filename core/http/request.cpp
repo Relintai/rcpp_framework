@@ -3,6 +3,8 @@
 #include "core/http/cookie.h"
 #include "web_application.h"
 
+#include "http_session.h"
+
 const std::string &Request::get_cookie(const std::string &key) {
 }
 
@@ -73,6 +75,7 @@ void Request::send_error(int error_code) {
 }
 
 void Request::reset() {
+	session = nullptr;
 	application = nullptr;
 	current_middleware_index = 0;
 	middleware_stack = nullptr;

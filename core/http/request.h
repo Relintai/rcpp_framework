@@ -11,6 +11,7 @@
 
 class WebApplication;
 class Cookie;
+class HTTPSession;
 
 class Request {
 public:
@@ -33,6 +34,7 @@ public:
 
 	bool connection_closed;
 
+	HTTPSession *session;
 	std::map<std::string, Object*> data;
 
 	virtual const std::string &get_cookie(const std::string &key);
