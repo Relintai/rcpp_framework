@@ -8,7 +8,7 @@
 #include <vector>
 #include <mutex>
 
-#include "user.h"
+class User;
 
 class UserManager : public Object {
 public:

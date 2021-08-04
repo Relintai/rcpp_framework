@@ -1,5 +1,7 @@
 #include "user_manager.h"
 
+#include "user.h"
+
 void UserManager::add_user(User *user) {
 	if (!user) {
 		printf("UserManager::add_user: ERROR, user is null!\n");
