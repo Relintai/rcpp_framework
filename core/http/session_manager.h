@@ -1,5 +1,5 @@
-#ifndef USER_MANAGER_H
-#define USER_MANAGER_H
+#ifndef SESSION_MANAGER_H
+#define SESSION_MANAGER_H
 
 #include "core/object.h"
 
