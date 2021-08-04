@@ -16,21 +16,6 @@ void UserManager::add_user(User *user) {
 
 	_users_vec.push_back(user);
 	_users[user->name] = user;
-
-	SessionManager *sm = SessionManager::get_singleton();
-
-	if (!sm) {
-		printf("ERROR: UserManager::add_user SessionManager singleton is null, please allocate one!\n");
-		return;
-	}
-
-	for (int i = 0; i < user->sessions.size(); ++i) {
-		HTTPSession *session = new HTTPSession();
-		session->session_id = user->sessions[i];
-		session->add_object("user", user);
-
-		sm->add_session(session);
-	}
 }
 
 void UserManager::remove_user(User *user) {
@@ -50,17 +35,6 @@ void UserManager::remove_user(User *user) {
 			break;
 		}
 	}
-
-	SessionManager *sm = SessionManager::get_singleton();
-
-	if (!sm) {
-		printf("ERROR: UserManager::remove_user SessionManager singleton is null, please allocate one!\n");
-		return;
-	}
-
-	for (int i = 0; i < user->sessions.size(); ++i) {
-		sm->delete_session(user->sessions[i]);
-	}
 }
 
 void UserManager::clear() {
@@ -69,15 +43,7 @@ void UserManager::clear() {
 	std::lock_guard<std::mutex> lock(_mutex);
 
 	for (int i = 0; i < _users_vec.size(); ++i) {
-		User *user = _users_vec[i];
-
-		if (sm) {
-			for (int i = 0; i < user->sessions.size(); ++i) {
-				sm->delete_session(user->sessions[i]);
-			}
-		}
-
-		delete user;
+		delete _users_vec[i];
 	}
 
 	_users.clear();

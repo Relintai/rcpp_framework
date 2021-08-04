@@ -26,6 +26,9 @@ public:
 	virtual void changed();
 	virtual void update();
 
+	void register_sessions();
+	void unregister_sessions();
+
 	User();
 	~User();
 };

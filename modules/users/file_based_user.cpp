@@ -69,6 +69,8 @@ void FileBasedUser::load(const std::string &p_name) {
 }
 
 void FileBasedUser::load() {
+	unregister_sessions();
+
 	FILE *f = fopen(_file_path.c_str(), "r");
 
 	if (!f) {
@@ -108,6 +110,8 @@ void FileBasedUser::load() {
 	for (rapidjson::Value::ConstValueIterator itr = sess.Begin(); itr != sess.End(); ++itr) {
 		sessions.push_back(itr->GetString());
 	}
+
+	register_sessions();
 }
 
 FileBasedUser::FileBasedUser() :
