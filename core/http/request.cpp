@@ -14,6 +14,10 @@ void Request::add_cookie(const ::Cookie &cookie) {
 void Request::remove_cookie(const std::string &key) {
 }
 
+HTTPMethod Request::get_method() const {
+	return HTTP_METHOD_GET;
+}
+
 void Request::compile_body() {
 	compiled_body.reserve(body.size() + head.size() + 13 + 14 + 15);
 

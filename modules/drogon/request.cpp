@@ -14,6 +14,12 @@ void DRequest::remove_cookie(const std::string &key) {
 	_removed_cookies.push_back(key);
 }
 
+HTTPMethod DRequest::get_method() const {
+	//the enums are in the same order
+
+	return static_cast<HTTPMethod>(static_cast<int>(request->getMethod()));
+}
+
 void DRequest::send() {
 	//if (connection_closed) {
 	//	DRequestPool::return_request(this);

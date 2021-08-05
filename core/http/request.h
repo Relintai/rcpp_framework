@@ -9,6 +9,8 @@
 
 #include "handler_instance.h"
 
+#include "http_enums.h"
+
 class WebApplication;
 class Cookie;
 class HTTPSession;
@@ -40,6 +42,8 @@ public:
 	virtual const std::string &get_cookie(const std::string &key);
 	virtual void add_cookie(const ::Cookie &cookie);
 	virtual void remove_cookie(const std::string &key);
+
+	virtual HTTPMethod get_method() const;
 
 	virtual void compile_body();
 	virtual void compile_and_send_body();

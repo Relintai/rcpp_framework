@@ -24,6 +24,8 @@ public:
 	void add_cookie(const ::Cookie &cookie);
 	void remove_cookie(const std::string &key);
 
+	HTTPMethod get_method() const;
+
 	void send();
 	void send_file(const std::string &p_file_path);
 	void reset();
