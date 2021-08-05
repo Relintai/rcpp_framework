@@ -3,6 +3,7 @@
 #include "core/http/http_session.h"
 #include "core/http/request.h"
 #include "core/http/session_manager.h"
+#include "core/html/html_builder.h"
 
 void User::save() {
 }
@@ -95,7 +96,42 @@ void User::handle_request_default(Request *request) {
 }
 
 void User::handle_login_request_default(Request *request) {
-	request->body += "handle_login_request_default";
+	std::string error_str = "";
+
+	std::string uname_val = "";
+	std::string pass_val = "";
+
+	if (request->get_method() == HTTP_METHOD_POST) {
+		request->body += "handle_login_request_default POST<br>";
+
+		
+
+	}
+
+	HTMLBuilder b;
+
+	b.div()->cls("login");
+
+	//todo href path helper
+	b.form()->method("POST")->href("/user/login");
+	b.w("Username");
+	b.br();
+	b.input()->type("text")->name("username")->value(uname_val);
+	b.cinput();
+	b.br();
+	b.w("Password");
+	b.br();
+	b.input()->type("password")->name("password");
+	b.cinput();
+	b.br();
+	b.input()->type("submit")->value("Send");
+	b.cinput();
+	b.cform();
+
+	b.cdiv();
+	
+
+	request->body += b.result;
 
 	request->compile_and_send_body();
 }
