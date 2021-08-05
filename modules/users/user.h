@@ -30,6 +30,10 @@ public:
 	virtual void changed();
 	virtual void update();
 
+	virtual bool check_password(const std::string &p_password);
+	virtual void create_password(const std::string &p_password);
+	virtual std::string hash_password(const std::string &p_password);
+
 	static void handle_request_default(Request *request);
 
 	static void handle_login_request_default(Request *request);
