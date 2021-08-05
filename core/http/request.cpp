@@ -5,6 +5,18 @@
 
 #include "http_session.h"
 
+#include "session_manager.h"
+
+HTTPSession *Request::get_or_create_session() {
+	if (session) {
+		return session;
+	}
+
+	session = SessionManager::get_singleton()->create_session();
+
+	return session;
+}
+
 const std::string &Request::get_cookie(const std::string &key) {
 }
 

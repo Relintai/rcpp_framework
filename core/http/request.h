@@ -39,6 +39,8 @@ public:
 	HTTPSession *session;
 	std::map<std::string, Object *> data;
 
+	HTTPSession *get_or_create_session();
+
 	virtual const std::string &get_cookie(const std::string &key);
 	virtual void add_cookie(const ::Cookie &cookie);
 	virtual void remove_cookie(const std::string &key);
