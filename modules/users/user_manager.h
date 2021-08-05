@@ -15,6 +15,7 @@ public:
 	void add_user(User *user);
 	void remove_user(User *user);
 	User *get_user(const std::string &user_name);
+	virtual User *create_user();
 
 	void clear();
 

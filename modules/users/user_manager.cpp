@@ -41,6 +41,12 @@ User *UserManager::get_user(const std::string &user_name) {
 	return _users[user_name];
 }
 
+User *UserManager::create_user() {
+	User *u = new User();
+
+	return u;
+}
+
 void UserManager::clear() {
 	SessionManager *sm = SessionManager::get_singleton();
 
