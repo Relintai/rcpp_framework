@@ -37,6 +37,10 @@ void UserManager::remove_user(User *user) {
 	}
 }
 
+User *UserManager::get_user(const std::string &user_name) {
+	return _users[user_name];
+}
+
 void UserManager::clear() {
 	SessionManager *sm = SessionManager::get_singleton();
 
