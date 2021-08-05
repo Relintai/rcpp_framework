@@ -1,9 +1,11 @@
 #include "user.h"
 
+#include "core/html/html_builder.h"
 #include "core/http/http_session.h"
 #include "core/http/request.h"
 #include "core/http/session_manager.h"
-#include "core/html/html_builder.h"
+#include "core/utils.h"
+#include "user_manager.h"
 
 void User::save() {
 }
@@ -102,13 +104,27 @@ void User::handle_login_request_default(Request *request) {
 	std::string pass_val = "";
 
 	if (request->get_method() == HTTP_METHOD_POST) {
-		request->body += "handle_login_request_default POST<br>";
+		uname_val = request->get_parameter("username");
+		pass_val = request->get_parameter("password");
 
-		
+		User *user = UserManager::get_singleton()->get_user(uname_val);
 
+		if (user) {
+			//todo
+		} else {
+			error_str = "Invalid username or password!";
+		}
 	}
 
 	HTMLBuilder b;
+
+	if (error_str.size() != 0) {
+		b.div()->cls("error");
+
+		b.w(error_str);
+
+		b.cdiv();
+	}
 
 	b.div()->cls("login");
 
@@ -129,7 +145,6 @@ void User::handle_login_request_default(Request *request) {
 	b.cform();
 
 	b.cdiv();
-	
 
 	request->body += b.result;
 
@@ -144,7 +159,7 @@ void User::handle_register_request_default(Request *request) {
 
 void User::handle_request(Request *request) {
 	const std::string &segment = request->get_current_path_segment();
-	
+
 	if (segment == "") {
 		handle_main_page_request(request);
 	} else if (segment == "settings") {
