@@ -20,6 +20,10 @@ HTTPMethod DRequest::get_method() const {
 	return static_cast<HTTPMethod>(static_cast<int>(request->getMethod()));
 }
 
+const std::string &DRequest::get_parameter(const std::string &key) const {
+	return request->getParameter(key);
+}
+
 void DRequest::send() {
 	//if (connection_closed) {
 	//	DRequestPool::return_request(this);

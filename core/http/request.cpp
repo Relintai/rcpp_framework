@@ -18,6 +18,10 @@ HTTPMethod Request::get_method() const {
 	return HTTP_METHOD_GET;
 }
 
+const std::string &Request::get_parameter(const std::string &key) const {
+	return "";
+}
+
 void Request::compile_body() {
 	compiled_body.reserve(body.size() + head.size() + 13 + 14 + 15);
 

@@ -1,9 +1,9 @@
 #ifndef REQUEST_H
 #define REQUEST_H
 
+#include <map>
 #include <mutex>
 #include <vector>
-#include <map>
 
 #include "core/object.h"
 
@@ -37,13 +37,15 @@ public:
 	bool connection_closed;
 
 	HTTPSession *session;
-	std::map<std::string, Object*> data;
+	std::map<std::string, Object *> data;
 
 	virtual const std::string &get_cookie(const std::string &key);
 	virtual void add_cookie(const ::Cookie &cookie);
 	virtual void remove_cookie(const std::string &key);
 
 	virtual HTTPMethod get_method() const;
+
+	virtual const std::string &get_parameter(const std::string &key) const;
 
 	virtual void compile_body();
 	virtual void compile_and_send_body();

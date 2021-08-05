@@ -26,6 +26,8 @@ public:
 
 	HTTPMethod get_method() const;
 
+	const std::string &get_parameter(const std::string &key) const;
+
 	void send();
 	void send_file(const std::string &p_file_path);
 	void reset();
