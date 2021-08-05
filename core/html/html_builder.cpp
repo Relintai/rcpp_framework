@@ -33,6 +33,11 @@ HTMLTag *HTMLTag::name(const std::string &val) {
 
 	return this;
 }
+HTMLTag *HTMLTag::value(const std::string &val) {
+	attrib("value", val);
+
+	return this;
+}
 
 HTMLTag *HTMLTag::method(const std::string &val) {
 	attrib("method", val);
