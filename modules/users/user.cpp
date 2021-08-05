@@ -143,6 +143,7 @@ void User::handle_login_request_default(Request *request) {
 
 				session->add_object("user", user);
 				user->sessions.push_back(session->session_id);
+				user->save();
 
 				request->add_cookie(::Cookie("session_id", session->session_id));
 
