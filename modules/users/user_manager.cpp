@@ -47,6 +47,9 @@ User *UserManager::create_user() {
 	return u;
 }
 
+void UserManager::load_all() {
+}
+
 void UserManager::clear() {
 	SessionManager *sm = SessionManager::get_singleton();
 

@@ -16,6 +16,7 @@ public:
 	void remove_user(User *user);
 	User *get_user(const std::string &user_name);
 	virtual User *create_user();
+	virtual void load_all();
 
 	void clear();
 

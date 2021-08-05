@@ -12,6 +12,8 @@ public:
 	void load(const std::string &p_name);
 	void load();
 
+	static void load_all();
+
 	FileBasedUser();
 	~FileBasedUser();
 

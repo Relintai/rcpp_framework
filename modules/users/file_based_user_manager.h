@@ -11,6 +11,9 @@ class FileBasedUserManager : public UserManager {
 
 public:
 	virtual User *create_user();
+	void load_all();
+
+	void set_path(const std::string &path);
 
 	FileBasedUserManager();
 	~FileBasedUserManager();

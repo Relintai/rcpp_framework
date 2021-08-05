@@ -6,6 +6,7 @@
 #include <rapidjson/writer.h>
 #include <tinydir/tinydir.h>
 #include <cstdio>
+#include "user_manager.h"
 
 std::string FileBasedUser::get_path() {
 	return _path;
@@ -112,6 +113,10 @@ void FileBasedUser::load() {
 	}
 
 	register_sessions();
+}
+
+void FileBasedUser::load_all() {
+	
 }
 
 FileBasedUser::FileBasedUser() :

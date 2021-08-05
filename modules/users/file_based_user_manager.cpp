@@ -8,6 +8,14 @@ User *FileBasedUserManager::create_user() {
 	return u;
 }
 
+void FileBasedUserManager::load_all() {
+	FileBasedUser::load_all();
+}
+
+void FileBasedUserManager::set_path(const std::string &path) {
+	FileBasedUser::set_path(path);
+}
+
 FileBasedUserManager::FileBasedUserManager() :
 		UserManager() {
 }
