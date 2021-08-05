@@ -18,6 +18,8 @@ void FileBasedUserManager::set_path(const std::string &path) {
 
 FileBasedUserManager::FileBasedUserManager() :
 		UserManager() {
+
+	printf("Using FileBasedUserManager. Note: Please DON'T USE THIS IN PRODUCTION IT'S NOT SAFE FOR THAT!\n");
 }
 
 FileBasedUserManager::~FileBasedUserManager() {
