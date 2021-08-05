@@ -3,10 +3,10 @@
 #include "rapidjson/document.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/rapidjson.h"
+#include "user_manager.h"
 #include <rapidjson/writer.h>
 #include <tinydir/tinydir.h>
 #include <cstdio>
-#include "user_manager.h"
 
 std::string FileBasedUser::get_path() {
 	return _path;
@@ -23,13 +23,13 @@ void FileBasedUser::set_path(const std::string &path) {
 }
 
 void FileBasedUser::save() {
+	//todo sanitize name!
 	_file_path = _path + name;
 
 	rapidjson::Document document;
 	document.SetObject();
 
 	document.AddMember("id", id, document.GetAllocator());
-
 
 	document.AddMember("name", rapidjson::Value(name.c_str(), document.GetAllocator()), document.GetAllocator());
 	document.AddMember("email", rapidjson::Value(email.c_str(), document.GetAllocator()), document.GetAllocator());
@@ -62,9 +62,8 @@ void FileBasedUser::save() {
 }
 
 void FileBasedUser::load(const std::string &p_name) {
-	name = p_name;
-
-	_file_path = _path + name;
+	//todo sanitize name!
+	_file_path = _path + p_name;
 
 	load();
 }
@@ -116,7 +115,32 @@ void FileBasedUser::load() {
 }
 
 void FileBasedUser::load_all() {
-	
+	tinydir_dir dir;
+	if (tinydir_open(&dir, _path.c_str()) == -1) {
+		return;
+	}
+
+	while (dir.has_next) {
+		tinydir_file file;
+		if (tinydir_readfile(&dir, &file) == -1) {
+			tinydir_next(&dir);
+			continue;
+		}
+
+		if (!file.is_dir) {
+			std::string np = file.path;
+			np = np.substr(_path.size(), np.size() - _path.size());
+
+			FileBasedUser *u = new FileBasedUser();
+			u->load(np);
+
+			UserManager::get_singleton()->add_user(u);
+		}
+
+		tinydir_next(&dir);
+	}
+
+	tinydir_close(&dir);
 }
 
 FileBasedUser::FileBasedUser() :
