@@ -1,5 +1,7 @@
 #include "table_builder.h"
 
+#include "query_result.h"
+
 TableBuilder *TableBuilder::create_table(const std::string &name) {
 	return this;
 }
@@ -40,11 +42,42 @@ TableBuilder *TableBuilder::next_row() {
 	return this;
 }
 
-TableBuilder *TableBuilder::drop_table(const std::string &name) {
-
+TableBuilder *TableBuilder::ccreate_table() {
+	return this;
 }
 
-void TableBuilder::finalize() {
+TableBuilder *TableBuilder::drop_table() {
+	return this;
+}
+TableBuilder *TableBuilder::drop_table_if_exists() {
+	return this;
+}
+TableBuilder *TableBuilder::drop_table(const std::string &name) {
+	return this;
+}
+TableBuilder *TableBuilder::drop_table_if_exists(const std::string &name) {
+	return this;
+}
+TableBuilder *TableBuilder::cdrop_table() {
+	return this;
+}
+
+TableBuilder *TableBuilder::foreign_key(const std::string &name) {
+	return this;
+}
+TableBuilder *TableBuilder::references(const std::string &table, const std::string &name) {
+	return this;
+}
+
+QueryResult *TableBuilder::run() {
+	return nullptr;
+}
+
+void TableBuilder::run_query() {
+}
+
+void TableBuilder::print() {
+	printf("%s\n", result.c_str());
 }
 
 TableBuilder::TableBuilder() {

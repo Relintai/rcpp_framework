@@ -51,7 +51,7 @@ void MessagePage::migrate() {
 
 	t->result.clear();
 
-	t->create_table("message_page")->integer("id")->auto_increment()->primary_key()->next_row()->varchar("text", 30)->finalize();
+	t->create_table("message_page")->integer("id")->auto_increment()->primary_key()->next_row()->varchar("text", 30)->ccreate_table();
 
 	printf("%s\n", t->result.c_str());
 

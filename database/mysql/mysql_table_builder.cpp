@@ -60,10 +60,6 @@ TableBuilder *MysqlTableBuilder::next_row() {
 	return this;
 }
 
-void MysqlTableBuilder::finalize() {
-	result += ");";
-}
-
 TableBuilder *MysqlTableBuilder::drop_table(const std::string &name) {
 	result += "DROP TABLE " + name + ";";
 

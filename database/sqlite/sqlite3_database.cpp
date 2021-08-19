@@ -2,8 +2,8 @@
 
 #include "core/database/database_manager.h"
 
-#include "sqlite3_query_result.h"
 #include "sqlite3_query_builder.h"
+#include "sqlite3_query_result.h"
 #include "sqlite3_table_builder.h"
 
 Database *SQLite3Database::_creation_func() {
@@ -26,7 +26,10 @@ QueryBuilder *SQLite3Database::get_query_builder() {
 }
 
 TableBuilder *SQLite3Database::get_table_builder() {
-	return new SQLite3TableBuilder();
+	SQLite3TableBuilder *b = new SQLite3TableBuilder();
+	b->_db = this;
+
+	return b;
 }
 
 void SQLite3Database::connect(const std::string &connection_str) {

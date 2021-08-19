@@ -3,6 +3,8 @@
 
 #include <string>
 
+class QueryResult;
+
 class TableBuilder {
 public:
 	virtual TableBuilder *create_table(const std::string &name);
@@ -15,10 +17,21 @@ public:
 	virtual TableBuilder *primary_key(const std::string &name);
 	virtual TableBuilder *primary_key();
 	virtual TableBuilder *next_row();
+	virtual TableBuilder *ccreate_table();
 
+	virtual TableBuilder *drop_table();
+	virtual TableBuilder *drop_table_if_exists();
 	virtual TableBuilder *drop_table(const std::string &name);
+	virtual TableBuilder *drop_table_if_exists(const std::string &name);
+	virtual TableBuilder *cdrop_table();
 
-	virtual void finalize();
+	virtual TableBuilder *foreign_key(const std::string &name);
+	virtual TableBuilder *references(const std::string &table, const std::string &name);
+
+	virtual QueryResult *run();
+	virtual void run_query();
+
+	void print();
 
 	TableBuilder();
 	virtual ~TableBuilder();

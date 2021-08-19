@@ -5,6 +5,8 @@
 
 #include "core/database/table_builder.h"
 
+class SQLite3Database;
+
 class SQLite3TableBuilder : public TableBuilder {
 public:
 	TableBuilder *create_table(const std::string &name);
@@ -17,13 +19,24 @@ public:
 	TableBuilder *primary_key(const std::string &name);
 	TableBuilder *primary_key();
 	TableBuilder *next_row();
+	TableBuilder *ccreate_table();
 
+	TableBuilder *drop_table();
+	TableBuilder *drop_table_if_exists();
 	TableBuilder *drop_table(const std::string &name);
+	TableBuilder *drop_table_if_exists(const std::string &name);
+	TableBuilder *cdrop_table();
 
-	void finalize();
+	TableBuilder *foreign_key(const std::string &name);
+	TableBuilder *references(const std::string &table, const std::string &name);
+
+	virtual QueryResult *run();
+	virtual void run_query();
 
 	SQLite3TableBuilder();
 	virtual ~SQLite3TableBuilder();
+
+	SQLite3Database *_db;
 };
 
 #endif

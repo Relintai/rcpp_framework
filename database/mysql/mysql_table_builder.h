@@ -20,8 +20,6 @@ public:
 
 	TableBuilder *drop_table(const std::string &name);
 
-	void finalize();
-
 	MysqlTableBuilder();
 	virtual ~MysqlTableBuilder();
 };
