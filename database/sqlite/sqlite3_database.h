@@ -20,6 +20,7 @@ public:
 	static void _unregister();
 
 	QueryBuilder *get_query_builder();
+	TableBuilder *get_table_builder();
 
 	void connect(const std::string &connection_str);
 	QueryResult *query(const std::string &query);
