@@ -3,6 +3,7 @@
 #include "core/database/database_manager.h"
 
 #include "sqlite3_query_result.h"
+#include "sqlite3_query_builder.h"
 
 Database *SQLite3Database::_creation_func() {
 	return new SQLite3Database();
@@ -14,6 +15,13 @@ void SQLite3Database::_register() {
 
 void SQLite3Database::_unregister() {
 	DatabaseManager::_unregister_db_creation_func("sqlite");
+}
+
+QueryBuilder *SQLite3Database::get_query_builder() {
+	SQLite3QueryBuilder *b = new SQLite3QueryBuilder();
+	b->_db = this;
+
+	return b;
 }
 
 void SQLite3Database::connect(const std::string &connection_str) {
@@ -63,7 +71,7 @@ void SQLite3Database::escape(const std::string str, std::string *to) {
 	ret = sqlite3_mprintf("%q", str.c_str());
 
 	if (ret) {
-		to->operator=(ret); 
+		to->operator=(ret);
 
 		sqlite3_free(ret);
 	}

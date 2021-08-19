@@ -19,6 +19,8 @@ public:
 	static void _register();
 	static void _unregister();
 
+	QueryBuilder *get_query_builder();
+
 	void connect(const std::string &connection_str);
 	QueryResult *query(const std::string &query);
 	void query_run(const std::string &query);

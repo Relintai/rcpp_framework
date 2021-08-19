@@ -8,7 +8,7 @@ def is_active():
 
 
 def get_name():
-    return "pgsql"
+    return "sqlite3"
 
 
 def can_build():
