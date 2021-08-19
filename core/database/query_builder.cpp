@@ -37,7 +37,29 @@ QueryBuilder *QueryBuilder::from(const std::string &params) {
 QueryBuilder *QueryBuilder::insert(const std::string &table_name) {
 	return this;
 }
+QueryBuilder *QueryBuilder::insert(const std::string &table_name, const std::string &columns) {
+	return this;
+}
 QueryBuilder *QueryBuilder::values(const std::string &params_str) {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::val() {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::val(const std::string &param) {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::val(const char *param) {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::val(const int param) {
+	return this;
+}
+QueryBuilder *QueryBuilder::val(const bool param) {
 	return this;
 }
 
@@ -67,11 +89,21 @@ QueryBuilder *QueryBuilder::evalues(const std::string &params_str) {
 	return this;
 }
 
+QueryBuilder *QueryBuilder::eval(const std::string &param) {
+	val(escape(param));
+
+	return this;
+}
+
 QueryBuilder *QueryBuilder::limit(const int num) {
 	return this;
 }
 
 QueryBuilder *QueryBuilder::offset(const int num) {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::select_last_insert_id() {
 	return this;
 }
 
@@ -106,6 +138,10 @@ std::string QueryBuilder::get_result() {
 	end_command();
 
 	return query_result;
+}
+
+void QueryBuilder::print() {
+	printf("%s\n", query_result.c_str());
 }
 
 QueryBuilder::QueryBuilder() {

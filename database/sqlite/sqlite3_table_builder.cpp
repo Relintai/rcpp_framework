@@ -39,7 +39,7 @@ TableBuilder *SQLite3TableBuilder::null() {
 }
 
 TableBuilder *SQLite3TableBuilder::auto_increment() {
-	result += "AUTO_INCREMENT ";
+	//result += "AUTO_INCREMENT ";
 
 	return this;
 }

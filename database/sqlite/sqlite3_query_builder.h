@@ -21,10 +21,18 @@ public:
 	QueryBuilder *where(const std::string &params);
 	QueryBuilder *from(const std::string &params);
 	QueryBuilder *insert(const std::string &table_name);
+	QueryBuilder *insert(const std::string &table_name, const std::string &columns);
 	QueryBuilder *values(const std::string &params_str);
+	QueryBuilder *val();
+	QueryBuilder *val(const std::string &param);
+	QueryBuilder *val(const char *param);
+	QueryBuilder *val(const int param);
+	QueryBuilder *val(const bool param);
 
 	QueryBuilder *limit(const int num);
 	QueryBuilder *offset(const int num);
+
+	QueryBuilder *select_last_insert_id();
 
 	std::string escape(const std::string &params);
 

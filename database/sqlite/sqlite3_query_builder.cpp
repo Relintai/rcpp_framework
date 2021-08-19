@@ -3,6 +3,8 @@
 #include "sqlite3_database.h"
 #include "sqlite3_query_result.h"
 
+#include <sstream>
+
 QueryBuilder *SQLite3QueryBuilder::select() {
 	query_result += "SELECT ";
 
@@ -29,6 +31,7 @@ QueryBuilder *SQLite3QueryBuilder::values() {
 	return this;
 }
 QueryBuilder *SQLite3QueryBuilder::cvalues() {
+	query_result[query_result.size() - 2] = ' ';
 	query_result += ") ";
 
 	return this;
@@ -57,9 +60,49 @@ QueryBuilder *SQLite3QueryBuilder::insert(const std::string &table_name) {
 
 	return this;
 }
+QueryBuilder *SQLite3QueryBuilder::insert(const std::string &table_name, const std::string &columns) {
+	query_result += "INSERT INTO " + table_name + "(" + columns + ") ";
 
+	return this;
+}
 QueryBuilder *SQLite3QueryBuilder::values(const std::string &params_str) {
 	query_result += "VALUES(" + params_str + ") ";
+
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::val() {
+	//query_result += "DEFAULT, ";
+
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::val(const std::string &param) {
+	query_result += "'" + param + "', ";
+
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::val(const char *param) {
+	query_result += "'" + std::string(param) + "', ";
+
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::val(const int param) {
+	//todo add a better way
+	std::stringstream ss;
+	ss << param;
+
+	query_result += ss.str() + ", ";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::val(const bool param) {
+	if (param)
+		query_result += "1, ";
+	else
+		query_result += "0, ";
 
 	return this;
 }
@@ -93,8 +136,6 @@ void SQLite3QueryBuilder::end_command() {
 }
 
 QueryResult *SQLite3QueryBuilder::run() {
-	end_command();
-
 	if (!_db) {
 		printf("SQLite3QueryBuilder::run !db!\n");
 
@@ -105,8 +146,6 @@ QueryResult *SQLite3QueryBuilder::run() {
 }
 
 void SQLite3QueryBuilder::run_query() {
-	end_command();
-
 	if (!_db) {
 		printf("SQLite3QueryBuilder::run_query !db!\n");
 
@@ -125,6 +164,10 @@ QueryBuilder *SQLite3QueryBuilder::limit(const int num) {
 QueryBuilder *SQLite3QueryBuilder::offset(const int num) {
 	//query_result += "OFFSET " + num + " ";
 
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::select_last_insert_id() {
 	return this;
 }
 

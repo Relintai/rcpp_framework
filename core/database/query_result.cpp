@@ -8,6 +8,10 @@ const char *QueryResult::get_cell(const int index) {
 	return "";
 }
 
+int QueryResult::get_last_insert_rowid() {
+	return 0;
+}
+
 QueryResult::QueryResult() {
 }
 

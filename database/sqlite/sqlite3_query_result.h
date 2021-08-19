@@ -12,6 +12,7 @@ class Sqlite3QueryResult : public QueryResult {
 public:
 	bool next_row();
 	const char* get_cell(const int index);
+	int get_last_insert_rowid();
 
 	void query(const std::string &query, sqlite3 *conn);
 
@@ -30,6 +31,8 @@ public:
 	char **col_names;
 	std::vector<Sqlite3QueryResultRow *> rows;
 	int current_row;
+
+	sqlite3 *_connection;
 };
 
 #endif

@@ -20,16 +20,25 @@ public:
 	virtual QueryBuilder *where(const std::string &params);
 	virtual QueryBuilder *from(const std::string &params);
 	virtual QueryBuilder *insert(const std::string &table_name);
+	virtual QueryBuilder *insert(const std::string &table_name, const std::string &columns);
 	virtual QueryBuilder *values(const std::string &params_str);
+	virtual QueryBuilder *val();
+	virtual QueryBuilder *val(const std::string &param);
+	virtual QueryBuilder *val(const char *param);
+	virtual QueryBuilder *val(const int param);
+	virtual QueryBuilder *val(const bool param);
 
 	virtual QueryBuilder *eselect(const std::string &params);
 	virtual QueryBuilder *ewhere(const std::string &params);
 	virtual QueryBuilder *efrom(const std::string &params);
 	virtual QueryBuilder *einsert(const std::string &table_name);
 	virtual QueryBuilder *evalues(const std::string &params_str);
+	virtual QueryBuilder *eval(const std::string &param);
 
 	virtual QueryBuilder *limit(const int num);
 	virtual QueryBuilder *offset(const int num);
+
+	virtual QueryBuilder *select_last_insert_id();
 
 	virtual std::string escape(const std::string &params);
 
@@ -44,6 +53,8 @@ public:
 	virtual void run_query();
 
 	std::string get_result();
+
+	void print();
 
 	QueryBuilder();
 	virtual ~QueryBuilder();
