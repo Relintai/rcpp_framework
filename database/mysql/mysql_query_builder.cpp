@@ -64,11 +64,6 @@ QueryBuilder *MysqlQueryBuilder::values(const std::string &params_str) {
 	return this;
 }
 
-QueryBuilder *MysqlQueryBuilder::limit(const int min, const int max) {
-
-	return this;
-}
-
 std::string MysqlQueryBuilder::escape(const std::string &params) {
 	if (!_db) {
 		printf("MysqlQueryBuilder::escape !db!\n");
@@ -106,7 +101,7 @@ QueryResult *MysqlQueryBuilder::run() {
 		return nullptr;
 	}
 
-	return _db->query(query_result)
+	return _db->query(query_result);
 }
 
 void MysqlQueryBuilder::run_query() {
@@ -118,17 +113,17 @@ void MysqlQueryBuilder::run_query() {
 		return;
 	}
 
-	_db->query_run(query_result)
+	_db->query_run(query_result);
 }
 
 QueryBuilder *MysqlQueryBuilder::limit(const int num) {
-	query_result += "LIMIT " + num + " ";
+	//query_result += "LIMIT " + num + " ";
 
 	return this;
 }
 
-virtual QueryBuilder *offset(const int num) {
-	query_result += "OFFSET " + num + " ";
+QueryBuilder *MysqlQueryBuilder::offset(const int num) {
+	//query_result += "OFFSET " + num + " ";
 
 	return this;
 }
