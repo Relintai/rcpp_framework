@@ -19,7 +19,13 @@ void User::load() {
 }
 
 void User::load(const std::string &p_name) {
-	name = p_name;
+	//name = p_name;
+
+	//load();
+}
+
+void User::load(const int p_id) {
+	id = p_id;
 
 	load();
 }

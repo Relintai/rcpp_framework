@@ -27,6 +27,7 @@ public:
 	virtual void save();
 	virtual void load();
 	virtual void load(const std::string &p_name);
+	virtual void load(const int p_id);
 	virtual void changed();
 	virtual void update();
 
