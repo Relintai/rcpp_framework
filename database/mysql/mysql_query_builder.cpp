@@ -98,10 +98,38 @@ void MysqlQueryBuilder::end_command() {
 }
 
 QueryResult *MysqlQueryBuilder::run() {
-	return nullptr;
+	end_command();
+
+	if (!_db) {
+		printf("MysqlQueryBuilder::run !db!\n");
+
+		return nullptr;
+	}
+
+	return _db->query(query_result)
 }
 
-QueryBuilder *MysqlQueryBuilder::limit(const int min, const int max) {
+void MysqlQueryBuilder::run_query() {
+	end_command();
+
+	if (!_db) {
+		printf("MysqlQueryBuilder::run_query !db!\n");
+
+		return;
+	}
+
+	_db->query_run(query_result)
+}
+
+QueryBuilder *MysqlQueryBuilder::limit(const int num) {
+	query_result += "LIMIT " + num + " ";
+
+	return this;
+}
+
+virtual QueryBuilder *offset(const int num) {
+	query_result += "OFFSET " + num + " ";
+
 	return this;
 }
 

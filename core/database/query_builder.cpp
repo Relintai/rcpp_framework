@@ -67,7 +67,11 @@ QueryBuilder *QueryBuilder::evalues(const std::string &params_str) {
 	return this;
 }
 
-QueryBuilder *QueryBuilder::limit(const int min, const int max) {
+QueryBuilder *QueryBuilder::limit(const int num) {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::offset(const int num) {
 	return this;
 }
 
@@ -93,6 +97,9 @@ void QueryBuilder::end_command() {
 
 QueryResult *QueryBuilder::run() {
 	return nullptr;
+}
+
+void QueryBuilder::run_query() {
 }
 
 std::string QueryBuilder::get_result() {

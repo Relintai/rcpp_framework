@@ -88,7 +88,10 @@ void MysqlDatabase::query_run(const std::string &query) {
 }
 
 QueryBuilder *MysqlDatabase::get_query_builder() {
-	return new MysqlQueryBuilder();
+	MysqlQueryBuilder *b = new MysqlQueryBuilder();
+	b->_db = this;
+
+	return b;
 }
 
 TableBuilder *MysqlDatabase::get_table_builder() {

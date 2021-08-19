@@ -28,7 +28,8 @@ public:
 	virtual QueryBuilder *einsert(const std::string &table_name);
 	virtual QueryBuilder *evalues(const std::string &params_str);
 
-	virtual QueryBuilder *limit(const int min, const int max);
+	virtual QueryBuilder *limit(const int num);
+	virtual QueryBuilder *offset(const int num);
 
 	virtual std::string escape(const std::string &params);
 
@@ -40,6 +41,7 @@ public:
 	virtual void end_command();
 
 	virtual QueryResult *run();
+	virtual void run_query();
 
 	std::string get_result();
 

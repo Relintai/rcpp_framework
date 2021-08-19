@@ -24,7 +24,8 @@ public:
 	QueryBuilder *insert(const std::string &table_name);
 	QueryBuilder *values(const std::string &params_str);
 
-	QueryBuilder *limit(const int min, const int max);
+	QueryBuilder *limit(const int num);
+	QueryBuilder *offset(const int num);
 
 	std::string escape(const std::string &params);
 
@@ -36,12 +37,12 @@ public:
 	void end_command();
 
 	QueryResult *run();
+	void run_query();
 
 	MysqlQueryBuilder();
 	~MysqlQueryBuilder();
 
 	MysqlDatabase *_db;
-	MysqlQueryResult *_result;
 };
 
 #endif
