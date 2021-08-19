@@ -9,7 +9,7 @@
 void MessagePage::index(Request *request) {
 	QueryBuilder *b = db->get_query_builder();
 
-	b->select("text")->from("message_page")->finalize();
+	b->select("text")->from("message_page")->end_command();
 
 	QueryResult *res = db->query(b->query_result);
 
@@ -59,14 +59,14 @@ void MessagePage::migrate() {
 
 	QueryBuilder *b = db->get_query_builder();
 
-	b->insert("message_page", "default, 'aaewdwd'");
+	b->insert("message_page")->values("default, 'aaewdwd'");
 
 	printf("%s\n", b->query_result.c_str());
 
 	db->query_run(b->query_result);
 
 	b->query_result.clear();
-	b->insert("message_page", "default, 'qqqqq'");
+	b->insert("message_page")->values("default, 'qqqqq'");
 
 	printf("%s\n", b->query_result.c_str());
 
