@@ -1,107 +1,129 @@
 #include "db_based_user.h"
 
 #include "core/database/database_manager.h"
-#include "core/database/table_builder.h"
 #include "core/database/query_builder.h"
+#include "core/database/query_result.h"
+#include "core/database/table_builder.h"
 #include "user_manager.h"
 #include <cstdio>
+#include <sstream>
 
 void DBBasedUser::save() {
 	QueryBuilder *b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
 	if (id == 0) {
-		b->insert(_table_name);
+		b->insert(_table_name, "username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked")->values();
+		b->val(name);
+		b->val(email);
+		b->val(rank);
+		b->val(pre_salt);
+		b->val(post_salt);
+		b->val(password_hash);
+		b->val(banned);
+		b->val(password_reset_token);
+		b->val(locked);
+
+		b->cvalues()->end_command();
+		b->select_last_insert_id();
+
+		QueryResult *r = b->run();
+
+		id = r->get_last_insert_rowid();
+
+		delete r;
+
 	} else {
-		//todo
+		//update
 	}
 
+	if (id == 0) {
+		return;
+	}
+
+	//todo better way
+	std::stringstream ss;
+	ss << id;
+	std::string uid = ss.str();
+
+	//todo
+	b->query_result = "DELETE FROM " + _table_name + "_sessions WHERE user_id=" + uid;
+	b->end_command();
+	b->run_query();
+
+	b->query_result = "";
+
+	for (int i = 0; i < sessions.size(); ++i) {
+		b->query_result += "INSERT INTO " + _table_name + "_sessions VALUES(" + uid + ", '" + sessions[i] + "');";
+	}
+
+	b->run_query();
 
 	delete b;
-
-	/*
-	//todo sanitize name!
-	_file_path = _path + name;
-
-	rapidjson::Document document;
-	document.SetObject();
-
-	document.AddMember("id", id, document.GetAllocator());
-
-	document.AddMember("name", rapidjson::Value(name.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("email", rapidjson::Value(email.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("rank", rank, document.GetAllocator());
-	document.AddMember("pre_salt", rapidjson::Value(pre_salt.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("post_salt", rapidjson::Value(post_salt.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("password_hash", rapidjson::Value(password_hash.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("banned", banned, document.GetAllocator());
-	document.AddMember("password_reset_token", rapidjson::Value(password_reset_token.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("locked", locked, document.GetAllocator());
-
-	rapidjson::Value sa(rapidjson::Type::kArrayType);
-	rapidjson::Document::AllocatorType &allocator = document.GetAllocator();
-
-	for (int i = 0; i < sessions.size(); i++) {
-		sa.PushBack(rapidjson::Value(sessions[i].c_str(), document.GetAllocator()), allocator);
-	}
-
-	document.AddMember("sessions", sa, document.GetAllocator());
-
-	FILE *fp = fopen(_file_path.c_str(), "w");
-
-	char writeBuffer[65536];
-	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
-
-	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
-	document.Accept(writer);
-
-	fclose(fp);
-	*/
 }
 
 void DBBasedUser::load() {
 	unregister_sessions();
 
-	/*
-	FILE *f = fopen(_file_path.c_str(), "r");
-
-	if (!f) {
-		printf("DBBasedUser::load: Error opening file! %s\n", _file_path.c_str());
+	if (id == 0) {
 		return;
 	}
 
-	fseek(f, 0, SEEK_END);
-	long fsize = ftell(f);
-	fseek(f, 0, SEEK_SET); // same as rewind(f);
+	QueryBuilder *b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
-	std::string fd;
-	fd.resize(fsize);
+	b->select("username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
+	b->from(_table_name);
 
-	fread(&fd[0], 1, fsize, f);
-	fclose(f);
+	//todo better way
+	std::stringstream ss;
+	ss << id;
+	std::string uid = ss.str();
+	b->where("id=" + uid);
 
-	rapidjson::Document data;
-	data.Parse(fd.c_str());
+	b->end_command();
 
-	rapidjson::Value uobj = data.GetObject();
+	QueryResult *r = b->run();
 
-	id = uobj["id"].GetInt();
-	name = uobj["name"].GetString();
-	email = uobj["email"].GetString();
-	rank = uobj["rank"].GetInt();
-	pre_salt = uobj["pre_salt"].GetString();
-	post_salt = uobj["post_salt"].GetString();
-	password_hash = uobj["password_hash"].GetString();
-	banned = uobj["banned"].GetBool();
+	if (r->next_row()) {
+		ss.clear();
 
-	password_reset_token = uobj["password_reset_token"].GetString();
-	locked = uobj["locked"].GetBool();
+		name = r->get_cell(0);
+		email = r->get_cell(1);
 
-	const rapidjson::Value &sess = uobj["sessions"].GetArray();
+		ss << r->get_cell(2);
+		ss >> rank;
 
-	for (rapidjson::Value::ConstValueIterator itr = sess.Begin(); itr != sess.End(); ++itr) {
-		sessions.push_back(itr->GetString());
+		pre_salt = r->get_cell(3);
+		post_salt = r->get_cell(4);
+		password_hash = r->get_cell(5);
+
+		ss << r->get_cell(6);
+		ss >> banned;
+
+		password_reset_token = r->get_cell(7);
+
+		ss << r->get_cell(8);
+		ss >> locked;
 	}
-*/
+
+	delete r;
+
+	b->query_result = "";
+
+	b->select("session_id");
+	b->from(_table_name + "_sessions");
+	b->where("user_id=" + uid);
+	b->end_command();
+
+	r = b->run();
+
+	while (r->next_row()) {
+		sessions.push_back(r->get_cell(0));
+	}
+
+	delete r;
+
+	delete b;
+
 	register_sessions();
 }
 
@@ -115,8 +137,9 @@ void DBBasedUser::migrate() {
 	tb->result = "";
 
 	tb->create_table(_table_name);
-	tb->integer("id")->not_null()->auto_increment()->next_row();
+	tb->integer("id")->auto_increment()->next_row();
 	tb->varchar("username", 60)->not_null()->next_row();
+	tb->varchar("email", 100)->not_null()->next_row();
 	tb->integer("rank")->not_null()->next_row();
 	tb->varchar("pre_salt", 100)->next_row();
 	tb->varchar("post_salt", 100)->next_row();
@@ -126,7 +149,7 @@ void DBBasedUser::migrate() {
 	tb->integer("locked")->next_row();
 	tb->primary_key("id");
 	tb->ccreate_table();
-	tb->run();
+	tb->run_query();
 	//tb->print();
 
 	tb->result = "";
@@ -138,40 +161,37 @@ void DBBasedUser::migrate() {
 	tb->references("user", "id");
 	tb->ccreate_table();
 	//tb->print();
-	tb->run();
+	tb->run_query();
 
 	delete tb;
 }
 
 void DBBasedUser::load_all() {
-	/*
-	tinydir_dir dir;
-	if (tinydir_open(&dir, _path.c_str()) == -1) {
-		return;
+	QueryBuilder *b = DatabaseManager::get_singleton()->ddb->get_query_builder();
+
+	b->select("id");
+	b->from(_table_name);
+	b->end_command();
+	b->print();
+
+	QueryResult *r = b->run();
+
+	while (r->next_row()) {
+		DBBasedUser *u = new DBBasedUser();
+		//todo better way
+		const char *c = r->get_cell(0);
+		std::stringstream ss;
+		ss << c;
+		ss >> u->id;
+
+		u->load();
+
+		UserManager::get_singleton()->add_user(u);
 	}
 
-	while (dir.has_next) {
-		tinydir_file file;
-		if (tinydir_readfile(&dir, &file) == -1) {
-			tinydir_next(&dir);
-			continue;
-		}
+	delete r;
 
-		if (!file.is_dir) {
-			std::string np = file.path;
-			np = np.substr(_path.size(), np.size() - _path.size());
-
-			DBBasedUser *u = new DBBasedUser();
-			u->load(np);
-
-			UserManager::get_singleton()->add_user(u);
-		}
-
-		tinydir_next(&dir);
-	}
-
-	tinydir_close(&dir);
-	*/
+	delete b;
 }
 
 DBBasedUser::DBBasedUser() :

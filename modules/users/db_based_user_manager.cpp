@@ -9,7 +9,7 @@ User *DBBasedUserManager::create_user() {
 }
 
 void DBBasedUserManager::load_all() {
-	//DBBasedUser::load_all();
+	DBBasedUser::load_all();
 }
 
 void DBBasedUserManager::set_table_name(const std::string &path) {
