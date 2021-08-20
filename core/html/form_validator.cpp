@@ -214,7 +214,7 @@ FormNeedsOtherCharacterFieldEntry::~FormNeedsOtherCharacterFieldEntry() {
 //FormMinimumLengthFieldEntry
 
 bool FormMinimumLengthFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
-	if (data.size() <= min_length) {
+	if (data.size() < min_length) {
 		if (errors) {
 			std::stringstream ss;
 
@@ -241,7 +241,7 @@ FormMinimumLengthFieldEntry::~FormMinimumLengthFieldEntry() {
 //FormMaximumLengthFieldEntry
 
 bool FormMaximumLengthFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
-	if (data.size() >= max_length) {
+	if (data.size() > max_length) {
 		if (errors) {
 			std::stringstream ss;
 
@@ -448,12 +448,37 @@ FormField *FormField::need_to_match(const std::string &other) {
 	return this;
 }
 
+FormField *FormField::ignore_if_not_exists() {
+	_ignore_if_not_exists = true;
+
+	return this;
+}
+
+FormField *FormField::ignore_if_other_field_not_exists(const std::string &other) {
+	_ignore_if_other_field_not_exists = true;
+	_ignore_if_other_field_not_exist_field = other;
+
+	return this;
+}
+
 void FormField::add_entry(FormFieldEntry *field) {
 	fields.push_back(field);
 }
 
 bool FormField::validate(Request *request, std::vector<std::string> *errors) {
 	std::string param = request->get_parameter(name);
+
+	if (_ignore_if_not_exists && param == "") {
+		return true;
+	}
+
+	if (_ignore_if_other_field_not_exists) {
+		std::string op = request->get_parameter(_ignore_if_other_field_not_exist_field);
+
+		if (op == "") {
+			return true;
+		}
+	}
 
 	bool valid = true;
 
@@ -467,6 +492,8 @@ bool FormField::validate(Request *request, std::vector<std::string> *errors) {
 }
 
 FormField::FormField() {
+	_ignore_if_not_exists = false;
+	_ignore_if_other_field_not_exists = false;
 }
 FormField::~FormField() {
 	for (int i = 0; i < fields.size(); ++i) {

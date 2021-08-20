@@ -152,6 +152,11 @@ public:
 	std::string name;
     std::string human_name;
 
+	bool _ignore_if_not_exists;
+
+	bool _ignore_if_other_field_not_exists;
+	std::string _ignore_if_other_field_not_exist_field;
+
 	FormField *need_to_exist();
 	FormField *need_to_be_int();
 	FormField *need_to_be_float();
@@ -164,6 +169,8 @@ public:
 	FormField *need_maximum_length(const int max_length);
 	FormField *need_to_be_email();
     FormField *need_to_match(const std::string &other);
+	FormField *ignore_if_not_exists();
+	FormField *ignore_if_other_field_not_exists(const std::string &other);
 
 	void add_entry(FormFieldEntry *field);
 
