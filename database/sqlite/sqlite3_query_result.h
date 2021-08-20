@@ -12,6 +12,9 @@ class Sqlite3QueryResult : public QueryResult {
 public:
 	bool next_row();
 	const char* get_cell(const int index);
+
+	bool is_cell_null(const int index);
+
 	int get_last_insert_rowid();
 
 	void query(const std::string &query, sqlite3 *conn);
@@ -24,8 +27,17 @@ public:
 	char* err_msg;
 
 public:
+	struct Cell {
+		bool null;
+		std::string data;
+
+		Cell() {
+			null = false;
+		}
+	};
+
 	struct Sqlite3QueryResultRow {
-		std::vector<std::string> cells;
+		std::vector<Cell> cells;
 	};
 
 	char **col_names;

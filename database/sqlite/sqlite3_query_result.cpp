@@ -7,7 +7,11 @@ bool Sqlite3QueryResult::next_row() {
 }
 
 const char *Sqlite3QueryResult::get_cell(const int index) {
-	return rows[current_row]->cells[index].c_str();
+	return rows[current_row]->cells[index].data.c_str();
+}
+
+bool Sqlite3QueryResult::is_cell_null(const int index) {
+	return rows[current_row]->cells[index].null;
 }
 
 int Sqlite3QueryResult::get_last_insert_rowid() {
@@ -31,12 +35,15 @@ int Sqlite3QueryResult::run_query_finished(void *data, int argc, char **argv, ch
 	Sqlite3QueryResultRow *r = new Sqlite3QueryResultRow();
 
 	for (int i = 0; i < argc; ++i) {
+		Cell c;
+
 		if (argv[i]) {
-			r->cells.push_back(argv[i]);
+			c.data = argv[i];
 		} else {
-			//todo mark nulls in cells
-			r->cells.push_back("NULL");
+			c.null = true;
 		}
+
+		r->cells.push_back(c);
 	}
 
 	res->rows.push_back(r);
