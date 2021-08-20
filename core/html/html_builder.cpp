@@ -51,6 +51,12 @@ HTMLTag *HTMLTag::type(const std::string &val) {
 	return this;
 }
 
+HTMLTag *HTMLTag::placeholder(const std::string &val) {
+	attrib("placeholder", val);
+
+	return this;
+}
+
 HTMLTag *HTMLTag::rel(const std::string &val) {
 	attrib("rel", val);
 

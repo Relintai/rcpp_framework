@@ -23,6 +23,7 @@ public:
 	HTMLTag *value(const std::string &val);
 	HTMLTag *method(const std::string &val);
 	HTMLTag *type(const std::string &val);
+	HTMLTag *placeholder(const std::string &val);
 	HTMLTag *rel(const std::string &val);
 	HTMLTag *rel_stylesheet();
 	HTMLTag *charset(const std::string &val);
