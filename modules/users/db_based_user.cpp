@@ -13,8 +13,8 @@ void DBBasedUser::save() {
 
 	if (id == 0) {
 		b->insert(_table_name, "username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked")->values();
-		b->val(name);
-		b->val(email);
+		b->eval(name);
+		b->eval(email);
 		b->val(rank);
 		b->val(pre_salt);
 		b->val(post_salt);
