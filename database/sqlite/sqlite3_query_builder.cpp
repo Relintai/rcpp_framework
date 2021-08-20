@@ -195,13 +195,32 @@ QueryBuilder *SQLite3QueryBuilder::wp(const std::string &col, const bool param) 
 }
 
 QueryBuilder *SQLite3QueryBuilder::limit(const int num) {
-	//query_result += "LIMIT " + num + " ";
+	//todo better way
+	std::stringstream ss;
+	ss << num;
+
+	query_result += "LIMIT " + ss.str() + " ";
 
 	return this;
 }
 
 QueryBuilder *SQLite3QueryBuilder::offset(const int num) {
-	//query_result += "OFFSET " + num + " ";
+	//todo better way
+	std::stringstream ss;
+	ss << num;
+
+	query_result += "OFFSET " + ss.str() + " ";
+
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::land() {
+	query_result += "AND ";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::lor() {
+	query_result += "OR ";
 
 	return this;
 }

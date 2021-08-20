@@ -50,6 +50,10 @@ public:
 	QueryBuilder *limit(const int num);
 	QueryBuilder *offset(const int num);
 
+	//l=logical (and, or are operators)
+	virtual QueryBuilder *land();
+	virtual QueryBuilder *lor();
+
 	QueryBuilder *select_last_insert_id();
 
 	std::string escape(const std::string &params);

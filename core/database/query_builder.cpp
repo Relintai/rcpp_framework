@@ -151,6 +151,13 @@ QueryBuilder *QueryBuilder::offset(const int num) {
 	return this;
 }
 
+QueryBuilder *QueryBuilder::land() {
+	return this;
+}
+QueryBuilder *QueryBuilder::lor() {
+	return this;
+}
+
 QueryBuilder *QueryBuilder::w(const std::string &str) {
 	query_result += str + " ";
 

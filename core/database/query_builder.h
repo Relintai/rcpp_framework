@@ -64,6 +64,10 @@ public:
 	virtual QueryBuilder *limit(const int num);
 	virtual QueryBuilder *offset(const int num);
 
+	//l=logical (and, or are operators)
+	virtual QueryBuilder *land();
+	virtual QueryBuilder *lor();
+
 	virtual QueryBuilder *w(const std::string &str);
 	virtual QueryBuilder *ew(const std::string &str);
 
