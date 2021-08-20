@@ -1,6 +1,7 @@
 #include "user.h"
 
 #include "core/hash/sha256.h"
+#include "core/html/form_validator.h"
 #include "core/html/html_builder.h"
 #include "core/http/cookie.h"
 #include "core/http/http_session.h"
@@ -387,6 +388,32 @@ void User::handle_delete_request(Request *request) {
 	request->compile_and_send_body();
 }
 
+void User::create_validators() {
+	//Login
+	_login_validator = new FormValidator();
+
+	_login_validator->new_field("username")->need_to_exist()->need_to_be_alpha_numeric()->need_minimum_length(5)->need_maximum_length(20);
+	FormField *pw = _login_validator->new_field("password");
+	pw->need_to_exist();
+	pw->need_to_have_lowercase_character()->need_to_have_uppercase_character();
+	pw->need_minimum_length(5);
+
+	//Registration
+	_registration_validator = new FormValidator();
+
+	_registration_validator->new_field("username")->need_to_exist()->need_to_be_alpha_numeric()->need_minimum_length(5)->need_maximum_length(20);
+	_registration_validator->new_field("email")->need_to_exist()->need_to_be_email();
+
+	pw = _registration_validator->new_field("password");
+	pw->need_to_exist();
+	pw->need_to_have_lowercase_character()->need_to_have_uppercase_character();
+	pw->need_minimum_length(5);
+
+	_registration_validator->new_field("password_check")->need_to_match("password");
+
+	_registration_validator->new_field("email")->need_to_exist()->need_to_be_email();
+}
+
 User::User() :
 		Object() {
 
@@ -394,6 +421,11 @@ User::User() :
 	rank = 0;
 	banned = false;
 	locked = false;
+
+	_login_validator = nullptr;
+	_registration_validator = nullptr;
+
+	create_validators();
 }
 
 User::~User() {

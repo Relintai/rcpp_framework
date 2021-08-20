@@ -357,7 +357,95 @@ FormEmailFieldEntry::FormEmailFieldEntry() {
 FormEmailFieldEntry::~FormEmailFieldEntry() {
 }
 
+//FormNeedToMatchOtherFieldEntry
+
+bool FormNeedToMatchOtherFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+	if (data != request->get_parameter(other_field)) {
+		if (errors) {
+			errors->push_back(does_not_match_error + field_name + ".");
+		}
+
+		return false;
+	}
+
+	return true;
+}
+
+FormNeedToMatchOtherFieldEntry::FormNeedToMatchOtherFieldEntry() {
+	does_not_match_error = "Field does not match ";
+}
+FormNeedToMatchOtherFieldEntry::~FormNeedToMatchOtherFieldEntry() {
+}
+
 //FormField
+
+FormField *FormField::need_to_exist() {
+	add_entry(new FormExistsFieldEntry());
+
+	return this;
+}
+FormField *FormField::need_to_be_int() {
+	add_entry(new FormIntFieldEntry());
+
+	return this;
+}
+FormField *FormField::need_to_be_float() {
+	add_entry(new FormFloatFieldEntry());
+
+	return this;
+}
+FormField *FormField::need_to_be_alpha() {
+	add_entry(new FormAlphaFieldEntry());
+
+	return this;
+}
+FormField *FormField::need_to_be_alpha_numeric() {
+	add_entry(new FormAlphaNumericFieldEntry());
+
+	return this;
+}
+FormField *FormField::need_to_have_lowercase_character() {
+	add_entry(new FormNeedsLowercaseCharacterFieldEntry());
+
+	return this;
+}
+FormField *FormField::need_to_have_uppercase_character() {
+	add_entry(new FormNeedsUppercaseCharacterFieldEntry());
+
+	return this;
+}
+FormField *FormField::need_to_have_other_character() {
+	add_entry(new FormNeedsOtherCharacterFieldEntry());
+
+	return this;
+}
+FormField *FormField::need_minimum_length(const int min_length) {
+	FormMinimumLengthFieldEntry *f = new FormMinimumLengthFieldEntry();
+	f->min_length = min_length;
+	add_entry(f);
+
+	return this;
+}
+FormField *FormField::need_maximum_length(const int max_length) {
+	FormMaximumLengthFieldEntry *f = new FormMaximumLengthFieldEntry();
+	f->max_length =max_length;
+	add_entry(f);
+
+	return this;
+}
+FormField *FormField::need_to_be_email() {
+	add_entry(new FormEmailFieldEntry());
+
+	return this;
+}
+
+FormField *FormField::need_to_match(const std::string &other) {
+	FormNeedToMatchOtherFieldEntry *f = new FormNeedToMatchOtherFieldEntry();
+	f->other_field = other;
+	add_entry(f);
+
+	return this;
+}
 
 void FormField::add_entry(FormFieldEntry *field) {
 	fields.push_back(field);
@@ -404,6 +492,15 @@ bool FormValidator::validate(Request *request, std::vector<std::string> *errors)
 
 void FormValidator::add_field(FormField *field) {
 	fields.push_back(field);
+}
+
+FormField *FormValidator::new_field(const std::string &name) {
+	FormField *f = new FormField();
+	f->name = name;
+
+	fields.push_back(f);
+
+	return f;
 }
 
 FormValidator::FormValidator() {

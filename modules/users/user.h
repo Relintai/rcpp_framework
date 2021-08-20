@@ -7,6 +7,7 @@
 #include <vector>
 
 class Request;
+class FormValidator;
 
 class User : public Object {
 	RCPP_OBJECT(User, Object);
@@ -47,11 +48,16 @@ public:
 	virtual void handle_logout_request(Request *request);
 	virtual void handle_delete_request(Request *request);
 
+	virtual void create_validators();
+
 	void register_sessions();
 	void unregister_sessions();
 
 	User();
 	~User();
+
+	FormValidator *_login_validator;
+	FormValidator *_registration_validator;
 };
 
 #endif
