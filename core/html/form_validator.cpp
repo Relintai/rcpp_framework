@@ -1,10 +1,11 @@
 #include "form_validator.h"
 
 #include "core/http/request.h"
+#include <sstream>
 
 //FormFieldEntry
 
-bool FormFieldEntry::validate(Request *request, const std::string &data, std::vector<std::string> *errors) {
+bool FormFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
 	return true;
 }
 
@@ -12,6 +13,348 @@ FormFieldEntry::FormFieldEntry() {
 }
 
 FormFieldEntry::~FormFieldEntry() {
+}
+
+//FormExistsFieldEntry
+
+bool FormExistsFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+	if (data == "") {
+		if (errors) {
+			errors->push_back(not_exists_error);
+		}
+
+		return false;
+	}
+
+	return true;
+}
+
+FormExistsFieldEntry::FormExistsFieldEntry() {
+	not_exists_error = "Form field need to exists!";
+}
+FormExistsFieldEntry::~FormExistsFieldEntry() {
+}
+
+//FormIntFieldEntry
+
+bool FormIntFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+	//https://stackoverflow.com/questions/2844817/how-do-i-check-if-a-c-string-is-an-int
+
+	if (data.empty()) {
+		return true;
+	}
+
+	if (((!isdigit(data[0])) && (data[0] != '-') && (data[0] != '+'))) {
+		if (errors) {
+			errors->push_back(not_int_error);
+		}
+
+		return false;
+	}
+
+	char *p;
+	strtol(data.c_str(), &p, 10);
+
+	bool is_int = (*p == 0);
+
+	if (!is_int) {
+		if (errors) {
+			errors->push_back(not_int_error);
+		}
+	}
+
+	return is_int;
+}
+
+FormIntFieldEntry::FormIntFieldEntry() {
+	not_int_error = "Field needs to be an integer.";
+}
+
+FormIntFieldEntry::~FormIntFieldEntry() {
+}
+
+//FormFloatFieldEntry
+
+bool FormFloatFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+	if (data.empty()) {
+		return true;
+	}
+
+	//from https://stackoverflow.com/questions/447206/c-isfloat-function
+	char *ptr;
+	strtof(data.c_str(), &ptr);
+	bool is_float = (*ptr) == '\0';
+
+	if (!is_float) {
+		if (errors) {
+			errors->push_back(not_float_error);
+		}
+	}
+
+	return is_float;
+}
+
+FormFloatFieldEntry::FormFloatFieldEntry() {
+	not_float_error = "Field needs to be an floating point number.";
+}
+FormFloatFieldEntry::~FormFloatFieldEntry() {
+}
+
+//FormAlphaFieldEntry
+
+bool FormAlphaFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+	for (int i = 0; i < data.size(); ++i) {
+		if (!isalpha(data[i])) {
+			if (errors) {
+				errors->push_back(not_alpha_error);
+			}
+
+			return false;
+		}
+	}
+
+	return true;
+}
+
+FormAlphaFieldEntry::FormAlphaFieldEntry() {
+	not_alpha_error = "Field needs to only contain caharcters.";
+}
+FormAlphaFieldEntry::~FormAlphaFieldEntry() {
+}
+
+//FormAlphaNumericFieldEntry
+
+bool FormAlphaNumericFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+	for (int i = 0; i < data.size(); ++i) {
+		if (!isalnum(data[i])) {
+			if (errors) {
+				errors->push_back(not_alpha_numeric_error);
+			}
+
+			return false;
+		}
+	}
+
+	return true;
+}
+
+FormAlphaNumericFieldEntry::FormAlphaNumericFieldEntry() {
+	not_alpha_numeric_error = "Field needs to only contain caharcters of numbers.";
+}
+FormAlphaNumericFieldEntry::~FormAlphaNumericFieldEntry() {
+}
+
+//FormNeedsLowercaseCharacterFieldEntry
+
+bool FormNeedsLowercaseCharacterFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+	for (int i = 0; i < data.size(); ++i) {
+		if (islower(data[i])) {
+			if (errors) {
+				errors->push_back(does_not_have_lowercase_error);
+			}
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+FormNeedsLowercaseCharacterFieldEntry::FormNeedsLowercaseCharacterFieldEntry() {
+	does_not_have_lowercase_error = "Field needs at least one lowercase character!";
+}
+FormNeedsLowercaseCharacterFieldEntry::~FormNeedsLowercaseCharacterFieldEntry() {
+}
+
+//FormNeedsUppercaseCharacterFieldEntry
+
+bool FormNeedsUppercaseCharacterFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+	for (int i = 0; i < data.size(); ++i) {
+		if (isupper(data[i])) {
+			return true;
+		}
+	}
+
+	if (errors) {
+		errors->push_back(does_not_have_uppercase_error);
+	}
+
+	return false;
+}
+
+FormNeedsUppercaseCharacterFieldEntry::FormNeedsUppercaseCharacterFieldEntry() {
+	does_not_have_uppercase_error = "Field needs at least one uppercase character!";
+}
+FormNeedsUppercaseCharacterFieldEntry::~FormNeedsUppercaseCharacterFieldEntry() {
+}
+
+//FormNeedsOtherCharacterFieldEntry
+
+bool FormNeedsOtherCharacterFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+	for (int i = 0; i < data.size(); ++i) {
+		if (!isalnum(data[i])) {
+			return true;
+		}
+	}
+
+	if (errors) {
+		errors->push_back(does_not_have_other_error);
+	}
+
+	return false;
+}
+
+FormNeedsOtherCharacterFieldEntry::FormNeedsOtherCharacterFieldEntry() {
+	does_not_have_other_error = "Field needs at least one other character!";
+}
+FormNeedsOtherCharacterFieldEntry::~FormNeedsOtherCharacterFieldEntry() {
+}
+
+//FormMinimumLengthFieldEntry
+
+bool FormMinimumLengthFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+	if (data.size() <= min_length) {
+		if (errors) {
+			std::stringstream ss;
+
+			ss << does_not_have_min_length_errorf << min_length << does_not_have_min_length_errors;
+
+			errors->push_back(ss.str());
+		}
+
+		return false;
+	}
+
+	return true;
+}
+
+FormMinimumLengthFieldEntry::FormMinimumLengthFieldEntry() {
+	does_not_have_min_length_errorf = "Field needs at least ";
+	does_not_have_min_length_errors = " characters!";
+
+	min_length = 5;
+}
+FormMinimumLengthFieldEntry::~FormMinimumLengthFieldEntry() {
+}
+
+//FormMaximumLengthFieldEntry
+
+bool FormMaximumLengthFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+	if (data.size() >= max_length) {
+		if (errors) {
+			std::stringstream ss;
+
+			ss << does_not_have_max_length_errorf << max_length << does_not_have_max_length_errors;
+
+			errors->push_back(ss.str());
+		}
+
+		return false;
+	}
+
+	return true;
+}
+
+FormMaximumLengthFieldEntry::FormMaximumLengthFieldEntry() {
+	does_not_have_max_length_errorf = "Field needs at most ";
+	does_not_have_max_length_errors = " characters!";
+
+	max_length = 10;
+}
+FormMaximumLengthFieldEntry::~FormMaximumLengthFieldEntry() {
+}
+
+//FormEmailFieldEntry
+
+bool FormEmailFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+	if (data.size() == 0) {
+		if (errors) {
+			errors->push_back(email_format_error);
+		}
+
+		return false;
+	}
+
+	if (!isalpha(data[0])) {
+		if (errors) {
+			errors->push_back(email_format_error);
+		}
+
+		return false;
+	}
+
+	int dot_pos = -1;
+	int at_pos = -1;
+
+	for (int i = 0; i < data.size(); ++i) {
+		if (data[i] == '.') {
+			if (dot_pos != -1) {
+				if (errors) {
+					errors->push_back(email_format_error);
+				}
+
+				return false;
+			}
+
+			dot_pos = i;
+
+			return true;
+		}
+	}
+
+	if (dot_pos == -1) {
+		if (errors) {
+			errors->push_back(email_format_error);
+		}
+
+		return false;
+	}
+
+	for (int i = 0; i < data.size(); ++i) {
+		if (data[i] == '@') {
+			if (at_pos != -1) {
+				if (errors) {
+					errors->push_back(email_format_error);
+				}
+
+				return false;
+			}
+
+			at_pos = i;
+
+			return true;
+		}
+	}
+
+	if (at_pos == -1) {
+		if (errors) {
+			errors->push_back(email_format_error);
+		}
+
+		return false;
+	}
+
+	for (int i = 0; i < data.size(); ++i) {
+		if (i == at_pos || i == dot_pos) {
+			continue;
+		}
+
+		if (!isalnum(data[i])) {
+			if (errors) {
+				errors->push_back(email_format_error);
+			}
+
+			return false;
+		}
+	}
+
+	return true;
+}
+
+FormEmailFieldEntry::FormEmailFieldEntry() {
+	email_format_error = "Field is invalid!";
+}
+FormEmailFieldEntry::~FormEmailFieldEntry() {
 }
 
 //FormField
@@ -26,7 +369,7 @@ bool FormField::validate(Request *request, std::vector<std::string> *errors) {
 	bool valid = true;
 
 	for (int i = 0; i < fields.size(); ++i) {
-		if (!fields[i]->validate(request, param, errors)) {
+		if (!fields[i]->validate(request, name, param, errors)) {
 			valid = false;
 		}
 	}
