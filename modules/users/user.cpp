@@ -399,7 +399,151 @@ void User::handle_main_page_request(Request *request) {
 }
 
 void User::handle_settings_request(Request *request) {
-	request->body += "handle_settings_request";
+
+	std::string error_str = "";
+
+	std::string uname_val;
+	std::string email_val;
+	std::string pass_val;
+	std::string pass_check_val;
+
+	if (request->get_method() == HTTP_METHOD_POST) {
+
+		uname_val = request->get_parameter("username");
+		email_val = request->get_parameter("email");
+		pass_val = request->get_parameter("password");
+		pass_check_val = request->get_parameter("password_check");
+
+		bool changed = false;
+
+		std::vector<std::string> errors;
+
+		bool valid = _profile_validator->validate(request, &errors);
+
+		for (int i = 0; i < errors.size(); ++i) {
+			error_str += errors[i] + "<br>";
+		}
+
+		if (valid) {
+			if (uname_val == nameui) {
+				uname_val = "";
+			}
+
+			if (email_val == emailui) {
+				email_val = "";
+			}
+
+			if (uname_val != "") {
+				User *user = UserManager::get_singleton()->get_user(uname_val);
+
+				if (user) {
+					error_str += "Username already taken!<br>";
+				} else {
+					//todo sanitize for html special chars!
+					nameui = uname_val;
+					changed = true;
+					uname_val = "";
+				}
+			}
+
+			if (email_val != "") {
+				UserManager *um = UserManager::get_singleton();
+
+				bool email_found = false;
+
+				//todo better way + should be thread safe
+				for (int i = 0; i < um->_users_vec.size(); ++i) {
+					User *u = um->_users_vec[i];
+
+					if (!u) {
+						continue;
+					}
+
+					if (u == this) {
+						continue;
+					}
+
+					if (u->emailui == email_val) {
+						email_found = true;
+						break;
+					}
+				}
+
+				if (email_found) {
+					error_str += "Email already in use!<br>";
+				} else {
+					//todo sanitize for html special chars!
+					//also send email
+					emailui = email_val;
+					changed = true;
+					email_val = "";
+				}
+			}
+
+			if (pass_val != "") {
+				if (pass_val != pass_check_val) {
+					error_str += "The passwords did not match!<br>";
+				} else {
+					create_password(pass_val);
+					changed = true;
+				}
+			}
+
+			if (changed) {
+				save();
+			}
+		}
+	}
+
+	HTMLBuilder b;
+
+	b.w("Settings");
+	b.br();
+
+	if (error_str.size() != 0) {
+		b.div()->cls("error");
+
+		b.w(error_str);
+
+		b.cdiv();
+	}
+
+	b.div()->cls("settings");
+
+	//todo href path helper
+	b.form()->method("POST")->href("/user/settings");
+
+	b.w("Username");
+	b.br();
+	b.input()->type("text")->name("username")->placeholder(nameui)->value(uname_val);
+	b.cinput();
+	b.br();
+
+	b.w("Email");
+	b.br();
+	b.input()->type("email")->name("email")->placeholder(emailui)->value(email_val);
+	b.cinput();
+	b.br();
+
+	b.w("Password");
+	b.br();
+	b.input()->type("password")->placeholder("*******")->name("password");
+	b.cinput();
+	b.br();
+
+	b.w("Password again");
+	b.br();
+	b.input()->type("password")->placeholder("*******")->name("password_check");
+	b.cinput();
+	b.br();
+
+	b.input()->type("submit")->value("Save");
+	b.cinput();
+	b.cform();
+
+	b.cdiv();
+
+	request->body += b.result;
 
 	request->compile_and_send_body();
 }
@@ -467,6 +611,20 @@ void User::create_validators() {
 
 		_registration_validator->new_field("email", "Email")->need_to_exist()->need_to_be_email();
 	}
+
+	if (!_profile_validator) {
+		_profile_validator = new FormValidator();
+
+		_profile_validator->new_field("username", "Username")->ignore_if_not_exists()->need_to_be_alpha_numeric()->need_minimum_length(5)->need_maximum_length(20);
+		_profile_validator->new_field("email", "Email")->ignore_if_not_exists()->need_to_be_email();
+
+		FormField *pw = _profile_validator->new_field("password", "Password");
+		pw->ignore_if_not_exists();
+		pw->need_to_have_lowercase_character()->need_to_have_uppercase_character();
+		pw->need_minimum_length(5);
+
+		_profile_validator->new_field("password_check", "Password check")->ignore_if_other_field_not_exists("password")->need_to_match("password");
+	}
 }
 
 User::User() :
@@ -476,11 +634,6 @@ User::User() :
 	rank = 0;
 	banned = false;
 	locked = false;
-
-	_login_validator = nullptr;
-	_registration_validator = nullptr;
-
-	create_validators();
 }
 
 User::~User() {
@@ -489,3 +642,4 @@ User::~User() {
 
 FormValidator *User::_login_validator = nullptr;
 FormValidator *User::_registration_validator = nullptr;
+FormValidator *User::_profile_validator = nullptr;
