@@ -397,7 +397,14 @@ void User::handle_password_reset_request(Request *request) {
 	request->compile_and_send_body();
 }
 void User::handle_logout_request(Request *request) {
-	request->body += "handle_logout_request";
+	request->remove_cookie("session_id");
+	
+	SessionManager::get_singleton()->delete_session(request->session->session_id);
+	request->session = nullptr;
+
+	HTMLBuilder b;
+	b.w("Logout successful!");
+	request->body += b.result;
 
 	request->compile_and_send_body();
 }

@@ -47,9 +47,15 @@ void SessionManager::delete_session(const std::string &session_id) {
 	_sessions.erase(session_id);
 
 	for (int i = 0; i < _sessions_vec.size(); ++i) {
-		if (_sessions_vec[i]->session_id == session_id) {
+		HTTPSession *sess = _sessions_vec[i];
+
+		if (sess->session_id == session_id) {
+
 			_sessions_vec[i] = _sessions_vec[_sessions_vec.size() - 1];
 			_sessions_vec.pop_back();
+
+			delete sess;
+
 			return;
 		}
 	}
