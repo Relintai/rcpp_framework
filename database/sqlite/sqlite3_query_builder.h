@@ -11,13 +11,16 @@ class SQLite3Database;
 class SQLite3QueryBuilder : public QueryBuilder {
 public:
 	QueryBuilder *select();
+	QueryBuilder *udpate();
 	QueryBuilder *where();
+
 	QueryBuilder *from();
 	QueryBuilder *insert();
 	QueryBuilder *values();
 	QueryBuilder *cvalues();
 
 	QueryBuilder *select(const std::string &params);
+	QueryBuilder *udpate(const std::string &params);
 	QueryBuilder *where(const std::string &params);
 	QueryBuilder *from(const std::string &params);
 	QueryBuilder *insert(const std::string &table_name);
@@ -28,6 +31,13 @@ public:
 	QueryBuilder *val(const char *param);
 	QueryBuilder *val(const int param);
 	QueryBuilder *val(const bool param);
+
+	QueryBuilder *set();
+	QueryBuilder *cset();
+	QueryBuilder *setp(const std::string &col, const std::string &param);
+	QueryBuilder *setp(const std::string &col, const char *param);
+	QueryBuilder *setp(const std::string &col, const int param);
+	QueryBuilder *setp(const std::string &col, const bool param);
 
 	QueryBuilder *limit(const int num);
 	QueryBuilder *offset(const int num);

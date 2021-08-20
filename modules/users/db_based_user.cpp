@@ -33,7 +33,28 @@ void DBBasedUser::save() {
 		delete r;
 
 	} else {
-		//update
+		//todo better way
+		std::stringstream ss;
+		ss << id;
+		std::string uid = ss.str();
+
+		b->udpate(_table_name);
+		b->set();
+		b->esetp("username", name);
+		b->esetp("email", email);
+		b->setp("rank", rank);
+		b->setp("pre_salt", pre_salt);
+		b->setp("post_salt", post_salt);
+		b->setp("password_hash", password_hash);
+		b->setp("banned", banned);
+		b->setp("password_reset_token", password_reset_token);
+		b->setp("locked", locked);
+		b->cset();
+		b->where("id=" + uid);
+
+		//b->print();
+
+		b->run_query();
 	}
 
 	if (id == 0) {

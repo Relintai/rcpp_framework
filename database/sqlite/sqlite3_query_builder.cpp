@@ -10,6 +10,11 @@ QueryBuilder *SQLite3QueryBuilder::select() {
 
 	return this;
 }
+QueryBuilder *SQLite3QueryBuilder::udpate() {
+	query_result += "UPDATE ";
+
+	return this;
+}
 QueryBuilder *SQLite3QueryBuilder::where() {
 	query_result += "WHERE ";
 
@@ -42,7 +47,11 @@ QueryBuilder *SQLite3QueryBuilder::select(const std::string &params) {
 
 	return this;
 }
+QueryBuilder *SQLite3QueryBuilder::udpate(const std::string &params) {
+	query_result += "UPDATE " + params + " ";
 
+	return this;
+}
 QueryBuilder *SQLite3QueryBuilder::where(const std::string &params) {
 	query_result += "WHERE " + params + " ";
 
@@ -107,6 +116,56 @@ QueryBuilder *SQLite3QueryBuilder::val(const bool param) {
 	return this;
 }
 
+QueryBuilder *SQLite3QueryBuilder::set() {
+	query_result += "SET ";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::cset() {
+	query_result[query_result.size() - 2] = ' ';
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::setp(const std::string &col, const std::string &param) {
+	query_result += col + "='" + param + "', ";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::setp(const std::string &col, const char *param) {
+	query_result += col + "='" + std::string(param) + "', ";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::setp(const std::string &col, const int param) {
+	//todo add a better way
+	std::stringstream ss;
+	ss << param;
+
+	query_result += col + "=" + ss.str() + ", ";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::setp(const std::string &col, const bool param) {
+	if (param)
+		query_result += col + "=1, ";
+	else
+		query_result += col + "=0, ";
+
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::limit(const int num) {
+	//query_result += "LIMIT " + num + " ";
+
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::offset(const int num) {
+	//query_result += "OFFSET " + num + " ";
+
+	return this;
+}
+
 std::string SQLite3QueryBuilder::escape(const std::string &params) {
 	if (!_db) {
 		printf("SQLite3QueryBuilder::escape !db!\n");
@@ -153,18 +212,6 @@ void SQLite3QueryBuilder::run_query() {
 	}
 
 	_db->query_run(query_result);
-}
-
-QueryBuilder *SQLite3QueryBuilder::limit(const int num) {
-	//query_result += "LIMIT " + num + " ";
-
-	return this;
-}
-
-QueryBuilder *SQLite3QueryBuilder::offset(const int num) {
-	//query_result += "OFFSET " + num + " ";
-
-	return this;
 }
 
 QueryBuilder *SQLite3QueryBuilder::select_last_insert_id() {
