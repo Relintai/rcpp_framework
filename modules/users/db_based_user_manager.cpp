@@ -25,6 +25,8 @@ DBBasedUserManager::DBBasedUserManager() :
 		UserManager() {
 
 	printf("Using DBBasedUserManager.\n");
+
+	User::create_validators();
 }
 
 DBBasedUserManager::~DBBasedUserManager() {

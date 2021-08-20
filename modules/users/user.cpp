@@ -137,6 +137,16 @@ void User::handle_login_request_default(Request *request) {
 	std::string pass_val = "";
 
 	if (request->get_method() == HTTP_METHOD_POST) {
+
+		//this is probbaly not needed
+		//it's ok for now as I need to test the validators more
+		std::vector<std::string> errors;
+		_login_validator->validate(request, &errors);
+		for (int i = 0; i < errors.size(); ++i) {
+			error_str += errors[i] + "<br>";
+		}
+		//not needed end
+
 		uname_val = request->get_parameter("username");
 		pass_val = request->get_parameter("password");
 
@@ -214,6 +224,15 @@ void User::handle_register_request_default(Request *request) {
 	std::string pass_check_val = "";
 
 	if (request->get_method() == HTTP_METHOD_POST) {
+
+		std::vector<std::string> errors;
+
+		_registration_validator->validate(request, &errors);
+
+		for (int i = 0; i < errors.size(); ++i) {
+			error_str += errors[i] + "<br>";
+		}
+
 		uname_val = request->get_parameter("username");
 		email_val = request->get_parameter("email");
 		pass_val = request->get_parameter("password");
@@ -389,29 +408,33 @@ void User::handle_delete_request(Request *request) {
 }
 
 void User::create_validators() {
-	//Login
-	_login_validator = new FormValidator();
+	if (!_login_validator) {
+		//Login
+		_login_validator = new FormValidator();
 
-	_login_validator->new_field("username")->need_to_exist()->need_to_be_alpha_numeric()->need_minimum_length(5)->need_maximum_length(20);
-	FormField *pw = _login_validator->new_field("password");
-	pw->need_to_exist();
-	pw->need_to_have_lowercase_character()->need_to_have_uppercase_character();
-	pw->need_minimum_length(5);
+		_login_validator->new_field("username", "Username")->need_to_exist()->need_to_be_alpha_numeric()->need_minimum_length(5)->need_maximum_length(20);
+		FormField *pw = _login_validator->new_field("password", "Password");
+		pw->need_to_exist();
+		pw->need_to_have_lowercase_character()->need_to_have_uppercase_character();
+		pw->need_minimum_length(5);
+	}
 
-	//Registration
-	_registration_validator = new FormValidator();
+	if (!_registration_validator) {
+		//Registration
+		_registration_validator = new FormValidator();
 
-	_registration_validator->new_field("username")->need_to_exist()->need_to_be_alpha_numeric()->need_minimum_length(5)->need_maximum_length(20);
-	_registration_validator->new_field("email")->need_to_exist()->need_to_be_email();
+		_registration_validator->new_field("username", "Username")->need_to_exist()->need_to_be_alpha_numeric()->need_minimum_length(5)->need_maximum_length(20);
+		_registration_validator->new_field("email", "Email")->need_to_exist()->need_to_be_email();
 
-	pw = _registration_validator->new_field("password");
-	pw->need_to_exist();
-	pw->need_to_have_lowercase_character()->need_to_have_uppercase_character();
-	pw->need_minimum_length(5);
+		FormField *pw = _registration_validator->new_field("password", "Password");
+		pw->need_to_exist();
+		pw->need_to_have_lowercase_character()->need_to_have_uppercase_character();
+		pw->need_minimum_length(5);
 
-	_registration_validator->new_field("password_check")->need_to_match("password");
+		_registration_validator->new_field("password_check", "Password check")->need_to_match("password");
 
-	_registration_validator->new_field("email")->need_to_exist()->need_to_be_email();
+		_registration_validator->new_field("email", "Email")->need_to_exist()->need_to_be_email();
+	}
 }
 
 User::User() :
@@ -431,3 +454,6 @@ User::User() :
 User::~User() {
 	unregister_sessions();
 }
+
+FormValidator *User::_login_validator = nullptr;
+FormValidator *User::_registration_validator = nullptr;

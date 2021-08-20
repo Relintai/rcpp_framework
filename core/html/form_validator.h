@@ -7,10 +7,11 @@
 #include <vector>
 
 class Request;
+class FormField;
 
 class FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormFieldEntry();
 	virtual ~FormFieldEntry();
@@ -18,7 +19,7 @@ public:
 
 class FormExistsFieldEntry : public FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormExistsFieldEntry();
 	~FormExistsFieldEntry();
@@ -28,7 +29,7 @@ public:
 
 class FormIntFieldEntry : public FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormIntFieldEntry();
 	~FormIntFieldEntry();
@@ -38,7 +39,7 @@ public:
 
 class FormFloatFieldEntry : public FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormFloatFieldEntry();
 	~FormFloatFieldEntry();
@@ -48,7 +49,7 @@ public:
 
 class FormAlphaFieldEntry : public FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormAlphaFieldEntry();
 	~FormAlphaFieldEntry();
@@ -58,7 +59,7 @@ public:
 
 class FormAlphaNumericFieldEntry : public FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormAlphaNumericFieldEntry();
 	~FormAlphaNumericFieldEntry();
@@ -68,7 +69,7 @@ public:
 
 class FormNeedsLowercaseCharacterFieldEntry : public FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormNeedsLowercaseCharacterFieldEntry();
 	~FormNeedsLowercaseCharacterFieldEntry();
@@ -78,7 +79,7 @@ public:
 
 class FormNeedsUppercaseCharacterFieldEntry : public FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormNeedsUppercaseCharacterFieldEntry();
 	~FormNeedsUppercaseCharacterFieldEntry();
@@ -88,7 +89,7 @@ public:
 
 class FormNeedsOtherCharacterFieldEntry : public FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormNeedsOtherCharacterFieldEntry();
 	~FormNeedsOtherCharacterFieldEntry();
@@ -98,7 +99,7 @@ public:
 
 class FormMinimumLengthFieldEntry : public FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormMinimumLengthFieldEntry();
 	~FormMinimumLengthFieldEntry();
@@ -111,7 +112,7 @@ public:
 
 class FormMaximumLengthFieldEntry : public FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormMaximumLengthFieldEntry();
 	~FormMaximumLengthFieldEntry();
@@ -124,7 +125,7 @@ public:
 
 class FormEmailFieldEntry : public FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormEmailFieldEntry();
 	~FormEmailFieldEntry();
@@ -134,7 +135,7 @@ public:
 
 class FormNeedToMatchOtherFieldEntry : public FormFieldEntry {
 public:
-	virtual bool validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors);
+	virtual bool validate(Request *request, const FormField* field, const std::string &data, std::vector<std::string> *errors);
 
 	FormNeedToMatchOtherFieldEntry();
 	~FormNeedToMatchOtherFieldEntry();
@@ -149,6 +150,7 @@ public:
 class FormField {
 public:
 	std::string name;
+    std::string human_name;
 
 	FormField *need_to_exist();
 	FormField *need_to_be_int();
@@ -180,7 +182,7 @@ public:
 	bool validate(Request *request, std::vector<std::string> *errors = nullptr);
 
 	void add_field(FormField *field);
-	FormField *new_field(const std::string &name);
+	FormField *new_field(const std::string &name, const std::string &human_name);
 
 	FormValidator();
 	virtual ~FormValidator();

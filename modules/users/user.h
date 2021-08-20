@@ -48,7 +48,7 @@ public:
 	virtual void handle_logout_request(Request *request);
 	virtual void handle_delete_request(Request *request);
 
-	virtual void create_validators();
+	static void create_validators();
 
 	void register_sessions();
 	void unregister_sessions();
@@ -56,8 +56,8 @@ public:
 	User();
 	~User();
 
-	FormValidator *_login_validator;
-	FormValidator *_registration_validator;
+	static FormValidator *_login_validator;
+	static FormValidator *_registration_validator;
 };
 
 #endif

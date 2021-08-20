@@ -5,7 +5,7 @@
 
 //FormFieldEntry
 
-bool FormFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	return true;
 }
 
@@ -17,10 +17,10 @@ FormFieldEntry::~FormFieldEntry() {
 
 //FormExistsFieldEntry
 
-bool FormExistsFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormExistsFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	if (data == "") {
 		if (errors) {
-			errors->push_back(not_exists_error);
+			errors->push_back(field->human_name + not_exists_error);
 		}
 
 		return false;
@@ -30,14 +30,14 @@ bool FormExistsFieldEntry::validate(Request *request, const std::string &field_n
 }
 
 FormExistsFieldEntry::FormExistsFieldEntry() {
-	not_exists_error = "Form field need to exists!";
+	not_exists_error = " field need to exists!";
 }
 FormExistsFieldEntry::~FormExistsFieldEntry() {
 }
 
 //FormIntFieldEntry
 
-bool FormIntFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormIntFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	//https://stackoverflow.com/questions/2844817/how-do-i-check-if-a-c-string-is-an-int
 
 	if (data.empty()) {
@@ -46,7 +46,7 @@ bool FormIntFieldEntry::validate(Request *request, const std::string &field_name
 
 	if (((!isdigit(data[0])) && (data[0] != '-') && (data[0] != '+'))) {
 		if (errors) {
-			errors->push_back(not_int_error);
+			errors->push_back(field->human_name + not_int_error);
 		}
 
 		return false;
@@ -59,7 +59,7 @@ bool FormIntFieldEntry::validate(Request *request, const std::string &field_name
 
 	if (!is_int) {
 		if (errors) {
-			errors->push_back(not_int_error);
+			errors->push_back(field->human_name + not_int_error);
 		}
 	}
 
@@ -67,7 +67,7 @@ bool FormIntFieldEntry::validate(Request *request, const std::string &field_name
 }
 
 FormIntFieldEntry::FormIntFieldEntry() {
-	not_int_error = "Field needs to be an integer.";
+	not_int_error = " needs to be an integer.";
 }
 
 FormIntFieldEntry::~FormIntFieldEntry() {
@@ -75,7 +75,7 @@ FormIntFieldEntry::~FormIntFieldEntry() {
 
 //FormFloatFieldEntry
 
-bool FormFloatFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormFloatFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	if (data.empty()) {
 		return true;
 	}
@@ -87,7 +87,7 @@ bool FormFloatFieldEntry::validate(Request *request, const std::string &field_na
 
 	if (!is_float) {
 		if (errors) {
-			errors->push_back(not_float_error);
+			errors->push_back(field->human_name + not_float_error);
 		}
 	}
 
@@ -95,18 +95,18 @@ bool FormFloatFieldEntry::validate(Request *request, const std::string &field_na
 }
 
 FormFloatFieldEntry::FormFloatFieldEntry() {
-	not_float_error = "Field needs to be an floating point number.";
+	not_float_error = " needs to be an floating point number.";
 }
 FormFloatFieldEntry::~FormFloatFieldEntry() {
 }
 
 //FormAlphaFieldEntry
 
-bool FormAlphaFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormAlphaFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	for (int i = 0; i < data.size(); ++i) {
 		if (!isalpha(data[i])) {
 			if (errors) {
-				errors->push_back(not_alpha_error);
+				errors->push_back(field->human_name + not_alpha_error);
 			}
 
 			return false;
@@ -117,18 +117,18 @@ bool FormAlphaFieldEntry::validate(Request *request, const std::string &field_na
 }
 
 FormAlphaFieldEntry::FormAlphaFieldEntry() {
-	not_alpha_error = "Field needs to only contain caharcters.";
+	not_alpha_error = " needs to only contain caharcters.";
 }
 FormAlphaFieldEntry::~FormAlphaFieldEntry() {
 }
 
 //FormAlphaNumericFieldEntry
 
-bool FormAlphaNumericFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormAlphaNumericFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	for (int i = 0; i < data.size(); ++i) {
 		if (!isalnum(data[i])) {
 			if (errors) {
-				errors->push_back(not_alpha_numeric_error);
+				errors->push_back(field->human_name + not_alpha_numeric_error);
 			}
 
 			return false;
@@ -139,36 +139,37 @@ bool FormAlphaNumericFieldEntry::validate(Request *request, const std::string &f
 }
 
 FormAlphaNumericFieldEntry::FormAlphaNumericFieldEntry() {
-	not_alpha_numeric_error = "Field needs to only contain caharcters of numbers.";
+	not_alpha_numeric_error = " needs to only contain caharcters of numbers.";
 }
 FormAlphaNumericFieldEntry::~FormAlphaNumericFieldEntry() {
 }
 
 //FormNeedsLowercaseCharacterFieldEntry
 
-bool FormNeedsLowercaseCharacterFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormNeedsLowercaseCharacterFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	for (int i = 0; i < data.size(); ++i) {
 		if (islower(data[i])) {
-			if (errors) {
-				errors->push_back(does_not_have_lowercase_error);
-			}
 
 			return true;
 		}
+	}
+
+	if (errors) {
+		errors->push_back(field->human_name + does_not_have_lowercase_error);
 	}
 
 	return false;
 }
 
 FormNeedsLowercaseCharacterFieldEntry::FormNeedsLowercaseCharacterFieldEntry() {
-	does_not_have_lowercase_error = "Field needs at least one lowercase character!";
+	does_not_have_lowercase_error = " needs at least one lowercase character!";
 }
 FormNeedsLowercaseCharacterFieldEntry::~FormNeedsLowercaseCharacterFieldEntry() {
 }
 
 //FormNeedsUppercaseCharacterFieldEntry
 
-bool FormNeedsUppercaseCharacterFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormNeedsUppercaseCharacterFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	for (int i = 0; i < data.size(); ++i) {
 		if (isupper(data[i])) {
 			return true;
@@ -176,21 +177,21 @@ bool FormNeedsUppercaseCharacterFieldEntry::validate(Request *request, const std
 	}
 
 	if (errors) {
-		errors->push_back(does_not_have_uppercase_error);
+		errors->push_back(field->human_name + does_not_have_uppercase_error);
 	}
 
 	return false;
 }
 
 FormNeedsUppercaseCharacterFieldEntry::FormNeedsUppercaseCharacterFieldEntry() {
-	does_not_have_uppercase_error = "Field needs at least one uppercase character!";
+	does_not_have_uppercase_error = " needs at least one uppercase character!";
 }
 FormNeedsUppercaseCharacterFieldEntry::~FormNeedsUppercaseCharacterFieldEntry() {
 }
 
 //FormNeedsOtherCharacterFieldEntry
 
-bool FormNeedsOtherCharacterFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormNeedsOtherCharacterFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	for (int i = 0; i < data.size(); ++i) {
 		if (!isalnum(data[i])) {
 			return true;
@@ -198,26 +199,26 @@ bool FormNeedsOtherCharacterFieldEntry::validate(Request *request, const std::st
 	}
 
 	if (errors) {
-		errors->push_back(does_not_have_other_error);
+		errors->push_back(field->human_name + does_not_have_other_error);
 	}
 
 	return false;
 }
 
 FormNeedsOtherCharacterFieldEntry::FormNeedsOtherCharacterFieldEntry() {
-	does_not_have_other_error = "Field needs at least one other character!";
+	does_not_have_other_error = " needs at least one other character!";
 }
 FormNeedsOtherCharacterFieldEntry::~FormNeedsOtherCharacterFieldEntry() {
 }
 
 //FormMinimumLengthFieldEntry
 
-bool FormMinimumLengthFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormMinimumLengthFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	if (data.size() <= min_length) {
 		if (errors) {
 			std::stringstream ss;
 
-			ss << does_not_have_min_length_errorf << min_length << does_not_have_min_length_errors;
+			ss << field->human_name << does_not_have_min_length_errorf << min_length << does_not_have_min_length_errors;
 
 			errors->push_back(ss.str());
 		}
@@ -229,7 +230,7 @@ bool FormMinimumLengthFieldEntry::validate(Request *request, const std::string &
 }
 
 FormMinimumLengthFieldEntry::FormMinimumLengthFieldEntry() {
-	does_not_have_min_length_errorf = "Field needs at least ";
+	does_not_have_min_length_errorf = " needs at least ";
 	does_not_have_min_length_errors = " characters!";
 
 	min_length = 5;
@@ -239,12 +240,12 @@ FormMinimumLengthFieldEntry::~FormMinimumLengthFieldEntry() {
 
 //FormMaximumLengthFieldEntry
 
-bool FormMaximumLengthFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormMaximumLengthFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	if (data.size() >= max_length) {
 		if (errors) {
 			std::stringstream ss;
 
-			ss << does_not_have_max_length_errorf << max_length << does_not_have_max_length_errors;
+			ss << field->human_name << does_not_have_max_length_errorf << max_length << does_not_have_max_length_errors;
 
 			errors->push_back(ss.str());
 		}
@@ -256,7 +257,7 @@ bool FormMaximumLengthFieldEntry::validate(Request *request, const std::string &
 }
 
 FormMaximumLengthFieldEntry::FormMaximumLengthFieldEntry() {
-	does_not_have_max_length_errorf = "Field needs at most ";
+	does_not_have_max_length_errorf = " needs at most ";
 	does_not_have_max_length_errors = " characters!";
 
 	max_length = 10;
@@ -266,10 +267,10 @@ FormMaximumLengthFieldEntry::~FormMaximumLengthFieldEntry() {
 
 //FormEmailFieldEntry
 
-bool FormEmailFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormEmailFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	if (data.size() == 0) {
 		if (errors) {
-			errors->push_back(email_format_error);
+			errors->push_back(field->human_name + email_format_error);
 		}
 
 		return false;
@@ -277,7 +278,7 @@ bool FormEmailFieldEntry::validate(Request *request, const std::string &field_na
 
 	if (!isalpha(data[0])) {
 		if (errors) {
-			errors->push_back(email_format_error);
+			errors->push_back(field->human_name + email_format_error);
 		}
 
 		return false;
@@ -290,7 +291,7 @@ bool FormEmailFieldEntry::validate(Request *request, const std::string &field_na
 		if (data[i] == '.') {
 			if (dot_pos != -1) {
 				if (errors) {
-					errors->push_back(email_format_error);
+					errors->push_back(field->human_name + email_format_error);
 				}
 
 				return false;
@@ -304,7 +305,7 @@ bool FormEmailFieldEntry::validate(Request *request, const std::string &field_na
 
 	if (dot_pos == -1) {
 		if (errors) {
-			errors->push_back(email_format_error);
+			errors->push_back(field->human_name + email_format_error);
 		}
 
 		return false;
@@ -314,7 +315,7 @@ bool FormEmailFieldEntry::validate(Request *request, const std::string &field_na
 		if (data[i] == '@') {
 			if (at_pos != -1) {
 				if (errors) {
-					errors->push_back(email_format_error);
+					errors->push_back(field->human_name + email_format_error);
 				}
 
 				return false;
@@ -328,7 +329,7 @@ bool FormEmailFieldEntry::validate(Request *request, const std::string &field_na
 
 	if (at_pos == -1) {
 		if (errors) {
-			errors->push_back(email_format_error);
+			errors->push_back(field->human_name + email_format_error);
 		}
 
 		return false;
@@ -341,7 +342,7 @@ bool FormEmailFieldEntry::validate(Request *request, const std::string &field_na
 
 		if (!isalnum(data[i])) {
 			if (errors) {
-				errors->push_back(email_format_error);
+				errors->push_back(field->human_name + email_format_error);
 			}
 
 			return false;
@@ -352,17 +353,17 @@ bool FormEmailFieldEntry::validate(Request *request, const std::string &field_na
 }
 
 FormEmailFieldEntry::FormEmailFieldEntry() {
-	email_format_error = "Field is invalid!";
+	email_format_error = " is invalid!";
 }
 FormEmailFieldEntry::~FormEmailFieldEntry() {
 }
 
 //FormNeedToMatchOtherFieldEntry
 
-bool FormNeedToMatchOtherFieldEntry::validate(Request *request, const std::string &field_name, const std::string &data, std::vector<std::string> *errors) {
+bool FormNeedToMatchOtherFieldEntry::validate(Request *request, const FormField *field, const std::string &data, std::vector<std::string> *errors) {
 	if (data != request->get_parameter(other_field)) {
 		if (errors) {
-			errors->push_back(does_not_match_error + field_name + ".");
+			errors->push_back(field->human_name + does_not_match_error + field->name + ".");
 		}
 
 		return false;
@@ -372,7 +373,7 @@ bool FormNeedToMatchOtherFieldEntry::validate(Request *request, const std::strin
 }
 
 FormNeedToMatchOtherFieldEntry::FormNeedToMatchOtherFieldEntry() {
-	does_not_match_error = "Field does not match ";
+	does_not_match_error = " does not match ";
 }
 FormNeedToMatchOtherFieldEntry::~FormNeedToMatchOtherFieldEntry() {
 }
@@ -428,7 +429,7 @@ FormField *FormField::need_minimum_length(const int min_length) {
 }
 FormField *FormField::need_maximum_length(const int max_length) {
 	FormMaximumLengthFieldEntry *f = new FormMaximumLengthFieldEntry();
-	f->max_length =max_length;
+	f->max_length = max_length;
 	add_entry(f);
 
 	return this;
@@ -457,7 +458,7 @@ bool FormField::validate(Request *request, std::vector<std::string> *errors) {
 	bool valid = true;
 
 	for (int i = 0; i < fields.size(); ++i) {
-		if (!fields[i]->validate(request, name, param, errors)) {
+		if (!fields[i]->validate(request, this, param, errors)) {
 			valid = false;
 		}
 	}
@@ -494,9 +495,10 @@ void FormValidator::add_field(FormField *field) {
 	fields.push_back(field);
 }
 
-FormField *FormValidator::new_field(const std::string &name) {
+FormField *FormValidator::new_field(const std::string &name, const std::string &human_name) {
 	FormField *f = new FormField();
 	f->name = name;
+	f->human_name = human_name;
 
 	fields.push_back(f);
 
