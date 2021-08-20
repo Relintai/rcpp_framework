@@ -12,7 +12,9 @@ void DBBasedUser::save() {
 	QueryBuilder *b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
 	if (id == 0) {
-		b->insert(_table_name, "username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked")->values();
+		b->insert(_table_name, "username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
+
+		b->values();
 		b->eval(name);
 		b->eval(email);
 		b->val(rank);
@@ -22,8 +24,9 @@ void DBBasedUser::save() {
 		b->val(banned);
 		b->val(password_reset_token);
 		b->val(locked);
-
-		b->cvalues()->end_command();
+		b->cvalues();
+		
+		b->end_command();
 		b->select_last_insert_id();
 
 		QueryResult *r = b->run();
@@ -50,7 +53,7 @@ void DBBasedUser::save() {
 		b->setp("password_reset_token", password_reset_token);
 		b->setp("locked", locked);
 		b->cset();
-		b->where("id=" + uid);
+		b->where()->wp("id", id);
 
 		//b->print();
 
@@ -61,21 +64,21 @@ void DBBasedUser::save() {
 		return;
 	}
 
-	//todo better way
-	std::stringstream ss;
-	ss << id;
-	std::string uid = ss.str();
+	b->reset();
 
-	//todo
-	b->query_result = "DELETE FROM " + _table_name + "_sessions WHERE user_id=" + uid;
+	b->del(_table_name + "_sessions")->where()->wp("user_id", id)->end_command();
+	//b->print();
+
 	b->end_command();
 	b->run_query();
 
-	b->query_result = "";
+	b->reset();
 
 	for (int i = 0; i < sessions.size(); ++i) {
-		b->query_result += "INSERT INTO " + _table_name + "_sessions VALUES(" + uid + ", '" + sessions[i] + "');";
+		b->insert(_table_name + "_sessions")->values()->val(id)->val(sessions[i])->cvalues()->end_command();
 	}
+
+	//b->print();
 
 	b->run_query();
 
@@ -94,13 +97,12 @@ void DBBasedUser::load() {
 	b->select("username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
 	b->from(_table_name);
 
-	//todo better way
-	std::stringstream ss;
-	ss << id;
-	std::string uid = ss.str();
-	b->where("id=" + uid);
+	b->where()->wp("id", id);
 
 	b->end_command();
+
+	//todo get_cell with types
+	std::stringstream ss;
 
 	QueryResult *r = b->run();
 
@@ -132,7 +134,7 @@ void DBBasedUser::load() {
 
 	b->select("session_id");
 	b->from(_table_name + "_sessions");
-	b->where("user_id=" + uid);
+	b->where()->wp("user_id", id);
 	b->end_command();
 
 	r = b->run();

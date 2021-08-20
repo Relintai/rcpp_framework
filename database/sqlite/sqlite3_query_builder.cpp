@@ -15,6 +15,12 @@ QueryBuilder *SQLite3QueryBuilder::udpate() {
 
 	return this;
 }
+QueryBuilder *SQLite3QueryBuilder::del() {
+	query_result += "DELETE FROM ";
+
+	return this;
+}
+
 QueryBuilder *SQLite3QueryBuilder::where() {
 	query_result += "WHERE ";
 
@@ -52,6 +58,12 @@ QueryBuilder *SQLite3QueryBuilder::udpate(const std::string &params) {
 
 	return this;
 }
+QueryBuilder *SQLite3QueryBuilder::del(const std::string &params) {
+	query_result += "DELETE FROM " + params + " ";
+
+	return this;
+}
+
 QueryBuilder *SQLite3QueryBuilder::where(const std::string &params) {
 	query_result += "WHERE " + params + " ";
 
@@ -150,6 +162,34 @@ QueryBuilder *SQLite3QueryBuilder::setp(const std::string &col, const bool param
 		query_result += col + "=1, ";
 	else
 		query_result += col + "=0, ";
+
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::wp(const std::string &col, const std::string &param) {
+	query_result += col + "=" + param + "' ";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::wp(const std::string &col, const char *param) {
+	query_result += col + "=" + std::string(param) + "' ";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::wp(const std::string &col, const int param) {
+	//todo add a better way
+	std::stringstream ss;
+	ss << param;
+
+	query_result += col + "=" + ss.str() + " ";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::wp(const std::string &col, const bool param) {
+	if (param)
+		query_result += col + "=1 ";
+	else
+		query_result += col + "=0 ";
 
 	return this;
 }

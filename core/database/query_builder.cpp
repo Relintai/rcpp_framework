@@ -8,6 +8,10 @@ QueryBuilder *QueryBuilder::select() {
 QueryBuilder *QueryBuilder::udpate() {
 	return this;
 }
+QueryBuilder *QueryBuilder::del() {
+	return this;
+}
+
 QueryBuilder *QueryBuilder::where() {
 
 	return this;
@@ -29,6 +33,9 @@ QueryBuilder *QueryBuilder::select(const std::string &params) {
 	return this;
 }
 QueryBuilder *QueryBuilder::udpate(const std::string &params) {
+	return this;
+}
+QueryBuilder *QueryBuilder::del(const std::string &params) {
 	return this;
 }
 QueryBuilder *QueryBuilder::where(const std::string &params) {
@@ -87,47 +94,55 @@ QueryBuilder *QueryBuilder::setp(const std::string &col, const bool param) {
 	return this;
 }
 
-QueryBuilder *QueryBuilder::eselect(const std::string &params) {
-	select(escape(params));
-
+QueryBuilder *QueryBuilder::wp(const std::string &col, const std::string &param) {
 	return this;
+}
+QueryBuilder *QueryBuilder::wp(const std::string &col, const char *param) {
+	return this;
+}
+QueryBuilder *QueryBuilder::wp(const std::string &col, const int param) {
+	return this;
+}
+QueryBuilder *QueryBuilder::wp(const std::string &col, const bool param) {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::eselect(const std::string &params) {
+	return select(escape(params));
 }
 QueryBuilder *QueryBuilder::eudpate(const std::string &params) {
-	udpate(escape(params));
-
-	return this;
+	return udpate(escape(params));
 }
-QueryBuilder *QueryBuilder::ewhere(const std::string &params) {
-	where(escape(params));
+QueryBuilder *QueryBuilder::edel(const std::string &params) {
+	return del(escape(params));
+}
 
-	return this;
+QueryBuilder *QueryBuilder::ewhere(const std::string &params) {
+	return where(escape(params));
 }
 QueryBuilder *QueryBuilder::efrom(const std::string &params) {
-	from(escape(params));
-
-	return this;
+	return from(escape(params));
 }
 QueryBuilder *QueryBuilder::einsert(const std::string &table_name) {
-	insert(escape(table_name));
+	return insert(escape(table_name));
 
 	return this;
 }
 QueryBuilder *QueryBuilder::evalues(const std::string &params_str) {
-	values(escape(params_str));
-
-	return this;
+	return values(escape(params_str));
 }
 
 QueryBuilder *QueryBuilder::eval(const std::string &param) {
-	val(escape(param));
-
-	return this;
+	return val(escape(param));
 }
-QueryBuilder *QueryBuilder::esetp(const std::string &col, const std::string &escaped_param) {
-	setp(col, escape(escaped_param));
-
-	return this;
+QueryBuilder *QueryBuilder::esetp(const std::string &col, const std::string &escape_param) {
+	return setp(col, escape(escape_param));
 }
+
+QueryBuilder *QueryBuilder::ewp(const std::string &col, const std::string &escape_param) {
+	return wp(col, escape(escape_param));
+}
+
 QueryBuilder *QueryBuilder::limit(const int num) {
 	return this;
 }
@@ -138,6 +153,8 @@ QueryBuilder *QueryBuilder::offset(const int num) {
 
 QueryBuilder *QueryBuilder::w(const std::string &str) {
 	query_result += str + " ";
+
+	return this;
 }
 QueryBuilder *QueryBuilder::ew(const std::string &str) {
 	return w(escape(str));
@@ -165,6 +182,12 @@ QueryBuilder *QueryBuilder::set_param(const int index, const float value) {
 }
 
 void QueryBuilder::end_command() {
+}
+
+QueryBuilder *QueryBuilder::reset() {
+	query_result = "";
+
+	return this;
 }
 
 QueryResult *QueryBuilder::run() {
