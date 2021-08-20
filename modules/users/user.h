@@ -13,8 +13,8 @@ class User : public Object {
 
 public:
 	int id;
-	std::string name;
-	std::string email;
+	std::string nameui;
+	std::string emailui;
 	int rank;
 	std::string pre_salt;
 	std::string post_salt;

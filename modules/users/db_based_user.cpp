@@ -14,8 +14,8 @@ void DBBasedUser::save() {
 		b->insert(_table_name, "username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
 
 		b->values();
-		b->eval(name);
-		b->eval(email);
+		b->eval(nameui);
+		b->eval(emailui);
 		b->val(rank);
 		b->val(pre_salt);
 		b->val(post_salt);
@@ -37,8 +37,8 @@ void DBBasedUser::save() {
 	} else {
 		b->udpate(_table_name);
 		b->set();
-		b->esetp("username", name);
-		b->esetp("email", email);
+		b->esetp("username", nameui);
+		b->esetp("email", emailui);
 		b->setp("rank", rank);
 		b->setp("pre_salt", pre_salt);
 		b->setp("post_salt", post_salt);
@@ -98,8 +98,8 @@ void DBBasedUser::load() {
 	QueryResult *r = b->run();
 
 	if (r->next_row()) {
-		name = r->get_cell(0);
-		email = r->get_cell(1);
+		nameui = r->get_cell(0);
+		emailui = r->get_cell(1);
 		rank = r->get_cell_int(2);
 		pre_salt = r->get_cell(3);
 		post_salt = r->get_cell(4);

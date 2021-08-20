@@ -24,15 +24,15 @@ void FileBasedUser::set_path(const std::string &path) {
 
 void FileBasedUser::save() {
 	//todo sanitize name!
-	_file_path = _path + name;
+	_file_path = _path + nameui;
 
 	rapidjson::Document document;
 	document.SetObject();
 
 	document.AddMember("id", id, document.GetAllocator());
 
-	document.AddMember("name", rapidjson::Value(name.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("email", rapidjson::Value(email.c_str(), document.GetAllocator()), document.GetAllocator());
+	document.AddMember("name", rapidjson::Value(nameui.c_str(), document.GetAllocator()), document.GetAllocator());
+	document.AddMember("email", rapidjson::Value(emailui.c_str(), document.GetAllocator()), document.GetAllocator());
 	document.AddMember("rank", rank, document.GetAllocator());
 	document.AddMember("pre_salt", rapidjson::Value(pre_salt.c_str(), document.GetAllocator()), document.GetAllocator());
 	document.AddMember("post_salt", rapidjson::Value(post_salt.c_str(), document.GetAllocator()), document.GetAllocator());
@@ -94,8 +94,8 @@ void FileBasedUser::load() {
 	rapidjson::Value uobj = data.GetObject();
 
 	id = uobj["id"].GetInt();
-	name = uobj["name"].GetString();
-	email = uobj["email"].GetString();
+	nameui = uobj["name"].GetString();
+	emailui = uobj["email"].GetString();
 	rank = uobj["rank"].GetInt();
 	pre_salt = uobj["pre_salt"].GetString();
 	post_salt = uobj["post_salt"].GetString();

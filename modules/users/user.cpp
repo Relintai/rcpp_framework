@@ -43,8 +43,8 @@ bool User::check_password(const std::string &p_password) {
 
 void User::create_password(const std::string &p_password) {
 	//todo improve a bit
-	pre_salt = hash_password(name + email);
-	post_salt = hash_password(email + name);
+	pre_salt = hash_password(nameui + emailui);
+	post_salt = hash_password(emailui + nameui);
 
 	password_hash = hash_password(p_password);
 }
@@ -238,7 +238,7 @@ void User::handle_register_request_default(Request *request) {
 				continue;
 			}
 
-			if (u->email == email_val) {
+			if (u->emailui == email_val) {
 				email_found = true;
 				break;
 			}
@@ -255,8 +255,8 @@ void User::handle_register_request_default(Request *request) {
 		if (error_str.size() == 0) {
 			user = UserManager::get_singleton()->create_user();
 
-			user->name = uname_val;
-			user->email = email_val;
+			user->nameui = uname_val;
+			user->emailui = email_val;
 			//todo
 			user->rank = 1;
 			user->create_password(pass_val);
