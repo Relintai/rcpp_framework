@@ -6,7 +6,6 @@
 #include "core/database/table_builder.h"
 #include "user_manager.h"
 #include <cstdio>
-#include <sstream>
 
 void DBBasedUser::save() {
 	QueryBuilder *b = DatabaseManager::get_singleton()->ddb->get_query_builder();
@@ -25,7 +24,7 @@ void DBBasedUser::save() {
 		b->val(password_reset_token);
 		b->val(locked);
 		b->cvalues();
-		
+
 		b->end_command();
 		b->select_last_insert_id();
 
@@ -36,11 +35,6 @@ void DBBasedUser::save() {
 		delete r;
 
 	} else {
-		//todo better way
-		std::stringstream ss;
-		ss << id;
-		std::string uid = ss.str();
-
 		b->udpate(_table_name);
 		b->set();
 		b->esetp("username", name);
@@ -101,31 +95,18 @@ void DBBasedUser::load() {
 
 	b->end_command();
 
-	//todo get_cell with types
-	std::stringstream ss;
-
 	QueryResult *r = b->run();
 
 	if (r->next_row()) {
-		ss.clear();
-
 		name = r->get_cell(0);
 		email = r->get_cell(1);
-
-		ss << r->get_cell(2);
-		ss >> rank;
-
+		rank = r->get_cell_int(2);
 		pre_salt = r->get_cell(3);
 		post_salt = r->get_cell(4);
 		password_hash = r->get_cell(5);
-
-		ss << r->get_cell(6);
-		ss >> banned;
-
+		banned = r->get_cell_bool(6);
 		password_reset_token = r->get_cell(7);
-
-		ss << r->get_cell(8);
-		ss >> locked;
+		locked = r->get_cell_bool(8);
 	}
 
 	delete r;
@@ -201,12 +182,7 @@ void DBBasedUser::load_all() {
 
 	while (r->next_row()) {
 		DBBasedUser *u = new DBBasedUser();
-		//todo better way
-		const char *c = r->get_cell(0);
-		std::stringstream ss;
-		ss << c;
-		ss >> u->id;
-
+		u->id = r->get_cell_int(0);
 		u->load();
 
 		UserManager::get_singleton()->add_user(u);
