@@ -57,6 +57,9 @@ void DRequest::reset() {
 
 	request.reset();
 
+	_added_cookies.clear();
+	_removed_cookies.clear();
+
 	//response = new HttpResponse();
 }
 
