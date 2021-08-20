@@ -8,6 +8,8 @@
 #include <cstdio>
 
 void DBBasedUser::save() {
+	_mutex.lock();
+
 	QueryBuilder *b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
 	if (id == 0) {
@@ -77,10 +79,14 @@ void DBBasedUser::save() {
 	b->run_query();
 
 	delete b;
+
+	_mutex.unlock();
 }
 
 void DBBasedUser::load() {
 	unregister_sessions();
+
+	_mutex.lock();
 
 	if (id == 0) {
 		return;
@@ -127,6 +133,8 @@ void DBBasedUser::load() {
 	delete r;
 
 	delete b;
+
+	_mutex.unlock();
 
 	register_sessions();
 }

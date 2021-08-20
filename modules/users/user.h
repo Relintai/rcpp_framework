@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <mutex>
 
 class Request;
 class FormValidator;
@@ -58,6 +59,8 @@ public:
 
 	static FormValidator *_login_validator;
 	static FormValidator *_registration_validator;
+
+	std::mutex _mutex;
 };
 
 #endif
