@@ -7,45 +7,38 @@
 
 class Request;
 
-//This might be converted to a form validator
+class FormFieldEntry {
+public:
+	virtual bool validate(Request *request, const std::string &data, std::vector<std::string> *errors);
+
+	FormFieldEntry();
+	virtual ~FormFieldEntry();
+};
 
 class FormField {
 public:
-    std::string name;
-    std::string label;
-	std::map<std::string, std::string> attribues;
-
-    virtual std::string render();
-
-    virtual bool validate(Request *request, std::vector<std::string> *errors);
-
-    FormField();
-    virtual ~FormField();
-};
-
-class InputFormField : public FormField {
-    std::string render();
-};
-
-class InputTextFormField : public InputFormField {
-    std::string render();
-};
-
-class InputPasswordFormField : public InputFormField {
-    std::string render();
-};
-
-class Form {
-public:
 	std::string name;
-	std::map<std::string, std::string> attribues;
+
+	void add_entry(FormFieldEntry *field);
+
+	bool validate(Request *request, std::vector<std::string> *errors);
+
+	FormField();
+	virtual ~FormField();
+
+	std::vector<FormFieldEntry *> fields;
+};
+
+class FormValidator {
+public:
+    bool validate(Request *request, std::vector<std::string> *errors = nullptr);
+
+	void add_field(FormField *field);
+
+	FormValidator();
+	virtual ~FormValidator();
+
 	std::vector<FormField *> fields;
-
-    //call Theme->render(); in it, and that will go though all attribs and call their renders
-    virtual std::string render();
-
-	Form();
-	virtual ~Form();
 };
 
 #endif
