@@ -72,7 +72,8 @@ public:
 	void register_sessions();
 	void unregister_sessions();
 
-	void register_properties();
+	std::string to_json(rapidjson::Document *into = nullptr);
+	void from_json(const std::string &data);
 
 	User();
 	~User();

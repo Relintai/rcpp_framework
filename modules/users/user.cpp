@@ -1,5 +1,10 @@
 #include "user.h"
 
+#include "rapidjson/filewritestream.h"
+#include "rapidjson/rapidjson.h"
+#include "rapidjson/stringbuffer.h"
+#include <rapidjson/writer.h>
+
 #include "core/hash/sha256.h"
 #include "core/html/form_validator.h"
 #include "core/html/html_builder.h"
@@ -695,6 +700,56 @@ void User::create_validators() {
 
 		_profile_validator->new_field("password_check", "Password check")->ignore_if_other_field_not_exists("password")->need_to_match("password");
 	}
+}
+
+std::string User::to_json(rapidjson::Document *into) {
+	rapidjson::Document *document;
+
+	if (into) {
+		document = into;
+	} else {
+		document =  new rapidjson::Document();
+	}
+
+	document->SetObject();
+
+	document->AddMember("id", get_id(), document->GetAllocator());
+
+	document->AddMember("name", rapidjson::Value(_nameui.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("email", rapidjson::Value(_emailui.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("rank", _rank, document->GetAllocator());
+	document->AddMember("pre_salt", rapidjson::Value(_pre_salt.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("post_salt", rapidjson::Value(_post_salt.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("password_hash", rapidjson::Value(_password_hash.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("banned", _banned, document->GetAllocator());
+	document->AddMember("password_reset_token", rapidjson::Value(_password_reset_token.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("locked", _locked, document->GetAllocator());
+
+	rapidjson::Value sa(rapidjson::Type::kArrayType);
+	rapidjson::Document::AllocatorType &allocator = document->GetAllocator();
+
+	for (int i = 0; i < _sessions.size(); i++) {
+		sa.PushBack(rapidjson::Value(_sessions[i].c_str(), document->GetAllocator()), allocator);
+	}
+
+	document->AddMember("sessions", sa, document->GetAllocator());
+
+	if (into) {
+		return "";
+	}
+
+	rapidjson::StringBuffer buffer;
+	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+	document->Accept(writer);
+
+	std::string s = buffer.GetString();
+
+	delete document;
+
+	return s;
+}
+void User::from_json(const std::string &data) {
+
 }
 
 User::User() :

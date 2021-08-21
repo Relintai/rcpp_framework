@@ -2,10 +2,7 @@
 
 #include <vector>
 
-#include "rapidjson/filewritestream.h"
 #include "rapidjson/rapidjson.h"
-#include "rapidjson/stringbuffer.h"
-#include <rapidjson/writer.h>
 #include <tinydir/tinydir.h>
 #include <cstdio>
 
@@ -101,6 +98,9 @@ void Resource::sql_delete_tables(Database *db) {
 
 void Resource::file_save() {
 	/*
+	//todo sanitize name!
+	_file_path =  _resource_name + get_id();
+
 
 	FILE *fp = fopen(_file_path.c_str(), "w");
 
@@ -108,7 +108,7 @@ void Resource::file_save() {
 	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
 
 	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
-	document->Accept(writer);
+	document.Accept(writer);
 
 	fclose(fp);
 	*/
@@ -135,13 +135,4 @@ Resource::Resource() :
 }
 
 Resource::~Resource() {
-	std::map<std::string, ResourcePropertyBase *>::iterator it;
-
-	for (it = _property_map.begin(); it != _property_map.end(); it++) {
-		ResourcePropertyBase *p = it->second;
-
-		if (p) {
-			delete p;
-		}
-	}
 }

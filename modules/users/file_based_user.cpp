@@ -23,42 +23,7 @@ void FileBasedUser::set_path(const std::string &path) {
 }
 
 void FileBasedUser::save() {
-	//todo sanitize name!
-	_file_path = _path + _nameui;
 
-	rapidjson::Document document;
-	document.SetObject();
-
-	document.AddMember("id", get_id(), document.GetAllocator());
-
-	document.AddMember("name", rapidjson::Value(_nameui.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("email", rapidjson::Value(_emailui.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("rank", _rank, document.GetAllocator());
-	document.AddMember("pre_salt", rapidjson::Value(_pre_salt.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("post_salt", rapidjson::Value(_post_salt.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("password_hash", rapidjson::Value(_password_hash.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("banned", _banned, document.GetAllocator());
-	document.AddMember("password_reset_token", rapidjson::Value(_password_reset_token.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("locked", _locked, document.GetAllocator());
-
-	rapidjson::Value sa(rapidjson::Type::kArrayType);
-	rapidjson::Document::AllocatorType &allocator = document.GetAllocator();
-
-	for (int i = 0; i < _sessions.size(); i++) {
-		sa.PushBack(rapidjson::Value(_sessions[i].c_str(), document.GetAllocator()), allocator);
-	}
-
-	document.AddMember("sessions", sa, document.GetAllocator());
-
-	FILE *fp = fopen(_file_path.c_str(), "w");
-
-	char writeBuffer[65536];
-	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
-
-	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
-	document.Accept(writer);
-
-	fclose(fp);
 }
 
 void FileBasedUser::load(const std::string &p_name) {
