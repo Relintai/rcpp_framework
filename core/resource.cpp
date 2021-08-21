@@ -283,7 +283,8 @@ void Resource::register_properties() {
 	add_property_int("id", &Resource::get_id, &Resource::set_id);
 }
 
-Resource::Resource() {
+Resource::Resource() :
+		Reference() {
 	_id = 0;
 	_dirty = false;
 	_resource_name = get_class();
@@ -291,8 +292,7 @@ Resource::Resource() {
 	register_properties();
 }
 
-Resource::~Resource() :
-		Reference() {
+Resource::~Resource() {
 	std::map<std::string, ResourcePropertyBase *>::iterator it;
 
 	for (it = _property_map.begin(); it != _property_map.end(); it++) {
