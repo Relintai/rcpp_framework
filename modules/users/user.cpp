@@ -697,15 +697,6 @@ void User::create_validators() {
 	}
 }
 
-void User::register_properties() {
-	Resource::register_properties();
-
-	//add_property_int("id", &Resource::get_id, &Resource::set_id);
-
-	//add_property_string("nameui", &User::get_name_ui, &User::set_name_ui);
-	//add_property_string("nameui", &User::get_name_ui, &User::set_name_ui);
-}
-
 User::User() :
 		Resource() {
 

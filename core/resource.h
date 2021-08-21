@@ -65,45 +65,6 @@ public:
 	std::string to_json(rapidjson::Document *into = nullptr);
 	void from_json(const std::string &data);
 
-	//todo add a variant like class. (Or variant itself from godot.)
-	int get_int(const std::string &property);
-	float get_float(const std::string &property);
-	std::string get_string(const std::string &property);
-	bool get_bool(const std::string &property);
-	Ref<Resource> get_resource(const std::string &property);
-
-	std::vector<int> get_int_vector(const std::string &property);
-	std::vector<float> get_float_vector(const std::string &property);
-	std::vector<std::string> get_string_vector(const std::string &property);
-	std::vector<bool> get_bool_vector(const std::string &property);
-	std::vector<Ref<Resource> > get_resource_vector(const std::string &property);
-
-	void set_int(const std::string &property, const int data);
-	void set_float(const std::string &property, const float data);
-	void set_string(const std::string &property, const std::string &data);
-	void set_bool(const std::string &property, const bool data);
-	void set_resource(const std::string &property, const Ref<Resource> &data);
-
-	void set_int_vector(const std::string &property, const std::vector<int> &data);
-	void set_float_vector(const std::string &property, const std::vector<float> &data);
-	void set_string_vector(const std::string &property, const std::vector<std::string> &data);
-	void set_bool_vector(const std::string &property, const std::vector<bool> &data);
-	void set_resource_vector(const std::string &property, const std::vector<Ref<Resource> > &data);
-
-	void add_property_int(const std::string &name, std::function<int(Resource *)> getter, std::function<void(Resource *, int)> setter, const int property_flags = 0);
-	void add_property_float(const std::string &name, std::function<float(Resource *)> getter, std::function<void(Resource *, float)> setter, const int property_flags = 0);
-	void add_property_string(const std::string &name, std::function<std::string(Resource *)> getter, std::function<void(Resource *, std::string)> setter, const int property_flags = 0);
-	void add_property_bool(const std::string &name, std::function<bool(Resource *)> getter, std::function<void(Resource *, bool)> setter, const int property_flags = 0);
-	void add_property_resource(const std::string &name, std::function<Ref<Resource>(Resource *)> getter, std::function<void(Resource *, Ref<Resource>)> setter, const int property_flags = 0);
-
-	void add_property_int_vector(const std::string &name, std::function<std::vector<int>(Resource *)> getter, std::function<void(Resource *, std::vector<int>)> setter, const int property_flags = 0);
-	void add_property_float_vector(const std::string &name, std::function<std::vector<float>(Resource *)> getter, std::function<void(Resource *, std::vector<float>)> setter, const int property_flags = 0);
-	void add_property_string_vector(const std::string &name, std::function<std::vector<std::string>(Resource *)> getter, std::function<void(Resource *, std::vector<std::string>)> setter, const int property_flags = 0);
-	void add_property_bool_vector(const std::string &name, std::function<std::vector<bool>(Resource *)> getter, std::function<void(Resource *, std::vector<bool>)> setter, const int property_flags = 0);
-	void add_property_resource_vector(const std::string &name, std::function<std::vector<Ref<Resource> >(Resource *)> getter, std::function<void(Resource *, std::vector<Ref<Resource> >)> setter, const int property_flags = 0);
-
-	virtual void register_properties();
-
 	Resource();
 	~Resource();
 
