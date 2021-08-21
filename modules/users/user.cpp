@@ -26,7 +26,7 @@ void User::load(const std::string &p_name) {
 }
 
 void User::load(const int p_id) {
-	id = p_id;
+	set_id(p_id);
 
 	load();
 }
@@ -630,7 +630,6 @@ void User::create_validators() {
 User::User() :
 		Resource() {
 
-	id = 0;
 	rank = 0;
 	banned = false;
 	locked = false;

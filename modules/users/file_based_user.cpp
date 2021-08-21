@@ -29,7 +29,7 @@ void FileBasedUser::save() {
 	rapidjson::Document document;
 	document.SetObject();
 
-	document.AddMember("id", id, document.GetAllocator());
+	document.AddMember("id", get_id(), document.GetAllocator());
 
 	document.AddMember("name", rapidjson::Value(nameui.c_str(), document.GetAllocator()), document.GetAllocator());
 	document.AddMember("email", rapidjson::Value(emailui.c_str(), document.GetAllocator()), document.GetAllocator());
@@ -93,7 +93,7 @@ void FileBasedUser::load() {
 
 	rapidjson::Value uobj = data.GetObject();
 
-	id = uobj["id"].GetInt();
+	set_id(uobj["id"].GetInt());
 	nameui = uobj["name"].GetString();
 	emailui = uobj["email"].GetString();
 	rank = uobj["rank"].GetInt();

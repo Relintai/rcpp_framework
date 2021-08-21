@@ -12,7 +12,7 @@ void DBBasedUser::save() {
 
 	QueryBuilder *b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
-	if (id == 0) {
+	if (get_id() == 0) {
 		b->insert(_table_name, "username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
 
 		b->values();
@@ -32,7 +32,7 @@ void DBBasedUser::save() {
 
 		QueryResult *r = b->run();
 
-		id = r->get_last_insert_rowid();
+		set_id(r->get_last_insert_rowid());
 
 		delete r;
 
@@ -49,20 +49,20 @@ void DBBasedUser::save() {
 		b->setp("password_reset_token", password_reset_token);
 		b->setp("locked", locked);
 		b->cset();
-		b->where()->wp("id", id);
+		b->where()->wp("id", get_id());
 
 		//b->print();
 
 		b->run_query();
 	}
 
-	if (id == 0) {
+	if (get_id() == 0) {
 		return;
 	}
 
 	b->reset();
 
-	b->del(_table_name + "_sessions")->where()->wp("user_id", id)->end_command();
+	b->del(_table_name + "_sessions")->where()->wp("user_id", get_id())->end_command();
 	//b->print();
 
 	b->end_command();
@@ -71,7 +71,7 @@ void DBBasedUser::save() {
 	b->reset();
 
 	for (int i = 0; i < sessions.size(); ++i) {
-		b->insert(_table_name + "_sessions")->values()->val(id)->val(sessions[i])->cvalues()->end_command();
+		b->insert(_table_name + "_sessions")->values()->val(get_id())->val(sessions[i])->cvalues()->end_command();
 	}
 
 	//b->print();
@@ -88,7 +88,7 @@ void DBBasedUser::load() {
 
 	_mutex.lock();
 
-	if (id == 0) {
+	if (get_id() == 0) {
 		return;
 	}
 
@@ -97,7 +97,7 @@ void DBBasedUser::load() {
 	b->select("username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
 	b->from(_table_name);
 
-	b->where()->wp("id", id);
+	b->where()->wp("id", get_id());
 
 	b->end_command();
 
@@ -121,7 +121,7 @@ void DBBasedUser::load() {
 
 	b->select("session_id");
 	b->from(_table_name + "_sessions");
-	b->where()->wp("user_id", id);
+	b->where()->wp("user_id", get_id());
 	b->end_command();
 
 	r = b->run();
@@ -190,8 +190,10 @@ void DBBasedUser::load_all() {
 
 	while (r->next_row()) {
 		DBBasedUser *u = new DBBasedUser();
-		u->id = r->get_cell_int(0);
+		u->set_id(r->get_cell_int(0));
 		u->load();
+
+		//u->to_json();
 
 		UserManager::get_singleton()->add_user(u);
 	}

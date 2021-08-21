@@ -14,7 +14,6 @@ class User : public Resource {
 	RCPP_OBJECT(User, Resource);
 
 public:
-	int id;
 	std::string nameui;
 	std::string emailui;
 	int rank;
