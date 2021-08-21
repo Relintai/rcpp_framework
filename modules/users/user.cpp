@@ -628,7 +628,7 @@ void User::create_validators() {
 }
 
 User::User() :
-		Object() {
+		Resource() {
 
 	id = 0;
 	rank = 0;

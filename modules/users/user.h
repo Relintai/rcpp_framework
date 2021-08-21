@@ -1,7 +1,7 @@
 #ifndef USER_H
 #define USER_H
 
-#include "core/object.h"
+#include "core/resource.h"
 
 #include <string>
 #include <vector>
@@ -10,8 +10,8 @@
 class Request;
 class FormValidator;
 
-class User : public Object {
-	RCPP_OBJECT(User, Object);
+class User : public Resource {
+	RCPP_OBJECT(User, Resource);
 
 public:
 	int id;
