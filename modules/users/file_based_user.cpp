@@ -28,9 +28,9 @@ void FileBasedUser::save() {
 
 void FileBasedUser::load(const std::string &p_name) {
 	//todo sanitize name!
-	_file_path = _path + p_name;
+	//_file_path = _path + p_name;
 
-	load();
+	//load();
 }
 
 void FileBasedUser::load() {
