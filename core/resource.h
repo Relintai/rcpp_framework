@@ -5,8 +5,9 @@
 #include <map>
 #include <string>
 
-#include "libs/rapidjson/document.h"
 #include "reference.h"
+
+#include "rapidjson/document.h"
 
 #if DATABASES_ENABLED
 class Database;
@@ -61,7 +62,7 @@ public:
 	virtual void file_ensure_directory_exist();
 	virtual std::string file_get_base_path();
 
-	std::string to_json(rapidjson::Document *document = nullptr);
+	std::string to_json(rapidjson::Document *into = nullptr);
 	void from_json(const std::string &data);
 
 	//todo add a variant like class. (Or variant itself from godot.)

@@ -2,6 +2,13 @@
 
 #include <vector>
 
+#include "rapidjson/filewritestream.h"
+#include "rapidjson/rapidjson.h"
+#include "rapidjson/stringbuffer.h"
+#include <rapidjson/writer.h>
+#include <tinydir/tinydir.h>
+#include <cstdio>
+
 #if DATABASES_ENABLED
 #include "core/database/database.h"
 #include "core/database/database_manager.h"
@@ -165,6 +172,18 @@ void Resource::sql_delete_tables(Database *db) {
 #endif
 
 void Resource::file_save() {
+	/*
+
+	FILE *fp = fopen(_file_path.c_str(), "w");
+
+	char writeBuffer[65536];
+	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
+
+	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+	document->Accept(writer);
+
+	fclose(fp);
+	*/
 }
 void Resource::file_load() {
 }
@@ -174,8 +193,85 @@ std::string Resource::file_get_base_path() {
 	return "./resources/";
 }
 
-std::string Resource::to_json(rapidjson::Document *document) {
-	return "";
+std::string Resource::to_json(rapidjson::Document *into) {
+	rapidjson::Document *document;
+
+	if (into) {
+		document = into;
+	} else {
+		document = new rapidjson::Document();
+	}
+
+	document->SetObject();
+
+	std::map<std::string, ResourcePropertyBase *>::iterator it;
+
+	for (it = _property_map.begin(); it != _property_map.end(); it++) {
+		std::string property_name = it->first;
+		ResourcePropertyType property_type = it->second->type;
+
+		switch (property_type) {
+			case TYPE_NULL:
+				break;
+			case TYPE_INT:
+				document->AddMember(rapidjson::GenericStringRef<char>(property_name.c_str()), get_int(property_name), document->GetAllocator());
+				break;
+			case TYPE_FLOAT:
+				break;
+			case TYPE_STRING:
+				break;
+			case TYPE_BOOL:
+				break;
+			case TYPE_RESOURCE:
+				break;
+			case TYPE_VECTOR_INT:
+				break;
+			case TYPE_VECTOR_FLOAT:
+				break;
+			case TYPE_VECTOR_STRING:
+				break;
+			case TYPE_VECTOR_BOOL:
+				break;
+			case TYPE_VECTOR_RESOURCE:
+				break;
+		}
+	}
+
+	/*
+	document->AddMember("name", rapidjson::Value(nameui.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("email", rapidjson::Value(emailui.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("rank", rank, document->GetAllocator());
+	document->AddMember("pre_salt", rapidjson::Value(pre_salt.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("post_salt", rapidjson::Value(post_salt.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("password_hash", rapidjson::Value(password_hash.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("banned", banned, document->GetAllocator());
+	document->AddMember("password_reset_token", rapidjson::Value(password_reset_token.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("locked", locked, document->GetAllocator());
+
+	rapidjson::Value sa(rapidjson::Type::kArrayType);
+	rapidjson::Document::AllocatorType &allocator = document->GetAllocator();
+
+	for (int i = 0; i < sessions.size(); i++) {
+		sa.PushBack(rapidjson::Value(sessions[i].c_str(), document->GetAllocator()), allocator);
+	}
+
+	document->AddMember("sessions", sa, document->GetAllocator());
+
+	*/
+
+	if (into) {
+		return "";
+	}
+
+	rapidjson::StringBuffer buffer;
+	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+	document->Accept(writer);
+
+	std::string s = buffer.GetString();
+
+	delete document;
+
+	return s;
 }
 void Resource::from_json(const std::string &data) {
 }

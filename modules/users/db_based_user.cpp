@@ -193,7 +193,7 @@ void DBBasedUser::load_all() {
 		u->set_id(r->get_cell_int(0));
 		u->load();
 
-		//u->to_json();
+		//printf("%s\n", u->to_json().c_str());
 
 		UserManager::get_singleton()->add_user(u);
 	}
