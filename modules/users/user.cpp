@@ -10,6 +10,76 @@
 #include "core/utils.h"
 #include "user_manager.h"
 
+std::string User::get_name_ui() {
+	return _nameui;
+}
+void User::set_name_ui(const std::string &value) {
+	_nameui = value;
+}
+
+std::string User::get_email_ui() {
+	return _emailui;
+}
+void User::set_email_ui(const std::string &value) {
+	_emailui = value;
+}
+
+int User::get_rank() {
+	return _rank;
+}
+void User::set_rank(const int value) {
+	_rank = value;
+}
+
+std::string User::get_pre_salt() {
+	return _pre_salt;
+}
+void User::set_pre_salt(const std::string &value) {
+	_pre_salt = value;
+}
+
+std::string User::get_post_salt() {
+	return _post_salt;
+}
+void User::set_post_salt(const std::string &value) {
+	_post_salt = value;
+}
+
+std::string User::get_password_hash() {
+	return _password_hash;
+}
+void User::set_password_hash(const std::string &value) {
+	_password_hash = value;
+}
+
+bool User::get_banned() {
+	return _banned;
+}
+void User::set_banned(const bool value) {
+	_banned = value;
+}
+
+std::vector<std::string> User::get_sessions() {
+	return _sessions;
+}
+void User::set_sessions(const std::vector<std::string> &value) {
+	_sessions = value;
+}
+
+std::string User::get_password_reset_token() {
+	return _password_reset_token;
+}
+void User::set_password_reset_token(const std::string &value) {
+	_password_reset_token = value;
+}
+
+bool User::get_locked() {
+	return _locked;
+}
+void User::set_locked(const bool value) {
+	_locked = value;
+}
+
 void User::save() {
 }
 
@@ -39,21 +109,21 @@ void User::update() {
 }
 
 bool User::check_password(const std::string &p_password) {
-	return hash_password(p_password) == password_hash;
+	return hash_password(p_password) == _password_hash;
 }
 
 void User::create_password(const std::string &p_password) {
 	//todo improve a bit
-	pre_salt = hash_password(nameui + emailui);
-	post_salt = hash_password(emailui + nameui);
+	_pre_salt = hash_password(_nameui + _emailui);
+	_post_salt = hash_password(_emailui + _nameui);
 
-	password_hash = hash_password(p_password);
+	_password_hash = hash_password(p_password);
 }
 
 std::string User::hash_password(const std::string &p_password) {
 	SHA256 *s = SHA256::get();
 
-	std::string p = pre_salt + p_password + post_salt;
+	std::string p = _pre_salt + p_password + _post_salt;
 
 	std::string c = s->compute(p);
 
@@ -63,7 +133,7 @@ std::string User::hash_password(const std::string &p_password) {
 }
 
 void User::register_sessions() {
-	if (sessions.size() == 0) {
+	if (_sessions.size() == 0) {
 		return;
 	}
 
@@ -76,9 +146,9 @@ void User::register_sessions() {
 
 	_mutex.lock();
 
-	for (int i = 0; i < sessions.size(); ++i) {
+	for (int i = 0; i < _sessions.size(); ++i) {
 		HTTPSession *session = new HTTPSession();
-		session->session_id = sessions[i];
+		session->session_id = _sessions[i];
 		session->add_object("user", this);
 
 		sm->add_session(session);
@@ -88,7 +158,7 @@ void User::register_sessions() {
 }
 
 void User::unregister_sessions() {
-	if (sessions.size() == 0) {
+	if (_sessions.size() == 0) {
 		return;
 	}
 
@@ -101,8 +171,8 @@ void User::unregister_sessions() {
 
 	_mutex.lock();
 
-	for (int i = 0; i < sessions.size(); ++i) {
-		sm->delete_session(sessions[i]);
+	for (int i = 0; i < _sessions.size(); ++i) {
+		sm->delete_session(_sessions[i]);
 	}
 
 	_mutex.unlock();
@@ -169,7 +239,7 @@ void User::handle_login_request_default(Request *request) {
 				session->add_object("user", user);
 
 				user->_mutex.lock();
-				user->sessions.push_back(session->session_id);
+				user->_sessions.push_back(session->session_id);
 				user->_mutex.unlock();
 
 				user->save();
@@ -270,7 +340,7 @@ void User::handle_register_request_default(Request *request) {
 				continue;
 			}
 
-			if (u->emailui == email_val) {
+			if (u->_emailui == email_val) {
 				email_found = true;
 				break;
 			}
@@ -287,10 +357,10 @@ void User::handle_register_request_default(Request *request) {
 		if (error_str.size() == 0) {
 			user = UserManager::get_singleton()->create_user();
 
-			user->nameui = uname_val;
-			user->emailui = email_val;
+			user->_nameui = uname_val;
+			user->_emailui = email_val;
 			//todo
-			user->rank = 1;
+			user->_rank = 1;
 			user->create_password(pass_val);
 			user->save();
 
@@ -425,11 +495,11 @@ void User::handle_settings_request(Request *request) {
 		}
 
 		if (valid) {
-			if (uname_val == nameui) {
+			if (uname_val == _nameui) {
 				uname_val = "";
 			}
 
-			if (email_val == emailui) {
+			if (email_val == _emailui) {
 				email_val = "";
 			}
 
@@ -440,7 +510,7 @@ void User::handle_settings_request(Request *request) {
 					error_str += "Username already taken!<br>";
 				} else {
 					//todo sanitize for html special chars!
-					nameui = uname_val;
+					_nameui = uname_val;
 					changed = true;
 					uname_val = "";
 				}
@@ -463,7 +533,7 @@ void User::handle_settings_request(Request *request) {
 						continue;
 					}
 
-					if (u->emailui == email_val) {
+					if (u->_emailui == email_val) {
 						email_found = true;
 						break;
 					}
@@ -474,7 +544,7 @@ void User::handle_settings_request(Request *request) {
 				} else {
 					//todo sanitize for html special chars!
 					//also send email
-					emailui = email_val;
+					_emailui = email_val;
 					changed = true;
 					email_val = "";
 				}
@@ -515,13 +585,13 @@ void User::handle_settings_request(Request *request) {
 
 	b.w("Username");
 	b.br();
-	b.input()->type("text")->name("username")->placeholder(nameui)->value(uname_val);
+	b.input()->type("text")->name("username")->placeholder(_nameui)->value(uname_val);
 	b.cinput();
 	b.br();
 
 	b.w("Email");
 	b.br();
-	b.input()->type("email")->name("email")->placeholder(emailui)->value(email_val);
+	b.input()->type("email")->name("email")->placeholder(_emailui)->value(email_val);
 	b.cinput();
 	b.br();
 
@@ -557,10 +627,10 @@ void User::handle_logout_request(Request *request) {
 
 	_mutex.lock();
 
-	for (int i = 0; i < sessions.size(); ++i) {
-		if (sessions[i] == request->session->session_id) {
-			sessions[i] = sessions[sessions.size() - 1];
-			sessions.pop_back();
+	for (int i = 0; i < _sessions.size(); ++i) {
+		if (_sessions[i] == request->session->session_id) {
+			_sessions[i] = _sessions[_sessions.size() - 1];
+			_sessions.pop_back();
 		}
 	}
 
@@ -627,12 +697,21 @@ void User::create_validators() {
 	}
 }
 
+void User::register_properties() {
+	Resource::register_properties();
+
+	//add_property_int("id", &Resource::get_id, &Resource::set_id);
+
+	//add_property_string("nameui", &User::get_name_ui, &User::set_name_ui);
+	//add_property_string("nameui", &User::get_name_ui, &User::set_name_ui);
+}
+
 User::User() :
 		Resource() {
 
-	rank = 0;
-	banned = false;
-	locked = false;
+	_rank = 0;
+	_banned = false;
+	_locked = false;
 }
 
 User::~User() {

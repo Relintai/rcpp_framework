@@ -24,28 +24,28 @@ void FileBasedUser::set_path(const std::string &path) {
 
 void FileBasedUser::save() {
 	//todo sanitize name!
-	_file_path = _path + nameui;
+	_file_path = _path + _nameui;
 
 	rapidjson::Document document;
 	document.SetObject();
 
 	document.AddMember("id", get_id(), document.GetAllocator());
 
-	document.AddMember("name", rapidjson::Value(nameui.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("email", rapidjson::Value(emailui.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("rank", rank, document.GetAllocator());
-	document.AddMember("pre_salt", rapidjson::Value(pre_salt.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("post_salt", rapidjson::Value(post_salt.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("password_hash", rapidjson::Value(password_hash.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("banned", banned, document.GetAllocator());
-	document.AddMember("password_reset_token", rapidjson::Value(password_reset_token.c_str(), document.GetAllocator()), document.GetAllocator());
-	document.AddMember("locked", locked, document.GetAllocator());
+	document.AddMember("name", rapidjson::Value(_nameui.c_str(), document.GetAllocator()), document.GetAllocator());
+	document.AddMember("email", rapidjson::Value(_emailui.c_str(), document.GetAllocator()), document.GetAllocator());
+	document.AddMember("rank", _rank, document.GetAllocator());
+	document.AddMember("pre_salt", rapidjson::Value(_pre_salt.c_str(), document.GetAllocator()), document.GetAllocator());
+	document.AddMember("post_salt", rapidjson::Value(_post_salt.c_str(), document.GetAllocator()), document.GetAllocator());
+	document.AddMember("password_hash", rapidjson::Value(_password_hash.c_str(), document.GetAllocator()), document.GetAllocator());
+	document.AddMember("banned", _banned, document.GetAllocator());
+	document.AddMember("password_reset_token", rapidjson::Value(_password_reset_token.c_str(), document.GetAllocator()), document.GetAllocator());
+	document.AddMember("locked", _locked, document.GetAllocator());
 
 	rapidjson::Value sa(rapidjson::Type::kArrayType);
 	rapidjson::Document::AllocatorType &allocator = document.GetAllocator();
 
-	for (int i = 0; i < sessions.size(); i++) {
-		sa.PushBack(rapidjson::Value(sessions[i].c_str(), document.GetAllocator()), allocator);
+	for (int i = 0; i < _sessions.size(); i++) {
+		sa.PushBack(rapidjson::Value(_sessions[i].c_str(), document.GetAllocator()), allocator);
 	}
 
 	document.AddMember("sessions", sa, document.GetAllocator());
@@ -94,21 +94,21 @@ void FileBasedUser::load() {
 	rapidjson::Value uobj = data.GetObject();
 
 	set_id(uobj["id"].GetInt());
-	nameui = uobj["name"].GetString();
-	emailui = uobj["email"].GetString();
-	rank = uobj["rank"].GetInt();
-	pre_salt = uobj["pre_salt"].GetString();
-	post_salt = uobj["post_salt"].GetString();
-	password_hash = uobj["password_hash"].GetString();
-	banned = uobj["banned"].GetBool();
+	_nameui = uobj["name"].GetString();
+	_emailui = uobj["email"].GetString();
+	_rank = uobj["rank"].GetInt();
+	_pre_salt = uobj["pre_salt"].GetString();
+	_post_salt = uobj["post_salt"].GetString();
+	_password_hash = uobj["password_hash"].GetString();
+	_banned = uobj["banned"].GetBool();
 
-	password_reset_token = uobj["password_reset_token"].GetString();
-	locked = uobj["locked"].GetBool();
+	_password_reset_token = uobj["password_reset_token"].GetString();
+	_locked = uobj["locked"].GetBool();
 
 	const rapidjson::Value &sess = uobj["sessions"].GetArray();
 
 	for (rapidjson::Value::ConstValueIterator itr = sess.Begin(); itr != sess.End(); ++itr) {
-		sessions.push_back(itr->GetString());
+		_sessions.push_back(itr->GetString());
 	}
 
 	register_sessions();

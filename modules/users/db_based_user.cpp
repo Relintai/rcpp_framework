@@ -16,15 +16,15 @@ void DBBasedUser::save() {
 		b->insert(_table_name, "username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
 
 		b->values();
-		b->eval(nameui);
-		b->eval(emailui);
-		b->val(rank);
-		b->val(pre_salt);
-		b->val(post_salt);
-		b->val(password_hash);
-		b->val(banned);
-		b->val(password_reset_token);
-		b->val(locked);
+		b->eval(_nameui);
+		b->eval(_emailui);
+		b->val(_rank);
+		b->val(_pre_salt);
+		b->val(_post_salt);
+		b->val(_password_hash);
+		b->val(_banned);
+		b->val(_password_reset_token);
+		b->val(_locked);
 		b->cvalues();
 
 		b->end_command();
@@ -39,15 +39,15 @@ void DBBasedUser::save() {
 	} else {
 		b->udpate(_table_name);
 		b->set();
-		b->esetp("username", nameui);
-		b->esetp("email", emailui);
-		b->setp("rank", rank);
-		b->setp("pre_salt", pre_salt);
-		b->setp("post_salt", post_salt);
-		b->setp("password_hash", password_hash);
-		b->setp("banned", banned);
-		b->setp("password_reset_token", password_reset_token);
-		b->setp("locked", locked);
+		b->esetp("username", _nameui);
+		b->esetp("email", _emailui);
+		b->setp("rank", _rank);
+		b->setp("pre_salt", _pre_salt);
+		b->setp("post_salt", _post_salt);
+		b->setp("password_hash", _password_hash);
+		b->setp("banned", _banned);
+		b->setp("password_reset_token", _password_reset_token);
+		b->setp("locked", _locked);
 		b->cset();
 		b->where()->wp("id", get_id());
 
@@ -70,8 +70,8 @@ void DBBasedUser::save() {
 
 	b->reset();
 
-	for (int i = 0; i < sessions.size(); ++i) {
-		b->insert(_table_name + "_sessions")->values()->val(get_id())->val(sessions[i])->cvalues()->end_command();
+	for (int i = 0; i < _sessions.size(); ++i) {
+		b->insert(_table_name + "_sessions")->values()->val(get_id())->val(_sessions[i])->cvalues()->end_command();
 	}
 
 	//b->print();
@@ -104,15 +104,15 @@ void DBBasedUser::load() {
 	QueryResult *r = b->run();
 
 	if (r->next_row()) {
-		nameui = r->get_cell(0);
-		emailui = r->get_cell(1);
-		rank = r->get_cell_int(2);
-		pre_salt = r->get_cell(3);
-		post_salt = r->get_cell(4);
-		password_hash = r->get_cell(5);
-		banned = r->get_cell_bool(6);
-		password_reset_token = r->get_cell(7);
-		locked = r->get_cell_bool(8);
+		_nameui = r->get_cell(0);
+		_emailui = r->get_cell(1);
+		_rank = r->get_cell_int(2);
+		_pre_salt = r->get_cell(3);
+		_post_salt = r->get_cell(4);
+		_password_hash = r->get_cell(5);
+		_banned = r->get_cell_bool(6);
+		_password_reset_token = r->get_cell(7);
+		_locked = r->get_cell_bool(8);
 	}
 
 	delete r;
@@ -127,7 +127,7 @@ void DBBasedUser::load() {
 	r = b->run();
 
 	while (r->next_row()) {
-		sessions.push_back(r->get_cell(0));
+		_sessions.push_back(r->get_cell(0));
 	}
 
 	delete r;
