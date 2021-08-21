@@ -93,8 +93,6 @@ protected:
 	static FormValidator *_login_validator;
 	static FormValidator *_registration_validator;
 	static FormValidator *_profile_validator;
-
-	std::mutex _mutex;
 };
 
 #endif

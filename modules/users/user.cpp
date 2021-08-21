@@ -149,8 +149,6 @@ void User::register_sessions() {
 		return;
 	}
 
-	_mutex.lock();
-
 	for (int i = 0; i < _sessions.size(); ++i) {
 		HTTPSession *session = new HTTPSession();
 		session->session_id = _sessions[i];
@@ -158,8 +156,6 @@ void User::register_sessions() {
 
 		sm->add_session(session);
 	}
-
-	_mutex.unlock();
 }
 
 void User::unregister_sessions() {
@@ -174,13 +170,9 @@ void User::unregister_sessions() {
 		return;
 	}
 
-	_mutex.lock();
-
 	for (int i = 0; i < _sessions.size(); ++i) {
 		sm->delete_session(_sessions[i]);
 	}
-
-	_mutex.unlock();
 }
 
 void User::handle_request_default(Request *request) {
@@ -243,9 +235,7 @@ void User::handle_login_request_default(Request *request) {
 
 				session->add_object("user", user);
 
-				user->_mutex.lock();
 				user->_sessions.push_back(session->session_id);
-				user->_mutex.unlock();
 
 				user->save();
 
@@ -630,16 +620,12 @@ void User::handle_password_reset_request(Request *request) {
 void User::handle_logout_request(Request *request) {
 	request->remove_cookie("session_id");
 
-	_mutex.lock();
-
 	for (int i = 0; i < _sessions.size(); ++i) {
 		if (_sessions[i] == request->session->session_id) {
 			_sessions[i] = _sessions[_sessions.size() - 1];
 			_sessions.pop_back();
 		}
 	}
-
-	_mutex.unlock();
 
 	save();
 
