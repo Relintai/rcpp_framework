@@ -68,13 +68,13 @@ typedef std::vector<Ref<Resource> > ResourceVector;
                                                                                                                                                                                                                                                      \
 	return pp->setter(this, data);
 
-#define RESOURCE_PROPERTY_ADD_IMPL(property_type, type_enum)                                                                                                                                                                     \
+#define RESOURCE_PROPERTY_ADD_IMPL(property_type, type_enum)                                                                                                                                                                               \
 	ResourceProperty<std::function<property_type(Resource *)>, std::function<void(Resource *, property_type)> > *prop = new ResourceProperty<std::function<property_type(Resource *)>, std::function<void(Resource *, property_type)> >(); \
-                                                                                                                                                                                                                                 \
-	prop->type = type_enum;                                                                                                                                                                                                      \
-	prop->getter = getter;                                                                                                                                                                                                       \
-	prop->setter = setter;                                                                                                                                                                                                       \
-                                                                                                                                                                                                                                 \
+                                                                                                                                                                                                                                           \
+	prop->type = type_enum;                                                                                                                                                                                                                \
+	prop->getter = getter;                                                                                                                                                                                                                 \
+	prop->setter = setter;                                                                                                                                                                                                                 \
+                                                                                                                                                                                                                                           \
 	_property_map[name] = prop;
 
 //Properties stuff end
@@ -291,7 +291,8 @@ Resource::Resource() {
 	register_properties();
 }
 
-Resource::~Resource() {
+Resource::~Resource() :
+		Reference() {
 	std::map<std::string, ResourcePropertyBase *>::iterator it;
 
 	for (it = _property_map.begin(); it != _property_map.end(); it++) {
