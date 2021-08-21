@@ -75,6 +75,26 @@ public:
 
 	Object();
 	virtual ~Object();
+
+	template <class T>
+	static T *cast_to(Object *p_object) {
+		if (!p_object)
+			return NULL;
+		if (p_object->is_class_ptr(T::get_class_ptr_static()))
+			return static_cast<T *>(p_object);
+		else
+			return NULL;
+	}
+
+	template <class T>
+	static const T *cast_to(const Object *p_object) {
+		if (!p_object)
+			return NULL;
+		if (p_object->is_class_ptr(T::get_class_ptr_static()))
+			return static_cast<const T *>(p_object);
+		else
+			return NULL;
+	}
 };
 
 #endif
