@@ -1,101 +1,5 @@
 #include "resource.h"
 
-#include <vector>
-
-#include "rapidjson/rapidjson.h"
-#include <tinydir/tinydir.h>
-#include <cstdio>
-
-#if DATABASES_ENABLED
-#include "core/database/database.h"
-#include "core/database/database_manager.h"
-#endif
-
-void Resource::changed() {
-	dirty = true;
-}
-
-void Resource::save() {
-#if DATABASES_ENABLED
-	sql_save();
-#else
-	file_save();
-#endif
-}
-void Resource::load() {
-#if DATABASES_ENABLED
-	sql_load();
-#else
-	file_load();
-#endif
-}
-void Resource::migrate() {
-#if DATABASES_ENABLED
-	//todo!
-
-	sql_delete_tables();
-	sql_create_tables();
-
-	//sql_migrate();
-#else
-	file_ensure_directory_exist();
-#endif
-}
-
-#if DATABASES_ENABLED
-void Resource::sql_save() {
-	sql_save(DatabaseManager::get_singleton()->ddb);
-}
-void Resource::sql_load() {
-	sql_load(DatabaseManager::get_singleton()->ddb);
-}
-void Resource::sql_migrate() {
-	sql_migrate(DatabaseManager::get_singleton()->ddb);
-}
-void Resource::sql_create_tables() {
-	sql_create_tables(DatabaseManager::get_singleton()->ddb);
-}
-void Resource::sql_delete_tables() {
-	sql_delete_tables(DatabaseManager::get_singleton()->ddb);
-}
-
-void Resource::sql_save(Database *db) {
-}
-void Resource::sql_load(Database *db) {
-}
-void Resource::sql_migrate(Database *db) {
-}
-void Resource::sql_create_tables(Database *db) {
-}
-void Resource::sql_delete_tables(Database *db) {
-}
-#endif
-
-void Resource::file_save() {
-	/*
-	//todo sanitize name!
-	_file_path =  _resource_name + get_id();
-
-
-	FILE *fp = fopen(_file_path.c_str(), "w");
-
-	char writeBuffer[65536];
-	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
-
-	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
-	document.Accept(writer);
-
-	fclose(fp);
-	*/
-}
-void Resource::file_load() {
-}
-void Resource::file_ensure_directory_exist() {
-}
-std::string Resource::file_get_base_path() {
-	return "./resources/";
-}
-
 std::string Resource::to_json(rapidjson::Document *into) {
 	return "";
 }
@@ -105,8 +9,6 @@ void Resource::from_json(const std::string &data) {
 Resource::Resource() :
 		Reference() {
 	id = 0;
-	dirty = false;
-	resource_name = get_class();
 }
 
 Resource::~Resource() {

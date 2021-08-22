@@ -36,12 +36,6 @@ public:
 
 	User();
 	~User();
-
-protected:
-	std::string _file_path;
-
-	static std::string _path;
-	static std::string _table_name;
 };
 
 #endif

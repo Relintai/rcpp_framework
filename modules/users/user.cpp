@@ -22,79 +22,6 @@
 #include "core/utils.h"
 #include "user_model.h"
 
-void User::file_save() {
-}
-void User::file_load() {
-	FILE *f = fopen(_file_path.c_str(), "r");
-
-	if (!f) {
-		printf("FileBasedUser::load: Error opening file! %s\n", _file_path.c_str());
-		return;
-	}
-
-	fseek(f, 0, SEEK_END);
-	long fsize = ftell(f);
-	fseek(f, 0, SEEK_SET); // same as rewind(f);
-
-	std::string fd;
-	fd.resize(fsize);
-
-	fread(&fd[0], 1, fsize, f);
-	fclose(f);
-
-	from_json(fd);
-}
-void User::file_ensure_directory_exist() {
-}
-std::string User::file_get_base_path() {
-	return _path;
-}
-
-void User::file_load_all() {
-	/*
-	tinydir_dir dir;
-	if (tinydir_open(&dir, _path.c_str()) == -1) {
-		return;
-	}
-
-	while (dir.has_next) {
-		tinydir_file file;
-		if (tinydir_readfile(&dir, &file) == -1) {
-			tinydir_next(&dir);
-			continue;
-		}
-
-		if (!file.is_dir) {
-			std::string np = file.path;
-			np = np.substr(_path.size(), np.size() - _path.size());
-
-			User *u = new User();
-			u->load(np);
-
-			UserManager::get_singleton()->add_user(u);
-		}
-
-		tinydir_next(&dir);
-	}
-
-	tinydir_close(&dir);
-	*/
-}
-
-std::string User::file_get_path() {
-	return _path;
-}
-
-void User::file_set_path(const std::string &path) {
-	_path = path;
-
-	if (_path.size() > 0) {
-		if (_path[_path.size() - 1] != '/') {
-			_path += '/';
-		}
-	}
-}
-
 std::string User::to_json(rapidjson::Document *into) {
 	rapidjson::Document *document;
 
@@ -132,6 +59,7 @@ std::string User::to_json(rapidjson::Document *into) {
 
 	return s;
 }
+
 void User::from_json(const std::string &p_data) {
 
 	rapidjson::Document data;
@@ -162,6 +90,3 @@ User::User() :
 
 User::~User() {
 }
-
-std::string User::_path = "./";
-std::string User::_table_name = "users";
