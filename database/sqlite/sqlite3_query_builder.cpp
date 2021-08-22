@@ -190,12 +190,12 @@ QueryBuilder *SQLite3QueryBuilder::setp(const std::string &col, const bool param
 }
 
 QueryBuilder *SQLite3QueryBuilder::wp(const std::string &col, const std::string &param) {
-	query_result += col + "=" + param + "' ";
+	query_result += col + "='" + param + "' ";
 
 	return this;
 }
 QueryBuilder *SQLite3QueryBuilder::wp(const std::string &col, const char *param) {
-	query_result += col + "=" + std::string(param) + "' ";
+	query_result += col + "='" + std::string(param) + "' ";
 
 	return this;
 }
