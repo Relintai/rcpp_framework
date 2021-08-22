@@ -3,7 +3,11 @@
 
 #include <string>
 
-class SHA256 {
+#include "core/reference.h"
+
+class SHA256 : public Reference {
+	RCPP_OBJECT(SHA256, Reference);
+
 public:
 	virtual std::string compute(const void *data, size_t num_bytes) = 0;
 	virtual std::string compute(const std::string &text) = 0;
