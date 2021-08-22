@@ -4,6 +4,10 @@
 #include "rapidjson/rapidjson.h"
 #include "rapidjson/stringbuffer.h"
 #include <rapidjson/writer.h>
+#include "rapidjson/document.h"
+#include "user_manager.h"
+#include <tinydir/tinydir.h>
+#include <cstdio>
 
 #include "core/hash/sha256.h"
 #include "core/html/form_validator.h"
@@ -688,13 +692,85 @@ void User::create_validators() {
 	}
 }
 
+void User::file_save() {
+}
+void User::file_load() {
+	FILE *f = fopen(_file_path.c_str(), "r");
+
+	if (!f) {
+		printf("FileBasedUser::load: Error opening file! %s\n", _file_path.c_str());
+		return;
+	}
+
+	fseek(f, 0, SEEK_END);
+	long fsize = ftell(f);
+	fseek(f, 0, SEEK_SET); // same as rewind(f);
+
+	std::string fd;
+	fd.resize(fsize);
+
+	fread(&fd[0], 1, fsize, f);
+	fclose(f);
+
+	from_json(fd);
+}
+void User::file_ensure_directory_exist() {
+}
+std::string User::file_get_base_path() {
+	return _path;
+}
+
+void User::file_load_all() {
+	tinydir_dir dir;
+	if (tinydir_open(&dir, _path.c_str()) == -1) {
+		return;
+	}
+
+	while (dir.has_next) {
+		tinydir_file file;
+		if (tinydir_readfile(&dir, &file) == -1) {
+			tinydir_next(&dir);
+			continue;
+		}
+
+		if (!file.is_dir) {
+			std::string np = file.path;
+			np = np.substr(_path.size(), np.size() - _path.size());
+
+			User *u = new User();
+			u->load(np);
+
+			UserManager::get_singleton()->add_user(u);
+		}
+
+		tinydir_next(&dir);
+	}
+
+	tinydir_close(&dir);
+}
+
+std::string User::file_get_path() {
+	return _path;
+}
+
+void User::file_set_path(const std::string &path) {
+	_path = path;
+
+	if (_path.size() > 0) {
+		if (_path[_path.size() - 1] != '/') {
+			_path += '/';
+		}
+	}
+}
+
+
 std::string User::to_json(rapidjson::Document *into) {
 	rapidjson::Document *document;
 
 	if (into) {
 		document = into;
 	} else {
-		document =  new rapidjson::Document();
+		document = new rapidjson::Document();
 	}
 
 	document->SetObject();
@@ -734,8 +810,30 @@ std::string User::to_json(rapidjson::Document *into) {
 
 	return s;
 }
-void User::from_json(const std::string &data) {
+void User::from_json(const std::string &p_data) {
 
+	rapidjson::Document data;
+	data.Parse(p_data.c_str());
+
+	rapidjson::Value uobj = data.GetObject();
+
+	set_id(uobj["id"].GetInt());
+	_nameui = uobj["name"].GetString();
+	_emailui = uobj["email"].GetString();
+	_rank = uobj["rank"].GetInt();
+	_pre_salt = uobj["pre_salt"].GetString();
+	_post_salt = uobj["post_salt"].GetString();
+	_password_hash = uobj["password_hash"].GetString();
+	_banned = uobj["banned"].GetBool();
+
+	_password_reset_token = uobj["password_reset_token"].GetString();
+	_locked = uobj["locked"].GetBool();
+
+	const rapidjson::Value &sess = uobj["sessions"].GetArray();
+
+	for (rapidjson::Value::ConstValueIterator itr = sess.Begin(); itr != sess.End(); ++itr) {
+		_sessions.push_back(itr->GetString());
+	}
 }
 
 User::User() :
@@ -753,3 +851,5 @@ User::~User() {
 FormValidator *User::_login_validator = nullptr;
 FormValidator *User::_registration_validator = nullptr;
 FormValidator *User::_profile_validator = nullptr;
+
+std::string User::_path = "./";

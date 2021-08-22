@@ -72,6 +72,14 @@ public:
 	void register_sessions();
 	void unregister_sessions();
 
+	void file_save();
+	void file_load();
+	void file_ensure_directory_exist();
+	std::string file_get_base_path();
+	static void file_load_all();
+	static std::string file_get_path();
+	static void file_set_path(const std::string &path);
+
 	std::string to_json(rapidjson::Document *into = nullptr);
 	void from_json(const std::string &data);
 
@@ -93,6 +101,10 @@ protected:
 	static FormValidator *_login_validator;
 	static FormValidator *_registration_validator;
 	static FormValidator *_profile_validator;
+
+	std::string _file_path;
+
+	static std::string _path;
 };
 
 #endif
