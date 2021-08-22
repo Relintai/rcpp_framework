@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "core/object.h"
+#include "core/reference.h"
 
 #include "handler_instance.h"
 
@@ -38,6 +39,7 @@ public:
 
 	HTTPSession *session;
 	std::map<std::string, Object *> data;
+	std::map<std::string, Ref<Reference> > reference_data;
 
 	HTTPSession *get_or_create_session();
 

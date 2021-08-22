@@ -18,6 +18,7 @@ HTTPSession *Request::get_or_create_session() {
 }
 
 const std::string &Request::get_cookie(const std::string &key) {
+	return "";
 }
 
 void Request::add_cookie(const ::Cookie &cookie) {
@@ -31,7 +32,8 @@ HTTPMethod Request::get_method() const {
 }
 
 const std::string &Request::get_parameter(const std::string &key) const {
-	return "";
+	static std::string str;
+	return str;
 }
 
 void Request::compile_body() {
@@ -112,6 +114,7 @@ void Request::reset() {
 	compiled_body.clear();
 
 	data.clear();
+	reference_data.clear();
 }
 
 std::string Request::parser_get_path() {
