@@ -5,7 +5,6 @@
 
 #include <mutex>
 #include <string>
-#include <vector>
 
 class Request;
 class FormValidator;
@@ -21,7 +20,6 @@ public:
 	std::string post_salt;
 	std::string password_hash;
 	bool banned;
-	std::vector<std::string> sessions;
 	std::string password_reset_token;
 	bool locked;
 

@@ -407,13 +407,6 @@ void UserController::handle_password_reset_request(Ref<User> &user, Request *req
 void UserController::handle_logout_request(Ref<User> &user, Request *request) {
 	request->remove_cookie("session_id");
 
-	for (int i = 0; i < user->sessions.size(); ++i) {
-		if (user->sessions[i] == request->session->session_id) {
-			user->sessions[i] = user->sessions[user->sessions.size() - 1];
-			user->sessions.pop_back();
-		}
-	}
-
 	UserModel::get_singleton()->save_user(user);
 
 	SessionManager::get_singleton()->delete_session(request->session->session_id);

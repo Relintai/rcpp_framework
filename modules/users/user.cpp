@@ -118,15 +118,6 @@ std::string User::to_json(rapidjson::Document *into) {
 	document->AddMember("password_reset_token", rapidjson::Value(password_reset_token.c_str(), document->GetAllocator()), document->GetAllocator());
 	document->AddMember("locked", locked, document->GetAllocator());
 
-	rapidjson::Value sa(rapidjson::Type::kArrayType);
-	rapidjson::Document::AllocatorType &allocator = document->GetAllocator();
-
-	for (int i = 0; i < sessions.size(); i++) {
-		sa.PushBack(rapidjson::Value(sessions[i].c_str(), document->GetAllocator()), allocator);
-	}
-
-	document->AddMember("sessions", sa, document->GetAllocator());
-
 	if (into) {
 		return "";
 	}
@@ -159,12 +150,6 @@ void User::from_json(const std::string &p_data) {
 
 	password_reset_token = uobj["password_reset_token"].GetString();
 	locked = uobj["locked"].GetBool();
-
-	const rapidjson::Value &sess = uobj["sessions"].GetArray();
-
-	for (rapidjson::Value::ConstValueIterator itr = sess.Begin(); itr != sess.End(); ++itr) {
-		sessions.push_back(itr->GetString());
-	}
 }
 
 User::User() :
