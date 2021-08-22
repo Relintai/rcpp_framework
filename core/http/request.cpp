@@ -18,7 +18,8 @@ HTTPSession *Request::get_or_create_session() {
 }
 
 const std::string &Request::get_cookie(const std::string &key) {
-	return "";
+	static std::string str;
+	return str;
 }
 
 void Request::add_cookie(const ::Cookie &cookie) {
