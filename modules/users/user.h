@@ -23,14 +23,6 @@ public:
 	std::string password_reset_token;
 	bool locked;
 
-	void file_save();
-	void file_load();
-	void file_ensure_directory_exist();
-	std::string file_get_base_path();
-	static void file_load_all();
-	static std::string file_get_path();
-	static void file_set_path(const std::string &path);
-
 	std::string to_json(rapidjson::Document *into = nullptr);
 	void from_json(const std::string &data);
 
