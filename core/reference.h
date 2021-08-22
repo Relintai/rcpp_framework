@@ -47,7 +47,7 @@ class Ref {
 	}
 
 	void ref_pointer(T *p_ref) {
-		ERR_FAIL_COND(!p_ref);
+		//ERR_FAIL_COND(!p_ref);
 
 		if (p_ref->init_ref()) {
 			reference = p_ref;
