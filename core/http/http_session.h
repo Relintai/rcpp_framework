@@ -22,9 +22,12 @@ public:
 	int get_int(const std::string &key);
 
 	std::string session_id;
+	int id;
 
 	void clear();
 	void reset();
+
+	std::map<std::string, int> get_int_data();
 
 	HTTPSession();
 	~HTTPSession();

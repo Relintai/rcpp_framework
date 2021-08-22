@@ -60,7 +60,12 @@ void HTTPSession::reset() {
 	session_id = "";
 }
 
+std::map<std::string, int> HTTPSession::get_int_data() {
+	return _int_data;
+}
+
 HTTPSession::HTTPSession() {
+	id = 0;
 }
 
 HTTPSession::~HTTPSession() {

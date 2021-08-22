@@ -67,7 +67,7 @@ void UserController::handle_login_request_default(Request *request) {
 				HTTPSession *session = request->get_or_create_session();
 
 				session->add_int("user_id", user->id);
-				//session->save();
+				SessionManager::get_singleton()->save_session(session);
 
 				request->add_cookie(::Cookie("session_id", session->session_id));
 
