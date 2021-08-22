@@ -24,76 +24,6 @@
 #include "core/utils.h"
 #include "user_manager.h"
 
-std::string User::get_name_ui() {
-	return _nameui;
-}
-void User::set_name_ui(const std::string &value) {
-	_nameui = value;
-}
-
-std::string User::get_email_ui() {
-	return _emailui;
-}
-void User::set_email_ui(const std::string &value) {
-	_emailui = value;
-}
-
-int User::get_rank() {
-	return _rank;
-}
-void User::set_rank(const int value) {
-	_rank = value;
-}
-
-std::string User::get_pre_salt() {
-	return _pre_salt;
-}
-void User::set_pre_salt(const std::string &value) {
-	_pre_salt = value;
-}
-
-std::string User::get_post_salt() {
-	return _post_salt;
-}
-void User::set_post_salt(const std::string &value) {
-	_post_salt = value;
-}
-
-std::string User::get_password_hash() {
-	return _password_hash;
-}
-void User::set_password_hash(const std::string &value) {
-	_password_hash = value;
-}
-
-bool User::get_banned() {
-	return _banned;
-}
-void User::set_banned(const bool value) {
-	_banned = value;
-}
-
-std::vector<std::string> User::get_sessions() {
-	return _sessions;
-}
-void User::set_sessions(const std::vector<std::string> &value) {
-	_sessions = value;
-}
-
-std::string User::get_password_reset_token() {
-	return _password_reset_token;
-}
-void User::set_password_reset_token(const std::string &value) {
-	_password_reset_token = value;
-}
-
-bool User::get_locked() {
-	return _locked;
-}
-void User::set_locked(const bool value) {
-	_locked = value;
-}
-
 void User::save() {
 
 	QueryBuilder *b = DatabaseManager::get_singleton()->ddb->get_query_builder();
@@ -102,15 +32,15 @@ void User::save() {
 		b->insert(_table_name, "username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
 
 		b->values();
-		b->eval(_nameui);
-		b->eval(_emailui);
-		b->val(_rank);
-		b->val(_pre_salt);
-		b->val(_post_salt);
-		b->val(_password_hash);
-		b->val(_banned);
-		b->val(_password_reset_token);
-		b->val(_locked);
+		b->eval(name_user_input);
+		b->eval(email_user_input);
+		b->val(rank);
+		b->val(pre_salt);
+		b->val(post_salt);
+		b->val(password_hash);
+		b->val(banned);
+		b->val(password_reset_token);
+		b->val(locked);
 		b->cvalues();
 
 		b->end_command();
@@ -125,15 +55,15 @@ void User::save() {
 	} else {
 		b->udpate(_table_name);
 		b->set();
-		b->esetp("username", _nameui);
-		b->esetp("email", _emailui);
-		b->setp("rank", _rank);
-		b->setp("pre_salt", _pre_salt);
-		b->setp("post_salt", _post_salt);
-		b->setp("password_hash", _password_hash);
-		b->setp("banned", _banned);
-		b->setp("password_reset_token", _password_reset_token);
-		b->setp("locked", _locked);
+		b->esetp("username", name_user_input);
+		b->esetp("email", email_user_input);
+		b->setp("rank", rank);
+		b->setp("pre_salt", pre_salt);
+		b->setp("post_salt", post_salt);
+		b->setp("password_hash", password_hash);
+		b->setp("banned", banned);
+		b->setp("password_reset_token", password_reset_token);
+		b->setp("locked", locked);
 		b->cset();
 		b->where()->wp("id", get_id());
 
@@ -156,8 +86,8 @@ void User::save() {
 
 	b->reset();
 
-	for (int i = 0; i < _sessions.size(); ++i) {
-		b->insert(_table_name + "_sessions")->values()->val(get_id())->val(_sessions[i])->cvalues()->end_command();
+	for (int i = 0; i < sessions.size(); ++i) {
+		b->insert(_table_name + "_sessions")->values()->val(get_id())->val(sessions[i])->cvalues()->end_command();
 	}
 
 	//b->print();
@@ -187,15 +117,15 @@ void User::load() {
 	QueryResult *r = b->run();
 
 	if (r->next_row()) {
-		_nameui = r->get_cell(0);
-		_emailui = r->get_cell(1);
-		_rank = r->get_cell_int(2);
-		_pre_salt = r->get_cell(3);
-		_post_salt = r->get_cell(4);
-		_password_hash = r->get_cell(5);
-		_banned = r->get_cell_bool(6);
-		_password_reset_token = r->get_cell(7);
-		_locked = r->get_cell_bool(8);
+		name_user_input = r->get_cell(0);
+		email_user_input = r->get_cell(1);
+		rank = r->get_cell_int(2);
+		pre_salt = r->get_cell(3);
+		post_salt = r->get_cell(4);
+		password_hash = r->get_cell(5);
+		banned = r->get_cell_bool(6);
+		password_reset_token = r->get_cell(7);
+		locked = r->get_cell_bool(8);
 	}
 
 	delete r;
@@ -210,7 +140,7 @@ void User::load() {
 	r = b->run();
 
 	while (r->next_row()) {
-		_sessions.push_back(r->get_cell(0));
+		sessions.push_back(r->get_cell(0));
 	}
 
 	delete r;
@@ -306,21 +236,21 @@ void User::db_load_all() {
 
 
 bool User::check_password(const std::string &p_password) {
-	return hash_password(p_password) == _password_hash;
+	return hash_password(p_password) == password_hash;
 }
 
 void User::create_password(const std::string &p_password) {
 	//todo improve a bit
-	_pre_salt = hash_password(_nameui + _emailui);
-	_post_salt = hash_password(_emailui + _nameui);
+	pre_salt = hash_password(name_user_input + email_user_input);
+	post_salt = hash_password(email_user_input + name_user_input);
 
-	_password_hash = hash_password(p_password);
+	password_hash = hash_password(p_password);
 }
 
 std::string User::hash_password(const std::string &p_password) {
 	SHA256 *s = SHA256::get();
 
-	std::string p = _pre_salt + p_password + _post_salt;
+	std::string p = pre_salt + p_password + post_salt;
 
 	std::string c = s->compute(p);
 
@@ -330,7 +260,7 @@ std::string User::hash_password(const std::string &p_password) {
 }
 
 void User::register_sessions() {
-	if (_sessions.size() == 0) {
+	if (sessions.size() == 0) {
 		return;
 	}
 
@@ -341,9 +271,9 @@ void User::register_sessions() {
 		return;
 	}
 
-	for (int i = 0; i < _sessions.size(); ++i) {
+	for (int i = 0; i < sessions.size(); ++i) {
 		HTTPSession *session = new HTTPSession();
-		session->session_id = _sessions[i];
+		session->session_id = sessions[i];
 		session->add_object("user", this);
 
 		sm->add_session(session);
@@ -351,7 +281,7 @@ void User::register_sessions() {
 }
 
 void User::unregister_sessions() {
-	if (_sessions.size() == 0) {
+	if (sessions.size() == 0) {
 		return;
 	}
 
@@ -362,8 +292,8 @@ void User::unregister_sessions() {
 		return;
 	}
 
-	for (int i = 0; i < _sessions.size(); ++i) {
-		sm->delete_session(_sessions[i]);
+	for (int i = 0; i < sessions.size(); ++i) {
+		sm->delete_session(sessions[i]);
 	}
 }
 
@@ -427,7 +357,7 @@ void User::handle_login_request_default(Request *request) {
 
 				session->add_object("user", user);
 
-				user->_sessions.push_back(session->session_id);
+				user->sessions.push_back(session->session_id);
 
 				user->save();
 
@@ -527,7 +457,7 @@ void User::handle_register_request_default(Request *request) {
 				continue;
 			}
 
-			if (u->_emailui == email_val) {
+			if (u->email_user_input == email_val) {
 				email_found = true;
 				break;
 			}
@@ -544,10 +474,10 @@ void User::handle_register_request_default(Request *request) {
 		if (error_str.size() == 0) {
 			user = UserManager::get_singleton()->create_user();
 
-			user->_nameui = uname_val;
-			user->_emailui = email_val;
+			user->name_user_input = uname_val;
+			user->email_user_input = email_val;
 			//todo
-			user->_rank = 1;
+			user->rank = 1;
 			user->create_password(pass_val);
 			user->save();
 
@@ -682,11 +612,11 @@ void User::handle_settings_request(Request *request) {
 		}
 
 		if (valid) {
-			if (uname_val == _nameui) {
+			if (uname_val == name_user_input) {
 				uname_val = "";
 			}
 
-			if (email_val == _emailui) {
+			if (email_val == email_user_input) {
 				email_val = "";
 			}
 
@@ -697,7 +627,7 @@ void User::handle_settings_request(Request *request) {
 					error_str += "Username already taken!<br>";
 				} else {
 					//todo sanitize for html special chars!
-					_nameui = uname_val;
+					name_user_input = uname_val;
 					changed = true;
 					uname_val = "";
 				}
@@ -720,7 +650,7 @@ void User::handle_settings_request(Request *request) {
 						continue;
 					}
 
-					if (u->_emailui == email_val) {
+					if (u->email_user_input == email_val) {
 						email_found = true;
 						break;
 					}
@@ -731,7 +661,7 @@ void User::handle_settings_request(Request *request) {
 				} else {
 					//todo sanitize for html special chars!
 					//also send email
-					_emailui = email_val;
+					email_user_input = email_val;
 					changed = true;
 					email_val = "";
 				}
@@ -772,13 +702,13 @@ void User::handle_settings_request(Request *request) {
 
 	b.w("Username");
 	b.br();
-	b.input()->type("text")->name("username")->placeholder(_nameui)->value(uname_val);
+	b.input()->type("text")->name("username")->placeholder(name_user_input)->value(uname_val);
 	b.cinput();
 	b.br();
 
 	b.w("Email");
 	b.br();
-	b.input()->type("email")->name("email")->placeholder(_emailui)->value(email_val);
+	b.input()->type("email")->name("email")->placeholder(email_user_input)->value(email_val);
 	b.cinput();
 	b.br();
 
@@ -812,10 +742,10 @@ void User::handle_password_reset_request(Request *request) {
 void User::handle_logout_request(Request *request) {
 	request->remove_cookie("session_id");
 
-	for (int i = 0; i < _sessions.size(); ++i) {
-		if (_sessions[i] == request->session->session_id) {
-			_sessions[i] = _sessions[_sessions.size() - 1];
-			_sessions.pop_back();
+	for (int i = 0; i < sessions.size(); ++i) {
+		if (sessions[i] == request->session->session_id) {
+			sessions[i] = sessions[sessions.size() - 1];
+			sessions.pop_back();
 		}
 	}
 
@@ -964,21 +894,21 @@ std::string User::to_json(rapidjson::Document *into) {
 
 	document->AddMember("id", get_id(), document->GetAllocator());
 
-	document->AddMember("name", rapidjson::Value(_nameui.c_str(), document->GetAllocator()), document->GetAllocator());
-	document->AddMember("email", rapidjson::Value(_emailui.c_str(), document->GetAllocator()), document->GetAllocator());
-	document->AddMember("rank", _rank, document->GetAllocator());
-	document->AddMember("pre_salt", rapidjson::Value(_pre_salt.c_str(), document->GetAllocator()), document->GetAllocator());
-	document->AddMember("post_salt", rapidjson::Value(_post_salt.c_str(), document->GetAllocator()), document->GetAllocator());
-	document->AddMember("password_hash", rapidjson::Value(_password_hash.c_str(), document->GetAllocator()), document->GetAllocator());
-	document->AddMember("banned", _banned, document->GetAllocator());
-	document->AddMember("password_reset_token", rapidjson::Value(_password_reset_token.c_str(), document->GetAllocator()), document->GetAllocator());
-	document->AddMember("locked", _locked, document->GetAllocator());
+	document->AddMember("name", rapidjson::Value(name_user_input.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("email", rapidjson::Value(email_user_input.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("rank", rank, document->GetAllocator());
+	document->AddMember("pre_salt", rapidjson::Value(pre_salt.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("post_salt", rapidjson::Value(post_salt.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("password_hash", rapidjson::Value(password_hash.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("banned", banned, document->GetAllocator());
+	document->AddMember("password_reset_token", rapidjson::Value(password_reset_token.c_str(), document->GetAllocator()), document->GetAllocator());
+	document->AddMember("locked", locked, document->GetAllocator());
 
 	rapidjson::Value sa(rapidjson::Type::kArrayType);
 	rapidjson::Document::AllocatorType &allocator = document->GetAllocator();
 
-	for (int i = 0; i < _sessions.size(); i++) {
-		sa.PushBack(rapidjson::Value(_sessions[i].c_str(), document->GetAllocator()), allocator);
+	for (int i = 0; i < sessions.size(); i++) {
+		sa.PushBack(rapidjson::Value(sessions[i].c_str(), document->GetAllocator()), allocator);
 	}
 
 	document->AddMember("sessions", sa, document->GetAllocator());
@@ -1005,30 +935,30 @@ void User::from_json(const std::string &p_data) {
 	rapidjson::Value uobj = data.GetObject();
 
 	set_id(uobj["id"].GetInt());
-	_nameui = uobj["name"].GetString();
-	_emailui = uobj["email"].GetString();
-	_rank = uobj["rank"].GetInt();
-	_pre_salt = uobj["pre_salt"].GetString();
-	_post_salt = uobj["post_salt"].GetString();
-	_password_hash = uobj["password_hash"].GetString();
-	_banned = uobj["banned"].GetBool();
+	name_user_input = uobj["name"].GetString();
+	email_user_input = uobj["email"].GetString();
+	rank = uobj["rank"].GetInt();
+	pre_salt = uobj["pre_salt"].GetString();
+	post_salt = uobj["post_salt"].GetString();
+	password_hash = uobj["password_hash"].GetString();
+	banned = uobj["banned"].GetBool();
 
-	_password_reset_token = uobj["password_reset_token"].GetString();
-	_locked = uobj["locked"].GetBool();
+	password_reset_token = uobj["password_reset_token"].GetString();
+	locked = uobj["locked"].GetBool();
 
 	const rapidjson::Value &sess = uobj["sessions"].GetArray();
 
 	for (rapidjson::Value::ConstValueIterator itr = sess.Begin(); itr != sess.End(); ++itr) {
-		_sessions.push_back(itr->GetString());
+		sessions.push_back(itr->GetString());
 	}
 }
 
 User::User() :
 		Resource() {
 
-	_rank = 0;
-	_banned = false;
-	_locked = false;
+	rank = 0;
+	banned = false;
+	locked = false;
 }
 
 User::~User() {

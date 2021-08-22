@@ -15,7 +15,7 @@ void UserManager::add_user(User *user) {
 	std::lock_guard<std::mutex> lock(_mutex);
 
 	_users_vec.push_back(user);
-	_users[user->get_name_ui()] = user;
+	_users[user->name_user_input] = user;
 }
 
 void UserManager::remove_user(User *user) {
@@ -26,7 +26,7 @@ void UserManager::remove_user(User *user) {
 
 	std::lock_guard<std::mutex> lock(_mutex);
 
-	_users.erase(user->get_name_ui());
+	_users.erase(user->name_user_input);
 
 	for (int i = 0; i < _users_vec.size(); ++i) {
 		if (_users_vec[i] == user) {
