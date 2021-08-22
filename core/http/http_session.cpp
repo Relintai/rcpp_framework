@@ -17,6 +17,22 @@ Object *HTTPSession::get_object(const std::string &key) {
 	return _data[key];
 }
 
+void HTTPSession::add_reference(const std::string &key, const Ref<Reference> &ref) {
+	std::lock_guard<std::mutex> lock(_mutex);
+
+	_reference_data[key] = ref;
+}
+void HTTPSession::remove_reference(const std::string &key) {
+	std::lock_guard<std::mutex> lock(_mutex);
+
+	_reference_data.erase(key);
+}
+Ref<Reference> HTTPSession::get_reference(const std::string &key) {
+	//don't lock here
+
+	return _reference_data[key];
+}
+
 void HTTPSession::add_int(const std::string &key, const int val) {
 	std::lock_guard<std::mutex> lock(_mutex);
 
@@ -36,6 +52,7 @@ int HTTPSession::get_int(const std::string &key) {
 void HTTPSession::clear() {
 	_data.clear();
 	_int_data.clear();
+	_reference_data.clear();
 }
 
 void HTTPSession::reset() {
