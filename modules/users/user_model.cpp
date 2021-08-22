@@ -54,7 +54,7 @@ Ref<User> UserModel::get_user(const std::string &user_name_input) {
 
 	b->select("id, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
 	b->from(_table_name);
-	b->where()->ewp("name", user_name_input);
+	b->where()->ewp("username", user_name_input);
 	b->end_command();
 
 	Ref<QueryResult> r = b->run();
@@ -155,7 +155,7 @@ todo
 bool UserModel::is_username_taken(const std::string &user_name_input) {
 	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
-	b->select("id")->from(_table_name)->where("name")->elike(user_name_input)->end_command();
+	b->select("id")->from(_table_name)->where("username")->elike(user_name_input)->end_command();
 
 	Ref<QueryResult> r = b->run();
 
@@ -164,7 +164,7 @@ bool UserModel::is_username_taken(const std::string &user_name_input) {
 bool UserModel::is_email_taken(const std::string &email_input) {
 	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
-	b->select("id")->from(_table_name)->where("name")->elike(email_input)->end_command();
+	b->select("id")->from(_table_name)->where("username")->elike(email_input)->end_command();
 
 	Ref<QueryResult> r = b->run();
 
