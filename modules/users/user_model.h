@@ -9,6 +9,8 @@ class User;
 
 class UserModel : public Object {
 public:
+	//Ref<User> get_user(const int id);
+
 	static UserModel *get_singleton();
 
 	UserModel();

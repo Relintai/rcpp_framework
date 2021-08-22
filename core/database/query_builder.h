@@ -3,11 +3,13 @@
 
 #include <string>
 
+#include "core/reference.h"
+
 class QueryResult;
 
 //methods that start with an e escape their params.
 
-class QueryBuilder {
+class QueryBuilder : public Reference {
 public:
 	virtual QueryBuilder *select();
 	virtual QueryBuilder *udpate();

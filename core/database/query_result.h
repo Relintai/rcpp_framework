@@ -3,7 +3,9 @@
 
 #include <string>
 
-class QueryResult {
+#include "core/reference.h"
+
+class QueryResult : public Reference {
 public:
 	virtual bool next_row();
 	virtual const char *get_cell(const int index);

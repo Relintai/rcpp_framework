@@ -3,9 +3,11 @@
 
 #include <string>
 
+#include "core/reference.h"
+
 class QueryResult;
 
-class TableBuilder {
+class TableBuilder : public Reference {
 public:
 	virtual TableBuilder *create_table(const std::string &name);
 	virtual TableBuilder *integer(const std::string &name);
