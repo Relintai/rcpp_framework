@@ -1,16 +1,16 @@
 #include "user_controller.h"
 
-#include "user_model.h"
-#include "core/http/request.h"
 #include "core/html/form_validator.h"
 #include "core/html/html_builder.h"
-#include "core/http/http_session.h"
-#include "core/http/session_manager.h"
 #include "core/http/cookie.h"
+#include "core/http/http_session.h"
+#include "core/http/request.h"
+#include "core/http/session_manager.h"
+#include "user_model.h"
 
 void UserController::handle_request_default(Request *request) {
 	if (request->session) {
-		Ref<User> u = request->session->get_reference("user");
+		Ref<User> u = request->reference_data["user"];
 
 		if (u.is_valid()) {
 			handle_request(u, request);
@@ -66,7 +66,7 @@ void UserController::handle_login_request_default(Request *request) {
 			} else {
 				HTTPSession *session = request->get_or_create_session();
 
-				session->add_int("user", user->id);
+				session->add_int("user_id", user->id);
 				//session->save();
 
 				request->add_cookie(::Cookie("session_id", session->session_id));
@@ -475,6 +475,25 @@ void UserController::create_validators() {
 	}
 }
 
+void UserController::user_session_setup_middleware(Object *instance, Request *request) {
+	if (request->session) {
+		int user_id = request->session->get_int("user_id");
+
+		if (user_id != 0) {
+			Ref<User> u = UserModel::get_singleton()->get_user(user_id);
+
+			if (u.is_valid()) {
+				request->reference_data["user"] = u;
+			} else {
+				//log
+				request->session->remove_int("user_id");
+			}
+		}
+	}
+
+	request->next_stage();
+}
+
 UserController *UserController::get_singleton() {
 	return _self;
 }
@@ -487,6 +506,8 @@ UserController::UserController() :
 	}
 
 	_self = this;
+
+	create_validators();
 }
 
 UserController::~UserController() {

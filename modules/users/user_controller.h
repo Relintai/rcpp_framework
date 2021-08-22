@@ -23,7 +23,9 @@ public:
 	virtual void handle_logout_request(Ref<User> &user, Request *request);
 	virtual void handle_delete_request(Ref<User> &user, Request *request);
 
-	static void create_validators();
+	virtual void create_validators();
+
+	static void user_session_setup_middleware(Object *instance, Request *request);
 
 	static UserController *get_singleton();
 
