@@ -335,8 +335,8 @@ void UserController::handle_settings_request(Ref<User> &user, Request *request) 
 				if (pass_val != pass_check_val) {
 					error_str += "The passwords did not match!<br>";
 				} else {
-					//todo
-					//create_password(pass_val);
+					UserModel::get_singleton()->create_password(user, pass_val);
+
 					changed = true;
 				}
 			}
