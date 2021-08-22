@@ -1,6 +1,303 @@
 #include "user_model.h"
 
-#include "user.h"
+#include "core/database/database.h"
+#include "core/database/database_manager.h"
+#include "core/database/query_builder.h"
+#include "core/database/query_result.h"
+#include "core/database/table_builder.h"
+
+#include "core/hash/sha256.h"
+
+Ref<User> UserModel::get_user(const int id) {
+	if (id == 0) {
+		return Ref<User>();
+	}
+
+	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
+
+	b->select("username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
+	b->from(_table_name);
+
+	b->where()->wp("id", id);
+
+	b->end_command();
+
+	Ref<QueryResult> r = b->run();
+
+	if (!r->next_row()) {
+		return Ref<User>();
+	}
+
+	Ref<User> user;
+	user.instance();
+
+	user->id = id;
+	user->name_user_input = r->get_cell(0);
+	user->email_user_input = r->get_cell(1);
+	user->rank = r->get_cell_int(2);
+	user->pre_salt = r->get_cell(3);
+	user->post_salt = r->get_cell(4);
+	user->password_hash = r->get_cell(5);
+	user->banned = r->get_cell_bool(6);
+	user->password_reset_token = r->get_cell(7);
+	user->locked = r->get_cell_bool(8);
+
+	b->query_result = "";
+
+	//todo remove this, sessions should have their own model
+	b->select("session_id");
+	b->from(_table_name + "_sessions");
+	b->where()->wp("user_id", id);
+	b->end_command();
+
+	r = b->run();
+
+	while (r->next_row()) {
+		user->sessions.push_back(r->get_cell(0));
+	}
+
+	user->register_sessions();
+
+	return user;
+}
+
+Ref<User> UserModel::get_user(const std::string &user_name_input) {
+	if (user_name_input == "") {
+		return Ref<User>();
+	}
+
+	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
+
+	b->select("id, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
+	b->from(_table_name);
+	b->where()->ewp("name", user_name_input);
+	b->end_command();
+
+	Ref<QueryResult> r = b->run();
+
+	if (!r->next_row()) {
+		return Ref<User>();
+	}
+
+	Ref<User> user;
+	user.instance();
+
+	user->id = r->get_cell_int(0);
+	user->name_user_input = user_name_input;
+	user->email_user_input = r->get_cell(1);
+	user->rank = r->get_cell_int(2);
+	user->pre_salt = r->get_cell(3);
+	user->post_salt = r->get_cell(4);
+	user->password_hash = r->get_cell(5);
+	user->banned = r->get_cell_bool(6);
+	user->password_reset_token = r->get_cell(7);
+	user->locked = r->get_cell_bool(8);
+
+	b->query_result = "";
+
+	//todo remove this, sessions should have their own model
+	b->select("session_id");
+	b->from(_table_name + "_sessions");
+	b->where()->wp("user_id", user->id);
+	b->end_command();
+
+	r = b->run();
+
+	while (r->next_row()) {
+		user->sessions.push_back(r->get_cell(0));
+	}
+
+	user->register_sessions();
+
+	return user;
+}
+
+void UserModel::save_user(Ref<User> &user) {
+	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
+
+	if (user->id == 0) {
+		b->insert(_table_name, "username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
+
+		b->values();
+		b->eval(user->name_user_input);
+		b->eval(user->email_user_input);
+		b->val(user->rank);
+		b->val(user->pre_salt);
+		b->val(user->post_salt);
+		b->val(user->password_hash);
+		b->val(user->banned);
+		b->val(user->password_reset_token);
+		b->val(user->locked);
+		b->cvalues();
+
+		b->end_command();
+		b->select_last_insert_id();
+
+		QueryResult *r = b->run();
+
+		user->id = r->get_last_insert_rowid();
+
+		delete r;
+
+	} else {
+		b->udpate(_table_name);
+		b->set();
+		b->esetp("username", user->name_user_input);
+		b->esetp("email", user->email_user_input);
+		b->setp("rank", user->rank);
+		b->setp("pre_salt", user->pre_salt);
+		b->setp("post_salt", user->post_salt);
+		b->setp("password_hash", user->password_hash);
+		b->setp("banned", user->banned);
+		b->setp("password_reset_token", user->password_reset_token);
+		b->setp("locked", user->locked);
+		b->cset();
+		b->where()->wp("id", user->id);
+
+		//b->print();
+
+		b->run_query();
+	}
+
+	if (user->id == 0) {
+		return;
+	}
+
+	b->reset();
+
+	b->del(_table_name + "_sessions")->where()->wp("user_id", user->id)->end_command();
+	//b->print();
+
+	b->end_command();
+	b->run_query();
+
+	b->reset();
+
+	for (int i = 0; i < user->sessions.size(); ++i) {
+		b->insert(_table_name + "_sessions")->values()->val(user->id)->val(user->sessions[i])->cvalues()->end_command();
+	}
+
+	//b->print();
+
+	b->run_query();
+}
+
+std::vector<Ref<User> > UserModel::get_all() {
+	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
+
+	b->select("id");
+	b->from(_table_name);
+	b->end_command();
+	b->print();
+
+	std::vector<Ref<User> > users;
+
+	Ref<QueryResult> r = b->run();
+
+	/*
+todo
+	while (r->next_row()) {
+		User *u = new User();
+		u->id = r->get_cell_int(0);
+		u->load();
+	}
+*/
+
+	return users;
+}
+
+bool UserModel::is_username_taken(const std::string &user_name_input) {
+	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
+
+	b->select("id")->from(_table_name)->where("name")->elike(user_name_input)->end_command();
+
+	Ref<QueryResult> r = b->run();
+
+	return r->next_row();
+}
+bool UserModel::is_email_taken(const std::string &email_input) {
+	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
+
+	b->select("id")->from(_table_name)->where("name")->elike(email_input)->end_command();
+
+	Ref<QueryResult> r = b->run();
+
+	return r->next_row();
+}
+
+bool UserModel::check_password(const Ref<User> &user, const std::string &p_password) {
+	return hash_password(user, p_password) == user->password_hash;
+}
+
+void UserModel::create_password(Ref<User> &user, const std::string &p_password) {
+	if (!user.is_valid()) {
+		printf("Error UserModel::create_password !user.is_valid()!\n");
+		return;
+	}
+
+	//todo improve a bit
+	user->pre_salt = hash_password(user, user->name_user_input + user->email_user_input);
+	user->post_salt = hash_password(user, user->email_user_input + user->name_user_input);
+
+	user->password_hash = hash_password(user, p_password);
+}
+
+std::string UserModel::hash_password(const Ref<User> &user, const std::string &p_password) {
+	if (!user.is_valid()) {
+		printf("Error UserModel::hash_password !user.is_valid()!\n");
+		return "";
+	}
+
+	Ref<SHA256> s = SHA256::get();
+
+	std::string p = user->pre_salt + p_password + user->post_salt;
+
+	std::string c = s->compute(p);
+
+	return c;
+}
+
+void UserModel::create_table() {
+	Ref<TableBuilder> tb = DatabaseManager::get_singleton()->ddb->get_table_builder();
+
+	tb->create_table(_table_name);
+	tb->integer("id")->auto_increment()->next_row();
+	tb->varchar("username", 60)->not_null()->next_row();
+	tb->varchar("email", 100)->not_null()->next_row();
+	tb->integer("rank")->not_null()->next_row();
+	tb->varchar("pre_salt", 100)->next_row();
+	tb->varchar("post_salt", 100)->next_row();
+	tb->varchar("password_hash", 100)->next_row();
+	tb->integer("banned")->next_row();
+	tb->varchar("password_reset_token", 100)->next_row();
+	tb->integer("locked")->next_row();
+	tb->primary_key("id");
+	tb->ccreate_table();
+	tb->run_query();
+	//tb->print();
+
+	//todo sessions need to be separate
+	tb->result = "";
+
+	tb->create_table(_table_name + "_sessions");
+	tb->integer("user_id")->not_null()->next_row();
+	tb->varchar("session_id", 100)->next_row();
+	tb->foreign_key("user_id");
+	tb->references("user", "id");
+	tb->ccreate_table();
+	//tb->print();
+	tb->run_query();
+}
+void UserModel::drop_table() {
+	Ref<TableBuilder> tb = DatabaseManager::get_singleton()->ddb->get_table_builder();
+
+	tb->drop_table_if_exists(_table_name)->run_query();
+	tb->drop_table_if_exists(_table_name + "_sessions")->run_query();
+}
+void UserModel::migrate() {
+	drop_table();
+	create_table();
+}
 
 UserModel *UserModel::get_singleton() {
 	return _self;
@@ -23,3 +320,6 @@ UserModel::~UserModel() {
 }
 
 UserModel *UserModel::_self = nullptr;
+
+std::string UserModel::_path = "./";
+std::string UserModel::_table_name = "users";

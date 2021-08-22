@@ -4,7 +4,6 @@
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/rapidjson.h"
 #include "rapidjson/stringbuffer.h"
-#include "user_manager.h"
 #include <rapidjson/writer.h>
 #include <tinydir/tinydir.h>
 #include <cstdio>
@@ -14,7 +13,6 @@
 #include "core/database/query_result.h"
 #include "core/database/table_builder.h"
 
-#include "core/hash/sha256.h"
 #include "core/html/form_validator.h"
 #include "core/html/html_builder.h"
 #include "core/http/cookie.h"
@@ -22,242 +20,7 @@
 #include "core/http/request.h"
 #include "core/http/session_manager.h"
 #include "core/utils.h"
-#include "user_manager.h"
-
-void User::save() {
-
-	QueryBuilder *b = DatabaseManager::get_singleton()->ddb->get_query_builder();
-
-	if (get_id() == 0) {
-		b->insert(_table_name, "username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
-
-		b->values();
-		b->eval(name_user_input);
-		b->eval(email_user_input);
-		b->val(rank);
-		b->val(pre_salt);
-		b->val(post_salt);
-		b->val(password_hash);
-		b->val(banned);
-		b->val(password_reset_token);
-		b->val(locked);
-		b->cvalues();
-
-		b->end_command();
-		b->select_last_insert_id();
-
-		QueryResult *r = b->run();
-
-		set_id(r->get_last_insert_rowid());
-
-		delete r;
-
-	} else {
-		b->udpate(_table_name);
-		b->set();
-		b->esetp("username", name_user_input);
-		b->esetp("email", email_user_input);
-		b->setp("rank", rank);
-		b->setp("pre_salt", pre_salt);
-		b->setp("post_salt", post_salt);
-		b->setp("password_hash", password_hash);
-		b->setp("banned", banned);
-		b->setp("password_reset_token", password_reset_token);
-		b->setp("locked", locked);
-		b->cset();
-		b->where()->wp("id", get_id());
-
-		//b->print();
-
-		b->run_query();
-	}
-
-	if (get_id() == 0) {
-		return;
-	}
-
-	b->reset();
-
-	b->del(_table_name + "_sessions")->where()->wp("user_id", get_id())->end_command();
-	//b->print();
-
-	b->end_command();
-	b->run_query();
-
-	b->reset();
-
-	for (int i = 0; i < sessions.size(); ++i) {
-		b->insert(_table_name + "_sessions")->values()->val(get_id())->val(sessions[i])->cvalues()->end_command();
-	}
-
-	//b->print();
-
-	b->run_query();
-
-	delete b;
-}
-
-void User::load() {
-
-	unregister_sessions();
-
-	if (get_id() == 0) {
-		return;
-	}
-
-	QueryBuilder *b = DatabaseManager::get_singleton()->ddb->get_query_builder();
-
-	b->select("username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
-	b->from(_table_name);
-
-	b->where()->wp("id", get_id());
-
-	b->end_command();
-
-	QueryResult *r = b->run();
-
-	if (r->next_row()) {
-		name_user_input = r->get_cell(0);
-		email_user_input = r->get_cell(1);
-		rank = r->get_cell_int(2);
-		pre_salt = r->get_cell(3);
-		post_salt = r->get_cell(4);
-		password_hash = r->get_cell(5);
-		banned = r->get_cell_bool(6);
-		password_reset_token = r->get_cell(7);
-		locked = r->get_cell_bool(8);
-	}
-
-	delete r;
-
-	b->query_result = "";
-
-	b->select("session_id");
-	b->from(_table_name + "_sessions");
-	b->where()->wp("user_id", get_id());
-	b->end_command();
-
-	r = b->run();
-
-	while (r->next_row()) {
-		sessions.push_back(r->get_cell(0));
-	}
-
-	delete r;
-
-	delete b;
-
-	register_sessions();
-}
-
-void User::load(const std::string &p_name) {
-	//name = p_name;
-
-	//load();
-}
-
-void User::load(const int p_id) {
-	set_id(p_id);
-
-	load();
-}
-
-void User::changed() {
-	save();
-}
-
-void User::update() {
-}
-
-
-void User::migrate() {
-	TableBuilder *tb = DatabaseManager::get_singleton()->ddb->get_table_builder();
-
-	tb->drop_table_if_exists(_table_name)->run_query();
-	tb->drop_table_if_exists(_table_name + "_sessions")->run_query();
-	//tb->print();
-
-	tb->result = "";
-
-	tb->create_table(_table_name);
-	tb->integer("id")->auto_increment()->next_row();
-	tb->varchar("username", 60)->not_null()->next_row();
-	tb->varchar("email", 100)->not_null()->next_row();
-	tb->integer("rank")->not_null()->next_row();
-	tb->varchar("pre_salt", 100)->next_row();
-	tb->varchar("post_salt", 100)->next_row();
-	tb->varchar("password_hash", 100)->next_row();
-	tb->integer("banned")->next_row();
-	tb->varchar("password_reset_token", 100)->next_row();
-	tb->integer("locked")->next_row();
-	tb->primary_key("id");
-	tb->ccreate_table();
-	tb->run_query();
-	//tb->print();
-
-	tb->result = "";
-
-	tb->create_table(_table_name + "_sessions");
-	tb->integer("user_id")->not_null()->next_row();
-	tb->varchar("session_id", 100)->next_row();
-	tb->foreign_key("user_id");
-	tb->references("user", "id");
-	tb->ccreate_table();
-	//tb->print();
-	tb->run_query();
-
-	delete tb;
-}
-
-void User::db_load_all() {
-	QueryBuilder *b = DatabaseManager::get_singleton()->ddb->get_query_builder();
-
-	b->select("id");
-	b->from(_table_name);
-	b->end_command();
-	b->print();
-
-	QueryResult *r = b->run();
-
-	while (r->next_row()) {
-		User *u = new User();
-		u->set_id(r->get_cell_int(0));
-		u->load();
-
-		//printf("%s\n", u->to_json().c_str());
-
-		UserManager::get_singleton()->add_user(u);
-	}
-
-	delete r;
-
-	delete b;
-}
-
-
-bool User::check_password(const std::string &p_password) {
-	return hash_password(p_password) == password_hash;
-}
-
-void User::create_password(const std::string &p_password) {
-	//todo improve a bit
-	pre_salt = hash_password(name_user_input + email_user_input);
-	post_salt = hash_password(email_user_input + name_user_input);
-
-	password_hash = hash_password(p_password);
-}
-
-std::string User::hash_password(const std::string &p_password) {
-	SHA256 *s = SHA256::get();
-
-	std::string p = pre_salt + p_password + post_salt;
-
-	std::string c = s->compute(p);
-
-	delete s;
-
-	return c;
-}
+#include "user_model.h"
 
 void User::register_sessions() {
 	if (sessions.size() == 0) {
@@ -347,19 +110,16 @@ void User::handle_login_request_default(Request *request) {
 		uname_val = request->get_parameter("username");
 		pass_val = request->get_parameter("password");
 
-		User *user = UserManager::get_singleton()->get_user(uname_val);
+		Ref<User> user = UserModel::get_singleton()->get_user(uname_val);
 
-		if (user) {
-			if (!user->check_password(pass_val)) {
+		if (user.is_valid()) {
+			if (!UserModel::get_singleton()->check_password(user, pass_val)) {
 				error_str += "Invalid username or password!";
 			} else {
 				HTTPSession *session = request->get_or_create_session();
 
-				session->add_object("user", user);
-
-				user->sessions.push_back(session->session_id);
-
-				user->save();
+				session->add_int("user", user->id);
+				//session->save();
 
 				request->add_cookie(::Cookie("session_id", session->session_id));
 
@@ -440,30 +200,11 @@ void User::handle_register_request_default(Request *request) {
 		//todo username length etc check
 		//todo pw length etc check
 
-		User *user = UserManager::get_singleton()->get_user(uname_val);
-
-		if (user) {
+		if (UserModel::get_singleton()->is_username_taken(uname_val)) {
 			error_str += "Username already taken!<br>";
 		}
 
-		UserManager *um = UserManager::get_singleton();
-
-		bool email_found = false;
-
-		for (int i = 0; i < um->_users_vec.size(); ++i) {
-			User *u = um->_users_vec[i];
-
-			if (!u) {
-				continue;
-			}
-
-			if (u->email_user_input == email_val) {
-				email_found = true;
-				break;
-			}
-		}
-
-		if (email_found) {
+		if (UserModel::get_singleton()->is_email_taken(email_val)) {
 			error_str += "Email already in use!<br>";
 		}
 
@@ -472,16 +213,15 @@ void User::handle_register_request_default(Request *request) {
 		}
 
 		if (error_str.size() == 0) {
-			user = UserManager::get_singleton()->create_user();
+			Ref<User> user;
+			user.instance();
 
 			user->name_user_input = uname_val;
 			user->email_user_input = email_val;
 			//todo
 			user->rank = 1;
-			user->create_password(pass_val);
-			user->save();
-
-			UserManager::get_singleton()->add_user(user);
+			UserModel::get_singleton()->create_password(user, pass_val);
+			UserModel::get_singleton()->save_user(user);
 
 			HTMLBuilder b;
 
@@ -621,9 +361,7 @@ void User::handle_settings_request(Request *request) {
 			}
 
 			if (uname_val != "") {
-				User *user = UserManager::get_singleton()->get_user(uname_val);
-
-				if (user) {
+				if (UserModel::get_singleton()->is_username_taken(uname_val)) {
 					error_str += "Username already taken!<br>";
 				} else {
 					//todo sanitize for html special chars!
@@ -634,29 +372,7 @@ void User::handle_settings_request(Request *request) {
 			}
 
 			if (email_val != "") {
-				UserManager *um = UserManager::get_singleton();
-
-				bool email_found = false;
-
-				//todo better way + should be thread safe
-				for (int i = 0; i < um->_users_vec.size(); ++i) {
-					User *u = um->_users_vec[i];
-
-					if (!u) {
-						continue;
-					}
-
-					if (u == this) {
-						continue;
-					}
-
-					if (u->email_user_input == email_val) {
-						email_found = true;
-						break;
-					}
-				}
-
-				if (email_found) {
+				if (UserModel::get_singleton()->is_email_taken(email_val)) {
 					error_str += "Email already in use!<br>";
 				} else {
 					//todo sanitize for html special chars!
@@ -671,7 +387,8 @@ void User::handle_settings_request(Request *request) {
 				if (pass_val != pass_check_val) {
 					error_str += "The passwords did not match!<br>";
 				} else {
-					create_password(pass_val);
+					//todo
+					//create_password(pass_val);
 					changed = true;
 				}
 			}
@@ -839,6 +556,7 @@ std::string User::file_get_base_path() {
 }
 
 void User::file_load_all() {
+	/*
 	tinydir_dir dir;
 	if (tinydir_open(&dir, _path.c_str()) == -1) {
 		return;
@@ -865,6 +583,7 @@ void User::file_load_all() {
 	}
 
 	tinydir_close(&dir);
+	*/
 }
 
 std::string User::file_get_path() {
@@ -892,7 +611,7 @@ std::string User::to_json(rapidjson::Document *into) {
 
 	document->SetObject();
 
-	document->AddMember("id", get_id(), document->GetAllocator());
+	document->AddMember("id", id, document->GetAllocator());
 
 	document->AddMember("name", rapidjson::Value(name_user_input.c_str(), document->GetAllocator()), document->GetAllocator());
 	document->AddMember("email", rapidjson::Value(email_user_input.c_str(), document->GetAllocator()), document->GetAllocator());
@@ -934,7 +653,7 @@ void User::from_json(const std::string &p_data) {
 
 	rapidjson::Value uobj = data.GetObject();
 
-	set_id(uobj["id"].GetInt());
+	id = uobj["id"].GetInt();
 	name_user_input = uobj["name"].GetString();
 	email_user_input = uobj["email"].GetString();
 	rank = uobj["rank"].GetInt();

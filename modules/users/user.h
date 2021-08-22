@@ -25,21 +25,6 @@ public:
 	std::string password_reset_token;
 	bool locked;
 
-	virtual void save();
-	virtual void load();
-	virtual void load(const std::string &p_name);
-	virtual void load(const int p_id);
-	virtual void changed();
-	virtual void update();
-
-	void migrate();
-
-	static void db_load_all();
-
-	virtual bool check_password(const std::string &p_password);
-	virtual void create_password(const std::string &p_password);
-	virtual std::string hash_password(const std::string &p_password);
-
 	static void handle_request_default(Request *request);
 
 	static void handle_login_request_default(Request *request);
