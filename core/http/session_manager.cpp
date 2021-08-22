@@ -152,7 +152,7 @@ void SessionManager::load_sessions() {
 
 	b->select("id, session_id");
 	b->from(_table_name);
-	b->print();
+	//b->print();
 	Ref<QueryResult> r = b->run();
 
 	while (r->next_row()) {
@@ -171,7 +171,7 @@ void SessionManager::load_sessions() {
 
 	b->select("session_db_id, key, value");
 	b->from(_data_table_name);
-	b->print();
+	//b->print();
 	r = b->run();
 
 	while (r->next_row()) {
