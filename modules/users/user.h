@@ -25,9 +25,6 @@ public:
 	std::string password_reset_token;
 	bool locked;
 
-	void register_sessions();
-	void unregister_sessions();
-
 	void file_save();
 	void file_load();
 	void file_ensure_directory_exist();

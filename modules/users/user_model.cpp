@@ -42,22 +42,6 @@ Ref<User> UserModel::get_user(const int id) {
 	user->password_reset_token = r->get_cell(7);
 	user->locked = r->get_cell_bool(8);
 
-	b->query_result = "";
-
-	//todo remove this, sessions should have their own model
-	b->select("session_id");
-	b->from(_table_name + "_sessions");
-	b->where()->wp("user_id", id);
-	b->end_command();
-
-	r = b->run();
-
-	while (r->next_row()) {
-		user->sessions.push_back(r->get_cell(0));
-	}
-
-	user->register_sessions();
-
 	return user;
 }
 
@@ -92,22 +76,6 @@ Ref<User> UserModel::get_user(const std::string &user_name_input) {
 	user->banned = r->get_cell_bool(6);
 	user->password_reset_token = r->get_cell(7);
 	user->locked = r->get_cell_bool(8);
-
-	b->query_result = "";
-
-	//todo remove this, sessions should have their own model
-	b->select("session_id");
-	b->from(_table_name + "_sessions");
-	b->where()->wp("user_id", user->id);
-	b->end_command();
-
-	r = b->run();
-
-	while (r->next_row()) {
-		user->sessions.push_back(r->get_cell(0));
-	}
-
-	user->register_sessions();
 
 	return user;
 }
@@ -158,28 +126,6 @@ void UserModel::save_user(Ref<User> &user) {
 
 		b->run_query();
 	}
-
-	if (user->id == 0) {
-		return;
-	}
-
-	b->reset();
-
-	b->del(_table_name + "_sessions")->where()->wp("user_id", user->id)->end_command();
-	//b->print();
-
-	b->end_command();
-	b->run_query();
-
-	b->reset();
-
-	for (int i = 0; i < user->sessions.size(); ++i) {
-		b->insert(_table_name + "_sessions")->values()->val(user->id)->val(user->sessions[i])->cvalues()->end_command();
-	}
-
-	//b->print();
-
-	b->run_query();
 }
 
 std::vector<Ref<User> > UserModel::get_all() {
@@ -275,24 +221,11 @@ void UserModel::create_table() {
 	tb->ccreate_table();
 	tb->run_query();
 	//tb->print();
-
-	//todo sessions need to be separate
-	tb->result = "";
-
-	tb->create_table(_table_name + "_sessions");
-	tb->integer("user_id")->not_null()->next_row();
-	tb->varchar("session_id", 100)->next_row();
-	tb->foreign_key("user_id");
-	tb->references("user", "id");
-	tb->ccreate_table();
-	//tb->print();
-	tb->run_query();
 }
 void UserModel::drop_table() {
 	Ref<TableBuilder> tb = DatabaseManager::get_singleton()->ddb->get_table_builder();
 
 	tb->drop_table_if_exists(_table_name)->run_query();
-	tb->drop_table_if_exists(_table_name + "_sessions")->run_query();
 }
 void UserModel::migrate() {
 	drop_table();

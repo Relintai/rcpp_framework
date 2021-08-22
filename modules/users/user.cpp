@@ -22,47 +22,6 @@
 #include "core/utils.h"
 #include "user_model.h"
 
-void User::register_sessions() {
-	//todo rework this
-	
-	
-	if (sessions.size() == 0) {
-		return;
-	}
-
-	SessionManager *sm = SessionManager::get_singleton();
-
-	if (!sm) {
-		printf("ERROR: UserManager::add_user SessionManager singleton is null, please allocate one!\n");
-		return;
-	}
-
-	for (int i = 0; i < sessions.size(); ++i) {
-		HTTPSession *session = new HTTPSession();
-		session->session_id = sessions[i];
-		session->add_reference("user", Ref<Reference>(this));
-
-		sm->add_session(session);
-	}
-}
-
-void User::unregister_sessions() {
-	if (sessions.size() == 0) {
-		return;
-	}
-
-	SessionManager *sm = SessionManager::get_singleton();
-
-	if (!sm) {
-		printf("ERROR: UserManager::remove_user SessionManager singleton is null, please allocate one!\n");
-		return;
-	}
-
-	for (int i = 0; i < sessions.size(); ++i) {
-		sm->delete_session(sessions[i]);
-	}
-}
-
 void User::file_save() {
 }
 void User::file_load() {
@@ -217,7 +176,6 @@ User::User() :
 }
 
 User::~User() {
-	unregister_sessions();
 }
 
 std::string User::_path = "./";
