@@ -11,33 +11,8 @@
 #include "core/database/database_manager.h"
 #endif
 
-int Resource::get_id() {
-	return _id;
-}
-void Resource::set_id(const int value) {
-	_id = value;
-
-	changed();
-}
-
-bool Resource::get_dirty() {
-	return _dirty;
-}
-void Resource::set_dirty(const bool value) {
-	_dirty = value;
-}
-
-std::string Resource::get_resource_name() {
-	return _resource_name;
-}
-void Resource::set_resource_name(const std::string &name) {
-	_resource_name = name;
-
-	changed();
-}
-
 void Resource::changed() {
-	_dirty = true;
+	dirty = true;
 }
 
 void Resource::save() {
@@ -129,9 +104,9 @@ void Resource::from_json(const std::string &data) {
 
 Resource::Resource() :
 		Reference() {
-	_id = 0;
-	_dirty = false;
-	_resource_name = get_class();
+	id = 0;
+	dirty = false;
+	resource_name = get_class();
 }
 
 Resource::~Resource() {

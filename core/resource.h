@@ -17,14 +17,9 @@ class Resource : public Reference {
 	RCPP_OBJECT(Resource, Reference);
 
 public:
-	int get_id();
-	void set_id(const int value);
-
-	bool get_dirty();
-	void set_dirty(const bool value);
-
-	std::string get_resource_name();
-	void set_resource_name(const std::string &name);
+	int id;
+	bool dirty;
+	std::string resource_name;
 
 	void changed();
 
@@ -58,9 +53,6 @@ public:
 	~Resource();
 
 private:
-	int _id;
-	bool _dirty;
-	std::string _resource_name;
 };
 
 #endif
