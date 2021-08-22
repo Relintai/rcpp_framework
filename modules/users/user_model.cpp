@@ -131,23 +131,32 @@ void UserModel::save_user(Ref<User> &user) {
 std::vector<Ref<User> > UserModel::get_all() {
 	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
-	b->select("id");
+	b->select("id, username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
 	b->from(_table_name);
 	b->end_command();
-	b->print();
+	//b->print();
 
 	std::vector<Ref<User> > users;
 
 	Ref<QueryResult> r = b->run();
 
-	/*
-todo
 	while (r->next_row()) {
-		User *u = new User();
-		u->id = r->get_cell_int(0);
-		u->load();
+		Ref<User> user;
+		user.instance();
+
+		user->id = r->get_cell_int(0);
+		user->name_user_input = r->get_cell(1);
+		user->email_user_input = r->get_cell(2);
+		user->rank = r->get_cell_int(3);
+		user->pre_salt = r->get_cell(4);
+		user->post_salt = r->get_cell(5);
+		user->password_hash = r->get_cell(6);
+		user->banned = r->get_cell_bool(7);
+		user->password_reset_token = r->get_cell(8);
+		user->locked = r->get_cell_bool(9);
+
+		users.push_back(user);
 	}
-*/
 
 	return users;
 }
