@@ -51,6 +51,10 @@ public:
 	virtual void changed();
 	virtual void update();
 
+	void migrate();
+
+	static void db_load_all();
+
 	virtual bool check_password(const std::string &p_password);
 	virtual void create_password(const std::string &p_password);
 	virtual std::string hash_password(const std::string &p_password);
@@ -105,6 +109,7 @@ protected:
 	std::string _file_path;
 
 	static std::string _path;
+	static std::string _table_name;
 };
 
 #endif

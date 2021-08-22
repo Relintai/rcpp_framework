@@ -18,6 +18,10 @@ public:
 	virtual User *create_user();
 	virtual void load_all();
 
+	void set_table_name(const std::string &name);
+
+	virtual void migrate();
+
 	void clear();
 
 	static UserManager *get_singleton();

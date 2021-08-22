@@ -48,7 +48,18 @@ User *UserManager::create_user() {
 }
 
 void UserManager::load_all() {
+	User::db_load_all();
 }
+
+void UserManager::set_table_name(const std::string &path) {
+	//DBBasedUser::set_path(path);
+}
+
+void UserManager::migrate() {
+	User u;
+	u.migrate();
+}
+
 
 void UserManager::clear() {
 	SessionManager *sm = SessionManager::get_singleton();
@@ -75,6 +86,10 @@ UserManager::UserManager() :
 	}
 
 	_self = this;
+
+	printf("Using UserManager.\n");
+
+	User::create_validators();
 }
 
 UserManager::~UserManager() {
