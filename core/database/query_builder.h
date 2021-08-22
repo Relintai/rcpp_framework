@@ -21,6 +21,11 @@ public:
 	virtual QueryBuilder *values();
 	virtual QueryBuilder *cvalues();
 
+	virtual QueryBuilder *str();
+	virtual QueryBuilder *cstr();
+
+	virtual QueryBuilder *like();
+
 	virtual QueryBuilder *select(const std::string &params);
 	virtual QueryBuilder *udpate(const std::string &params);
 	virtual QueryBuilder *del(const std::string &params);
@@ -35,6 +40,8 @@ public:
 	virtual QueryBuilder *val(const char *param);
 	virtual QueryBuilder *val(const int param);
 	virtual QueryBuilder *val(const bool param);
+
+	virtual QueryBuilder *like(const std::string &str);
 
 	virtual QueryBuilder *set();
 	virtual QueryBuilder *cset();
@@ -56,6 +63,7 @@ public:
 	virtual QueryBuilder *ewhere(const std::string &params);
 	virtual QueryBuilder *efrom(const std::string &params);
 	virtual QueryBuilder *einsert(const std::string &table_name);
+	virtual QueryBuilder *elike(const std::string &str);
 	virtual QueryBuilder *evalues(const std::string &params_str);
 	virtual QueryBuilder *eval(const std::string &param);
 	//note col is NOT escaped
@@ -69,6 +77,8 @@ public:
 	//l=logical (and, or are operators)
 	virtual QueryBuilder *land();
 	virtual QueryBuilder *lor();
+
+	virtual QueryBuilder *wildcard();
 
 	virtual QueryBuilder *w(const std::string &str);
 	virtual QueryBuilder *ew(const std::string &str);

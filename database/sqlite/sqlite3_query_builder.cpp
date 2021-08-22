@@ -48,6 +48,23 @@ QueryBuilder *SQLite3QueryBuilder::cvalues() {
 	return this;
 }
 
+QueryBuilder *SQLite3QueryBuilder::str() {
+	query_result += "'";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::cstr() {
+	query_result += "'";
+
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::like() {
+	query_result += "LIKE ";
+
+	return this;
+}
+
 QueryBuilder *SQLite3QueryBuilder::select(const std::string &params) {
 	query_result += "SELECT " + params + " ";
 
@@ -124,6 +141,12 @@ QueryBuilder *SQLite3QueryBuilder::val(const bool param) {
 		query_result += "1, ";
 	else
 		query_result += "0, ";
+
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::like(const std::string &str) {
+	query_result += "LIKE '" + str + "' ";
 
 	return this;
 }
@@ -221,6 +244,12 @@ QueryBuilder *SQLite3QueryBuilder::land() {
 }
 QueryBuilder *SQLite3QueryBuilder::lor() {
 	query_result += "OR ";
+
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::wildcard() {
+	query_result += "%";
 
 	return this;
 }

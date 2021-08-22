@@ -20,6 +20,11 @@ public:
 	QueryBuilder *values();
 	QueryBuilder *cvalues();
 
+	QueryBuilder *str();
+	QueryBuilder *cstr();
+
+	QueryBuilder *like();
+
 	QueryBuilder *select(const std::string &params);
 	QueryBuilder *udpate(const std::string &params);
 	QueryBuilder *del(const std::string &params);
@@ -34,6 +39,8 @@ public:
 	QueryBuilder *val(const char *param);
 	QueryBuilder *val(const int param);
 	QueryBuilder *val(const bool param);
+
+	QueryBuilder *like(const std::string &str);
 
 	QueryBuilder *set();
 	QueryBuilder *cset();
@@ -51,8 +58,10 @@ public:
 	QueryBuilder *offset(const int num);
 
 	//l=logical (and, or are operators)
-	virtual QueryBuilder *land();
-	virtual QueryBuilder *lor();
+	QueryBuilder *land();
+	QueryBuilder *lor();
+
+	QueryBuilder *wildcard();
 
 	QueryBuilder *select_last_insert_id();
 

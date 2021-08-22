@@ -29,6 +29,17 @@ QueryBuilder *QueryBuilder::cvalues() {
 	return this;
 }
 
+QueryBuilder *QueryBuilder::str() {
+	return this;
+}
+QueryBuilder *QueryBuilder::cstr() {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::like() {
+	return this;
+}
+
 QueryBuilder *QueryBuilder::select(const std::string &params) {
 	return this;
 }
@@ -72,6 +83,10 @@ QueryBuilder *QueryBuilder::val(const int param) {
 	return this;
 }
 QueryBuilder *QueryBuilder::val(const bool param) {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::like(const std::string &str) {
 	return this;
 }
 
@@ -128,6 +143,9 @@ QueryBuilder *QueryBuilder::einsert(const std::string &table_name) {
 
 	return this;
 }
+QueryBuilder *QueryBuilder::elike(const std::string &str) {
+	return like(escape(str));
+}
 QueryBuilder *QueryBuilder::evalues(const std::string &params_str) {
 	return values(escape(params_str));
 }
@@ -155,6 +173,10 @@ QueryBuilder *QueryBuilder::land() {
 	return this;
 }
 QueryBuilder *QueryBuilder::lor() {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::wildcard() {
 	return this;
 }
 
