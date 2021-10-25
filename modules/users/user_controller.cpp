@@ -89,32 +89,39 @@ void UserController::handle_login_request_default(Request *request) {
 	b.w("Login");
 	b.br();
 
-	if (error_str.size() != 0) {
-		b.div()->cls("error");
+	{
+		if (error_str.size() != 0) {
+			b.div()->cls("error");
 
-		b.w(error_str);
+			b.w(error_str);
 
-		b.cdiv();
+			b.cdiv();
+		}
 	}
 
 	b.div()->cls("login");
+	{
 
-	//todo href path helper
-	b.form()->method("POST")->href("/user/login");
-	b.w("Username");
-	b.br();
-	b.input()->type("text")->name("username")->value(uname_val);
-	b.cinput();
-	b.br();
-	b.w("Password");
-	b.br();
-	b.input()->type("password")->name("password");
-	b.cinput();
-	b.br();
-	b.input()->type("submit")->value("Send");
-	b.cinput();
-	b.cform();
+		//todo href path helper
+		b.form()->method("POST")->href("/user/login");
+		{
+			b.w("Username");
+			b.br();
+			b.input()->type("text")->name("username")->value(uname_val);
+			b.cinput();
+			b.br();
 
+			b.w("Password");
+			b.br();
+			b.input()->type("password")->name("password");
+			b.cinput();
+			b.br();
+
+			b.input()->type("submit")->value("Send");
+			b.cinput();
+		}
+		b.cform();
+	}
 	b.cdiv();
 
 	request->body += b.result;
@@ -174,11 +181,13 @@ void UserController::handle_register_request_default(Request *request) {
 			HTMLBuilder b;
 
 			b.div()->cls("success");
-			b.w("Registration successful! You can now log in!");
-			b.br();
-			b.a()->href("/user/login");
-			b.w(">> Login <<");
-			b.ca();
+			{
+				b.w("Registration successful! You can now log in!");
+				b.br();
+				b.a()->href("/user/login");
+				b.w(">> Login <<");
+				b.ca();
+			}
 			b.cdiv();
 
 			request->body += b.result;
@@ -193,47 +202,50 @@ void UserController::handle_register_request_default(Request *request) {
 	b.w("Registration");
 	b.br();
 
-	if (error_str.size() != 0) {
-		b.div()->cls("error");
+	{
+		if (error_str.size() != 0) {
+			b.div()->cls("error");
 
-		b.w(error_str);
+			b.w(error_str);
 
-		b.cdiv();
+			b.cdiv();
+		}
 	}
 
 	b.div()->cls("register");
+	{
+		//todo href path helper
+		b.form()->method("POST")->href("/user/register");
+		{
+			b.w("Username");
+			b.br();
+			b.input()->type("text")->name("username")->value(uname_val);
+			b.cinput();
+			b.br();
 
-	//todo href path helper
-	b.form()->method("POST")->href("/user/register");
+			b.w("Email");
+			b.br();
+			b.input()->type("email")->name("email")->value(email_val);
+			b.cinput();
+			b.br();
 
-	b.w("Username");
-	b.br();
-	b.input()->type("text")->name("username")->value(uname_val);
-	b.cinput();
-	b.br();
+			b.w("Password");
+			b.br();
+			b.input()->type("password")->name("password");
+			b.cinput();
+			b.br();
 
-	b.w("Email");
-	b.br();
-	b.input()->type("email")->name("email")->value(email_val);
-	b.cinput();
-	b.br();
-
-	b.w("Password");
-	b.br();
-	b.input()->type("password")->name("password");
-	b.cinput();
-	b.br();
-
-	b.w("Password again");
-	b.br();
-	b.input()->type("password")->name("password_check");
-	b.cinput();
-	b.br();
-
-	b.input()->type("submit")->value("Register");
-	b.cinput();
-	b.cform();
-
+			b.w("Password again");
+			b.br();
+			b.input()->type("password")->name("password_check");
+			b.cinput();
+			b.br();
+			
+			b.input()->type("submit")->value("Register");
+			b.cinput();
+		}
+		b.cform();
+	}
 	b.cdiv();
 
 	request->body += b.result;
@@ -352,47 +364,50 @@ void UserController::handle_settings_request(Ref<User> &user, Request *request) 
 	b.w("Settings");
 	b.br();
 
-	if (error_str.size() != 0) {
-		b.div()->cls("error");
+	{
+		if (error_str.size() != 0) {
+			b.div()->cls("error");
 
-		b.w(error_str);
+			b.w(error_str);
 
-		b.cdiv();
+			b.cdiv();
+		}
 	}
 
 	b.div()->cls("settings");
+	{
+		//todo href path helper
+		b.form()->method("POST")->href("/user/settings");
+		{
+			b.w("Username");
+			b.br();
+			b.input()->type("text")->name("username")->placeholder(user->name_user_input)->value(uname_val);
+			b.cinput();
+			b.br();
 
-	//todo href path helper
-	b.form()->method("POST")->href("/user/settings");
+			b.w("Email");
+			b.br();
+			b.input()->type("email")->name("email")->placeholder(user->email_user_input)->value(email_val);
+			b.cinput();
+			b.br();
 
-	b.w("Username");
-	b.br();
-	b.input()->type("text")->name("username")->placeholder(user->name_user_input)->value(uname_val);
-	b.cinput();
-	b.br();
+			b.w("Password");
+			b.br();
+			b.input()->type("password")->placeholder("*******")->name("password");
+			b.cinput();
+			b.br();
 
-	b.w("Email");
-	b.br();
-	b.input()->type("email")->name("email")->placeholder(user->email_user_input)->value(email_val);
-	b.cinput();
-	b.br();
+			b.w("Password again");
+			b.br();
+			b.input()->type("password")->placeholder("*******")->name("password_check");
+			b.cinput();
+			b.br();
 
-	b.w("Password");
-	b.br();
-	b.input()->type("password")->placeholder("*******")->name("password");
-	b.cinput();
-	b.br();
-
-	b.w("Password again");
-	b.br();
-	b.input()->type("password")->placeholder("*******")->name("password_check");
-	b.cinput();
-	b.br();
-
-	b.input()->type("submit")->value("Save");
-	b.cinput();
-	b.cform();
-
+			b.input()->type("submit")->value("Save");
+			b.cinput();
+		}
+		b.cform();
+	}
 	b.cdiv();
 
 	request->body += b.result;
