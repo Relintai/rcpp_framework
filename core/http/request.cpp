@@ -38,7 +38,10 @@ const std::string &Request::get_parameter(const std::string &key) const {
 }
 
 void Request::compile_body() {
-	compiled_body.reserve(body.size() + head.size() + 13 + 14 + 15);
+	compiled_body.reserve(body.size() + head.size() + 15 + 13 + 14 + 15);
+
+	//15
+	compiled_body += "<!DOCTYPE html>";
 
 	//13
 	compiled_body += "<html>"
