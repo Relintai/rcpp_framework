@@ -23,16 +23,25 @@ HTMLTag *HTMLTag::cls(const std::string &val) {
 
 	return this;
 }
+
 HTMLTag *HTMLTag::id(const std::string &val) {
 	attrib("id", val);
 
 	return this;
 }
+
 HTMLTag *HTMLTag::name(const std::string &val) {
 	attrib("name", val);
 
 	return this;
 }
+
+HTMLTag *HTMLTag::content(const std::string &val) {
+	attrib("content", val);
+
+	return this;
+}
+
 HTMLTag *HTMLTag::value(const std::string &val) {
 	attrib("value", val);
 

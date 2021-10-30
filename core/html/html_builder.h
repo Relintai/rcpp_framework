@@ -20,6 +20,7 @@ public:
 	HTMLTag *cls(const std::string &val);
 	HTMLTag *id(const std::string &val);
 	HTMLTag *name(const std::string &val);
+	HTMLTag *content(const std::string &val);
 	HTMLTag *value(const std::string &val);
 	HTMLTag *method(const std::string &val);
 	HTMLTag *type(const std::string &val);
