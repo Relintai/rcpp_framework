@@ -13,12 +13,43 @@ class UserController : public Object {
 public:
 	virtual void handle_request_default(Request *request);
 
+	struct LoginRequestData {
+		std::string error_str;
+		std::string uname_val;
+		std::string pass_val;
+	};
+
 	virtual void handle_login_request_default(Request *request);
+	virtual void render_login_request_default(Request *request, LoginRequestData *data);
+
+	struct RegisterRequestData {
+		std::string error_str;
+		std::string uname_val;
+		std::string email_val;
+		std::string pass_val;
+		std::string pass_check_val;
+	};
+
 	virtual void handle_register_request_default(Request *request);
+	virtual void render_register_request_default(Request *request, RegisterRequestData *data);
+
+	virtual void render_already_logged_in_error(Request *request);
 
 	virtual void handle_request(Ref<User> &user, Request *request);
 	virtual void handle_main_page_request(Ref<User> &user, Request *request);
+
+	struct SettingsRequestData {
+		std::string error_str;
+
+		std::string uname_val;
+		std::string email_val;
+		std::string pass_val;
+		std::string pass_check_val;
+	};
+
 	virtual void handle_settings_request(Ref<User> &user, Request *request);
+	virtual void render_settings_request(Ref<User> &user, Request *request, SettingsRequestData *data);
+
 	virtual void handle_password_reset_request(Ref<User> &user, Request *request);
 	virtual void handle_logout_request(Ref<User> &user, Request *request);
 	virtual void handle_delete_request(Ref<User> &user, Request *request);

@@ -39,10 +39,7 @@ void UserController::handle_request_default(Request *request) {
 }
 
 void UserController::handle_login_request_default(Request *request) {
-	std::string error_str = "";
-
-	std::string uname_val = "";
-	std::string pass_val = "";
+	LoginRequestData data;
 
 	if (request->get_method() == HTTP_METHOD_POST) {
 
@@ -51,18 +48,18 @@ void UserController::handle_login_request_default(Request *request) {
 		std::vector<std::string> errors;
 		_login_validator->validate(request, &errors);
 		for (int i = 0; i < errors.size(); ++i) {
-			error_str += errors[i] + "<br>";
+			data.error_str += errors[i] + "<br>";
 		}
 		//not needed end
 
-		uname_val = request->get_parameter("username");
-		pass_val = request->get_parameter("password");
+		data.uname_val = request->get_parameter("username");
+		data.pass_val = request->get_parameter("password");
 
-		Ref<User> user = UserModel::get_singleton()->get_user(uname_val);
+		Ref<User> user = UserModel::get_singleton()->get_user(data.uname_val);
 
 		if (user.is_valid()) {
-			if (!UserModel::get_singleton()->check_password(user, pass_val)) {
-				error_str += "Invalid username or password!";
+			if (!UserModel::get_singleton()->check_password(user, data.pass_val)) {
+				data.error_str += "Invalid username or password!";
 			} else {
 				HTTPSession *session = request->get_or_create_session();
 
@@ -80,20 +77,24 @@ void UserController::handle_login_request_default(Request *request) {
 				return;
 			}
 		} else {
-			error_str += "Invalid username or password!";
+			data.error_str += "Invalid username or password!";
 		}
 	}
 
+	render_login_request_default(request, &data);
+}
+
+void UserController::render_login_request_default(Request *request, LoginRequestData *data) {
 	HTMLBuilder b;
 
 	b.w("Login");
 	b.br();
 
 	{
-		if (error_str.size() != 0) {
+		if (data->error_str.size() != 0) {
 			b.div()->cls("error");
 
-			b.w(error_str);
+			b.w(data->error_str);
 
 			b.cdiv();
 		}
@@ -107,7 +108,7 @@ void UserController::handle_login_request_default(Request *request) {
 		{
 			b.w("Username");
 			b.br();
-			b.input()->type("text")->name("username")->value(uname_val);
+			b.input()->type("text")->name("username")->value(data->uname_val);
 			b.cinput();
 			b.br();
 
@@ -130,12 +131,7 @@ void UserController::handle_login_request_default(Request *request) {
 }
 
 void UserController::handle_register_request_default(Request *request) {
-	std::string error_str = "";
-
-	std::string uname_val = "";
-	std::string email_val = "";
-	std::string pass_val = "";
-	std::string pass_check_val = "";
+	RegisterRequestData data;
 
 	if (request->get_method() == HTTP_METHOD_POST) {
 
@@ -144,38 +140,38 @@ void UserController::handle_register_request_default(Request *request) {
 		_registration_validator->validate(request, &errors);
 
 		for (int i = 0; i < errors.size(); ++i) {
-			error_str += errors[i] + "<br>";
+			data.error_str += errors[i] + "<br>";
 		}
 
-		uname_val = request->get_parameter("username");
-		email_val = request->get_parameter("email");
-		pass_val = request->get_parameter("password");
-		pass_check_val = request->get_parameter("password_check");
+		data.uname_val = request->get_parameter("username");
+		data.email_val = request->get_parameter("email");
+		data.pass_val = request->get_parameter("password");
+		data.pass_check_val = request->get_parameter("password_check");
 
 		//todo username length etc check
 		//todo pw length etc check
 
-		if (UserModel::get_singleton()->is_username_taken(uname_val)) {
-			error_str += "Username already taken!<br>";
+		if (UserModel::get_singleton()->is_username_taken(data.uname_val)) {
+			data.error_str += "Username already taken!<br>";
 		}
 
-		if (UserModel::get_singleton()->is_email_taken(email_val)) {
-			error_str += "Email already in use!<br>";
+		if (UserModel::get_singleton()->is_email_taken(data.email_val)) {
+			data.error_str += "Email already in use!<br>";
 		}
 
-		if (pass_val != pass_check_val) {
-			error_str += "The passwords did not match!<br>";
+		if (data.pass_val != data.pass_check_val) {
+			data.error_str += "The passwords did not match!<br>";
 		}
 
-		if (error_str.size() == 0) {
+		if (data.error_str.size() == 0) {
 			Ref<User> user;
 			user.instance();
 
-			user->name_user_input = uname_val;
-			user->email_user_input = email_val;
+			user->name_user_input = data.uname_val;
+			user->email_user_input = data.email_val;
 			//todo
 			user->rank = 1;
-			UserModel::get_singleton()->create_password(user, pass_val);
+			UserModel::get_singleton()->create_password(user, data.pass_val);
 			UserModel::get_singleton()->save_user(user);
 
 			HTMLBuilder b;
@@ -197,16 +193,20 @@ void UserController::handle_register_request_default(Request *request) {
 		}
 	}
 
+	render_register_request_default(request, &data);
+}
+
+void UserController::render_register_request_default(Request *request, RegisterRequestData *data) {
 	HTMLBuilder b;
 
 	b.w("Registration");
 	b.br();
 
 	{
-		if (error_str.size() != 0) {
+		if (data->error_str.size() != 0) {
 			b.div()->cls("error");
 
-			b.w(error_str);
+			b.w(data->error_str);
 
 			b.cdiv();
 		}
@@ -219,13 +219,13 @@ void UserController::handle_register_request_default(Request *request) {
 		{
 			b.w("Username");
 			b.br();
-			b.input()->type("text")->name("username")->value(uname_val);
+			b.input()->type("text")->name("username")->value(data->uname_val);
 			b.cinput();
 			b.br();
 
 			b.w("Email");
 			b.br();
-			b.input()->type("email")->name("email")->value(email_val);
+			b.input()->type("email")->name("email")->value(data->email_val);
 			b.cinput();
 			b.br();
 
@@ -253,6 +253,12 @@ void UserController::handle_register_request_default(Request *request) {
 	request->compile_and_send_body();
 }
 
+void UserController::render_already_logged_in_error(Request *request) {
+	request->body += "You are already logged in.";
+
+	request->compile_and_send_body();
+}
+
 void UserController::handle_request(Ref<User> &user, Request *request) {
 	const std::string &segment = request->get_current_path_segment();
 
@@ -267,13 +273,9 @@ void UserController::handle_request(Ref<User> &user, Request *request) {
 	} else if (segment == "delete") {
 		handle_delete_request(user, request);
 	} else if (segment == "login") {
-		request->body += "You are already logged in.";
-
-		request->compile_and_send_body();
+		render_already_logged_in_error(request);
 	} else if (segment == "register") {
-		request->body += "You are already logged in.";
-
-		request->compile_and_send_body();
+		render_already_logged_in_error(request);
 	} else {
 		request->send_error(404);
 	}
@@ -287,19 +289,14 @@ void UserController::handle_main_page_request(Ref<User> &user, Request *request)
 
 void UserController::handle_settings_request(Ref<User> &user, Request *request) {
 
-	std::string error_str = "";
-
-	std::string uname_val;
-	std::string email_val;
-	std::string pass_val;
-	std::string pass_check_val;
+	SettingsRequestData data;
 
 	if (request->get_method() == HTTP_METHOD_POST) {
 
-		uname_val = request->get_parameter("username");
-		email_val = request->get_parameter("email");
-		pass_val = request->get_parameter("password");
-		pass_check_val = request->get_parameter("password_check");
+		data.uname_val = request->get_parameter("username");
+		data.email_val = request->get_parameter("email");
+		data.pass_val = request->get_parameter("password");
+		data.pass_check_val = request->get_parameter("password_check");
 
 		bool changed = false;
 
@@ -308,46 +305,46 @@ void UserController::handle_settings_request(Ref<User> &user, Request *request) 
 		bool valid = _profile_validator->validate(request, &errors);
 
 		for (int i = 0; i < errors.size(); ++i) {
-			error_str += errors[i] + "<br>";
+			data.error_str += errors[i] + "<br>";
 		}
 
 		if (valid) {
-			if (uname_val == user->name_user_input) {
-				uname_val = "";
+			if (data.uname_val == user->name_user_input) {
+				data.uname_val = "";
 			}
 
-			if (email_val == user->email_user_input) {
-				email_val = "";
+			if (data.email_val == user->email_user_input) {
+				data.email_val = "";
 			}
 
-			if (uname_val != "") {
-				if (UserModel::get_singleton()->is_username_taken(uname_val)) {
-					error_str += "Username already taken!<br>";
+			if (data.uname_val != "") {
+				if (UserModel::get_singleton()->is_username_taken(data.uname_val)) {
+					data.error_str += "Username already taken!<br>";
 				} else {
 					//todo sanitize for html special chars!
-					user->name_user_input = uname_val;
+					user->name_user_input = data.uname_val;
 					changed = true;
-					uname_val = "";
+					data.uname_val = "";
 				}
 			}
 
-			if (email_val != "") {
-				if (UserModel::get_singleton()->is_email_taken(email_val)) {
-					error_str += "Email already in use!<br>";
+			if (data.email_val != "") {
+				if (UserModel::get_singleton()->is_email_taken(data.email_val)) {
+					data.error_str += "Email already in use!<br>";
 				} else {
 					//todo sanitize for html special chars!
 					//also send email
-					user->email_user_input = email_val;
+					user->email_user_input = data.email_val;
 					changed = true;
-					email_val = "";
+					data.email_val = "";
 				}
 			}
 
-			if (pass_val != "") {
-				if (pass_val != pass_check_val) {
-					error_str += "The passwords did not match!<br>";
+			if (data.pass_val != "") {
+				if (data.pass_val != data.pass_check_val) {
+					data.error_str += "The passwords did not match!<br>";
 				} else {
-					UserModel::get_singleton()->create_password(user, pass_val);
+					UserModel::get_singleton()->create_password(user, data.pass_val);
 
 					changed = true;
 				}
@@ -359,16 +356,20 @@ void UserController::handle_settings_request(Ref<User> &user, Request *request) 
 		}
 	}
 
+	render_settings_request(user, request, &data);
+}
+
+void UserController::render_settings_request(Ref<User> &user, Request *request, SettingsRequestData *data) {
 	HTMLBuilder b;
 
 	b.w("Settings");
 	b.br();
 
 	{
-		if (error_str.size() != 0) {
+		if (data->error_str.size() != 0) {
 			b.div()->cls("error");
 
-			b.w(error_str);
+			b.w(data->error_str);
 
 			b.cdiv();
 		}
@@ -381,13 +382,13 @@ void UserController::handle_settings_request(Ref<User> &user, Request *request) 
 		{
 			b.w("Username");
 			b.br();
-			b.input()->type("text")->name("username")->placeholder(user->name_user_input)->value(uname_val);
+			b.input()->type("text")->name("username")->placeholder(user->name_user_input)->value(data->uname_val);
 			b.cinput();
 			b.br();
 
 			b.w("Email");
 			b.br();
-			b.input()->type("email")->name("email")->placeholder(user->email_user_input)->value(email_val);
+			b.input()->type("email")->name("email")->placeholder(user->email_user_input)->value(data->email_val);
 			b.cinput();
 			b.br();
 
@@ -414,11 +415,13 @@ void UserController::handle_settings_request(Ref<User> &user, Request *request) 
 
 	request->compile_and_send_body();
 }
+
 void UserController::handle_password_reset_request(Ref<User> &user, Request *request) {
 	request->body += "handle_password_reset_request";
 
 	request->compile_and_send_body();
 }
+
 void UserController::handle_logout_request(Ref<User> &user, Request *request) {
 	request->remove_cookie("session_id");
 
@@ -433,6 +436,7 @@ void UserController::handle_logout_request(Ref<User> &user, Request *request) {
 
 	request->compile_and_send_body();
 }
+
 void UserController::handle_delete_request(Ref<User> &user, Request *request) {
 	request->body += "handle_delete_request";
 
