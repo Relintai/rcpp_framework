@@ -3,17 +3,24 @@
 
 #include "core/http/controller.h"
 
-#include <string>
+#include "core/string.h"
+#include "core/containers/vector.h"
 
 class Request;
 class FormValidator;
+class AdminController;
 
 class AdminPanel : public Controller {
 	RCPP_OBJECT(AdminPanel, Controller);
 	
 public:
 	void handle_request_main(Request *request);
-	void create_validators();
+
+	virtual void render_admin_panel_list(Request *request);
+	virtual void render_controller_panel(Request *request, AdminController *controller);
+
+	void register_admin_controller(const String &section, AdminController *controller);
+	void clear();
 
 	static AdminPanel *get_singleton();
 
@@ -21,7 +28,14 @@ public:
 	~AdminPanel();
 
 protected:
+	struct AdminPanelSection {
+		String section_url;
+		AdminController *controller;
+	};
+
 	static AdminPanel *_self;
+
+	Vector<AdminPanelSection> _controllers; 
 };
 
 #endif

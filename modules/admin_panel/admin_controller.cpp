@@ -7,6 +7,18 @@
 #include "core/http/request.h"
 #include "core/http/session_manager.h"
 
+void AdminController::admin_handle_request_main(Request *request) {
+
+}
+
+void AdminController::admin_add_section_links(Vector<AdminSectionLinkInfo> *links) {
+	
+}
+
+bool AdminController::admin_full_render() {
+	return false;
+}
+
 AdminController::AdminController() :
 		Controller() {
 
