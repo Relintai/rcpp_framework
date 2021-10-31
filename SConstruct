@@ -52,6 +52,95 @@ def add_program(env, name, sources, **args):
     env.NoCache(program)
     return program
 
+# Based on https://github.com/godotengine/godot/pull/53443
+# uses the graph/topo sort from:
+# https://www.geeksforgeeks.org/python-program-for-topological-sorting/
+# albeit highly modified
+class ModuleDepGraph:
+    def __init__(self, modules, dependencies: OrderedDict):
+        self.graph = dict()
+
+        v = []
+
+        for m in modules:
+            v.append(m[0])
+
+        self.vertices = v
+
+        # construct the edges
+        for name, deps in dependencies.items():
+            self.graph[name] = []
+            for dep_name in deps:
+                self.graph[name].append(dep_name)
+
+    # A recursive function used by dependency_sort
+    def topological_sort_util(self, v, visited, stack):
+
+        # Mark the current node as visited.
+        visited[v] = True
+
+        # Recur for all the vertices adjacent to this vertex
+        for i in self.graph[v]:
+            if i in visited and visited[i] == False:
+                self.topological_sort_util(i, visited, stack)
+
+        # Push current vertex to stack which stores result
+        stack.insert(0, v)
+
+    # The function to performs a topological sort, and then reverses it to obtain the dependency sort.
+    def dependency_sort(self):# -> []:
+        # Mark all the vertices as not visited
+        visited = dict()
+        for v in self.vertices:
+            visited[v] = False
+
+        stack = []
+
+        # Call the recursive helper function to store Topological
+        # Sort starting from all vertices one by one
+        for v in self.vertices:
+            if visited[v] == False:
+                self.topological_sort_util(v, visited, stack)
+
+        # reverse the topological sort
+        stack.reverse()
+
+        return stack
+
+def sort_modules_dependencies(modules):
+    deps = {}
+    for mod in modules:
+        name = mod[0]
+        path = mod[1]
+
+        sys.path.insert(0, path)
+        import detect
+
+        try:
+            deps[name] = detect.get_module_dependencies()
+        except AttributeError:
+            deps[name] = {}
+        sys.path.remove(path)
+        sys.modules.pop("detect")
+
+    graph = ModuleDepGraph(modules, deps)
+    dep_sorted_names = graph.dependency_sort()
+
+    for n in dep_sorted_names:
+        for i in range(len(modules)):
+            if modules[i][0] == n:
+
+                mt = modules[i]
+
+                for j in range(i + 1, len(modules)):
+                    modules[j - 1] = modules[j]
+
+                modules[len(modules) - 1] = mt
+
+                break
+
+    #return modules
+
 env_base = Environment()
 
 env_base.__class__.add_source_files = add_source_files
@@ -169,6 +258,9 @@ for mf in module_folders:
 
         sys.path.remove(tmppath)
         sys.modules.pop("detect")
+
+# Sort modules dependencies
+sort_modules_dependencies(module_list)
 
 env = env_base.Clone()
 
