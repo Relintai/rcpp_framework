@@ -37,6 +37,9 @@ const std::string &Request::get_parameter(const std::string &key) const {
 	return str;
 }
 
+void Request::send_redirect(const std::string &location, const HTTPStatusCode status_code) {
+}
+
 void Request::compile_body() {
 	compiled_body.reserve(body.size() + head.size() + 15 + 13 + 14 + 15);
 

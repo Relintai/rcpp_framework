@@ -51,6 +51,7 @@ public:
 
 	virtual const std::string &get_parameter(const std::string &key) const;
 
+	virtual void send_redirect(const std::string &location, const HTTPStatusCode status_code = HTTP_STATUS_CODE_302_FOUND);
 	virtual void compile_body();
 	virtual void compile_and_send_body();
 	virtual void next_stage();

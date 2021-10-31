@@ -28,6 +28,7 @@ public:
 
 	const std::string &get_parameter(const std::string &key) const;
 
+	void send_redirect(const std::string &location, const HTTPStatusCode status_code = HTTP_STATUS_CODE_302_FOUND);
 	void send();
 	void send_file(const std::string &p_file_path);
 	void reset();

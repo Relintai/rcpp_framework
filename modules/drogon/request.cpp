@@ -24,6 +24,19 @@ const std::string &DRequest::get_parameter(const std::string &key) const {
 	return request->getParameter(key);
 }
 
+void DRequest::send_redirect(const std::string &location, const HTTPStatusCode status_code) {
+	drogon::HttpResponsePtr response = drogon::HttpResponse::newRedirectionResponse(location, static_cast<const HttpStatusCode>(static_cast<const int>(status_code)));
+
+	_response_additional_setup(response);
+
+	response->setBody(body);
+
+	response->setExpiredTime(0);
+	callback(response);
+
+	pool();
+}
+
 void DRequest::send() {
 	//if (connection_closed) {
 	//	DRequestPool::return_request(this);
