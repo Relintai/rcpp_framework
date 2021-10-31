@@ -407,6 +407,16 @@ void String::append_str(const String &other) {
 	_data[_size] = '\0';
 }
 
+void String::append_str(const std::string &str) {
+	ensure_capacity(_size + str.size() + 1); // +1 for the null terminator
+
+	for (int i = 0; i < str.size(); ++i) {
+		_data[_size++] = str[i];
+	}
+
+	_data[_size] = '\0';
+}
+
 float String::to_float() {
 	return atof(c_str());
 }
@@ -421,6 +431,10 @@ int String::to_int() {
 
 uint32_t String::to_uint() {
 	return static_cast<uint32_t>(atoll(c_str()));
+}
+
+std::string String::to_string() {
+    return std::string(c_str());
 }
 
 char *String::c_str() {
@@ -473,6 +487,11 @@ String &String::operator+=(const char *p_c_str) {
 	return *this;
 }
 
+String &String::operator+=(const std::string &b) {
+    append_str(b);
+
+    return *this;
+}
 String operator+(String lhs, const String &rhs) {
 	lhs += rhs;
 
@@ -490,6 +509,14 @@ String operator+(String lhs, const char rhs) {
 
 	return lhs;
 }
+
+
+String operator+(String lhs, const std::string &rhs) {
+    lhs += rhs;
+
+	return lhs;
+}
+
 
 bool operator==(const String &a, const String &b) {
 	if (a._size != b._size) {
@@ -549,6 +576,32 @@ bool operator==(const char *b, const String &a) {
 
 bool operator!=(const char *b, const String &a) {
 	return !(a == b);
+}
+
+bool operator==(const String &a, std::string &b) {
+	if (a._size != b.size()) {
+		return false;
+	}
+
+    char *bp = &b[0];
+
+	for (int i = 0; i < a._size; ++i) {
+		if (a[i] != bp[i]) {
+			return false;
+		}
+	}
+
+	return true;
+}
+bool operator!=(const String &a, std::string &b) {
+    return !(a == b);
+}
+
+bool operator==(std::string &b, const String &a) {
+    return (a == b);
+}
+bool operator!=(std::string &b, const String &a) {
+    return !(a == b);
 }
 
 String::String() {
@@ -628,6 +681,15 @@ String::String(int prealloc, int grow_by) {
 	_grow_by = grow_by;
 
 	ensure_capacity(prealloc);
+}
+
+String::String(const std::string &str) {
+	_data = nullptr;
+	_actual_size = 0;
+	_size = 0;
+	_grow_by = 100;
+
+    append_str(str);
 }
 
 String::~String() {

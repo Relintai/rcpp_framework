@@ -3,6 +3,8 @@
 
 #include <inttypes.h>
 
+#include <string>
+
 class String {
 public:
 	void push_back(const char element);
@@ -50,11 +52,13 @@ public:
 
 	void append_str(const char* str);
 	void append_str(const String &other);
+	void append_str(const std::string &str);
 
 	float to_float();
 	double to_double();
 	int to_int();
 	uint32_t to_uint();
+	std::string to_string();
 
 	char *c_str();
 	const char *c_str() const;
@@ -68,10 +72,12 @@ public:
 	String &operator+=(const String &b);
 	String &operator+=(const char chr);
 	String &operator+=(const char *p_c_str);
+	String &operator+=(const std::string &b);
 
 	friend String operator+(String lhs, const String &rhs);
 	friend String operator+(String lhs, const char *rhs);
 	friend String operator+(String lhs, const char rhs);
+	friend String operator+(String lhs, const std::string &rhs);
 
 	friend bool operator==(const String &a, const String &b);
 	friend bool operator!=(const String &a, const String &b);
@@ -82,6 +88,12 @@ public:
 	friend bool operator==(const char *b, const String &a);
 	friend bool operator!=(const char *b, const String &a);
 
+	friend bool operator==(const String &a, std::string &b);
+	friend bool operator!=(const String &a, std::string &b);
+
+	friend bool operator==(std::string &b, const String &a);
+	friend bool operator!=(std::string &b, const String &a);
+
 	String();
 	String(const String &other);
 	String(const String &other, const int grow_by);
@@ -89,6 +101,7 @@ public:
 	String(const char* p_c_str, const int grow_by);
 	String(const int prealloc);
 	String(const int prealloc, const int grow_by);
+	String(const std::string &str);
 	~String();
 
 private:
