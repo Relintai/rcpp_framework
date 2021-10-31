@@ -80,6 +80,11 @@ std::string DRequest::parser_get_path() {
 	return request->getPath();
 }
 
+std::string DRequest::get_host() const {
+	//todo
+	return "/";
+}
+
 void DRequest::update() {
 	if (file_next) {
 		file_next = false;

@@ -200,6 +200,32 @@ void Request::push_path() {
 	_path_stack_pointer += 1;
 }
 
+std::string Request::get_url_root() const {
+	std::string path = "/";
+
+	for (uint32_t i = 0; i < _path_stack_pointer; ++i) {
+		path += _path_stack[i];
+		path += "/";
+	}
+
+	return path;
+}
+
+std::string Request::get_url_site() const {
+	std::string path = get_host();
+
+	for (uint32_t i = _path_stack_pointer; i < _path_stack.size(); ++i) {
+		path += _path_stack[i];
+		path += "/";
+	}
+
+	return path;
+}
+
+std::string Request::get_host() const {
+	return "";
+}
+
 void Request::update() {
 }
 

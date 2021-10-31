@@ -60,6 +60,7 @@ public:
 	virtual void send_error(int error_code);
 	virtual void reset();
 	virtual std::string parser_get_path();
+	virtual std::string get_host() const;
 
 	void setup_url_stack();
 	std::string get_path() const;
@@ -71,6 +72,10 @@ public:
 	uint32_t get_remaining_segment_count() const;
 	void pop_path();
 	void push_path();
+
+	std::string get_url_root() const;
+	std::string get_url_site() const;
+	
 
 	virtual void update();
 	virtual void pool();

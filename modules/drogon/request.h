@@ -33,6 +33,7 @@ public:
 	void send_file(const std::string &p_file_path);
 	void reset();
 	std::string parser_get_path();
+	std::string get_host() const;
 
 	void update();
 
