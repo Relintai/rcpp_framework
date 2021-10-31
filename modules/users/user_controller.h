@@ -34,8 +34,10 @@ public:
 
 	virtual void handle_register_request_default(Request *request);
 	virtual void render_register_request_default(Request *request, RegisterRequestData *data);
+	virtual void render_register_success(Request *request);
 
 	virtual void render_already_logged_in_error(Request *request);
+	virtual void render_login_success(Request *request);
 
 	virtual void handle_request(Ref<User> &user, Request *request);
 	virtual void handle_main_page_request(Ref<User> &user, Request *request);

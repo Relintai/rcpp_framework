@@ -71,11 +71,7 @@ void UserController::handle_login_request_default(Request *request) {
 
 				request->add_cookie(c);
 
-				//todo implement redirect!
-
-				request->body += "Login Success!<br>";
-
-				request->compile_and_send_body();
+				render_login_success(request);
 
 				return;
 			}
@@ -177,26 +173,30 @@ void UserController::handle_register_request_default(Request *request) {
 			UserModel::get_singleton()->create_password(user, data.pass_val);
 			UserModel::get_singleton()->save_user(user);
 
-			HTMLBuilder b;
-
-			b.div()->cls("success");
-			{
-				b.w("Registration successful! You can now log in!");
-				b.br();
-				b.a()->href("/user/login");
-				b.w(">> Login <<");
-				b.ca();
-			}
-			b.cdiv();
-
-			request->body += b.result;
-
-			request->compile_and_send_body();
+			render_register_success(request);
 			return;
 		}
 	}
 
 	render_register_request_default(request, &data);
+}
+
+void UserController::render_register_success(Request *request) {
+	HTMLBuilder b;
+
+	b.div()->cls("success");
+	{
+		b.w("Registration successful! You can now log in!");
+		b.br();
+		b.a()->href("/user/login");
+		b.w(">> Login <<");
+		b.ca();
+	}
+	b.cdiv();
+
+	request->body += b.result;
+
+	request->compile_and_send_body();
 }
 
 void UserController::render_register_request_default(Request *request, RegisterRequestData *data) {
@@ -260,6 +260,13 @@ void UserController::render_already_logged_in_error(Request *request) {
 	request->body += "You are already logged in.";
 
 	request->compile_and_send_body();
+}
+
+void UserController::render_login_success(Request *request) {
+	request->body = "Login Success!<br>";
+
+	//request->compile_and_send_body();
+	request->send_redirect("/user/settings");
 }
 
 void UserController::handle_request(Ref<User> &user, Request *request) {
