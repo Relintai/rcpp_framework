@@ -22,6 +22,10 @@ def get_flags():
 
     return []
 
-
 def configure(env):
     pass
+
+def get_module_dependencies():
+    return [
+        "admin_panel",
+    ]

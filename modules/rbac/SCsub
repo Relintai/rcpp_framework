@@ -8,5 +8,5 @@ env_mod.core_sources = []
 env_mod.add_source_files(env_mod.core_sources, "*.cpp")
 
 # Build it all as a library
-lib = env_mod.add_library("users", env_mod.core_sources)
+lib = env_mod.add_library("rbac", env_mod.core_sources)
 env.Prepend(LIBS=[lib])

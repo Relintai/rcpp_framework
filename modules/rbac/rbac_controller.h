@@ -1,15 +1,15 @@
 #ifndef RBAC_CONTROLLER_H
 #define RBAC_CONTROLLER_H
 
-#include "core/http/controller.h"
+#include "modules/admin_panel/admin_controller.h"
 
 #include <string>
 
 class Request;
 class FormValidator;
 
-class RBACController : public Controller {
-	RCPP_OBJECT(RBACController, Controller);
+class RBACController : public AdminController {
+	RCPP_OBJECT(RBACController, AdminController);
 	
 public:
 	void handle_request_main(Request *request);
