@@ -433,7 +433,7 @@ uint32_t String::to_uint() {
 	return static_cast<uint32_t>(atoll(c_str()));
 }
 
-std::string String::to_string() {
+std::string String::to_string() const {
     return std::string(c_str());
 }
 

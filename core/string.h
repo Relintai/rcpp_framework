@@ -58,7 +58,7 @@ public:
 	double to_double();
 	int to_int();
 	uint32_t to_uint();
-	std::string to_string();
+	std::string to_string() const;
 
 	char *c_str();
 	const char *c_str() const;
@@ -93,6 +93,9 @@ public:
 
 	friend bool operator==(std::string &b, const String &a);
 	friend bool operator!=(std::string &b, const String &a);
+
+	operator std::string() { return to_string(); }
+	operator std::string() const { return to_string(); }
 
 	String();
 	String(const String &other);
