@@ -66,7 +66,10 @@ void UserController::handle_login_request_default(Request *request) {
 				session->add_int("user_id", user->id);
 				SessionManager::get_singleton()->save_session(session);
 
-				request->add_cookie(::Cookie("session_id", session->session_id));
+				::Cookie c = ::Cookie("session_id", session->session_id);
+				c.path = "/";
+
+				request->add_cookie(c);
 
 				//todo implement redirect!
 
@@ -240,7 +243,7 @@ void UserController::render_register_request_default(Request *request, RegisterR
 			b.input()->type("password")->name("password_check");
 			b.cinput();
 			b.br();
-			
+
 			b.input()->type("submit")->value("Register");
 			b.cinput();
 		}
@@ -492,6 +495,7 @@ void UserController::user_session_setup_middleware(Object *instance, Request *re
 		int user_id = request->session->get_int("user_id");
 
 		if (user_id != 0) {
+
 			Ref<User> u = UserModel::get_singleton()->get_user(user_id);
 
 			if (u.is_valid()) {
