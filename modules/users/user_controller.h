@@ -10,6 +10,8 @@ class Request;
 class FormValidator;
 
 class UserController : public Object {
+	RCPP_OBJECT(UserController, Object);
+	
 public:
 	virtual void handle_request_default(Request *request);
 

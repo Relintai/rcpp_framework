@@ -8,6 +8,8 @@
 #include <vector>
 
 class UserModel : public Object {
+	RCPP_OBJECT(UserModel, Object);
+	
 public:
 	Ref<User> get_user(const int id);
 	Ref<User> get_user(const std::string &user_name_input);
