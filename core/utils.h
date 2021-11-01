@@ -1,20 +1,18 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <string>
-#include <vector>
+#include "core/string.h"
+#include "core/containers/vector.h"
 
 class Utils {
 public:
-	static void newline_to_br(std::string *str);
+	static void newline_to_br(String *str);
 	//htmlspecialchars
 
-	static void markdown_to_html(std::string *str);
+	static void markdown_to_html(String *str);
 
-	static std::string get_pagination(const std::string base_url, const uint32_t max, const uint32_t current_index, const uint32_t max_visible_links = 10);
-	static std::string get_pagination_links(const std::string base_url, const std::vector<std::string> &links, const uint32_t current_index, const uint32_t max_visible_links = 10);
-
-	static void str_replace(std::string *str, const std::string &from, const std::string &to);
+	static String get_pagination(const String base_url, const uint32_t max, const uint32_t current_index, const uint32_t max_visible_links = 10);
+	static String get_pagination_links(const String base_url, const Vector<String> &links, const uint32_t current_index, const uint32_t max_visible_links = 10);
 
 protected:
 };

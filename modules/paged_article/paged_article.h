@@ -2,8 +2,8 @@
 #define PAGED_ARTICLE_H
 
 #include <map>
-#include <string>
-#include <vector>
+#include "core/containers/vector.h"
+#include "core/string.h"
 
 #include "core/file_cache.h"
 #include "core/object.h"
@@ -11,16 +11,16 @@
 #include "core/http/request.h"
 
 struct Article {
-	std::string url;
-	std::string summary_page;
-	std::map<std::string, std::string *> pages;
+	String url;
+	String summary_page;
+	std::map<String, String *> pages;
 	FileCache *file_cache;
 
 	Article() {
 		file_cache = new FileCache();
 	}
 	~Article() {
-		for (std::map<std::string, std::string *>::iterator it = pages.begin(); it != pages.end(); ++it) {
+		for (std::map<String, String *>::iterator it = pages.begin(); it != pages.end(); ++it) {
 			delete ((*it).second);
 		}
 
@@ -37,16 +37,16 @@ public:
 	void index(Request *request);
 
 	void load();
-	Article *load_folder(const std::string &folder, const std::string &path);
+	Article *load_folder(const String &folder, const String &path);
 	void generate_summaries();
 	void generate_summary(Article *article);
 
 	PagedArticle();
 	~PagedArticle();
 
-	std::map<std::string, Article *> pages;
-	std::string folder;
-	std::string base_path;
+	std::map<String, Article *> pages;
+	String folder;
+	String base_path;
 };
 
 #endif

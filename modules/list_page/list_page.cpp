@@ -9,7 +9,7 @@
 #include <iostream>
 
 void ListPage::index(Request *request) {
-	std::string r = "";
+	String r = "";
 
 	for (uint32_t i = 0; i < list_entries.size(); ++i) {
 		r += "<div class=\"list_entry\">" + list_entries[i] + "</div>";
@@ -26,7 +26,7 @@ void ListPage::load() {
 		return;
 	}
 
-	std::vector<std::string> files;
+	std::vector<String> files;
 
 	tinydir_dir dir;
 	if (tinydir_open(&dir, folder.c_str()) == -1) {
@@ -42,7 +42,7 @@ void ListPage::load() {
 		}
 
 		if (!file.is_dir) {
-			std::string np = file.path;
+			String np = file.path;
 
 			files.push_back(np);
 		}
@@ -52,7 +52,8 @@ void ListPage::load() {
 
 	tinydir_close(&dir);
 
-	std::sort(files.begin(), files.end());
+	//todo
+	//std::sort(files.begin(), files.end());
 
 	for (uint32_t i = 0; i < files.size(); ++i) {
 		FILE *f = fopen(files[i].c_str(), "r");
@@ -66,7 +67,7 @@ void ListPage::load() {
 		long fsize = ftell(f);
 		fseek(f, 0, SEEK_SET); /* same as rewind(f); */
 
-		std::string fd;
+		String fd;
 		fd.resize(fsize);
 
 		fread(&fd[0], 1, fsize, f);

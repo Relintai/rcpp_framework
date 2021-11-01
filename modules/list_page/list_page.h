@@ -1,8 +1,8 @@
 #ifndef LIST_PAGE_H
 #define LIST_PAGE_H
 
-#include <vector>
-#include <string>
+#include "core/containers/vector.h"
+#include "core/string.h"
 
 #include "core/object.h"
 
@@ -20,8 +20,8 @@ public:
     ListPage();
     ~ListPage();
 
-    std::vector<std::string> list_entries;
-    std::string folder;
+    Vector<String> list_entries;
+    String folder;
 };
 
 #endif

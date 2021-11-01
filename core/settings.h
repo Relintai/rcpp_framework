@@ -1,7 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <string>
+#include "core/string.h"
 
 #include "rapidjson/document.h"
 
@@ -9,7 +9,7 @@ class Settings {
     public:
     rapidjson::Document settings;
 
-    void parse_file(const std::string &path);
+    void parse_file(const String &path);
 
     static Settings *get_singleton();
 

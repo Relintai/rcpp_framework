@@ -3,7 +3,7 @@
 
 #include "core/object.h"
 
-#include <string>
+#include "core/string.h"
 
 #include "modules/list_page/list_page.h"
 #include "modules/paged_article/paged_article.h"
@@ -19,8 +19,8 @@ public:
 
 	ListPage *main_page;
 	PagedArticle *articles;
-	std::string folder;
-	std::string base_path;
+	String folder;
+	String base_path;
 };
 
 #endif

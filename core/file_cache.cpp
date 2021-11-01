@@ -4,15 +4,15 @@
 
 #include <iostream>
 
-void FileCache::wwwroot_register_file(const std::string &file_path) {
+void FileCache::wwwroot_register_file(const String &file_path) {
 	registered_files.insert(file_path);
 }
 
-void FileCache::wwwroot_deregister_file(const std::string &file_path) {
+void FileCache::wwwroot_deregister_file(const String &file_path) {
 	registered_files.erase(file_path);
 }
 
-bool FileCache::wwwroot_has_file(const std::string &file_path) {
+bool FileCache::wwwroot_has_file(const String &file_path) {
 	return registered_files.find(file_path) != registered_files.end();
 }
 
@@ -40,7 +40,7 @@ void FileCache::wwwroot_evaluate_dir(const char *path, const bool should_exist) 
 		}
 
 		if (!file.is_dir) {
-			std::string np = file.path;
+			String np = file.path;
 			np = np.substr(wwwroot.size(), np.size() - wwwroot.size());
 
 			registered_files.insert(np);
@@ -59,7 +59,7 @@ void FileCache::wwwroot_evaluate_dir(const char *path, const bool should_exist) 
 	tinydir_close(&dir);
 }
 
-bool FileCache::get_cached_body(const std::string &path, std::string *body) {
+bool FileCache::get_cached_body(const String &path, String *body) {
 	//TODO ERROR MACRO body == null
 
 	//this shouldn't need mutexes
@@ -78,12 +78,12 @@ bool FileCache::get_cached_body(const std::string &path, std::string *body) {
 		return false;
 	}
 
-	body->append(e->body);
+	body->append_str(e->body);
 
 	return true;
 }
 
-void FileCache::set_cached_body(const std::string &path, const std::string &body) {
+void FileCache::set_cached_body(const String &path, const String &body) {
 	cache_mutex.lock();
 
 	CacheEntry *e = cache_map[path];

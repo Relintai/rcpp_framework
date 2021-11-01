@@ -6,12 +6,12 @@
 #include <sstream>
 #include <string>
 
-void Utils::newline_to_br(std::string *str) {
-	str_replace(str, "\r\n", "<br>");
-	str_replace(str, "\n", "<br>");
+void Utils::newline_to_br(String *str) {
+	str->replace("\r\n", "<br>");
+	str->replace("\n", "<br>");
 }
 
-void Utils::markdown_to_html(std::string *str) {
+void Utils::markdown_to_html(String *str) {
 	std::shared_ptr<maddy::ParserConfig> config = std::make_shared<maddy::ParserConfig>();
 	config->isEmphasizedParserEnabled = false;
 	config->isHTMLWrappedInParagraph = true;
@@ -20,13 +20,13 @@ void Utils::markdown_to_html(std::string *str) {
 
 	std::stringstream ss((*str));
 
-	std::string htmlOutput = parser->Parse(ss);
+	String htmlOutput = parser->Parse(ss);
 
 	(*str) = htmlOutput;
 }
 
-std::string Utils::get_pagination(const std::string base_url, const uint32_t max, const uint32_t current_index, const uint32_t max_visible_links) {
-	std::string s = base_url;
+String Utils::get_pagination(const String base_url, const uint32_t max, const uint32_t current_index, const uint32_t max_visible_links) {
+	String s = base_url;
 	if (s.size() > 0 && s[s.size() - 1] != '/') {
 		s += '/';
 	}
@@ -103,8 +103,8 @@ std::string Utils::get_pagination(const std::string base_url, const uint32_t max
 	return b.result;
 }
 
-std::string Utils::get_pagination_links(const std::string base_url, const std::vector<std::string> &links, const uint32_t current_index, const uint32_t max_visible_links) {
-	std::string s = base_url;
+String Utils::get_pagination_links(const String base_url, const Vector<String> &links, const uint32_t current_index, const uint32_t max_visible_links) {
+	String s = base_url;
 	if (s.size() > 0 && s[s.size() - 1] != '/') {
 		s += '/';
 	}
@@ -183,13 +183,3 @@ std::string Utils::get_pagination_links(const std::string base_url, const std::v
 	return b.result;
 }
 
-void Utils::str_replace(std::string *str, const std::string &from, const std::string &to) {
-	if (from.empty())
-		return;
-
-	size_t start_pos = 0;
-	while ((start_pos = str->find(from, start_pos)) != std::string::npos) {
-		str->replace(start_pos, from.length(), to);
-		start_pos += to.length();
-	}
-}

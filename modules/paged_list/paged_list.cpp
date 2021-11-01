@@ -13,7 +13,7 @@
 #include "core/html/html_builder.h"
 
 void PagedList::index(Request *request) {
-	const std::string path = request->get_current_path_segment();
+	const String path = request->get_current_path_segment();
 
 	if (request->get_remaining_segment_count() == 0) {
 		main_page->index(request);

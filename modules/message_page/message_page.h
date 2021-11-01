@@ -1,8 +1,8 @@
 #ifndef MESSAGE_PAGE_H
 #define MESSAGE_PAGE_H
 
-#include <vector>
-#include <string>
+#include "core/containers/vector.h"
+#include "core/string.h"
 
 #include "core/object.h"
 
@@ -20,7 +20,7 @@ public:
     MessagePage();
     ~MessagePage();
 
-    std::vector<std::string> messages;
+    Vector<String> messages;
 };
 
 #endif

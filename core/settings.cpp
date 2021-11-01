@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void Settings::parse_file(const std::string &path) {
+void Settings::parse_file(const String &path) {
 	FILE *f = fopen(path.c_str(), "r");
 
 	if (!f) {
@@ -15,10 +15,10 @@ void Settings::parse_file(const std::string &path) {
 	long fsize = ftell(f);
 	fseek(f, 0, SEEK_SET); /* same as rewind(f); */
 
-	std::string config_str;
+	String config_str;
 	config_str.resize(fsize);
 
-	fread(&config_str[0], 1, fsize, f);
+	fread(config_str.dataw(), 1, fsize, f);
 	fclose(f);
 
 	settings.Parse(config_str.c_str());

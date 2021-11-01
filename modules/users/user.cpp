@@ -22,7 +22,7 @@
 #include "core/utils.h"
 #include "user_model.h"
 
-std::string User::to_json(rapidjson::Document *into) {
+String User::to_json(rapidjson::Document *into) {
 	rapidjson::Document *document;
 
 	if (into) {
@@ -53,14 +53,14 @@ std::string User::to_json(rapidjson::Document *into) {
 	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
 	document->Accept(writer);
 
-	std::string s = buffer.GetString();
+	String s = buffer.GetString();
 
 	delete document;
 
 	return s;
 }
 
-void User::from_json(const std::string &p_data) {
+void User::from_json(const String &p_data) {
 
 	rapidjson::Document data;
 	data.Parse(p_data.c_str());

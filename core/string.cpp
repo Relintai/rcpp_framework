@@ -115,12 +115,32 @@ void String::resize(const int s) {
 	_data[_size] = '\0';
 }
 
-int String::find(const char val) const {
-	for (int i = 0; i < _size; ++i) {
+int String::find(const char val, const int from) const {
+	for (int i = from; i < _size; ++i) {
 		if (_data[i] == val) {
 			return i;
 		}
 	}
+
+	return -1;
+}
+
+int String::find(const String &val, const int from) const {
+	int ve = _size - val.size();
+
+	for (int i = from; i < ve; ++i) {
+		bool found = true;
+		for (int j = 0; j < val.size(); ++j) {
+			if (_data[i + j] != val[j]) {
+				found = false;
+				break;
+			}
+		}
+
+		if (found) {
+			return i;
+		}
+ 	}
 
 	return -1;
 }
@@ -150,7 +170,7 @@ String String::substr(const int start_index, const int len) {
 
 	int sil = start_index + len;
 
-	ERR_FAIL_INDEX_V(sil, _size, String());
+	ERR_FAIL_INDEX_V(sil, _size + 1, String());
 
 	String str;
 	str.ensure_capacity(len + 1);
@@ -161,6 +181,54 @@ String String::substr(const int start_index, const int len) {
 	str._data[str._size] = '\0';
 
 	return str;
+}
+
+void String::replace_from(const int start_index, const int length, const String &with) {
+	ERR_FAIL_INDEX(start_index, _size);
+
+	int sil = start_index + length;
+
+	ERR_FAIL_INDEX(sil, _size + 1);
+
+	if (length < with.size()) {
+		int loffs = with.size() - length;
+
+		ensure_capacity(_size + loffs + 1);
+
+		_size += loffs;
+		_data[_size] = '\0';
+
+		for (int i = _size - 1; i > start_index + loffs; --i) {
+			_data[i] = _data[i - loffs];
+		}
+	} else if (length > with.size()) {
+		int loffs = length - with.size();
+
+		for (int i = start_index + with.size(); i < _size; ++i) {
+			_data[i] = _data[i + loffs];
+		}
+
+		_size -= loffs;
+	}
+
+	for (int i = 0; i < length; ++i) {
+		_data[i + start_index] = with._data[i];
+	}
+}
+
+void String::replace(const String &find_str, const String &with) {
+	if (empty()) {
+		return;
+	}
+
+	if (find_str.empty())
+		return;
+
+	int start_pos = 0;
+	while ((start_pos = find(find_str, start_pos)) != -1) {
+		replace_from(start_pos, find_str.size(), with);
+		start_pos += with.size();
+	}
 }
 
 int String::compare(const String &other) const {

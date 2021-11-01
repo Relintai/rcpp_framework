@@ -1,7 +1,7 @@
 #ifndef RESOURCE_H
 #define RESOURCE_H
 
-#include <string>
+#include "core/string.h"
 
 #include "reference.h"
 #include "rapidjson/document.h"
@@ -16,8 +16,8 @@ class Resource : public Reference {
 public:
 	int id;
 
-	virtual std::string to_json(rapidjson::Document *into = nullptr);
-	virtual void from_json(const std::string &data);
+	virtual String to_json(rapidjson::Document *into = nullptr);
+	virtual void from_json(const String &data);
 
 	Resource();
 	~Resource();

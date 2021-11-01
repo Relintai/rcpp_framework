@@ -11,7 +11,7 @@
 #include "core/http/web_application.h"
 
 void PagedArticle::index(Request *request) {
-	const std::string r = request->get_current_path_segment();
+	const String r = request->get_current_path_segment();
 
 	Article *s = pages[r];
 
@@ -22,13 +22,13 @@ void PagedArticle::index(Request *request) {
 
 	request->push_path();
 
-	const std::string rp = request->get_current_path_segment();
+	const String rp = request->get_current_path_segment();
 
 	if (request->get_remaining_segment_count() > 1 && rp == "files") {
-		std::string file_name = "/" + request->get_path_segment(request->get_current_segment_index() + 1);
+		String file_name = "/" + request->get_path_segment(request->get_current_segment_index() + 1);
 
 		if (s->file_cache->wwwroot_has_file(file_name)) {
-			std::string fp = s->file_cache->wwwroot + file_name;
+			String fp = s->file_cache->wwwroot + file_name;
 
 			request->send_file(fp);
 			return;
@@ -44,7 +44,7 @@ void PagedArticle::index(Request *request) {
 		return;
 	}
 
-	const std::string *page = s->pages[rp];
+	const String *page = s->pages[rp];
 
 	if (page == nullptr) {
 		//bad url
@@ -90,17 +90,17 @@ void PagedArticle::load() {
 				continue;
 			}
 
-			std::string np = file.path;
-			std::string fn = file.name;
+			String np = file.path;
+			String fn = file.name;
 
-			std::string ff = folder + "/" + fn;
-			std::string wp = base_path + "/" + fn;
+			String ff = folder + "/" + fn;
+			String wp = base_path + "/" + fn;
 
 			Article *a = load_folder(np, wp);
 
 			if (a) {
 
-				std::string p = file.name;
+				String p = file.name;
 
 				a->url = p;
 				pages[p] = a;
@@ -118,10 +118,10 @@ void PagedArticle::load() {
 	generate_summaries();
 }
 
-Article *PagedArticle::load_folder(const std::string &folder, const std::string &path) {
+Article *PagedArticle::load_folder(const String &folder, const String &path) {
 	printf("PagedArticle: loading: %s\n", folder.c_str());
 
-	std::vector<std::string> files;
+	Vector<String> files;
 
 	tinydir_dir dir;
 	if (tinydir_open(&dir, folder.c_str()) == -1) {
@@ -137,7 +137,7 @@ Article *PagedArticle::load_folder(const std::string &folder, const std::string 
 		}
 
 		if (!file.is_dir) {
-			std::string np = file.name;
+			String np = file.name;
 
 			files.push_back(np);
 		}
@@ -151,12 +151,13 @@ Article *PagedArticle::load_folder(const std::string &folder, const std::string 
 		return nullptr;
 	}
 
-	std::sort(files.begin(), files.end());
+	//todo
+	//std::sort(files.begin(), files.end());
 
 	Article *article = new Article();
 
 	for (uint32_t i = 0; i < files.size(); ++i) {
-		std::string file_path = folder;
+		String file_path = folder;
 
 		if (file_path.size() > 0 && file_path[file_path.size() - 1] != '/')
 			file_path += "/";
@@ -174,7 +175,7 @@ Article *PagedArticle::load_folder(const std::string &folder, const std::string 
 		long fsize = ftell(f);
 		fseek(f, 0, SEEK_SET); /* same as rewind(f); */
 
-		std::string fd;
+		String fd;
 		fd.resize(fsize);
 
 		fread(&fd[0], 1, fsize, f);
@@ -182,11 +183,11 @@ Article *PagedArticle::load_folder(const std::string &folder, const std::string 
 
 		Utils::markdown_to_html(&fd);
 
-		std::string pagination;
+		String pagination;
 
 		pagination = Utils::get_pagination_links(path, files, i);
 
-		std::string *finals = new std::string();
+		String *finals = new String();
 
 		(*finals) += pagination;
 		(*finals) += fd;
@@ -203,7 +204,7 @@ Article *PagedArticle::load_folder(const std::string &folder, const std::string 
 }
 
 void PagedArticle::generate_summaries() {
-	for (std::map<std::string, Article *>::iterator it = pages.begin(); it != pages.end(); ++it) {
+	for (std::map<String, Article *>::iterator it = pages.begin(); it != pages.end(); ++it) {
 		generate_summary((*it).second);
 	}
 }
@@ -213,8 +214,8 @@ void PagedArticle::generate_summary(Article *article) {
 		return;
 	}
 
-	for (std::map<std::string, std::string *>::iterator it = article->pages.begin(); it != article->pages.end(); ++it) {
-		std::string *s = (*it).second;
+	for (std::map<String, String *>::iterator it = article->pages.begin(); it != article->pages.end(); ++it) {
+		String *s = (*it).second;
 
 		if (s != nullptr) {
 			article->summary_page = (*s);

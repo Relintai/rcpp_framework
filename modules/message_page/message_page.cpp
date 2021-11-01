@@ -13,13 +13,13 @@ void MessagePage::index(Request *request) {
 
 	Ref<QueryResult> res = db->query(b->query_result);
 
-	std::vector<std::string> msgs;
+	Vector<String> msgs;
 
 	while (res->next_row()) {
 		msgs.push_back(res->get_cell(0));
 	}
 
-	std::string r = "<html><body>";
+	String r = "<html><body>";
 
 	for (uint32_t i = 0; i < messages.size(); ++i) {
 		r += "<p>" + messages[i] + "</p><br>";
