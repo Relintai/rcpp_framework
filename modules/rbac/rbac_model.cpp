@@ -9,6 +9,82 @@
 #define RBAC_RANK_TABLE "rbac_ranks"
 #define RBAC_PERMISSION_TABLE "rbac_permissions"
 
+std::map<int, Ref<RBACRank> > RBACModel::load_permissions() {
+	std::map<int, Ref<RBACRank> > ranks;
+
+	Ref<QueryBuilder> qb = DatabaseManager::get_singleton()->ddb->get_query_builder();
+
+	qb->select("id,name,name_internal,settings,rank_permissions")->from(RBAC_RANK_TABLE);
+	Ref<QueryResult> res =  qb->run();
+
+	while (res->next_row()) {
+		Ref<RBACRank> r;
+		r.instance();
+
+		r->id = res->get_cell_int(0);
+		r->name = res->get_cell_str(1);
+		r->name_internal = res->get_cell_str(2);
+		r->settings = res->get_cell_str(3);
+		r->rank_permissions = res->get_cell_int(4);
+
+		ranks[r->id] = r;
+	}
+
+/*
+	qb->reset();
+	qb->select("id,name,name_internal,settings,rank_permissions")->from(RBAC_PERMISSION_TABLE);
+	res =  qb->run();
+*/
+
+	return ranks;
+}
+
+void RBACModel::save(const Ref<RBACRank> &rank) {
+	save_rank(rank);
+
+	for (int i = 0; i < rank->permissions.size(); ++i) {
+		Ref<RBACPermission> permission = rank->permissions[i];
+
+		if (permission->rank_id == 0) {
+			permission->rank_id = rank->id;
+		}
+
+		save_permission(permission);
+	}
+}
+
+void RBACModel::save_rank(const Ref<RBACRank> &rank) {
+	Ref<QueryBuilder> qb = DatabaseManager::get_singleton()->ddb->get_query_builder();
+
+	if (rank->id == 0) {
+		qb->insert(RBAC_RANK_TABLE, "name,name_internal,settings,rank_permissions")->values();
+		qb->eval(rank->name)->eval(rank->name_internal)->eval(rank->settings)->val(rank->rank_permissions);
+		qb->cvalues();
+		qb->select_last_insert_id();
+		Ref<QueryResult> res = qb->run();
+		qb->print();
+
+		Ref<RBACRank> r = rank;
+
+		r->id = res->get_last_insert_rowid();
+	} else {
+		qb->udpate(RBAC_RANK_TABLE)->set();
+		qb->esetp("name", rank->name);
+		qb->esetp("name_internal", rank->name_internal);
+		qb->esetp("settings", rank->settings);
+		qb->setp("rank_permissions", rank->rank_permissions);
+		qb->cset();
+		qb->where()->wp("id", rank->id);
+		qb->end_command();
+		qb->run_query();
+		qb->print();
+	}
+}
+
+void RBACModel::save_permission(const Ref<RBACPermission> &permission) {
+
+}
+
 void RBACModel::create_table() {
 	Ref<TableBuilder> tb = DatabaseManager::get_singleton()->ddb->get_table_builder();
 

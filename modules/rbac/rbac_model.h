@@ -3,13 +3,22 @@
 
 #include "core/http/model.h"
 
-#include <string>
-#include <vector>
+#include <map>
+#include "core/containers/vector.h"
+#include "core/string.h"
+
+#include "rbac_permission.h"
+#include "rbac_rank.h"
 
 class RBACModel : public Model {
 	RCPP_OBJECT(RBACModel, Model);
 
 public:
+	virtual std::map<int, Ref<RBACRank> > load_permissions();
+
+	virtual void save(const Ref<RBACRank> &rank);
+	virtual void save_rank(const Ref<RBACRank> &rank);
+	virtual void save_permission(const Ref<RBACPermission> &permission);
 
 	void create_table();
 	void drop_table();
@@ -22,8 +31,6 @@ public:
 
 protected:
 	static RBACModel *_self;
-
-	std::string _table_name;
 };
 
 #endif
