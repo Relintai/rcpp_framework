@@ -14,6 +14,10 @@ void RBACController::handle_request_main(Request *request) {
 void RBACController::create_validators() {
 }
 
+void RBACController::admin_add_section_links(Vector<AdminSectionLinkInfo> *links) {
+	links->push_back(AdminSectionLinkInfo("Test", "test/test"));
+}
+
 RBACController *RBACController::get_singleton() {
 	return _self;
 }

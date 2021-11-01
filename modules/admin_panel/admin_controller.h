@@ -12,6 +12,14 @@ class FormValidator;
 struct AdminSectionLinkInfo {
 	String name;
 	String link;
+
+	AdminSectionLinkInfo() {
+	}
+
+	AdminSectionLinkInfo(const String &p_name, const String &p_link) {
+		name = p_name;
+		link = p_link;
+	}
 };
 
 class AdminController : public Controller {
