@@ -19,16 +19,16 @@
 #define GENERATE_TRAP __builtin_trap();
 #endif
 
-#define LOG_TRACE(str) \
+#define RLOG_TRACE(str) \
     Logger::log_trace(str);
 
-#define LOG_MSG(str) \
+#define RLOG_MSG(str) \
     Logger::log_message(str);
 
-#define LOG_WARN(str) \
+#define RLOG_WARN(str) \
     Logger::log_warning(str);
 
-#define LOG_ERR(str) \
+#define RLOG_ERR(str) \
     Logger::log_error(str);
 
 #define ERR_FAIL_INDEX(index, size) \
