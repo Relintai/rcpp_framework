@@ -38,6 +38,26 @@ void String::erase(const char element) {
 	}
 }
 
+void String::erase(const int start_index, const int length) {
+	int sil = start_index + length;
+
+	if (sil >= _size) {
+		_size = 0;
+		_data[_size] = '\0';
+		return;
+	}
+
+	int j = start_index;
+	for (int i = sil; i < _size; ++i) {
+		_data[j] = _data[i];
+		++j;
+	}
+
+	_size -= length;
+
+	_data[_size] = '\0';
+}
+
 void String::clear() {
 	_size = 0;
 }
@@ -123,6 +143,42 @@ void String::get_substr_nt(char *into_buf, const int start_index, const int len)
 	}
 
 	into_buf[len + 1] = '\0';
+}
+
+String String::substr(const int start_index, const int len) {
+	ERR_FAIL_INDEX_V(start_index, _size, String());
+
+	int sil = start_index + len;
+
+	ERR_FAIL_INDEX_V(sil, _size, String());
+
+	String str;
+	str.ensure_capacity(len + 1);
+	for (int i = start_index; i < sil; ++i) {
+		str._data[str._size++] = _data[i];
+	}
+
+	str._data[str._size] = '\0';
+
+	return str;
+}
+
+int String::compare(const String &other) const {
+	if (size() < other.size()) {
+		return 1;
+	} else if (size() > other.size()) {
+		return 2;
+	} else {
+		for (int i = 0; i < _size; ++i) {
+			if (_data[i] < other._data[i]) {
+				return 1;
+			} else if (_data[i] > other._data[i]) {
+				return 2;
+			}
+		}
+
+		return 0;
+	}
 }
 
 uint8_t String::read_uint8_bytes_at(int &index, bool advance_index) {
@@ -609,64 +665,20 @@ bool operator!=(std::string &b, const String &a) {
 }
 
 bool operator<(const String &a, const String &b) {
-	if (a.size() < b.size()) {
-		return true;
-	} else if (a.size() > b.size()) {
-		return false;
-	} else {
-		for (int i = 0; i < a._size; ++i) {
-			if (a[i] < b[i]) {
-				return true;
-			}
-		}
-
-		return false;
-	}
+	return a.compare(b) == 1;
 }
 bool operator>(const String &a, const String &b) {
-	if (a.size() > b.size()) {
-		return true;
-	} else if (a.size() < b.size()) {
-		return false;
-	} else {
-		for (int i = 0; i < a._size; ++i) {
-			if (a[i] > b[i]) {
-				return true;
-			}
-		}
-
-		return false;
-	}
+	return a.compare(b) == 2;
 }
 bool operator<=(const String &a, const String &b) {
-	if (a.size() < b.size()) {
-		return true;
-	} else if (a.size() > b.size()) {
-		return false;
-	} else {
-		for (int i = 0; i < a._size; ++i) {
-			if (a[i] <= b[i]) {
-				return true;
-			}
-		}
+	int c = a.compare(b);
 
-		return false;
-	}
+	return c == 0 || c == 1;
 }
 bool operator>=(const String &a, const String &b) {
-	if (a.size() > b.size()) {
-		return true;
-	} else if (a.size() < b.size()) {
-		return false;
-	} else {
-		for (int i = 0; i < a._size; ++i) {
-			if (a[i] >= b[i]) {
-				return true;
-			}
-		}
+	int c = a.compare(b);
 
-		return false;
-	}
+	return c == 0 || c == 2;
 }
 
 String &String::operator=(const String &other) {

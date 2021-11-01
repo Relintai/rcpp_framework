@@ -11,6 +11,7 @@ public:
 	void pop_back();
 	void remove(const int index);
 	void erase(const char element);
+	void erase(const int start_index, const int length);
 	void clear();
 	bool empty() const;
 	char get(const int index);
@@ -24,6 +25,9 @@ public:
 	int find(const char val) const;
 	void get_substr(char *into_buf, const int start_index, const int len);
 	void get_substr_nt(char *into_buf, const int start_index, const int len);
+	String substr(const int start_index, const int len);
+
+	int compare(const String &other) const;
 
 	uint8_t read_uint8_bytes_at(int &index, bool advance_index = true);
 	uint16_t read_uint16_bytes_at(int &index, bool advance_index = true);
