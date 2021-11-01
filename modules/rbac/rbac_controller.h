@@ -15,6 +15,7 @@ public:
 	void handle_request_main(Request *request);
 	void create_validators();
 
+	void admin_handle_request_main(Request *request);
 	void admin_add_section_links(Vector<AdminSectionLinkInfo> *links);
 
 	static RBACController *get_singleton();

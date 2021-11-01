@@ -18,7 +18,9 @@ public:
 	std::string name_internal;
 	std::string settings;
 
-	std::vector<Ref<RBACPermission> > groups;
+	int rank_permissions;
+
+	std::vector<Ref<RBACPermission> > permissions;
 
 	RBACRank();
 	~RBACRank();

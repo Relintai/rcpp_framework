@@ -11,7 +11,6 @@ class RBACPermission : public Resource {
 public:
 	int id;
 	int rank_id;
-	int permission_id;
 	std::string name;
 	std::string url;
 	bool revoke;
