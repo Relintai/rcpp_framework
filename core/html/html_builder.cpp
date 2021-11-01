@@ -119,18 +119,25 @@ HTMLTag *HTMLTag::close() {
 	return this;
 }
 
+HTMLBuilder *HTMLTag::f() {
+	return owner;
+}
+
 bool HTMLTag::has_data() {
 	return result.size() > 0;
 }
 
 HTMLTag::HTMLTag() {
 	simple = true;
+	owner = nullptr;
 }
 
-void HTMLBuilder::comment(const String &val) {
+HTMLBuilder *HTMLBuilder::comment(const String &val) {
 	write_tag();
 
 	result += "<!--" + val + "-->";
+
+	return this;
 }
 
 HTMLTag *HTMLBuilder::doctype() {
@@ -139,10 +146,12 @@ HTMLTag *HTMLBuilder::doctype() {
 	return tag.start("!DOCTYPE");
 }
 
-void HTMLBuilder::doctype(const String &val) {
+HTMLBuilder *HTMLBuilder::doctype(const String &val) {
 	write_tag();
 
 	result += "<!DOCTYPE " + val + ">";
+
+	return this;
 }
 
 HTMLTag *HTMLBuilder::a() {
@@ -870,630 +879,877 @@ HTMLTag *HTMLBuilder::wbr() {
 
 //Closing tags
 
-void HTMLBuilder::ca() {
+HTMLBuilder *HTMLBuilder::ca() {
 	write_tag();
 	result += "</a>";
+
+	return this;
 }
 
-void HTMLBuilder::cabbr() {
+HTMLBuilder *HTMLBuilder::cabbr() {
 	write_tag();
 	result += "</abbr>";
+
+	return this;
 }
 
-void HTMLBuilder::cacronym() {
+HTMLBuilder *HTMLBuilder::cacronym() {
 	write_tag();
 	result += "</acronym>";
+
+	return this;
 }
 
-void HTMLBuilder::caddress() {
+HTMLBuilder *HTMLBuilder::caddress() {
 	write_tag();
 	result += "</address>";
+
+	return this;
 }
 
-void HTMLBuilder::capplet() {
+HTMLBuilder *HTMLBuilder::capplet() {
 	write_tag();
 	result += "</applet>";
+
+	return this;
 }
 
-void HTMLBuilder::carea() {
+HTMLBuilder *HTMLBuilder::carea() {
 	write_tag();
 	result += "</area>";
+
+	return this;
 }
 
-void HTMLBuilder::carticle() {
+HTMLBuilder *HTMLBuilder::carticle() {
 	write_tag();
 	result += "</article>";
+
+	return this;
 }
 
-void HTMLBuilder::caside() {
+HTMLBuilder *HTMLBuilder::caside() {
 	write_tag();
 	result += "</aside>";
+
+	return this;
 }
 
-void HTMLBuilder::caudio() {
+HTMLBuilder *HTMLBuilder::caudio() {
 	write_tag();
 	result += "</audio>";
+
+	return this;
 }
 
-void HTMLBuilder::cb() {
+HTMLBuilder *HTMLBuilder::cb() {
 	write_tag();
 	result += "</b>";
+
+	return this;
 }
 
-void HTMLBuilder::cbasefont() {
+HTMLBuilder *HTMLBuilder::cbasefont() {
 	write_tag();
 	result += "</basefont>";
+
+	return this;
 }
 
-void HTMLBuilder::cbdi() {
+HTMLBuilder *HTMLBuilder::cbdi() {
 	write_tag();
 	result += "</bdi>";
+
+	return this;
 }
 
-void HTMLBuilder::cbdo() {
+HTMLBuilder *HTMLBuilder::cbdo() {
 	write_tag();
 	result += "</bdo>";
+
+	return this;
 }
 
-void HTMLBuilder::cbig() {
+HTMLBuilder *HTMLBuilder::cbig() {
 	write_tag();
 	result += "</big>";
+
+	return this;
 }
 
-void HTMLBuilder::cblockquote() {
+HTMLBuilder *HTMLBuilder::cblockquote() {
 	write_tag();
 	result += "</blockquote>";
+
+	return this;
 }
 
-void HTMLBuilder::cbody() {
+HTMLBuilder *HTMLBuilder::cbody() {
 	write_tag();
 	result += "</body>";
+
+	return this;
 }
 
-void HTMLBuilder::cbutton() {
+HTMLBuilder *HTMLBuilder::cbutton() {
 	write_tag();
 	result += "</button>";
+
+	return this;
 }
 
-void HTMLBuilder::ccanvas() {
+HTMLBuilder *HTMLBuilder::ccanvas() {
 	write_tag();
 	result += "</canvas>";
+
+	return this;
 }
 
-void HTMLBuilder::ccaption() {
+HTMLBuilder *HTMLBuilder::ccaption() {
 	write_tag();
 	result += "</caption>";
+
+	return this;
 }
 
-void HTMLBuilder::ccenter() {
+HTMLBuilder *HTMLBuilder::ccenter() {
 	write_tag();
 	result += "</center>";
+
+	return this;
 }
 
-void HTMLBuilder::ccite() {
+HTMLBuilder *HTMLBuilder::ccite() {
 	write_tag();
 	result += "</cite>";
+
+	return this;
 }
 
-void HTMLBuilder::ccode() {
+HTMLBuilder *HTMLBuilder::ccode() {
 	write_tag();
 	result += "</code>";
+
+	return this;
 }
 
-void HTMLBuilder::ccol() {
+HTMLBuilder *HTMLBuilder::ccol() {
 	write_tag();
 	result += "</col>";
+
+	return this;
 }
 
-void HTMLBuilder::ccolgroup() {
+HTMLBuilder *HTMLBuilder::ccolgroup() {
 	write_tag();
 	result += "</colgroup>";
+
+	return this;
 }
 
-void HTMLBuilder::cdata() {
+HTMLBuilder *HTMLBuilder::cdata() {
 	write_tag();
 	result += "</data>";
+
+	return this;
 }
 
-void HTMLBuilder::cdatalist() {
+HTMLBuilder *HTMLBuilder::cdatalist() {
 	write_tag();
 	result += "</datalist>";
+
+	return this;
 }
 
-void HTMLBuilder::cdd() {
+HTMLBuilder *HTMLBuilder::cdd() {
 	write_tag();
 	result += "</dd>";
+
+	return this;
 }
 
-void HTMLBuilder::cdel() {
+HTMLBuilder *HTMLBuilder::cdel() {
 	write_tag();
 	result += "</del>";
+
+	return this;
 }
 
-void HTMLBuilder::cdetails() {
+HTMLBuilder *HTMLBuilder::cdetails() {
 	write_tag();
 	result += "</details>";
+
+	return this;
 }
 
-void HTMLBuilder::cdfn() {
+HTMLBuilder *HTMLBuilder::cdfn() {
 	write_tag();
 	result += "</dfn>";
+
+	return this;
 }
 
-void HTMLBuilder::cdialog() {
+HTMLBuilder *HTMLBuilder::cdialog() {
 	write_tag();
 	result += "</dialog>";
+
+	return this;
 }
 
-void HTMLBuilder::cdir() {
+HTMLBuilder *HTMLBuilder::cdir() {
 	write_tag();
 	result += "</dir>";
+
+	return this;
 }
 
-void HTMLBuilder::cdiv() {
+HTMLBuilder *HTMLBuilder::cdiv() {
 	write_tag();
 	result += "</div>";
+
+	return this;
 }
 
-void HTMLBuilder::cdl() {
+HTMLBuilder *HTMLBuilder::cdl() {
 	write_tag();
 	result += "</dl>";
+
+	return this;
 }
 
-void HTMLBuilder::cdt() {
+HTMLBuilder *HTMLBuilder::cdt() {
 	write_tag();
 	result += "</dt>";
+
+	return this;
 }
 
-void HTMLBuilder::cem() {
+HTMLBuilder *HTMLBuilder::cem() {
 	write_tag();
 	result += "</em>";
+
+	return this;
 }
 
-void HTMLBuilder::cembed() {
+HTMLBuilder *HTMLBuilder::cembed() {
 	write_tag();
 	result += "</embed>";
+
+	return this;
 }
 
-void HTMLBuilder::cfieldset() {
+HTMLBuilder *HTMLBuilder::cfieldset() {
 	write_tag();
 	result += "</fieldset>";
+
+	return this;
 }
 
-void HTMLBuilder::cfigcaption() {
+HTMLBuilder *HTMLBuilder::cfigcaption() {
 	write_tag();
 	result += "</figcaption>";
+
+	return this;
 }
 
-void HTMLBuilder::cfigure() {
+HTMLBuilder *HTMLBuilder::cfigure() {
 	write_tag();
 	result += "</figure>";
+
+	return this;
 }
 
-void HTMLBuilder::cfont() {
+HTMLBuilder *HTMLBuilder::cfont() {
 	write_tag();
 	result += "</font>";
+
+	return this;
 }
 
-void HTMLBuilder::cfooter() {
+HTMLBuilder *HTMLBuilder::cfooter() {
 	write_tag();
 	result += "</footer>";
+
+	return this;
 }
 
-void HTMLBuilder::cform() {
+HTMLBuilder *HTMLBuilder::cform() {
 	write_tag();
 	result += "</form>";
+
+	return this;
 }
 
-void HTMLBuilder::cframe() {
+HTMLBuilder *HTMLBuilder::cframe() {
 	write_tag();
 	result += "</frame>";
+
+	return this;
 }
 
-void HTMLBuilder::cframeset() {
+HTMLBuilder *HTMLBuilder::cframeset() {
 	write_tag();
 	result += "</frameset>";
+
+	return this;
 }
 
-void HTMLBuilder::ch1() {
+HTMLBuilder *HTMLBuilder::ch1() {
 	write_tag();
 	result += "</h1>";
+
+	return this;
 }
 
-void HTMLBuilder::ch2() {
+HTMLBuilder *HTMLBuilder::ch2() {
 	write_tag();
 	result += "</h2>";
+
+	return this;
 }
 
-void HTMLBuilder::ch3() {
+HTMLBuilder *HTMLBuilder::ch3() {
 	write_tag();
 	result += "</h3>";
+
+	return this;
 }
 
-void HTMLBuilder::ch4() {
+HTMLBuilder *HTMLBuilder::ch4() {
 	write_tag();
 	result += "</h4>";
+
+	return this;
 }
 
-void HTMLBuilder::ch5() {
+HTMLBuilder *HTMLBuilder::ch5() {
 	write_tag();
 	result += "</h5>";
+
+	return this;
 }
 
-void HTMLBuilder::ch6() {
+HTMLBuilder *HTMLBuilder::ch6() {
 	write_tag();
 	result += "</h6>";
+
+	return this;
 }
 
-void HTMLBuilder::chead() {
+HTMLBuilder *HTMLBuilder::chead() {
 	write_tag();
 	result += "</head>";
+
+	return this;
 }
 
-void HTMLBuilder::cheader() {
+HTMLBuilder *HTMLBuilder::cheader() {
 	write_tag();
 	result += "</header>";
+
+	return this;
 }
 
-void HTMLBuilder::chr() {
+HTMLBuilder *HTMLBuilder::chr() {
 	write_tag();
 	result += "</hr>";
+
+	return this;
 }
 
-void HTMLBuilder::chtml() {
+HTMLBuilder *HTMLBuilder::chtml() {
 	write_tag();
 	result += "</html>";
+
+	return this;
 }
 
-void HTMLBuilder::ci() {
+HTMLBuilder *HTMLBuilder::ci() {
 	write_tag();
 	result += "</i>";
+
+	return this;
 }
 
-void HTMLBuilder::ciframe() {
+HTMLBuilder *HTMLBuilder::ciframe() {
 	write_tag();
 	result += "</iframe>";
+
+	return this;
 }
 
-void HTMLBuilder::cimg() {
+HTMLBuilder *HTMLBuilder::cimg() {
 	write_tag();
 	result += "</img>";
+
+	return this;
 }
 
-void HTMLBuilder::cinput() {
+HTMLBuilder *HTMLBuilder::cinput() {
 	write_tag();
 	result += "</input>";
+
+	return this;
 }
 
-void HTMLBuilder::cins() {
+HTMLBuilder *HTMLBuilder::cins() {
 	write_tag();
 	result += "</ins>";
+
+	return this;
 }
 
-void HTMLBuilder::ckbd() {
+HTMLBuilder *HTMLBuilder::ckbd() {
 	write_tag();
 	result += "</kbd>";
+
+	return this;
 }
 
-void HTMLBuilder::clabel() {
+HTMLBuilder *HTMLBuilder::clabel() {
 	write_tag();
 	result += "</label>";
+
+	return this;
 }
 
-void HTMLBuilder::clegend() {
+HTMLBuilder *HTMLBuilder::clegend() {
 	write_tag();
 	result += "</legend>";
+
+	return this;
 }
 
-void HTMLBuilder::cli() {
+HTMLBuilder *HTMLBuilder::cli() {
 	write_tag();
 	result += "</li>";
+
+	return this;
 }
 
-void HTMLBuilder::clink() {
+HTMLBuilder *HTMLBuilder::clink() {
 	write_tag();
 	result += "</link>";
+
+	return this;
 }
 
-void HTMLBuilder::cmain() {
+HTMLBuilder *HTMLBuilder::cmain() {
 	write_tag();
 	result += "</main>";
+
+	return this;
 }
 
-void HTMLBuilder::cmap() {
+HTMLBuilder *HTMLBuilder::cmap() {
 	write_tag();
 	result += "</map>";
+
+	return this;
 }
 
-void HTMLBuilder::cmark() {
+HTMLBuilder *HTMLBuilder::cmark() {
 	write_tag();
 	result += "</mark>";
+
+	return this;
 }
 
-void HTMLBuilder::cmeta() {
+HTMLBuilder *HTMLBuilder::cmeta() {
 	write_tag();
 	result += "</meta>";
+
+	return this;
 }
 
-void HTMLBuilder::cmeter() {
+HTMLBuilder *HTMLBuilder::cmeter() {
 	write_tag();
 	result += "</meter>";
+
+	return this;
 }
 
-void HTMLBuilder::cnav() {
+HTMLBuilder *HTMLBuilder::cnav() {
 	write_tag();
 	result += "</nav>";
+
+	return this;
 }
 
-void HTMLBuilder::cnoframes() {
+HTMLBuilder *HTMLBuilder::cnoframes() {
 	write_tag();
 	result += "</noframes>";
+
+	return this;
 }
 
-void HTMLBuilder::cnoscript() {
+HTMLBuilder *HTMLBuilder::cnoscript() {
 	write_tag();
 	result += "</noscript>";
+
+	return this;
 }
 
-void HTMLBuilder::cobject() {
+HTMLBuilder *HTMLBuilder::cobject() {
 	write_tag();
 	result += "</object>";
+
+	return this;
 }
 
-void HTMLBuilder::c_ol() {
+HTMLBuilder *HTMLBuilder::c_ol() {
 	write_tag();
 	result += "</ol>";
+
+	return this;
 }
 
-void HTMLBuilder::coptgroup() {
+HTMLBuilder *HTMLBuilder::coptgroup() {
 	write_tag();
 	result += "</optgroup>";
+
+	return this;
 }
 
-void HTMLBuilder::coption() {
+HTMLBuilder *HTMLBuilder::coption() {
 	write_tag();
 	result += "</option>";
+
+	return this;
 }
 
-void HTMLBuilder::coutput() {
+HTMLBuilder *HTMLBuilder::coutput() {
 	write_tag();
 	result += "</output>";
+
+	return this;
 }
 
-void HTMLBuilder::cp() {
+HTMLBuilder *HTMLBuilder::cp() {
 	write_tag();
 	result += "</p>";
+
+	return this;
 }
 
-void HTMLBuilder::cparam() {
+HTMLBuilder *HTMLBuilder::cparam() {
 	write_tag();
 	result += "</param>";
+
+	return this;
 }
 
-void HTMLBuilder::cpicture() {
+HTMLBuilder *HTMLBuilder::cpicture() {
 	write_tag();
 	result += "</picture>";
+
+	return this;
 }
 
-void HTMLBuilder::cpre() {
+HTMLBuilder *HTMLBuilder::cpre() {
 	write_tag();
 	result += "</pre>";
+
+	return this;
 }
 
-void HTMLBuilder::cprogress() {
+HTMLBuilder *HTMLBuilder::cprogress() {
 	write_tag();
 	result += "</progress>";
+
+	return this;
 }
 
-void HTMLBuilder::cq() {
+HTMLBuilder *HTMLBuilder::cq() {
 	write_tag();
 	result += "</a>";
+
+	return this;
 }
 
-void HTMLBuilder::crp() {
+HTMLBuilder *HTMLBuilder::crp() {
 	write_tag();
 	result += "</rp>";
+
+	return this;
 }
 
-void HTMLBuilder::crt() {
+HTMLBuilder *HTMLBuilder::crt() {
 	write_tag();
 	result += "</rt>";
+
+	return this;
 }
 
-void HTMLBuilder::cruby() {
+HTMLBuilder *HTMLBuilder::cruby() {
 	write_tag();
 	result += "</ruby>";
+
+	return this;
 }
 
-void HTMLBuilder::cs() {
+HTMLBuilder *HTMLBuilder::cs() {
 	write_tag();
 	result += "</s>";
+
+	return this;
 }
 
-void HTMLBuilder::csamp() {
+HTMLBuilder *HTMLBuilder::csamp() {
 	write_tag();
 	result += "</samp>";
+
+	return this;
 }
 
-void HTMLBuilder::cscript() {
+HTMLBuilder *HTMLBuilder::cscript() {
 	write_tag();
 	result += "</script>";
+
+	return this;
 }
 
-void HTMLBuilder::csection() {
+HTMLBuilder *HTMLBuilder::csection() {
 	write_tag();
 	result += "</section>";
+
+	return this;
 }
 
-void HTMLBuilder::cselect() {
+HTMLBuilder *HTMLBuilder::cselect() {
 	write_tag();
 	result += "</select>";
+
+	return this;
 }
 
-void HTMLBuilder::csmall() {
+HTMLBuilder *HTMLBuilder::csmall() {
 	write_tag();
 	result += "</small>";
+
+	return this;
 }
 
-void HTMLBuilder::csource() {
+HTMLBuilder *HTMLBuilder::csource() {
 	write_tag();
 	result += "</source>";
+
+	return this;
 }
 
-void HTMLBuilder::cspan() {
+HTMLBuilder *HTMLBuilder::cspan() {
 	write_tag();
 	result += "</span>";
+
+	return this;
 }
 
-void HTMLBuilder::cstrike() {
+HTMLBuilder *HTMLBuilder::cstrike() {
 	write_tag();
 	result += "</strike>";
+
+	return this;
 }
 
-void HTMLBuilder::cstrong() {
+HTMLBuilder *HTMLBuilder::cstrong() {
 	write_tag();
 	result += "</strong>";
+
+	return this;
 }
 
-void HTMLBuilder::cstyle() {
+HTMLBuilder *HTMLBuilder::cstyle() {
 	write_tag();
 	result += "</style>";
+
+	return this;
 }
 
-void HTMLBuilder::csub() {
+HTMLBuilder *HTMLBuilder::csub() {
 	write_tag();
 	result += "</sub>";
+
+	return this;
 }
 
-void HTMLBuilder::csummary() {
+HTMLBuilder *HTMLBuilder::csummary() {
 	write_tag();
 	result += "</summary>";
+
+	return this;
 }
 
-void HTMLBuilder::csup() {
+HTMLBuilder *HTMLBuilder::csup() {
 	write_tag();
 	result += "</sup>";
+
+	return this;
 }
 
-void HTMLBuilder::csvg() {
+HTMLBuilder *HTMLBuilder::csvg() {
 	write_tag();
 	result += "</svg>";
+
+	return this;
 }
 
-void HTMLBuilder::ctable() {
+HTMLBuilder *HTMLBuilder::ctable() {
 	write_tag();
 	result += "</table>";
+
+	return this;
 }
 
-void HTMLBuilder::ctbody() {
+HTMLBuilder *HTMLBuilder::ctbody() {
 	write_tag();
 	result += "</tbody>";
+
+	return this;
 }
 
-void HTMLBuilder::ctd() {
+HTMLBuilder *HTMLBuilder::ctd() {
 	write_tag();
 	result += "</td>";
+
+	return this;
 }
 
-void HTMLBuilder::ctemplateh() {
+HTMLBuilder *HTMLBuilder::ctemplateh() {
 	write_tag();
 	result += "</templateh>";
+
+	return this;
 }
 
-void HTMLBuilder::ctextarea() {
+HTMLBuilder *HTMLBuilder::ctextarea() {
 	write_tag();
 	result += "</textarea>";
+
+	return this;
 }
 
-void HTMLBuilder::ctfoot() {
+HTMLBuilder *HTMLBuilder::ctfoot() {
 	write_tag();
 	result += "</tfoot>";
+
+	return this;
 }
 
-void HTMLBuilder::cth() {
+HTMLBuilder *HTMLBuilder::cth() {
 	write_tag();
 	result += "</th>";
+
+	return this;
 }
 
-void HTMLBuilder::cthead() {
+HTMLBuilder *HTMLBuilder::cthead() {
 	write_tag();
 	result += "</thead>";
+
+	return this;
 }
 
-void HTMLBuilder::ctime() {
+HTMLBuilder *HTMLBuilder::ctime() {
 	write_tag();
 	result += "</time>";
+
+	return this;
 }
 
-void HTMLBuilder::ctitle() {
+HTMLBuilder *HTMLBuilder::ctitle() {
 	write_tag();
 	result += "</title>";
+
+	return this;
 }
 
-void HTMLBuilder::ctr() {
+HTMLBuilder *HTMLBuilder::ctr() {
 	write_tag();
 	result += "</tr>";
+
+	return this;
 }
 
-void HTMLBuilder::ctrack() {
+HTMLBuilder *HTMLBuilder::ctrack() {
 	write_tag();
 	result += "</track>";
+
+	return this;
 }
 
-void HTMLBuilder::ctt() {
+HTMLBuilder *HTMLBuilder::ctt() {
 	write_tag();
 	result += "</tt>";
+
+	return this;
 }
 
-void HTMLBuilder::cu() {
+HTMLBuilder *HTMLBuilder::cu() {
 	write_tag();
 	result += "</u>";
+
+	return this;
 }
 
-void HTMLBuilder::cul() {
+HTMLBuilder *HTMLBuilder::cul() {
 	write_tag();
 	result += "</ul>";
+
+	return this;
 }
 
-void HTMLBuilder::cvar() {
+HTMLBuilder *HTMLBuilder::cvar() {
 	write_tag();
 	result += "</var>";
+
+	return this;
 }
 
-void HTMLBuilder::cvideo() {
+HTMLBuilder *HTMLBuilder::cvideo() {
 	write_tag();
 	result += "</video>";
+
+	return this;
 }
 
-void HTMLBuilder::cwbr() {
+HTMLBuilder *HTMLBuilder::cwbr() {
 	write_tag();
 	result += "</wbr>";
+
+	return this;
 }
 
-void HTMLBuilder::w(const String &val) {
+HTMLBuilder *HTMLBuilder::w(const String &val) {
 	write_tag();
 
 	result += val;
+
+	return this;
 }
 
 //TODO!
-void HTMLBuilder::we(const String &val) {
+HTMLBuilder *HTMLBuilder::we(const String &val) {
 	printf("HTMLBuilder::write_excaped NYI!");
 
 	write_tag();
 
 	result += val;
+
+	return this;
 }
 
-void HTMLBuilder::write_tag() {
+HTMLBuilder *HTMLBuilder::write_tag() {
 	if (tag.has_data()) {
 		tag.close();
 		result += tag.result;
 		tag.reset();
 	}
+
+	return this;
 }
 
 HTMLBuilder::HTMLBuilder() {
+	tag.owner = this;
 }
 
 HTMLBuilder::~HTMLBuilder() {

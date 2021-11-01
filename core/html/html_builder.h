@@ -4,8 +4,7 @@
 #include "core/string.h"
 
 class Request;
-
-//This might be converted to a form validator
+class HTMLBuilder;
 
 class HTMLTag {
 public:
@@ -34,18 +33,22 @@ public:
 	HTMLTag *reset();
 	HTMLTag *close();
 
+	HTMLBuilder *f();
+
 	bool has_data();
 
 	HTMLTag();
+
+	HTMLBuilder *owner;
 };
 
 class HTMLBuilder {
 public:
 	String result;
 
-	void comment(const String &val);
+	HTMLBuilder *comment(const String &val);
 	HTMLTag *doctype();
-	void doctype(const String &val);
+	HTMLBuilder *doctype(const String &val);
 
 	HTMLTag *a();
 	HTMLTag *abbr();
@@ -176,139 +179,139 @@ public:
 	//closing tags c prefix means close
     //Note simple tags should not have these like <br>
     //Note that I might have a few that shouldn't be here, those will be removed as I find them
-    void ca();
-	void cabbr();
-	void cacronym();
-	void caddress();
-	void capplet();
-	void carea();
-	void carticle();
-	void caside();
-	void caudio();
-	void cb();
-	void cbasefont();
-	void cbdi();
-	void cbdo();
-	void cbig();
-	void cblockquote();
-	void cbody();
-	void cbutton();
-	void ccanvas();
+    HTMLBuilder *ca();
+	HTMLBuilder *cabbr();
+	HTMLBuilder *cacronym();
+	HTMLBuilder *caddress();
+	HTMLBuilder *capplet();
+	HTMLBuilder *carea();
+	HTMLBuilder *carticle();
+	HTMLBuilder *caside();
+	HTMLBuilder *caudio();
+	HTMLBuilder *cb();
+	HTMLBuilder *cbasefont();
+	HTMLBuilder *cbdi();
+	HTMLBuilder *cbdo();
+	HTMLBuilder *cbig();
+	HTMLBuilder *cblockquote();
+	HTMLBuilder *cbody();
+	HTMLBuilder *cbutton();
+	HTMLBuilder *ccanvas();
 
-	void ccaption();
-	void ccenter();
-	void ccite();
-	void ccode();
-	void ccol();
-	void ccolgroup();
-	void cdata();
-	void cdatalist();
-	void cdd();
-	void cdel();
-	void cdetails();
-	void cdfn();
-	void cdialog();
-	void cdir();
-	void cdiv();
-	void cdl();
-	void cdt();
+	HTMLBuilder *ccaption();
+	HTMLBuilder *ccenter();
+	HTMLBuilder *ccite();
+	HTMLBuilder *ccode();
+	HTMLBuilder *ccol();
+	HTMLBuilder *ccolgroup();
+	HTMLBuilder *cdata();
+	HTMLBuilder *cdatalist();
+	HTMLBuilder *cdd();
+	HTMLBuilder *cdel();
+	HTMLBuilder *cdetails();
+	HTMLBuilder *cdfn();
+	HTMLBuilder *cdialog();
+	HTMLBuilder *cdir();
+	HTMLBuilder *cdiv();
+	HTMLBuilder *cdl();
+	HTMLBuilder *cdt();
     
-	void cem();
-	void cembed();
-	void cfieldset();
-	void cfigcaption();
-	void cfigure();
-	void cfont();
-	void cfooter();
-	void cform();
-	void cframe();
-	void cframeset();
-	void ch1();
-	void ch2();
-	void ch3();
-	void ch4();
-	void ch5();
-	void ch6();
-	void chead();
-	void cheader();
-	void chr();
-	void chtml();
+	HTMLBuilder *cem();
+	HTMLBuilder *cembed();
+	HTMLBuilder *cfieldset();
+	HTMLBuilder *cfigcaption();
+	HTMLBuilder *cfigure();
+	HTMLBuilder *cfont();
+	HTMLBuilder *cfooter();
+	HTMLBuilder *cform();
+	HTMLBuilder *cframe();
+	HTMLBuilder *cframeset();
+	HTMLBuilder *ch1();
+	HTMLBuilder *ch2();
+	HTMLBuilder *ch3();
+	HTMLBuilder *ch4();
+	HTMLBuilder *ch5();
+	HTMLBuilder *ch6();
+	HTMLBuilder *chead();
+	HTMLBuilder *cheader();
+	HTMLBuilder *chr();
+	HTMLBuilder *chtml();
 
-	void ci();
-	void ciframe();
-	void cimg();
-	void cinput();
-	void cins();
-	void ckbd();
-	void clabel();
-	void clegend();
-	void cli();
-	void clink();
-	void cmain();
-	void cmap();
-	void cmark();
-	void cmeta();
-	void cmeter();
+	HTMLBuilder *ci();
+	HTMLBuilder *ciframe();
+	HTMLBuilder *cimg();
+	HTMLBuilder *cinput();
+	HTMLBuilder *cins();
+	HTMLBuilder *ckbd();
+	HTMLBuilder *clabel();
+	HTMLBuilder *clegend();
+	HTMLBuilder *cli();
+	HTMLBuilder *clink();
+	HTMLBuilder *cmain();
+	HTMLBuilder *cmap();
+	HTMLBuilder *cmark();
+	HTMLBuilder *cmeta();
+	HTMLBuilder *cmeter();
 
-	void cnav();
-	void cnoframes();
-	void cnoscript();
-	void cobject();
-	void c_ol();
-	void coptgroup();
-	void coption();
-	void coutput();
-	void cp();
-	void cparam();
-	void cpicture();
-	void cpre();
-	void cprogress();
-	void cq();
-	void crp();
+	HTMLBuilder *cnav();
+	HTMLBuilder *cnoframes();
+	HTMLBuilder *cnoscript();
+	HTMLBuilder *cobject();
+	HTMLBuilder *c_ol();
+	HTMLBuilder *coptgroup();
+	HTMLBuilder *coption();
+	HTMLBuilder *coutput();
+	HTMLBuilder *cp();
+	HTMLBuilder *cparam();
+	HTMLBuilder *cpicture();
+	HTMLBuilder *cpre();
+	HTMLBuilder *cprogress();
+	HTMLBuilder *cq();
+	HTMLBuilder *crp();
 
-	void crt();
-	void cruby();
-	void cs();
-	void csamp();
-	void cscript();
-	void csection();
-	void cselect();
-	void csmall();
-	void csource();
-	void cspan();
-	void cstrike();
-	void cstrong();
-	void cstyle();
-	void csub();
-	void csummary();
-	void csup();
+	HTMLBuilder *crt();
+	HTMLBuilder *cruby();
+	HTMLBuilder *cs();
+	HTMLBuilder *csamp();
+	HTMLBuilder *cscript();
+	HTMLBuilder *csection();
+	HTMLBuilder *cselect();
+	HTMLBuilder *csmall();
+	HTMLBuilder *csource();
+	HTMLBuilder *cspan();
+	HTMLBuilder *cstrike();
+	HTMLBuilder *cstrong();
+	HTMLBuilder *cstyle();
+	HTMLBuilder *csub();
+	HTMLBuilder *csummary();
+	HTMLBuilder *csup();
 
-	void csvg();
-	void ctable();
-	void ctbody();
-	void ctd();
-	void ctemplateh();
-	void ctextarea();
-	void ctfoot();
-	void cth();
-	void cthead();
-	void ctime();
-	void ctitle();
-	void ctr();
-	void ctrack();
-	void ctt();
-	void cu();
-	void cul();
-	void cvar();
-	void cvideo();
-	void cwbr();
+	HTMLBuilder *csvg();
+	HTMLBuilder *ctable();
+	HTMLBuilder *ctbody();
+	HTMLBuilder *ctd();
+	HTMLBuilder *ctemplateh();
+	HTMLBuilder *ctextarea();
+	HTMLBuilder *ctfoot();
+	HTMLBuilder *cth();
+	HTMLBuilder *cthead();
+	HTMLBuilder *ctime();
+	HTMLBuilder *ctitle();
+	HTMLBuilder *ctr();
+	HTMLBuilder *ctrack();
+	HTMLBuilder *ctt();
+	HTMLBuilder *cu();
+	HTMLBuilder *cul();
+	HTMLBuilder *cvar();
+	HTMLBuilder *cvideo();
+	HTMLBuilder *cwbr();
 
     //write
-	void w(const String &val);
+	HTMLBuilder *w(const String &val);
     //write_escaped
-	void we(const String &val);
+	HTMLBuilder *we(const String &val);
 
-	void write_tag();
+	HTMLBuilder *write_tag();
 
 	HTMLBuilder();
 	virtual ~HTMLBuilder();
