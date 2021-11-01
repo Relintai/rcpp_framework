@@ -2,19 +2,19 @@
 
 #include "query_result.h"
 
-TableBuilder *TableBuilder::create_table(const std::string &name) {
+TableBuilder *TableBuilder::create_table(const String &name) {
 	return this;
 }
 
-TableBuilder *TableBuilder::integer(const std::string &name) {
+TableBuilder *TableBuilder::integer(const String &name) {
 	return this;
 }
 
-TableBuilder *TableBuilder::date(const std::string &name) {
+TableBuilder *TableBuilder::date(const String &name) {
 	return this;
 }
 
-TableBuilder *TableBuilder::varchar(const std::string &name, const int length) {
+TableBuilder *TableBuilder::varchar(const String &name, const int length) {
 	return this;
 }
 
@@ -30,7 +30,7 @@ TableBuilder *TableBuilder::auto_increment() {
 	return this;
 }
 
-TableBuilder *TableBuilder::primary_key(const std::string &name) {
+TableBuilder *TableBuilder::primary_key(const String &name) {
 	return this;
 }
 
@@ -52,20 +52,20 @@ TableBuilder *TableBuilder::drop_table() {
 TableBuilder *TableBuilder::drop_table_if_exists() {
 	return this;
 }
-TableBuilder *TableBuilder::drop_table(const std::string &name) {
+TableBuilder *TableBuilder::drop_table(const String &name) {
 	return this;
 }
-TableBuilder *TableBuilder::drop_table_if_exists(const std::string &name) {
+TableBuilder *TableBuilder::drop_table_if_exists(const String &name) {
 	return this;
 }
 TableBuilder *TableBuilder::cdrop_table() {
 	return this;
 }
 
-TableBuilder *TableBuilder::foreign_key(const std::string &name) {
+TableBuilder *TableBuilder::foreign_key(const String &name) {
 	return this;
 }
-TableBuilder *TableBuilder::references(const std::string &table, const std::string &name) {
+TableBuilder *TableBuilder::references(const String &table, const String &name) {
 	return this;
 }
 

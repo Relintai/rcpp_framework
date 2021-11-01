@@ -8,14 +8,14 @@
 #include "mysql_query_result.h"
 #include "mysql_table_builder.h"
 
-void MysqlDatabase::connect(const std::string &connection_str) {
+void MysqlDatabase::connect(const String &connection_str) {
 	mysql = mysql_init(mysql);
 	mysql_options(mysql, MYSQL_OPT_NONBLOCK, 0);
 
-	std::string host = "127.0.0.1";
-	std::string user = "";
-	std::string password = "";
-	std::string dbname = "testappdb";
+	String host = "127.0.0.1";
+	String user = "";
+	String password = "";
+	String dbname = "testappdb";
 	int port = 3306;
 
 	mysql = mysql_real_connect(mysql, host.c_str(), user.c_str(), password.c_str(), dbname.c_str(), port, NULL, 0);
@@ -25,13 +25,13 @@ void MysqlDatabase::connect(const std::string &connection_str) {
 	}
 }
 
-Ref<QueryResult> MysqlDatabase::query(const std::string &query) {
+Ref<QueryResult> MysqlDatabase::query(const String &query) {
 	if (!mysql)
 		return nullptr;
 
 	//printf("%s\n", query.c_str());
 
-	int error = mysql_real_query(mysql, query.c_str(), query.length());
+	int error = mysql_real_query(mysql, query.c_str(), query.capacity());
 
 	if (error) {
 		const char *merr = mysql_error(mysql);
@@ -51,13 +51,13 @@ Ref<QueryResult> MysqlDatabase::query(const std::string &query) {
 	return Ref<QueryResult>(res);
 }
 
-void MysqlDatabase::query_run(const std::string &query) {
+void MysqlDatabase::query_run(const String &query) {
 	if (!mysql)
 		return;
 
 	//printf("%s\n", query.c_str());
 
-	int error = mysql_real_query(mysql, query.c_str(), query.length());
+	int error = mysql_real_query(mysql, query.c_str(), query.capacity());
 
 	if (error) {
 		const char *merr = mysql_error(mysql);
@@ -98,18 +98,22 @@ Ref<TableBuilder> MysqlDatabase::get_table_builder() {
 	return Ref<TableBuilder>(new MysqlTableBuilder());
 }
 
-std::string MysqlDatabase::escape(const std::string str) {
-	std::string res;
-	res.reserve(str.size() + 100);
+String MysqlDatabase::escape(const String str) {
+	String res;
+	//https://dev.mysql.com/doc/c-api/8.0/en/mysql-real-escape-string.html
+	//You must allocate the to buffer to be at least length*2+1 bytes long. 
+	res.ensure_capacity(str.size() * 2 + 1);
 
-	mysql_real_escape_string(mysql, res.data(), str.c_str(), str.size());
+	mysql_real_escape_string(mysql, res.dataw(), str.c_str(), str.size());
 
 	return res;
 }
-void MysqlDatabase::escape(const std::string str, std::string *to) {
-	to->reserve(str.size() + 100);
+void MysqlDatabase::escape(const String str, String *to) {
+	//https://dev.mysql.com/doc/c-api/8.0/en/mysql-real-escape-string.html
+	//You must allocate the to buffer to be at least length*2+1 bytes long. 
+	to->ensure_capacity(str.size() * 2 + 1);
 
-	mysql_real_escape_string(mysql, to->data(), str.c_str(), str.size());
+	mysql_real_escape_string(mysql, to->dataw(), str.c_str(), str.size());
 }
 
 MysqlDatabase::MysqlDatabase() :

@@ -32,7 +32,7 @@ Ref<TableBuilder> SQLite3Database::get_table_builder() {
 	return b;
 }
 
-void SQLite3Database::connect(const std::string &connection_str) {
+void SQLite3Database::connect(const String &connection_str) {
 	int ret = sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
 	if (ret != SQLITE_OK) {
 		printf("SQLITE3 multithreading is not supported!\n");
@@ -41,7 +41,7 @@ void SQLite3Database::connect(const std::string &connection_str) {
 	ret = sqlite3_open(connection_str.c_str(), &conn);
 }
 
-Ref<QueryResult> SQLite3Database::query(const std::string &query) {
+Ref<QueryResult> SQLite3Database::query(const String &query) {
 	Sqlite3QueryResult *res = new Sqlite3QueryResult();
 
 	res->query(query, conn);
@@ -49,7 +49,7 @@ Ref<QueryResult> SQLite3Database::query(const std::string &query) {
 	return res;
 }
 
-void SQLite3Database::query_run(const std::string &query) {
+void SQLite3Database::query_run(const String &query) {
 	char *err_msg;
 
 	if (sqlite3_exec(conn, query.c_str(), NULL, NULL, &err_msg) != SQLITE_OK) {
@@ -58,13 +58,13 @@ void SQLite3Database::query_run(const std::string &query) {
 	}
 }
 
-std::string SQLite3Database::escape(const std::string str) {
+String SQLite3Database::escape(const String str) {
 	char *ret;
 
 	ret = sqlite3_mprintf("%q", str.c_str());
 
 	if (ret) {
-		std::string res(ret);
+		String res(ret);
 
 		sqlite3_free(ret);
 
@@ -73,7 +73,7 @@ std::string SQLite3Database::escape(const std::string str) {
 
 	return "";
 }
-void SQLite3Database::escape(const std::string str, std::string *to) {
+void SQLite3Database::escape(const String str, String *to) {
 	char *ret;
 
 	ret = sqlite3_mprintf("%q", str.c_str());

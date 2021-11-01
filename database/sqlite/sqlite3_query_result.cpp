@@ -18,7 +18,7 @@ int Sqlite3QueryResult::get_last_insert_rowid() {
 	return sqlite3_last_insert_rowid(_connection);
 }
 
-void Sqlite3QueryResult::query(const std::string &query, sqlite3 *conn) {
+void Sqlite3QueryResult::query(const String &query, sqlite3 *conn) {
 	_connection = conn;
 
 	if (sqlite3_exec(conn, query.c_str(), Sqlite3QueryResult::run_query_finished, this, &err_msg) != SQLITE_OK) {

@@ -10,8 +10,8 @@ const char *QueryResult::get_cell(const int index) {
 	return "";
 }
 
-const std::string QueryResult::get_cell_str(const int index) {
-	return std::string(get_cell(index));
+const String QueryResult::get_cell_str(const int index) {
+	return String(get_cell(index));
 }
 
 const bool QueryResult::get_cell_bool(const int index) {

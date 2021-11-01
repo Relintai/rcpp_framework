@@ -4,7 +4,7 @@ void DatabaseManager::load() {
 	//go thourgh settings, and create all the defined db backends
 }
 
-uint32_t DatabaseManager::create_database(const std::string &name) {
+uint32_t DatabaseManager::create_database(const String &name) {
     Database *db = _create_database(name);
 
     if (!db) {
@@ -28,7 +28,7 @@ DatabaseManager *DatabaseManager::get_singleton() {
 	return _instance;
 }
 
-void DatabaseManager::_register_db_creation_func(const std::string &name, std::function<Database *()> func) {
+void DatabaseManager::_register_db_creation_func(const String &name, std::function<Database *()> func) {
 	if (!func) {
 		printf("_register_db_creation_func: %s, func is wrong!", name.c_str());
         return;
@@ -37,11 +37,11 @@ void DatabaseManager::_register_db_creation_func(const std::string &name, std::f
 	_db_creation_func_map[name] = func;
 }
 
-void DatabaseManager::_unregister_db_creation_func(const std::string &name) {
+void DatabaseManager::_unregister_db_creation_func(const String &name) {
 	_db_creation_func_map.erase(name);
 }
 
-Database *DatabaseManager::_create_database(const std::string &name) {
+Database *DatabaseManager::_create_database(const String &name) {
 	std::function<Database *()> func = _db_creation_func_map[name];
 
 	if (!func) {
@@ -74,4 +74,4 @@ DatabaseManager::~DatabaseManager() {
 
 DatabaseManager *DatabaseManager::_instance = nullptr;
 
-std::map<std::string, std::function<Database *()> > DatabaseManager::_db_creation_func_map;
+std::map<String, std::function<Database *()> > DatabaseManager::_db_creation_func_map;

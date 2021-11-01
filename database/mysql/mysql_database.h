@@ -1,6 +1,8 @@
 #ifndef MYSQL_CONNECTION
 #define MYSQL_CONNECTION
 
+#include "core/string.h"
+
 #include "core/database/database.h"
 
 #include <memory>
@@ -15,15 +17,15 @@
 
 class MysqlDatabase : public Database {
 public:
-	void connect(const std::string &connection_str);
-	Ref<QueryResult> query(const std::string &query);
-	void query_run(const std::string &query);
+	void connect(const String &connection_str);
+	Ref<QueryResult> query(const String &query);
+	void query_run(const String &query);
 
 	Ref<QueryBuilder> get_query_builder();
 	Ref<TableBuilder> get_table_builder();
 
-	std::string escape(const std::string str);
-	void escape(const std::string str, std::string *to);
+	String escape(const String str);
+	void escape(const String str, String *to);
 
 	static Database *_creation_func();
 	static void _register();

@@ -2,8 +2,8 @@
 
 #include "error_macros.h"
 #include <stdlib.h>
-#include <cstring>
 #include <cstdio>
+#include <cstring>
 
 void String::push_back(const char element) {
 	ensure_capacity(_size + 1);
@@ -76,11 +76,11 @@ void String::ensure_capacity(const int capacity) {
 	char *nd = new char[tsize];
 
 	if (_data) {
-        for (int i = 0; i < _size; ++i) {
-            nd[i] = _data[i];
-        }
+		for (int i = 0; i < _size; ++i) {
+			nd[i] = _data[i];
+		}
 
-        delete[] _data;
+		delete[] _data;
 	}
 
 	_data = nd;
@@ -106,295 +106,295 @@ int String::find(const char val) const {
 }
 
 void String::get_substr(char *into_buf, const int start_index, const int len) {
-    ERR_FAIL_INDEX(start_index + len - 1, _size);
+	ERR_FAIL_INDEX(start_index + len - 1, _size);
 
-    int j = 0;
-    for (int i = start_index; i < start_index + len; ++i) {
-        into_buf[j++] = _data[i];
-    }
+	int j = 0;
+	for (int i = start_index; i < start_index + len; ++i) {
+		into_buf[j++] = _data[i];
+	}
 }
 
 void String::get_substr_nt(char *into_buf, const int start_index, const int len) {
-    ERR_FAIL_INDEX(start_index + len - 1, _size);
+	ERR_FAIL_INDEX(start_index + len - 1, _size);
 
-    int j = 0;
-    for (int i = start_index; i < start_index + len; ++i) {
-        into_buf[j++] = _data[i];
-    }
+	int j = 0;
+	for (int i = start_index; i < start_index + len; ++i) {
+		into_buf[j++] = _data[i];
+	}
 
-    into_buf[len + 1] = '\0';
+	into_buf[len + 1] = '\0';
 }
 
 uint8_t String::read_uint8_bytes_at(int &index, bool advance_index) {
-    ERR_FAIL_INDEX_V(index, _size, 0);
+	ERR_FAIL_INDEX_V(index, _size, 0);
 
-    if (advance_index) {
-        return static_cast<uint8_t>(_data[index++]);
-    } else {
-        return static_cast<uint8_t>(_data[index]);
-    }
+	if (advance_index) {
+		return static_cast<uint8_t>(_data[index++]);
+	} else {
+		return static_cast<uint8_t>(_data[index]);
+	}
 }
 uint16_t String::read_uint16_bytes_at(int &index, bool advance_index) {
-    ERR_FAIL_INDEX_V(index + 1, _size, 0);
+	ERR_FAIL_INDEX_V(index + 1, _size, 0);
 
-    char carr[3];
-    char* p = carr;
+	char carr[3];
+	char *p = carr;
 
-    //printf("%u %u\n", static_cast<uint8_t>(p[0]),  static_cast<uint8_t>(p[1]));
+	//printf("%u %u\n", static_cast<uint8_t>(p[0]),  static_cast<uint8_t>(p[1]));
 
-    get_substr_nt(p, index, 2);
+	get_substr_nt(p, index, 2);
 
-    const uint16_t *vp = static_cast<const uint16_t *>((void *)p);
+	const uint16_t *vp = static_cast<const uint16_t *>((void *)p);
 
-    if (advance_index) {
-        index += 2;
-    }
+	if (advance_index) {
+		index += 2;
+	}
 
-    return *vp;
+	return *vp;
 }
 uint32_t String::read_uint32_bytes_at(int &index, bool advance_index) {
-    ERR_FAIL_INDEX_V(index + 3, _size, 0);
+	ERR_FAIL_INDEX_V(index + 3, _size, 0);
 
-    char carr[5];
-    char* p = carr;
+	char carr[5];
+	char *p = carr;
 
-    get_substr_nt(p, index, 4);
+	get_substr_nt(p, index, 4);
 
-    const uint32_t *vp = static_cast<const uint32_t *>((void *)p);
+	const uint32_t *vp = static_cast<const uint32_t *>((void *)p);
 
-    if (advance_index) {
-        index += 4;
-    }
+	if (advance_index) {
+		index += 4;
+	}
 
-    return *vp;
+	return *vp;
 }
 uint64_t String::read_uint64_bytes_at(int &index, bool advance_index) {
-    ERR_FAIL_INDEX_V(index + 7, _size, 0);
+	ERR_FAIL_INDEX_V(index + 7, _size, 0);
 
-    char carr[9];
-    char* p = carr;
+	char carr[9];
+	char *p = carr;
 
-    get_substr_nt(p, index, 8);
+	get_substr_nt(p, index, 8);
 
-    const uint64_t *vp = static_cast<const uint64_t *>((void *)p);
+	const uint64_t *vp = static_cast<const uint64_t *>((void *)p);
 
-    if (advance_index) {
-        index += 8;
-    }
+	if (advance_index) {
+		index += 8;
+	}
 
-    return *vp;
+	return *vp;
 }
 
 int8_t String::read_int8_bytes_at(int &index, bool advance_index) {
-    ERR_FAIL_INDEX_V(index, _size, 0);
+	ERR_FAIL_INDEX_V(index, _size, 0);
 
-    if (advance_index) {
-        return static_cast<int8_t>(_data[index++]);
-    } else {
-        return static_cast<int8_t>(_data[index]);
-    }
+	if (advance_index) {
+		return static_cast<int8_t>(_data[index++]);
+	} else {
+		return static_cast<int8_t>(_data[index]);
+	}
 }
 int16_t String::read_int16_bytes_at(int &index, bool advance_index) {
-    ERR_FAIL_INDEX_V(index + 1, _size, 0);
+	ERR_FAIL_INDEX_V(index + 1, _size, 0);
 
-    char carr[3];
-    char* p = carr;
+	char carr[3];
+	char *p = carr;
 
-    //printf("%u %u\n", static_cast<uint8_t>(p[0]),  static_cast<uint8_t>(p[1]));
+	//printf("%u %u\n", static_cast<uint8_t>(p[0]),  static_cast<uint8_t>(p[1]));
 
-    get_substr_nt(p, index, 2);
+	get_substr_nt(p, index, 2);
 
-    const int16_t *vp = static_cast<const int16_t *>((void *)p);
+	const int16_t *vp = static_cast<const int16_t *>((void *)p);
 
-    if (advance_index) {
-        index += 2;
-    }
+	if (advance_index) {
+		index += 2;
+	}
 
-    return *vp;
+	return *vp;
 }
 int32_t String::read_int32_bytes_at(int &index, bool advance_index) {
-    ERR_FAIL_INDEX_V(index + 3, _size, 0);
+	ERR_FAIL_INDEX_V(index + 3, _size, 0);
 
-    char carr[5];
-    char* p = carr;
+	char carr[5];
+	char *p = carr;
 
-    get_substr_nt(p, index, 4);
+	get_substr_nt(p, index, 4);
 
-    const int32_t *vp = static_cast<const int32_t *>((void *)p);
+	const int32_t *vp = static_cast<const int32_t *>((void *)p);
 
-    if (advance_index) {
-        index += 4;
-    }
+	if (advance_index) {
+		index += 4;
+	}
 
-    return *vp;
+	return *vp;
 }
 int64_t String::read_int64_bytes_at(int &index, bool advance_index) {
-    ERR_FAIL_INDEX_V(index + 7, _size, 0);
+	ERR_FAIL_INDEX_V(index + 7, _size, 0);
 
-    char carr[9];
-    char* p = carr;
+	char carr[9];
+	char *p = carr;
 
-    get_substr_nt(p, index, 8);
+	get_substr_nt(p, index, 8);
 
-    const int64_t *vp = static_cast<const int64_t *>((void *)p);
+	const int64_t *vp = static_cast<const int64_t *>((void *)p);
 
-    if (advance_index) {
-        index += 8;
-    }
+	if (advance_index) {
+		index += 8;
+	}
 
-    return *vp;
+	return *vp;
 }
 
 void String::append_uint8_bytes(const uint8_t val) {
-    ensure_capacity(_size + 1);
+	ensure_capacity(_size + 1);
 
-    _data[_size++] = val;
-    _data[_size] = '\0';
+	_data[_size++] = val;
+	_data[_size] = '\0';
 }
 void String::append_uint16_bytes(const uint16_t val) {
-    ensure_capacity(_size + 2);
+	ensure_capacity(_size + 2);
 
-    const char *vp = static_cast<const char *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
-    //printf("a %u %u\n", static_cast<uint8_t>(vp[0]),  static_cast<uint8_t>(vp[1]));
+	//printf("a %u %u\n", static_cast<uint8_t>(vp[0]),  static_cast<uint8_t>(vp[1]));
 
-    memcpy(&_data[_size], vp, 2);
+	memcpy(&_data[_size], vp, 2);
 
-    _size += 2;
+	_size += 2;
 
-    _data[_size] = '\0';
+	_data[_size] = '\0';
 }
 void String::append_uint32_bytes(const uint32_t val) {
-    ensure_capacity(_size + 4);
+	ensure_capacity(_size + 4);
 
-    const char *vp = static_cast<const char *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
-    memcpy(&_data[_size], vp, 4);
+	memcpy(&_data[_size], vp, 4);
 
-    _size += 4;
+	_size += 4;
 
-    _data[_size] = '\0';
+	_data[_size] = '\0';
 }
 void String::append_uint64_bytes(const uint64_t val) {
-    ensure_capacity(_size + 8);
+	ensure_capacity(_size + 8);
 
-    const char *vp = static_cast<const char *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
-    memcpy(&_data[_size], vp, 8);
+	memcpy(&_data[_size], vp, 8);
 
-    _size += 8;
+	_size += 8;
 
-    _data[_size] = '\0';
+	_data[_size] = '\0';
 }
 
 void String::append_int8_bytes(const int8_t val) {
-    ensure_capacity(_size + 1);
+	ensure_capacity(_size + 1);
 
-    _data[_size++] = val;
-    _data[_size] = '\0';
+	_data[_size++] = val;
+	_data[_size] = '\0';
 }
 void String::append_int16_bytes(const int16_t val) {
-    ensure_capacity(_size + 2);
+	ensure_capacity(_size + 2);
 
-    const char *vp = static_cast<const char *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
-    //printf("a %u %u\n", static_cast<uint8_t>(vp[0]),  static_cast<uint8_t>(vp[1]));
+	//printf("a %u %u\n", static_cast<uint8_t>(vp[0]),  static_cast<uint8_t>(vp[1]));
 
-    memcpy(&_data[_size], vp, 2);
+	memcpy(&_data[_size], vp, 2);
 
-    _size += 2;
+	_size += 2;
 
-    _data[_size] = '\0';
+	_data[_size] = '\0';
 }
 void String::append_int32_bytes(const int32_t val) {
-    ensure_capacity(_size + 4);
+	ensure_capacity(_size + 4);
 
-    const char *vp = static_cast<const char *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
-    memcpy(&_data[_size], vp, 4);
+	memcpy(&_data[_size], vp, 4);
 
-    _size += 4;
+	_size += 4;
 
-    _data[_size] = '\0';
+	_data[_size] = '\0';
 }
 void String::append_int64_bytes(const int64_t val) {
-    ensure_capacity(_size + 8);
+	ensure_capacity(_size + 8);
 
-    const char *vp = static_cast<const char *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
-    memcpy(&_data[_size], vp, 8);
+	memcpy(&_data[_size], vp, 8);
 
-    _size += 8;
+	_size += 8;
 
-    _data[_size] = '\0';
+	_data[_size] = '\0';
 }
 
 float String::read_float_bytes_at(int &index, bool advance_index) {
-    ERR_FAIL_INDEX_V(index + 3, _size, 0);
+	ERR_FAIL_INDEX_V(index + 3, _size, 0);
 
-    char carr[5];
-    char* p = carr;
+	char carr[5];
+	char *p = carr;
 
-    get_substr_nt(p, index, 4);
+	get_substr_nt(p, index, 4);
 
-    const float *vp = static_cast<const float *>((void *)p);
+	const float *vp = static_cast<const float *>((void *)p);
 
-    if (advance_index) {
-        index += 4;
-    }
+	if (advance_index) {
+		index += 4;
+	}
 
-    return *vp;
+	return *vp;
 }
 void String::append_float_bytes(const float val) {
-    ensure_capacity(_size + 4);
+	ensure_capacity(_size + 4);
 
-    const char *vp = static_cast<const char *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
-    memcpy(&_data[_size], vp, 4);
+	memcpy(&_data[_size], vp, 4);
 
-    _size += 4;
+	_size += 4;
 
-    _data[_size] = '\0';
+	_data[_size] = '\0';
 }
 
 double String::read_double_bytes_at(int &index, bool advance_index) {
-    ERR_FAIL_INDEX_V(index + 7, _size, 0);
+	ERR_FAIL_INDEX_V(index + 7, _size, 0);
 
-    char carr[9];
-    char* p = carr;
+	char carr[9];
+	char *p = carr;
 
-    get_substr_nt(p, index, 8);
+	get_substr_nt(p, index, 8);
 
-    const double *vp = static_cast<const double *>((void *)p);
+	const double *vp = static_cast<const double *>((void *)p);
 
-    if (advance_index) {
-        index += 8;
-    }
+	if (advance_index) {
+		index += 8;
+	}
 
-    return *vp;
+	return *vp;
 }
 void String::append_double_bytes(const double val) {
-    ensure_capacity(_size + 8);
+	ensure_capacity(_size + 8);
 
-    const char *vp = static_cast<const char *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
-    memcpy(&_data[_size], vp, 8);
+	memcpy(&_data[_size], vp, 8);
 
-    _size += 8;
+	_size += 8;
 
-    _data[_size] = '\0';
+	_data[_size] = '\0';
 }
 
-void String::append_str(const char* str) {
-    if (str == nullptr) {
-        return;
-    }
+void String::append_str(const char *str) {
+	if (str == nullptr) {
+		return;
+	}
 
-    int i = 0;
+	int i = 0;
 
-    while (str[i] != '\0') {
-        push_back(str[i++]);
-    }
+	while (str[i] != '\0') {
+		push_back(str[i++]);
+	}
 }
 
 void String::append_str(const String &other) {
@@ -434,7 +434,7 @@ uint32_t String::to_uint() {
 }
 
 std::string String::to_string() const {
-    return std::string(c_str());
+	return std::string(c_str());
 }
 
 void String::print() const {
@@ -494,9 +494,9 @@ String &String::operator+=(const char *p_c_str) {
 }
 
 String &String::operator+=(const std::string &b) {
-    append_str(b);
+	append_str(b);
 
-    return *this;
+	return *this;
 }
 String operator+(String lhs, const String &rhs) {
 	lhs.append_str(rhs);
@@ -517,7 +517,7 @@ String operator+(String lhs, const char rhs) {
 }
 
 String operator+(String lhs, const std::string &rhs) {
-    lhs.append_str(rhs);
+	lhs.append_str(rhs);
 
 	return lhs;
 }
@@ -587,7 +587,7 @@ bool operator==(const String &a, std::string &b) {
 		return false;
 	}
 
-    char *bp = &b[0];
+	char *bp = &b[0];
 
 	for (int i = 0; i < a._size; ++i) {
 		if (a[i] != bp[i]) {
@@ -598,17 +598,78 @@ bool operator==(const String &a, std::string &b) {
 	return true;
 }
 bool operator!=(const String &a, std::string &b) {
-    return !(a == b);
+	return !(a == b);
 }
 
 bool operator==(std::string &b, const String &a) {
-    return (a == b);
+	return (a == b);
 }
 bool operator!=(std::string &b, const String &a) {
-    return !(a == b);
+	return !(a == b);
 }
 
-String& String::operator=(const String &other) {
+bool operator<(const String &a, const String &b) {
+	if (a.size() < b.size()) {
+		return true;
+	} else if (a.size() > b.size()) {
+		return false;
+	} else {
+		for (int i = 0; i < a._size; ++i) {
+			if (a[i] < b[i]) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+bool operator>(const String &a, const String &b) {
+	if (a.size() > b.size()) {
+		return true;
+	} else if (a.size() < b.size()) {
+		return false;
+	} else {
+		for (int i = 0; i < a._size; ++i) {
+			if (a[i] > b[i]) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+bool operator<=(const String &a, const String &b) {
+	if (a.size() < b.size()) {
+		return true;
+	} else if (a.size() > b.size()) {
+		return false;
+	} else {
+		for (int i = 0; i < a._size; ++i) {
+			if (a[i] <= b[i]) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+bool operator>=(const String &a, const String &b) {
+	if (a.size() > b.size()) {
+		return true;
+	} else if (a.size() < b.size()) {
+		return false;
+	} else {
+		for (int i = 0; i < a._size; ++i) {
+			if (a[i] >= b[i]) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+
+String &String::operator=(const String &other) {
 	clear();
 
 	append_str(other);
@@ -616,7 +677,7 @@ String& String::operator=(const String &other) {
 	return *this;
 }
 
-String& String::operator=(const std::string &other) {
+String &String::operator=(const std::string &other) {
 	clear();
 
 	append_str(other);
@@ -624,7 +685,7 @@ String& String::operator=(const std::string &other) {
 	return *this;
 }
 
-String& String::operator=(const char* other) {
+String &String::operator=(const char *other) {
 	clear();
 
 	append_str(other);
@@ -677,7 +738,7 @@ String::String(const String &other, int grow_by) {
 	_data[_size] = '\0';
 }
 
-String::String(const char* p_c_str) {
+String::String(const char *p_c_str) {
 	_data = nullptr;
 	_actual_size = 0;
 	_size = 0;
@@ -686,7 +747,7 @@ String::String(const char* p_c_str) {
 	append_str(p_c_str);
 }
 
-String::String(const char* p_c_str, const int grow_by) {
+String::String(const char *p_c_str, const int grow_by) {
 	_data = nullptr;
 	_actual_size = 0;
 	_size = 0;
@@ -723,12 +784,12 @@ String::String(const std::string &str) {
 	_size = 0;
 	_grow_by = 100;
 
-    append_str(str);
+	append_str(str);
 }
 
 String::~String() {
 	if (_data) {
-        delete[] _data;
+		delete[] _data;
 		_data = nullptr;
-    }
+	}
 }

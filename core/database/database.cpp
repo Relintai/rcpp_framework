@@ -4,13 +4,13 @@
 #include "table_builder.h"
 #include "query_result.h"
 
-void Database::connect(const std::string &connection_str) {
+void Database::connect(const String &connection_str) {
 }
 
-Ref<QueryResult> Database::query(const std::string &query) {
+Ref<QueryResult> Database::query(const String &query) {
 	return Ref<QueryResult>();
 }
-void Database::query_run(const std::string &query) {
+void Database::query_run(const String &query) {
 }
 
 Ref<QueryBuilder> Database::get_query_builder() {
@@ -21,11 +21,11 @@ Ref<TableBuilder> Database::get_table_builder() {
 	return Ref<TableBuilder>(new TableBuilder());
 }
 
-std::string Database::escape(const std::string str) {
-	return std::string();
+String Database::escape(const String str) {
+	return String();
 }
 
-void Database::escape(const std::string str, std::string *to) {
+void Database::escape(const String str, String *to) {
 
 }
 

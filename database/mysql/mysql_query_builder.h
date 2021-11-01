@@ -2,7 +2,7 @@
 #define MYSQL_QUERY_BUILDER_H
 
 #include <memory>
-#include <string>
+#include "core/string.h"
 
 #include "core/database/query_builder.h"
 

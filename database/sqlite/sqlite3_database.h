@@ -22,12 +22,12 @@ public:
 	Ref<QueryBuilder> get_query_builder();
 	Ref<TableBuilder> get_table_builder();
 
-	void connect(const std::string &connection_str);
-	Ref<QueryResult> query(const std::string &query);
-	void query_run(const std::string &query);
+	void connect(const String &connection_str);
+	Ref<QueryResult> query(const String &query);
+	void query_run(const String &query);
 
-	std::string escape(const std::string str);
-	void escape(const std::string str, std::string *to);
+	String escape(const String str);
+	void escape(const String str, String *to);
 
 	SQLite3Database();
 	~SQLite3Database();

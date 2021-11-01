@@ -95,6 +95,11 @@ public:
 	friend bool operator==(std::string &b, const String &a);
 	friend bool operator!=(std::string &b, const String &a);
 
+	friend bool operator<(const String &a, const String &b);
+	friend bool operator>(const String &a, const String &b);
+	friend bool operator<=(const String &a, const String &b);
+	friend bool operator>=(const String &a, const String &b);
+
 	operator std::string() { return to_string(); }
 	operator std::string() const { return to_string(); }
 

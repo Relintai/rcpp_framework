@@ -1,7 +1,7 @@
 #ifndef MYSQL_QUERY_RESULT_H
 #define MYSQL_QUERY_RESULT_H
 
-#include <string>
+#include "core/string.h"
 #include <vector>
 
 #include "core/database/query_result.h"
@@ -17,7 +17,7 @@ public:
 
 	int get_last_insert_rowid();
 
-	void query(const std::string &query, sqlite3 *conn);
+	void query(const String &query, sqlite3 *conn);
 
 	static int run_query_finished(void *data, int argc, char **argv, char **col_names);
 
@@ -29,7 +29,7 @@ public:
 public:
 	struct Cell {
 		bool null;
-		std::string data;
+		String data;
 
 		Cell() {
 			null = false;
