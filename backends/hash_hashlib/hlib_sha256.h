@@ -7,11 +7,11 @@
 
 class HashLibSHA256 : public SHA256 {
 public:
-	std::string compute(const void *data, size_t num_bytes);
-	std::string compute(const std::string &text);
+	String compute(const void *data, size_t num_bytes);
+	String compute(const String &text);
 
 	void add(const void *data, size_t num_bytes);
-	std::string get_hash();
+	String get_hash();
 	void get_hash(unsigned char *buffer, size_t buffer_len);
 
 	void reset();

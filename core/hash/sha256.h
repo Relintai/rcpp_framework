@@ -1,7 +1,7 @@
 #ifndef SHA256_H
 #define SHA256_H
 
-#include <string>
+#include "core/string.h"
 
 #include "core/reference.h"
 
@@ -9,11 +9,11 @@ class SHA256 : public Reference {
 	RCPP_OBJECT(SHA256, Reference);
 
 public:
-	virtual std::string compute(const void *data, size_t num_bytes) = 0;
-	virtual std::string compute(const std::string &text) = 0;
+	virtual String compute(const void *data, size_t num_bytes) = 0;
+	virtual String compute(const String &text) = 0;
 
 	virtual void add(const void *data, size_t num_bytes) = 0;
-	virtual std::string get_hash() = 0;
+	virtual String get_hash() = 0;
 	virtual void get_hash(unsigned char *buffer, size_t buffer_len) = 0;
 
 	virtual void reset() = 0;

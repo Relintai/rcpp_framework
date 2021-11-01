@@ -1,10 +1,10 @@
 #include "hlib_sha256.h"
 
-std::string HashLibSHA256::compute(const void *data, size_t num_bytes) {
+String HashLibSHA256::compute(const void *data, size_t num_bytes) {
 	return hasher.operator()(data, num_bytes);
 }
 
-std::string HashLibSHA256::compute(const std::string &text) {
+String HashLibSHA256::compute(const String &text) {
 	return hasher.operator()(text);
 }
 
@@ -12,7 +12,7 @@ void HashLibSHA256::add(const void *data, size_t num_bytes) {
 	hasher.add(data, num_bytes);
 }
 
-std::string HashLibSHA256::get_hash() {
+String HashLibSHA256::get_hash() {
 	return hasher.getHash();
 }
 
