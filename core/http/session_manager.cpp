@@ -46,7 +46,7 @@ void SessionManager::remove_session(HTTPSession *session) {
 	}
 }
 
-void SessionManager::delete_session(const std::string &session_id) {
+void SessionManager::delete_session(const String &session_id) {
 	_mutex.lock();
 
 	HTTPSession *s = _sessions[session_id];
@@ -105,15 +105,15 @@ void SessionManager::save_session(HTTPSession *session) {
 	b->del(_data_table_name)->where()->wp("session_db_id", session->id)->end_command();
 	int id = session->id;
 
-	std::map<std::string, int> m = session->get_int_data();
-	for (std::map<std::string, int>::iterator it = m.begin(); it != m.end(); it++) {
+	std::map<String, int> m = session->get_int_data();
+	for (std::map<String, int>::iterator it = m.begin(); it != m.end(); it++) {
 		b->insert(_data_table_name, "session_db_id, key, value")->values()->val(id)->val(it->first)->val(it->second)->cvalues()->end_command();
 	}
 
 	b->run_query();
 }
 
-HTTPSession *SessionManager::get_session(const std::string &session_id) {
+HTTPSession *SessionManager::get_session(const String &session_id) {
 	return _sessions[session_id];
 }
 
@@ -157,7 +157,7 @@ void SessionManager::load_sessions() {
 
 	while (r->next_row()) {
 		int id = r->get_cell_int(0);
-		std::string session_id = r->get_cell(1);
+		String session_id = r->get_cell(1);
 
 		HTTPSession *s = new HTTPSession();
 		s->id = id;
@@ -194,7 +194,7 @@ void SessionManager::load_sessions() {
 			continue;
 		}
 
-		std::string key = r->get_cell(1);
+		String key = r->get_cell(1);
 		int value = r->get_cell_int(2);
 
 		s->add_int(key, value);
@@ -212,11 +212,11 @@ void SessionManager::clear() {
 	_sessions_vec.clear();
 }
 
-std::string SessionManager::generate_session_id(const std::string &base) {
+String SessionManager::generate_session_id(const String &base) {
 	//todo make something simpler / better
 
 	SHA256 *h = SHA256::get();
-	std::string sid = base;
+	String sid = base;
 
 	sid += rand();
 	h->compute(sid);
@@ -230,7 +230,7 @@ std::string SessionManager::generate_session_id(const std::string &base) {
 }
 
 void SessionManager::session_setup_middleware(Object *instance, Request *request) {
-	const std::string &sid = request->get_cookie("session_id");
+	const String sid = request->get_cookie("session_id");
 
 	if (sid == "") {
 		//You could create a session here if you want to always assign sessions to visitors.
@@ -309,5 +309,5 @@ SessionManager::~SessionManager() {
 }
 
 SessionManager *SessionManager::_self = nullptr;
-std::string SessionManager::_table_name = "sessions";
-std::string SessionManager::_data_table_name = "session_data";
+String SessionManager::_table_name = "sessions";
+String SessionManager::_data_table_name = "session_data";

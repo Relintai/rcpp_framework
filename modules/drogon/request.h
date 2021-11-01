@@ -1,10 +1,12 @@
 #ifndef DREQUEST_H
 #define DREQUEST_H
 
+#include "core/string.h"
+#include "core/containers/vector.h"
+
 #include "core/http/request.h"
 
 #include <mutex>
-#include <vector>
 
 #include "http/HttpRequestImpl.h"
 #include "http/HttpResponse.h"
@@ -20,20 +22,20 @@ public:
 	drogon::HttpRequestImplPtr request;
 	std::function<void(const drogon::HttpResponsePtr &)> callback;
 
-	const std::string &get_cookie(const std::string &key);
+	const String get_cookie(const String &key);
 	void add_cookie(const ::Cookie &cookie);
-	void remove_cookie(const std::string &key);
+	void remove_cookie(const String &key);
 
 	HTTPMethod get_method() const;
 
-	const std::string &get_parameter(const std::string &key) const;
+	const String get_parameter(const String &key) const;
 
-	void send_redirect(const std::string &location, const HTTPStatusCode status_code = HTTP_STATUS_CODE_302_FOUND);
+	void send_redirect(const String &location, const HTTPStatusCode status_code = HTTP_STATUS_CODE_302_FOUND);
 	void send();
-	void send_file(const std::string &p_file_path);
+	void send_file(const String &p_file_path);
 	void reset();
-	std::string parser_get_path();
-	std::string get_host() const;
+	String parser_get_path();
+	String get_host() const;
 
 	void update();
 
@@ -49,11 +51,11 @@ protected:
 	void _file_chunk_sent();
 	void _response_additional_setup(const drogon::HttpResponsePtr &req);
 
-	std::vector<std::string> _path_stack;
+	Vector<String> _path_stack;
 	uint32_t _path_stack_pointer;
 
-	std::vector<::Cookie> _added_cookies;
-	std::vector<std::string> _removed_cookies;
+	Vector<::Cookie> _added_cookies;
+	Vector<String> _removed_cookies;
 
 private:
 	static RequestPool<DRequest> _request_pool;

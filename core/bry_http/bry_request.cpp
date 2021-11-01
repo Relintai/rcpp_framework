@@ -13,7 +13,7 @@ void BryRequest::send() {
 
 		response->addHeadValue("Connection", "Keep-Alive");
 
-		std::string result = response->getResult();
+		String result = response->getResult();
 
 		session->send(result.c_str(), result.size());
 	} else {
@@ -21,7 +21,7 @@ void BryRequest::send() {
 
 		response->addHeadValue("Connection", "Close");
 
-		std::string result = response->getResult();
+		String result = response->getResult();
 
 		HttpSession::Ptr lsession = session;
 
@@ -31,7 +31,7 @@ void BryRequest::send() {
 	pool();
 }
 
-void BryRequest::send_file(const std::string &p_file_path) {
+void BryRequest::send_file(const String &p_file_path) {
 	//if (connection_closed) {
 	//	RequestPool::return_request(this);
 	//	return;
@@ -52,7 +52,7 @@ void BryRequest::send_file(const std::string &p_file_path) {
 	fclose(f);
 
 	response->addHeadValue("Connection", "Close");
-	std::string result = "HTTP/1.1 200 OK\r\nConnection: Close\r\n\r\n";
+	String result = "HTTP/1.1 200 OK\r\nConnection: Close\r\n\r\n";
 
 	application->register_request_update(this);
 
@@ -71,7 +71,7 @@ void BryRequest::reset() {
 	response = new ::HttpResponse();
 }
 
-std::string BryRequest::parser_get_path() {
+String BryRequest::parser_get_path() {
 	return http_parser->getPath();
 }
 

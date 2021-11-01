@@ -1,7 +1,7 @@
 
 #include "cookie.h"
 
-Cookie::Cookie(const std::string &p_key, const std::string &p_value) {
+Cookie::Cookie(const String &p_key, const String &p_value) {
 	http_only = true;
 	secure = false;
 

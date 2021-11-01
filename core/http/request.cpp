@@ -17,31 +17,31 @@ HTTPSession *Request::get_or_create_session() {
 	return session;
 }
 
-const std::string &Request::get_cookie(const std::string &key) {
-	static std::string str;
+const String Request::get_cookie(const String &key) {
+	static String str(0);
 	return str;
 }
 
 void Request::add_cookie(const ::Cookie &cookie) {
 }
 
-void Request::remove_cookie(const std::string &key) {
+void Request::remove_cookie(const String &key) {
 }
 
 HTTPMethod Request::get_method() const {
 	return HTTP_METHOD_GET;
 }
 
-const std::string &Request::get_parameter(const std::string &key) const {
-	static std::string str;
+const String Request::get_parameter(const String &key) const {
+	static String str(0);
 	return str;
 }
 
-void Request::send_redirect(const std::string &location, const HTTPStatusCode status_code) {
+void Request::send_redirect(const String &location, const HTTPStatusCode status_code) {
 }
 
 void Request::compile_body() {
-	compiled_body.reserve(body.size() + head.size() + 15 + 13 + 14 + 15);
+	compiled_body.ensure_capacity(body.size() + head.size() + 15 + 13 + 14 + 15 + 1);
 
 	//15
 	compiled_body += "<!DOCTYPE html>";
@@ -95,7 +95,7 @@ void Request::send() {
 	//RequestPool::return_request(this);
 }
 
-void Request::send_file(const std::string &p_file_path) {
+void Request::send_file(const String &p_file_path) {
 	//RequestPool::return_request(this);
 }
 
@@ -124,31 +124,33 @@ void Request::reset() {
 	reference_data.clear();
 }
 
-std::string Request::parser_get_path() {
+String Request::parser_get_path() {
 	return "";
 }
 
 void Request::setup_url_stack() {
 	_full_path = parser_get_path();
-	std::string path = parser_get_path();
+	String path = parser_get_path();
 
 	size_t pos = 0;
-	std::string st;
-	while ((pos = path.find("/")) != std::string::npos) {
+	String st;
+	while ((pos = path.find('/')) != -1) {
 		st = path.substr(0, pos);
 
-		if (st.size() != 0)
+		if (st.size() != 0) {
 			_path_stack.push_back(st);
+		}
 
 		path.erase(0, pos + 1);
 	}
 
-	if (path.size() != 0)
+	if (path.size() != 0) {
 		_path_stack.push_back(path);
+	}
 }
 
-std::string Request::get_path() const {
-	std::string path = "";
+String Request::get_path() const {
+	String path = "";
 
 	for (uint32_t i = _path_stack_pointer; i < _path_stack.size(); ++i) {
 		path += _path_stack[i];
@@ -158,18 +160,18 @@ std::string Request::get_path() const {
 	return path;
 }
 
-const std::string &Request::get_path_full() const {
+const String &Request::get_path_full() const {
 	return _full_path;
 }
 
-const std::string &Request::get_path_segment(const uint32_t i) const {
+const String &Request::get_path_segment(const uint32_t i) const {
 	return _path_stack[i];
 }
 
-const std::string &Request::get_current_path_segment() const {
+const String &Request::get_current_path_segment() const {
 	if (_path_stack_pointer >= _path_stack.size()) {
 		//for convenience
-		static const std::string e_str = "";
+		static const String e_str = "";
 		return e_str;
 	}
 
@@ -200,8 +202,8 @@ void Request::push_path() {
 	_path_stack_pointer += 1;
 }
 
-std::string Request::get_url_root() const {
-	std::string path = "/";
+String Request::get_url_root() const {
+	String path = "/";
 
 	for (uint32_t i = 0; i < _path_stack_pointer; ++i) {
 		path += _path_stack[i];
@@ -211,8 +213,8 @@ std::string Request::get_url_root() const {
 	return path;
 }
 
-std::string Request::get_url_site() const {
-	std::string path = get_host();
+String Request::get_url_site() const {
+	String path = get_host();
 
 	for (uint32_t i = _path_stack_pointer; i < _path_stack.size(); ++i) {
 		path += _path_stack[i];
@@ -222,7 +224,7 @@ std::string Request::get_url_site() const {
 	return path;
 }
 
-std::string Request::get_host() const {
+String Request::get_host() const {
 	return "";
 }
 

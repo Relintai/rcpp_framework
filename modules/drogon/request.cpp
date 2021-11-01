@@ -4,13 +4,13 @@
 
 #include "core/http/cookie.h"
 
-const std::string &DRequest::get_cookie(const std::string &key) {
+const String DRequest::get_cookie(const String &key) {
 	return request->getCookie(key);
 }
 void DRequest::add_cookie(const ::Cookie &cookie) {
 	_added_cookies.push_back(cookie);
 }
-void DRequest::remove_cookie(const std::string &key) {
+void DRequest::remove_cookie(const String &key) {
 	_removed_cookies.push_back(key);
 }
 
@@ -20,11 +20,11 @@ HTTPMethod DRequest::get_method() const {
 	return static_cast<HTTPMethod>(static_cast<int>(request->getMethod()));
 }
 
-const std::string &DRequest::get_parameter(const std::string &key) const {
+const String DRequest::get_parameter(const String &key) const {
 	return request->getParameter(key);
 }
 
-void DRequest::send_redirect(const std::string &location, const HTTPStatusCode status_code) {
+void DRequest::send_redirect(const String &location, const HTTPStatusCode status_code) {
 	drogon::HttpResponsePtr response = drogon::HttpResponse::newRedirectionResponse(location, static_cast<const HttpStatusCode>(static_cast<const int>(status_code)));
 
 	_response_additional_setup(response);
@@ -55,7 +55,7 @@ void DRequest::send() {
 	pool();
 }
 
-void DRequest::send_file(const std::string &p_file_path) {
+void DRequest::send_file(const String &p_file_path) {
 	drogon::HttpResponsePtr response = drogon::HttpResponse::newFileResponse(p_file_path, "", drogon::getContentType(p_file_path));
 
 	_response_additional_setup(response);
@@ -76,11 +76,11 @@ void DRequest::reset() {
 	//response = new HttpResponse();
 }
 
-std::string DRequest::parser_get_path() {
+String DRequest::parser_get_path() {
 	return request->getPath();
 }
 
-std::string DRequest::get_host() const {
+String DRequest::get_host() const {
 	//todo
 	return "/";
 }

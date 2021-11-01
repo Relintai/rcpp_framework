@@ -1,9 +1,11 @@
 #ifndef REQUEST_H
 #define REQUEST_H
 
+#include "core/containers/vector.h"
+#include "core/string.h"
+
 #include <map>
 #include <mutex>
-#include <vector>
 
 #include "core/object.h"
 #include "core/reference.h"
@@ -24,12 +26,12 @@ public:
 	HandlerInstance handler_instance;
 	std::vector<HandlerInstance> *middleware_stack;
 
-	std::string head;
-	std::string body;
-	std::string footer;
-	std::string compiled_body;
+	String head;
+	String body;
+	String footer;
+	String compiled_body;
 
-	std::string file_path;
+	String file_path;
 	long file_size;
 	long current_file_progress;
 	long file_chunk_size;
@@ -38,43 +40,43 @@ public:
 	bool connection_closed;
 
 	HTTPSession *session;
-	std::map<std::string, Object *> data;
-	std::map<std::string, Ref<Reference> > reference_data;
+	std::map<String, Object *> data;
+	std::map<String, Ref<Reference> > reference_data;
 
 	HTTPSession *get_or_create_session();
 
-	virtual const std::string &get_cookie(const std::string &key);
+	virtual const String get_cookie(const String &key);
 	virtual void add_cookie(const ::Cookie &cookie);
-	virtual void remove_cookie(const std::string &key);
+	virtual void remove_cookie(const String &key);
 
 	virtual HTTPMethod get_method() const;
 
-	virtual const std::string &get_parameter(const std::string &key) const;
+	virtual const String get_parameter(const String &key) const;
 
-	virtual void send_redirect(const std::string &location, const HTTPStatusCode status_code = HTTP_STATUS_CODE_302_FOUND);
+	virtual void send_redirect(const String &location, const HTTPStatusCode status_code = HTTP_STATUS_CODE_302_FOUND);
 	virtual void compile_body();
 	virtual void compile_and_send_body();
 	virtual void next_stage();
 	virtual void send();
-	virtual void send_file(const std::string &p_file_path);
+	virtual void send_file(const String &p_file_path);
 	virtual void send_error(int error_code);
 	virtual void reset();
-	virtual std::string parser_get_path();
-	virtual std::string get_host() const;
+	virtual String parser_get_path();
+	virtual String get_host() const;
 
 	void setup_url_stack();
-	std::string get_path() const;
-	virtual const std::string &get_path_full() const;
-	const std::string &get_path_segment(const uint32_t i) const;
-	const std::string &get_current_path_segment() const;
+	String get_path() const;
+	virtual const String &get_path_full() const;
+	const String &get_path_segment(const uint32_t i) const;
+	const String &get_current_path_segment() const;
 	uint32_t get_path_segment_count() const;
 	uint32_t get_current_segment_index() const;
 	uint32_t get_remaining_segment_count() const;
 	void pop_path();
 	void push_path();
 
-	std::string get_url_root() const;
-	std::string get_url_site() const;
+	String get_url_root() const;
+	String get_url_site() const;
 	
 
 	virtual void update();
@@ -84,8 +86,8 @@ public:
 	virtual ~Request();
 
 protected:
-	std::string _full_path;
-	std::vector<std::string> _path_stack;
+	String _full_path;
+	Vector<String> _path_stack;
 	uint32_t _path_stack_pointer;
 };
 

@@ -1,6 +1,8 @@
 #ifndef BRY_REQUEST_H
 #define BRY_REQUEST_H
 
+#include "core/string.h"
+
 #include "core/http/request.h"
 
 #include <mutex>
@@ -20,9 +22,9 @@ public:
 	HttpResponse *response;
 
 	void send();
-	void send_file(const std::string &p_file_path);
+	void send_file(const String &p_file_path);
 	void reset();
-	std::string parser_get_path();
+	String parser_get_path();
 
 	void update();
 
@@ -37,7 +39,7 @@ protected:
 	void _progress_send_file();
 	void _file_chunk_sent();
 
-	std::vector<std::string> _path_stack;
+	std::vector<String> _path_stack;
 	uint32_t _path_stack_pointer;
 
 private:
