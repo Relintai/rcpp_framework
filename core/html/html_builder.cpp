@@ -1731,6 +1731,42 @@ HTMLBuilder *HTMLBuilder::w(const String &val) {
 	return this;
 }
 
+HTMLBuilder *HTMLBuilder::wn(const double val, int p_decimals) {
+	write_tag();
+
+	result += String::num(val, p_decimals);
+
+	return this;
+}
+HTMLBuilder *HTMLBuilder::wns(const double val) {
+	write_tag();
+
+	result += String::num_scientific(val);
+
+	return this;
+}
+HTMLBuilder *HTMLBuilder::wr(const double val, const bool p_trailing) {
+	write_tag();
+
+	result += String::num_real(val, p_trailing);
+
+	return this;
+}
+HTMLBuilder *HTMLBuilder::wi(const int64_t val, const int base, const bool capitalize_hex) {
+	write_tag();
+
+	result += String::num_int64(val, base, capitalize_hex);
+
+	return this;
+}
+HTMLBuilder *HTMLBuilder::wui(const uint64_t val, const int base, const bool capitalize_hex) {
+	write_tag();
+
+	result += String::num_uint64(val, base, capitalize_hex);
+
+	return this;
+}
+
 //TODO!
 HTMLBuilder *HTMLBuilder::we(const String &val) {
 	printf("HTMLBuilder::write_excaped NYI!");

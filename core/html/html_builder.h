@@ -177,9 +177,9 @@ public:
 	HTMLTag *wbr();
 
 	//closing tags c prefix means close
-    //Note simple tags should not have these like <br>
-    //Note that I might have a few that shouldn't be here, those will be removed as I find them
-    HTMLBuilder *ca();
+	//Note simple tags should not have these like <br>
+	//Note that I might have a few that shouldn't be here, those will be removed as I find them
+	HTMLBuilder *ca();
 	HTMLBuilder *cabbr();
 	HTMLBuilder *cacronym();
 	HTMLBuilder *caddress();
@@ -215,7 +215,7 @@ public:
 	HTMLBuilder *cdiv();
 	HTMLBuilder *cdl();
 	HTMLBuilder *cdt();
-    
+
 	HTMLBuilder *cem();
 	HTMLBuilder *cembed();
 	HTMLBuilder *cfieldset();
@@ -308,9 +308,16 @@ public:
 
 	void f();
 
-    //write
+	//write
 	HTMLBuilder *w(const String &val);
-    //write_escaped
+
+	HTMLBuilder *wn(const double val, int p_decimals = -1);
+	HTMLBuilder *wns(const double val);
+	HTMLBuilder *wr(const double val, const bool p_trailing = true);
+	HTMLBuilder *wi(const int64_t val, const int base = 10, const bool capitalize_hex = false);
+	HTMLBuilder *wui(const uint64_t val, const int base = 10, const bool capitalize_hex = false);
+
+	//write_escaped
 	HTMLBuilder *we(const String &val);
 
 	HTMLBuilder *write_tag();
