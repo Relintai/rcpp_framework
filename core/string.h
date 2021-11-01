@@ -62,10 +62,10 @@ public:
 	void append_str(const String &other);
 	void append_str(const std::string &str);
 
-	float to_float();
-	double to_double();
-	int to_int();
-	uint32_t to_uint();
+	float to_float() const;
+	double to_double() const;
+	int to_int() const;
+	uint32_t to_uint() const;
 	std::string to_string() const;
 	void print() const;
 

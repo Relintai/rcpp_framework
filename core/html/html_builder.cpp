@@ -54,6 +54,12 @@ HTMLTag *HTMLTag::method(const String &val) {
 	return this;
 }
 
+HTMLTag *HTMLTag::action(const String &val) {
+	attrib("action", val);
+
+	return this;
+}
+
 HTMLTag *HTMLTag::type(const String &val) {
 	attrib("type", val);
 

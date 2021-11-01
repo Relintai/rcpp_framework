@@ -20,6 +20,7 @@ public:
 	HTMLTag *content(const String &val);
 	HTMLTag *value(const String &val);
 	HTMLTag *method(const String &val);
+	HTMLTag *action(const String &val);
 	HTMLTag *type(const String &val);
 	HTMLTag *placeholder(const String &val);
 	HTMLTag *rel(const String &val);

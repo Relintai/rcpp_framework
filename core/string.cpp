@@ -544,19 +544,19 @@ void String::append_str(const std::string &str) {
 	_data[_size] = '\0';
 }
 
-float String::to_float() {
+float String::to_float() const {
 	return atof(c_str());
 }
 
-double String::to_double() {
+double String::to_double() const {
 	return atof(c_str());
 }
 
-int String::to_int() {
+int String::to_int() const {
 	return atoi(c_str());
 }
 
-uint32_t String::to_uint() {
+uint32_t String::to_uint() const {
 	return static_cast<uint32_t>(atoll(c_str()));
 }
 

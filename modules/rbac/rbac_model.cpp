@@ -62,7 +62,7 @@ void RBACModel::save_rank(const Ref<RBACRank> &rank) {
 		qb->cvalues();
 		qb->select_last_insert_id();
 		Ref<QueryResult> res = qb->run();
-		qb->print();
+		//qb->print();
 
 		Ref<RBACRank> r = rank;
 
@@ -77,7 +77,7 @@ void RBACModel::save_rank(const Ref<RBACRank> &rank) {
 		qb->where()->wp("id", rank->id);
 		qb->end_command();
 		qb->run_query();
-		qb->print();
+		//qb->print();
 	}
 }
 
