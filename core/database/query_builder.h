@@ -56,20 +56,19 @@ public:
 	virtual QueryBuilder *wp(const std::string &col, const int param);
 	virtual QueryBuilder *wp(const std::string &col, const bool param);
 
-	virtual QueryBuilder *eselect(const std::string &params);
-	virtual QueryBuilder *eupdate(const std::string &params);
-	virtual QueryBuilder *edel(const std::string &params);
+	virtual QueryBuilder *nselect(const std::string &params);
+	virtual QueryBuilder *nupdate(const std::string &params);
+	virtual QueryBuilder *ndel(const std::string &params);
 
-	virtual QueryBuilder *ewhere(const std::string &params);
-	virtual QueryBuilder *efrom(const std::string &params);
-	virtual QueryBuilder *einsert(const std::string &table_name);
-	virtual QueryBuilder *elike(const std::string &str);
-	virtual QueryBuilder *evalues(const std::string &params_str);
-	virtual QueryBuilder *eval(const std::string &param);
+	virtual QueryBuilder *nwhere(const std::string &params);
+	virtual QueryBuilder *nfrom(const std::string &params);
+	virtual QueryBuilder *nlike(const std::string &str);
+	virtual QueryBuilder *nvalues(const std::string &params_str);
+	virtual QueryBuilder *nval(const std::string &param);
 	//note col is NOT escaped
-	virtual QueryBuilder *esetp(const std::string &col, const std::string &escape_param);
+	virtual QueryBuilder *nsetp(const std::string &col, const std::string &escape_param);
 	//note col is NOT escaped
-	virtual QueryBuilder *ewp(const std::string &col, const std::string &escape_param);
+	virtual QueryBuilder *nwp(const std::string &col, const std::string &escape_param);
 
 	virtual QueryBuilder *limit(const int num);
 	virtual QueryBuilder *offset(const int num);

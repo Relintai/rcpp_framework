@@ -34,31 +34,31 @@ QueryBuilder *MysqlQueryBuilder::cvalues() {
 	return this;
 }
 
-QueryBuilder *MysqlQueryBuilder::select(const std::string &params) {
+QueryBuilder *MysqlQueryBuilder::nselect(const std::string &params) {
 	query_result += "SELECT " + params + " ";
 
 	return this;
 }
 
-QueryBuilder *MysqlQueryBuilder::where(const std::string &params) {
+QueryBuilder *MysqlQueryBuilder::nwhere(const std::string &params) {
 	query_result += "WHERE " + params + " ";
 
 	return this;
 }
 
-QueryBuilder *MysqlQueryBuilder::from(const std::string &params) {
+QueryBuilder *MysqlQueryBuilder::nfrom(const std::string &params) {
 	query_result += "FROM " + params + " ";
 
 	return this;
 }
 
-QueryBuilder *MysqlQueryBuilder::insert(const std::string &table_name) {
+QueryBuilder *MysqlQueryBuilder::ninsert(const std::string &table_name) {
 	query_result += "INSERT INTO " + table_name + " ";
 
 	return this;
 }
 
-QueryBuilder *MysqlQueryBuilder::values(const std::string &params_str) {
+QueryBuilder *MysqlQueryBuilder::nvalues(const std::string &params_str) {
 	query_result += "VALUES(" + params_str + ") ";
 
 	return this;

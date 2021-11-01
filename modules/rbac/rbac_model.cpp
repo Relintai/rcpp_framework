@@ -58,7 +58,7 @@ void RBACModel::save_rank(const Ref<RBACRank> &rank) {
 
 	if (rank->id == 0) {
 		qb->insert(RBAC_RANK_TABLE, "name,name_internal,settings,rank_permissions")->values();
-		qb->eval(rank->name)->eval(rank->name_internal)->eval(rank->settings)->val(rank->rank_permissions);
+		qb->val(rank->name)->val(rank->name_internal)->val(rank->settings)->val(rank->rank_permissions);
 		qb->cvalues();
 		qb->select_last_insert_id();
 		Ref<QueryResult> res = qb->run();
@@ -69,9 +69,9 @@ void RBACModel::save_rank(const Ref<RBACRank> &rank) {
 		r->id = res->get_last_insert_rowid();
 	} else {
 		qb->update(RBAC_RANK_TABLE)->set();
-		qb->esetp("name", rank->name);
-		qb->esetp("name_internal", rank->name_internal);
-		qb->esetp("settings", rank->settings);
+		qb->setp("name", rank->name);
+		qb->setp("name_internal", rank->name_internal);
+		qb->setp("settings", rank->settings);
 		qb->setp("rank_permissions", rank->rank_permissions);
 		qb->cset();
 		qb->where()->wp("id", rank->id);

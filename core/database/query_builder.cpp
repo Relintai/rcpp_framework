@@ -41,20 +41,20 @@ QueryBuilder *QueryBuilder::like() {
 }
 
 QueryBuilder *QueryBuilder::select(const std::string &params) {
-	return this;
+	return nselect(escape(params));
 }
 QueryBuilder *QueryBuilder::update(const std::string &params) {
-	return this;
+	return nupdate(escape(params));
 }
 QueryBuilder *QueryBuilder::del(const std::string &params) {
-	return this;
+	return ndel(escape(params));
 }
 QueryBuilder *QueryBuilder::where(const std::string &params) {
-	return this;
+	return nwhere(escape(params));
 }
 
 QueryBuilder *QueryBuilder::from(const std::string &params) {
-	return this;
+	return nfrom(escape(params));
 }
 
 QueryBuilder *QueryBuilder::insert(const std::string &table_name) {
@@ -64,7 +64,7 @@ QueryBuilder *QueryBuilder::insert(const std::string &table_name, const std::str
 	return this;
 }
 QueryBuilder *QueryBuilder::values(const std::string &params_str) {
-	return this;
+	return nvalues(escape(params_str));
 }
 
 QueryBuilder *QueryBuilder::val() {
@@ -72,7 +72,7 @@ QueryBuilder *QueryBuilder::val() {
 }
 
 QueryBuilder *QueryBuilder::val(const std::string &param) {
-	return this;
+	return nval(escape(param));
 }
 
 QueryBuilder *QueryBuilder::val(const char *param) {
@@ -87,7 +87,7 @@ QueryBuilder *QueryBuilder::val(const bool param) {
 }
 
 QueryBuilder *QueryBuilder::like(const std::string &str) {
-	return this;
+	return nlike(escape(str));
 }
 
 QueryBuilder *QueryBuilder::set() {
@@ -97,7 +97,7 @@ QueryBuilder *QueryBuilder::cset() {
 	return this;
 }
 QueryBuilder *QueryBuilder::setp(const std::string &col, const std::string &param) {
-	return this;
+	return nsetp(col, escape(param));
 }
 QueryBuilder *QueryBuilder::setp(const std::string &col, const char *param) {
 	return this;
@@ -110,7 +110,7 @@ QueryBuilder *QueryBuilder::setp(const std::string &col, const bool param) {
 }
 
 QueryBuilder *QueryBuilder::wp(const std::string &col, const std::string &param) {
-	return this;
+	return nwp(col, escape(param));
 }
 QueryBuilder *QueryBuilder::wp(const std::string &col, const char *param) {
 	return this;
@@ -122,43 +122,38 @@ QueryBuilder *QueryBuilder::wp(const std::string &col, const bool param) {
 	return this;
 }
 
-QueryBuilder *QueryBuilder::eselect(const std::string &params) {
-	return select(escape(params));
-}
-QueryBuilder *QueryBuilder::eupdate(const std::string &params) {
-	return update(escape(params));
-}
-QueryBuilder *QueryBuilder::edel(const std::string &params) {
-	return del(escape(params));
-}
-
-QueryBuilder *QueryBuilder::ewhere(const std::string &params) {
-	return where(escape(params));
-}
-QueryBuilder *QueryBuilder::efrom(const std::string &params) {
-	return from(escape(params));
-}
-QueryBuilder *QueryBuilder::einsert(const std::string &table_name) {
-	return insert(escape(table_name));
-
+QueryBuilder *QueryBuilder::nselect(const std::string &params) {
 	return this;
 }
-QueryBuilder *QueryBuilder::elike(const std::string &str) {
-	return like(escape(str));
+QueryBuilder *QueryBuilder::nupdate(const std::string &params) {
+	return this;
 }
-QueryBuilder *QueryBuilder::evalues(const std::string &params_str) {
-	return values(escape(params_str));
+QueryBuilder *QueryBuilder::ndel(const std::string &params) {
+	return this;
 }
 
-QueryBuilder *QueryBuilder::eval(const std::string &param) {
+QueryBuilder *QueryBuilder::nwhere(const std::string &params) {
+	return this;
+}
+QueryBuilder *QueryBuilder::nfrom(const std::string &params) {
+	return this;
+}
+QueryBuilder *QueryBuilder::nlike(const std::string &str) {
+	return this;
+}
+QueryBuilder *QueryBuilder::nvalues(const std::string &params_str) {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::nval(const std::string &param) {
 	return val(escape(param));
 }
-QueryBuilder *QueryBuilder::esetp(const std::string &col, const std::string &escape_param) {
+QueryBuilder *QueryBuilder::nsetp(const std::string &col, const std::string &escape_param) {
 	return setp(col, escape(escape_param));
 }
 
-QueryBuilder *QueryBuilder::ewp(const std::string &col, const std::string &escape_param) {
-	return wp(col, escape(escape_param));
+QueryBuilder *QueryBuilder::nwp(const std::string &col, const std::string &escape_param) {
+	return this;
 }
 
 QueryBuilder *QueryBuilder::limit(const int num) {

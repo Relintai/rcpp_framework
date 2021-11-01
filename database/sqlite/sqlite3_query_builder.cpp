@@ -65,29 +65,29 @@ QueryBuilder *SQLite3QueryBuilder::like() {
 	return this;
 }
 
-QueryBuilder *SQLite3QueryBuilder::select(const std::string &params) {
+QueryBuilder *SQLite3QueryBuilder::nselect(const std::string &params) {
 	query_result += "SELECT " + params + " ";
 
 	return this;
 }
-QueryBuilder *SQLite3QueryBuilder::update(const std::string &params) {
+QueryBuilder *SQLite3QueryBuilder::nupdate(const std::string &params) {
 	query_result += "UPDATE " + params + " ";
 
 	return this;
 }
-QueryBuilder *SQLite3QueryBuilder::del(const std::string &params) {
+QueryBuilder *SQLite3QueryBuilder::ndel(const std::string &params) {
 	query_result += "DELETE FROM " + params + " ";
 
 	return this;
 }
 
-QueryBuilder *SQLite3QueryBuilder::where(const std::string &params) {
+QueryBuilder *SQLite3QueryBuilder::nwhere(const std::string &params) {
 	query_result += "WHERE " + params + " ";
 
 	return this;
 }
 
-QueryBuilder *SQLite3QueryBuilder::from(const std::string &params) {
+QueryBuilder *SQLite3QueryBuilder::nfrom(const std::string &params) {
 	query_result += "FROM " + params + " ";
 
 	return this;
@@ -103,7 +103,7 @@ QueryBuilder *SQLite3QueryBuilder::insert(const std::string &table_name, const s
 
 	return this;
 }
-QueryBuilder *SQLite3QueryBuilder::values(const std::string &params_str) {
+QueryBuilder *SQLite3QueryBuilder::nvalues(const std::string &params_str) {
 	query_result += "VALUES(" + params_str + ") ";
 
 	return this;
@@ -115,7 +115,7 @@ QueryBuilder *SQLite3QueryBuilder::val() {
 	return this;
 }
 
-QueryBuilder *SQLite3QueryBuilder::val(const std::string &param) {
+QueryBuilder *SQLite3QueryBuilder::nval(const std::string &param) {
 	query_result += "'" + param + "', ";
 
 	return this;
@@ -145,7 +145,7 @@ QueryBuilder *SQLite3QueryBuilder::val(const bool param) {
 	return this;
 }
 
-QueryBuilder *SQLite3QueryBuilder::like(const std::string &str) {
+QueryBuilder *SQLite3QueryBuilder::nlike(const std::string &str) {
 	query_result += "LIKE '" + str + "' ";
 
 	return this;
@@ -161,7 +161,7 @@ QueryBuilder *SQLite3QueryBuilder::cset() {
 
 	return this;
 }
-QueryBuilder *SQLite3QueryBuilder::setp(const std::string &col, const std::string &param) {
+QueryBuilder *SQLite3QueryBuilder::nsetp(const std::string &col, const std::string &param) {
 	query_result += col + "='" + param + "', ";
 
 	return this;
@@ -189,7 +189,7 @@ QueryBuilder *SQLite3QueryBuilder::setp(const std::string &col, const bool param
 	return this;
 }
 
-QueryBuilder *SQLite3QueryBuilder::wp(const std::string &col, const std::string &param) {
+QueryBuilder *SQLite3QueryBuilder::nwp(const std::string &col, const std::string &param) {
 	query_result += col + "='" + param + "' ";
 
 	return this;

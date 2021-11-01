@@ -25,31 +25,31 @@ public:
 
 	QueryBuilder *like();
 
-	QueryBuilder *select(const std::string &params);
-	QueryBuilder *update(const std::string &params);
-	QueryBuilder *del(const std::string &params);
+	QueryBuilder *nselect(const std::string &params);
+	QueryBuilder *nupdate(const std::string &params);
+	QueryBuilder *ndel(const std::string &params);
 
-	QueryBuilder *where(const std::string &params);
-	QueryBuilder *from(const std::string &params);
+	QueryBuilder *nwhere(const std::string &params);
+	QueryBuilder *nfrom(const std::string &params);
 	QueryBuilder *insert(const std::string &table_name);
 	QueryBuilder *insert(const std::string &table_name, const std::string &columns);
-	QueryBuilder *values(const std::string &params_str);
+	QueryBuilder *nvalues(const std::string &params_str);
 	QueryBuilder *val();
-	QueryBuilder *val(const std::string &param);
+	QueryBuilder *nval(const std::string &param);
 	QueryBuilder *val(const char *param);
 	QueryBuilder *val(const int param);
 	QueryBuilder *val(const bool param);
 
-	QueryBuilder *like(const std::string &str);
+	QueryBuilder *nlike(const std::string &str);
 
 	QueryBuilder *set();
 	QueryBuilder *cset();
-	QueryBuilder *setp(const std::string &col, const std::string &param);
+	QueryBuilder *nsetp(const std::string &col, const std::string &param);
 	QueryBuilder *setp(const std::string &col, const char *param);
 	QueryBuilder *setp(const std::string &col, const int param);
 	QueryBuilder *setp(const std::string &col, const bool param);
 
-	QueryBuilder *wp(const std::string &col, const std::string &param);
+	QueryBuilder *nwp(const std::string &col, const std::string &param);
 	QueryBuilder *wp(const std::string &col, const char *param);
 	QueryBuilder *wp(const std::string &col, const int param);
 	QueryBuilder *wp(const std::string &col, const bool param);

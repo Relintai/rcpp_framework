@@ -54,7 +54,7 @@ Ref<User> UserModel::get_user(const std::string &user_name_input) {
 
 	b->select("id, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
 	b->from(_table_name);
-	b->where()->ewp("username", user_name_input);
+	b->where()->wp("username", user_name_input);
 	b->end_command();
 
 	Ref<QueryResult> r = b->run();
@@ -87,8 +87,8 @@ void UserModel::save_user(Ref<User> &user) {
 		b->insert(_table_name, "username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
 
 		b->values();
-		b->eval(user->name_user_input);
-		b->eval(user->email_user_input);
+		b->val(user->name_user_input);
+		b->val(user->email_user_input);
 		b->val(user->rank);
 		b->val(user->pre_salt);
 		b->val(user->post_salt);
@@ -107,8 +107,8 @@ void UserModel::save_user(Ref<User> &user) {
 	} else {
 		b->update(_table_name);
 		b->set();
-		b->esetp("username", user->name_user_input);
-		b->esetp("email", user->email_user_input);
+		b->setp("username", user->name_user_input);
+		b->setp("email", user->email_user_input);
 		b->setp("rank", user->rank);
 		b->setp("pre_salt", user->pre_salt);
 		b->setp("post_salt", user->post_salt);
@@ -161,7 +161,7 @@ std::vector<Ref<User> > UserModel::get_all() {
 bool UserModel::is_username_taken(const std::string &user_name_input) {
 	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
-	b->select("id")->from(_table_name)->where("username")->elike(user_name_input)->end_command();
+	b->select("id")->from(_table_name)->where("username")->like(user_name_input)->end_command();
 
 	Ref<QueryResult> r = b->run();
 
@@ -170,7 +170,7 @@ bool UserModel::is_username_taken(const std::string &user_name_input) {
 bool UserModel::is_email_taken(const std::string &email_input) {
 	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
-	b->select("id")->from(_table_name)->where("username")->elike(email_input)->end_command();
+	b->select("id")->from(_table_name)->where("username")->like(email_input)->end_command();
 
 	Ref<QueryResult> r = b->run();
 
