@@ -235,6 +235,16 @@ String Request::get_url_site() const {
 	return path;
 }
 
+String Request::get_url_root_parent(const String &add) const {
+	return get_url_root_parent() + add;
+}
+String Request::get_url_root(const String &add) const {
+	return get_url_root() + add;
+}
+String Request::get_url_site(const String &add) const {
+	return get_url_site() + add;
+}
+
 String Request::get_host() const {
 	return "";
 }

@@ -78,8 +78,11 @@ public:
 	String get_url_root_parent() const;
 	String get_url_root() const;
 	String get_url_site() const;
-	
 
+	String get_url_root_parent(const String &add) const;
+	String get_url_root(const String &add) const;
+	String get_url_site(const String &add) const;
+	
 	virtual void update();
 	virtual void pool();
 
