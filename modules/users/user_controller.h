@@ -18,20 +18,20 @@ public:
 	virtual void handle_request_default(Request *request);
 
 	struct LoginRequestData {
-		std::string error_str;
-		std::string uname_val;
-		std::string pass_val;
+		String error_str;
+		String uname_val;
+		String pass_val;
 	};
 
 	virtual void handle_login_request_default(Request *request);
 	virtual void render_login_request_default(Request *request, LoginRequestData *data);
 
 	struct RegisterRequestData {
-		std::string error_str;
-		std::string uname_val;
-		std::string email_val;
-		std::string pass_val;
-		std::string pass_check_val;
+		String error_str;
+		String uname_val;
+		String email_val;
+		String pass_val;
+		String pass_check_val;
 	};
 
 	virtual void handle_register_request_default(Request *request);
@@ -45,12 +45,12 @@ public:
 	virtual void handle_main_page_request(Ref<User> &user, Request *request);
 
 	struct SettingsRequestData {
-		std::string error_str;
+		String error_str;
 
-		std::string uname_val;
-		std::string email_val;
-		std::string pass_val;
-		std::string pass_check_val;
+		String uname_val;
+		String email_val;
+		String pass_val;
+		String pass_check_val;
 	};
 
 	virtual void handle_settings_request(Ref<User> &user, Request *request);

@@ -19,7 +19,7 @@ void UserController::handle_request_default(Request *request) {
 		}
 	}
 
-	const std::string &segment = request->get_current_path_segment();
+	const String &segment = request->get_current_path_segment();
 
 	if (segment == "") {
 		handle_login_request_default(request);
@@ -270,7 +270,7 @@ void UserController::render_login_success(Request *request) {
 }
 
 void UserController::handle_request(Ref<User> &user, Request *request) {
-	const std::string &segment = request->get_current_path_segment();
+	const String &segment = request->get_current_path_segment();
 
 	if (segment == "") {
 		handle_main_page_request(user, request);

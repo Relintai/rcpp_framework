@@ -45,7 +45,7 @@ Ref<User> UserModel::get_user(const int id) {
 	return user;
 }
 
-Ref<User> UserModel::get_user(const std::string &user_name_input) {
+Ref<User> UserModel::get_user(const String &user_name_input) {
 	if (user_name_input == "") {
 		return Ref<User>();
 	}
@@ -125,7 +125,7 @@ void UserModel::save_user(Ref<User> &user) {
 	}
 }
 
-std::vector<Ref<User> > UserModel::get_all() {
+Vector<Ref<User> > UserModel::get_all() {
 	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
 	b->select("id, username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
@@ -133,7 +133,7 @@ std::vector<Ref<User> > UserModel::get_all() {
 	b->end_command();
 	//b->print();
 
-	std::vector<Ref<User> > users;
+	Vector<Ref<User> > users;
 
 	Ref<QueryResult> r = b->run();
 
@@ -158,7 +158,7 @@ std::vector<Ref<User> > UserModel::get_all() {
 	return users;
 }
 
-bool UserModel::is_username_taken(const std::string &user_name_input) {
+bool UserModel::is_username_taken(const String &user_name_input) {
 	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
 	b->select("id")->from(_table_name)->where("username")->like(user_name_input)->end_command();
@@ -167,7 +167,7 @@ bool UserModel::is_username_taken(const std::string &user_name_input) {
 
 	return r->next_row();
 }
-bool UserModel::is_email_taken(const std::string &email_input) {
+bool UserModel::is_email_taken(const String &email_input) {
 	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
 	b->select("id")->from(_table_name)->where("username")->like(email_input)->end_command();
@@ -177,11 +177,11 @@ bool UserModel::is_email_taken(const std::string &email_input) {
 	return r->next_row();
 }
 
-bool UserModel::check_password(const Ref<User> &user, const std::string &p_password) {
+bool UserModel::check_password(const Ref<User> &user, const String &p_password) {
 	return hash_password(user, p_password) == user->password_hash;
 }
 
-void UserModel::create_password(Ref<User> &user, const std::string &p_password) {
+void UserModel::create_password(Ref<User> &user, const String &p_password) {
 	if (!user.is_valid()) {
 		printf("Error UserModel::create_password !user.is_valid()!\n");
 		return;
@@ -194,7 +194,7 @@ void UserModel::create_password(Ref<User> &user, const std::string &p_password) 
 	user->password_hash = hash_password(user, p_password);
 }
 
-std::string UserModel::hash_password(const Ref<User> &user, const std::string &p_password) {
+String UserModel::hash_password(const Ref<User> &user, const String &p_password) {
 	if (!user.is_valid()) {
 		printf("Error UserModel::hash_password !user.is_valid()!\n");
 		return "";
@@ -202,9 +202,9 @@ std::string UserModel::hash_password(const Ref<User> &user, const std::string &p
 
 	Ref<SHA256> s = SHA256::get();
 
-	std::string p = user->pre_salt + p_password + user->post_salt;
+	String p = user->pre_salt + p_password + user->post_salt;
 
-	std::string c = s->compute(p);
+	String c = s->compute(p);
 
 	return c;
 }
@@ -260,5 +260,5 @@ UserModel::~UserModel() {
 
 UserModel *UserModel::_self = nullptr;
 
-std::string UserModel::_path = "./";
-std::string UserModel::_table_name = "users";
+String UserModel::_path = "./";
+String UserModel::_table_name = "users";
