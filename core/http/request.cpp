@@ -202,6 +202,17 @@ void Request::push_path() {
 	_path_stack_pointer += 1;
 }
 
+String Request::get_url_root_parent() const {
+	String path = "/";
+
+	for (uint32_t i = 0; i < _path_stack_pointer - 1; ++i) {
+		path += _path_stack[i];
+		path += "/";
+	}
+
+	return path;
+}
+
 String Request::get_url_root() const {
 	String path = "/";
 

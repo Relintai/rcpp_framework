@@ -75,6 +75,7 @@ public:
 	void pop_path();
 	void push_path();
 
+	String get_url_root_parent() const;
 	String get_url_root() const;
 	String get_url_site() const;
 	
