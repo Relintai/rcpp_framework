@@ -604,6 +604,14 @@ bool operator!=(std::string &b, const String &a) {
     return !(a == b);
 }
 
+String& String::operator=(const String &other) {
+	clear();
+
+	append_str(other);
+
+	return *this;
+}
+
 String::String() {
 	_data = nullptr;
 	_actual_size = 0;
@@ -695,5 +703,6 @@ String::String(const std::string &str) {
 String::~String() {
 	if (_data) {
         delete[] _data;
+		_data = nullptr;
     }
 }

@@ -97,6 +97,8 @@ public:
 	operator std::string() { return to_string(); }
 	operator std::string() const { return to_string(); }
 
+	String& operator=(const String &other);
+
 	String();
 	String(const String &other);
 	String(const String &other, const int grow_by);
