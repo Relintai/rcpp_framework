@@ -1719,6 +1719,10 @@ HTMLBuilder *HTMLBuilder::cwbr() {
 	return this;
 }
 
+void HTMLBuilder::f() {
+	write_tag();
+}
+
 HTMLBuilder *HTMLBuilder::w(const String &val) {
 	write_tag();
 

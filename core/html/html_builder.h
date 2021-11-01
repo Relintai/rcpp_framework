@@ -306,6 +306,8 @@ public:
 	HTMLBuilder *cvideo();
 	HTMLBuilder *cwbr();
 
+	void f();
+
     //write
 	HTMLBuilder *w(const String &val);
     //write_escaped
