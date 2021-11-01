@@ -437,6 +437,10 @@ std::string String::to_string() const {
     return std::string(c_str());
 }
 
+void String::print() const {
+	::printf("%s\n", c_str());
+}
+
 char *String::c_str() {
 	return _data;
 }
@@ -468,6 +472,8 @@ String &String::operator+=(const String &b) {
 		_data[_size++] = b._data[i];
 	}
 
+	_data[_size] = '\0';
+
 	return *this;
 }
 
@@ -493,30 +499,28 @@ String &String::operator+=(const std::string &b) {
     return *this;
 }
 String operator+(String lhs, const String &rhs) {
-	lhs += rhs;
+	lhs.append_str(rhs);
 
 	return lhs;
 }
 
 String operator+(String lhs, const char *rhs) {
-	lhs += rhs;
+	lhs.append_str(rhs);
 
 	return lhs;
 }
 
 String operator+(String lhs, const char rhs) {
-	lhs += rhs;
+	lhs.push_back(rhs);
 
 	return lhs;
 }
-
 
 String operator+(String lhs, const std::string &rhs) {
-    lhs += rhs;
+    lhs.append_str(rhs);
 
 	return lhs;
 }
-
 
 bool operator==(const String &a, const String &b) {
 	if (a._size != b._size) {
@@ -612,6 +616,14 @@ String& String::operator=(const String &other) {
 	return *this;
 }
 
+String& String::operator=(const std::string &other) {
+	clear();
+
+	append_str(other);
+
+	return *this;
+}
+
 String::String() {
 	_data = nullptr;
 	_actual_size = 0;
@@ -635,7 +647,7 @@ String::String(const String &other) {
 	for (int i = 0; i < other._size; ++i) {
 		_data[i] = other._data[i];
 	}
-
+	_size = other._size;
 	_data[other._size] = '\0';
 }
 
@@ -652,6 +664,8 @@ String::String(const String &other, int grow_by) {
 		_data[i] = other._data[i];
 	}
 
+	_size = other._size;
+
 	_data[_size] = '\0';
 }
 
@@ -661,7 +675,7 @@ String::String(const char* p_c_str) {
 	_size = 0;
 	_grow_by = 100;
 
-	operator+=(p_c_str);
+	append_str(p_c_str);
 }
 
 String::String(const char* p_c_str, const int grow_by) {
@@ -670,7 +684,7 @@ String::String(const char* p_c_str, const int grow_by) {
 	_size = 0;
 	_grow_by = grow_by;
 
-	operator+=(p_c_str);
+	append_str(p_c_str);
 }
 
 String::String(int prealloc) {
@@ -680,6 +694,8 @@ String::String(int prealloc) {
 	_grow_by = 100;
 
 	ensure_capacity(prealloc);
+
+	_data[0] = '\0';
 }
 
 String::String(int prealloc, int grow_by) {
@@ -689,6 +705,8 @@ String::String(int prealloc, int grow_by) {
 	_grow_by = grow_by;
 
 	ensure_capacity(prealloc);
+
+	_data[0] = '\0';
 }
 
 String::String(const std::string &str) {

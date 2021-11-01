@@ -59,6 +59,7 @@ public:
 	int to_int();
 	uint32_t to_uint();
 	std::string to_string() const;
+	void print() const;
 
 	char *c_str();
 	const char *c_str() const;
@@ -98,6 +99,7 @@ public:
 	operator std::string() const { return to_string(); }
 
 	String& operator=(const String &other);
+	String& operator=(const std::string &other);
 
 	String();
 	String(const String &other);
