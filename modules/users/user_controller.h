@@ -1,9 +1,11 @@
 #ifndef USER_CONTROLLER_H
 #define USER_CONTROLLER_H
 
+#include "core/string.h"
+#include "core/containers/vector.h"
+
 #include "core/object.h"
 
-#include <string>
 #include "user.h"
 
 class Request;

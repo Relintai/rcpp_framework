@@ -45,7 +45,7 @@ void UserController::handle_login_request_default(Request *request) {
 
 		//this is probbaly not needed
 		//it's ok for now as I need to test the validators more
-		std::vector<std::string> errors;
+		Vector<String> errors;
 		_login_validator->validate(request, &errors);
 		for (int i = 0; i < errors.size(); ++i) {
 			data.error_str += errors[i] + "<br>";
@@ -134,7 +134,7 @@ void UserController::handle_register_request_default(Request *request) {
 
 	if (request->get_method() == HTTP_METHOD_POST) {
 
-		std::vector<std::string> errors;
+		Vector<String> errors;
 
 		_registration_validator->validate(request, &errors);
 
@@ -310,7 +310,7 @@ void UserController::handle_settings_request(Ref<User> &user, Request *request) 
 
 		bool changed = false;
 
-		std::vector<std::string> errors;
+		Vector<String> errors;
 
 		bool valid = _profile_validator->validate(request, &errors);
 

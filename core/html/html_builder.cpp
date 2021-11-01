@@ -1,72 +1,72 @@
 #include "html_builder.h"
 
-HTMLTag *HTMLTag::str(const std::string &str) {
+HTMLTag *HTMLTag::str(const String &str) {
 	result += " " + str;
 
 	return this;
 }
 
-HTMLTag *HTMLTag::style(const std::string &val) {
+HTMLTag *HTMLTag::style(const String &val) {
 	attrib("style", val);
 
 	return this;
 }
 
-HTMLTag *HTMLTag::href(const std::string &val) {
+HTMLTag *HTMLTag::href(const String &val) {
 	attrib("href", val);
 
 	return this;
 }
 
-HTMLTag *HTMLTag::cls(const std::string &val) {
+HTMLTag *HTMLTag::cls(const String &val) {
 	attrib("class", val);
 
 	return this;
 }
 
-HTMLTag *HTMLTag::id(const std::string &val) {
+HTMLTag *HTMLTag::id(const String &val) {
 	attrib("id", val);
 
 	return this;
 }
 
-HTMLTag *HTMLTag::name(const std::string &val) {
+HTMLTag *HTMLTag::name(const String &val) {
 	attrib("name", val);
 
 	return this;
 }
 
-HTMLTag *HTMLTag::content(const std::string &val) {
+HTMLTag *HTMLTag::content(const String &val) {
 	attrib("content", val);
 
 	return this;
 }
 
-HTMLTag *HTMLTag::value(const std::string &val) {
+HTMLTag *HTMLTag::value(const String &val) {
 	attrib("value", val);
 
 	return this;
 }
 
-HTMLTag *HTMLTag::method(const std::string &val) {
+HTMLTag *HTMLTag::method(const String &val) {
 	attrib("method", val);
 
 	return this;
 }
 
-HTMLTag *HTMLTag::type(const std::string &val) {
+HTMLTag *HTMLTag::type(const String &val) {
 	attrib("type", val);
 
 	return this;
 }
 
-HTMLTag *HTMLTag::placeholder(const std::string &val) {
+HTMLTag *HTMLTag::placeholder(const String &val) {
 	attrib("placeholder", val);
 
 	return this;
 }
 
-HTMLTag *HTMLTag::rel(const std::string &val) {
+HTMLTag *HTMLTag::rel(const String &val) {
 	attrib("rel", val);
 
 	return this;
@@ -78,7 +78,7 @@ HTMLTag *HTMLTag::rel_stylesheet() {
 	return this;
 }
 
-HTMLTag *HTMLTag::charset(const std::string &val) {
+HTMLTag *HTMLTag::charset(const String &val) {
 	attrib("charset", val);
 
 	return this;
@@ -90,13 +90,13 @@ HTMLTag *HTMLTag::charset_utf_8() {
 	return this;
 }
 
-HTMLTag *HTMLTag::attrib(const std::string &attr, const std::string &val) {
+HTMLTag *HTMLTag::attrib(const String &attr, const String &val) {
 	result += " " + attr + "=\"" + val + "\"";
 
 	return this;
 }
 
-HTMLTag *HTMLTag::start(const std::string &p_tag, const bool p_simple) {
+HTMLTag *HTMLTag::start(const String &p_tag, const bool p_simple) {
 	simple = p_simple;
 
 	result = "<" + p_tag;
@@ -127,7 +127,7 @@ HTMLTag::HTMLTag() {
 	simple = true;
 }
 
-void HTMLBuilder::comment(const std::string &val) {
+void HTMLBuilder::comment(const String &val) {
 	write_tag();
 
 	result += "<!--" + val + "-->";
@@ -139,7 +139,7 @@ HTMLTag *HTMLBuilder::doctype() {
 	return tag.start("!DOCTYPE");
 }
 
-void HTMLBuilder::doctype(const std::string &val) {
+void HTMLBuilder::doctype(const String &val) {
 	write_tag();
 
 	result += "<!DOCTYPE " + val + ">";
@@ -1470,14 +1470,14 @@ void HTMLBuilder::cwbr() {
 	result += "</wbr>";
 }
 
-void HTMLBuilder::w(const std::string &val) {
+void HTMLBuilder::w(const String &val) {
 	write_tag();
 
 	result += val;
 }
 
 //TODO!
-void HTMLBuilder::we(const std::string &val) {
+void HTMLBuilder::we(const String &val) {
 	printf("HTMLBuilder::write_excaped NYI!");
 
 	write_tag();

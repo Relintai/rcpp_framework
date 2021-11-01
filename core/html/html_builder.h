@@ -1,9 +1,7 @@
 #ifndef HTML_BUILDER_H
 #define HTML_BUILDER_H
 
-#include <map>
-#include <string>
-#include <vector>
+#include "core/string.h"
 
 class Request;
 
@@ -12,27 +10,27 @@ class Request;
 class HTMLTag {
 public:
 	bool simple;
-	std::string result;
+	String result;
 
-	HTMLTag *str(const std::string &str);
-	HTMLTag *style(const std::string &val);
-	HTMLTag *href(const std::string &val);
-	HTMLTag *cls(const std::string &val);
-	HTMLTag *id(const std::string &val);
-	HTMLTag *name(const std::string &val);
-	HTMLTag *content(const std::string &val);
-	HTMLTag *value(const std::string &val);
-	HTMLTag *method(const std::string &val);
-	HTMLTag *type(const std::string &val);
-	HTMLTag *placeholder(const std::string &val);
-	HTMLTag *rel(const std::string &val);
+	HTMLTag *str(const String &str);
+	HTMLTag *style(const String &val);
+	HTMLTag *href(const String &val);
+	HTMLTag *cls(const String &val);
+	HTMLTag *id(const String &val);
+	HTMLTag *name(const String &val);
+	HTMLTag *content(const String &val);
+	HTMLTag *value(const String &val);
+	HTMLTag *method(const String &val);
+	HTMLTag *type(const String &val);
+	HTMLTag *placeholder(const String &val);
+	HTMLTag *rel(const String &val);
 	HTMLTag *rel_stylesheet();
-	HTMLTag *charset(const std::string &val);
+	HTMLTag *charset(const String &val);
 	HTMLTag *charset_utf_8();
 
-	HTMLTag *attrib(const std::string &attr, const std::string &val);
+	HTMLTag *attrib(const String &attr, const String &val);
 
-	HTMLTag *start(const std::string &p_new_tag, const bool p_simple = false);
+	HTMLTag *start(const String &p_new_tag, const bool p_simple = false);
 	HTMLTag *reset();
 	HTMLTag *close();
 
@@ -43,11 +41,11 @@ public:
 
 class HTMLBuilder {
 public:
-	std::string result;
+	String result;
 
-	void comment(const std::string &val);
+	void comment(const String &val);
 	HTMLTag *doctype();
-	void doctype(const std::string &val);
+	void doctype(const String &val);
 
 	HTMLTag *a();
 	HTMLTag *abbr();
@@ -306,9 +304,9 @@ public:
 	void cwbr();
 
     //write
-	void w(const std::string &val);
+	void w(const String &val);
     //write_escaped
-	void we(const std::string &val);
+	void we(const String &val);
 
 	void write_tag();
 
