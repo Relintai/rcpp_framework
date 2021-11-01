@@ -10,7 +10,7 @@ QueryBuilder *SQLite3QueryBuilder::select() {
 
 	return this;
 }
-QueryBuilder *SQLite3QueryBuilder::udpate() {
+QueryBuilder *SQLite3QueryBuilder::update() {
 	query_result += "UPDATE ";
 
 	return this;
@@ -70,7 +70,7 @@ QueryBuilder *SQLite3QueryBuilder::select(const std::string &params) {
 
 	return this;
 }
-QueryBuilder *SQLite3QueryBuilder::udpate(const std::string &params) {
+QueryBuilder *SQLite3QueryBuilder::update(const std::string &params) {
 	query_result += "UPDATE " + params + " ";
 
 	return this;

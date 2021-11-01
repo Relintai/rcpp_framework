@@ -105,7 +105,7 @@ void UserModel::save_user(Ref<User> &user) {
 
 		user->id = r->get_last_insert_rowid();
 	} else {
-		b->udpate(_table_name);
+		b->update(_table_name);
 		b->set();
 		b->esetp("username", user->name_user_input);
 		b->esetp("email", user->email_user_input);

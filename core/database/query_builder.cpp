@@ -5,7 +5,7 @@
 QueryBuilder *QueryBuilder::select() {
 	return this;
 }
-QueryBuilder *QueryBuilder::udpate() {
+QueryBuilder *QueryBuilder::update() {
 	return this;
 }
 QueryBuilder *QueryBuilder::del() {
@@ -43,7 +43,7 @@ QueryBuilder *QueryBuilder::like() {
 QueryBuilder *QueryBuilder::select(const std::string &params) {
 	return this;
 }
-QueryBuilder *QueryBuilder::udpate(const std::string &params) {
+QueryBuilder *QueryBuilder::update(const std::string &params) {
 	return this;
 }
 QueryBuilder *QueryBuilder::del(const std::string &params) {
@@ -125,8 +125,8 @@ QueryBuilder *QueryBuilder::wp(const std::string &col, const bool param) {
 QueryBuilder *QueryBuilder::eselect(const std::string &params) {
 	return select(escape(params));
 }
-QueryBuilder *QueryBuilder::eudpate(const std::string &params) {
-	return udpate(escape(params));
+QueryBuilder *QueryBuilder::eupdate(const std::string &params) {
+	return update(escape(params));
 }
 QueryBuilder *QueryBuilder::edel(const std::string &params) {
 	return del(escape(params));

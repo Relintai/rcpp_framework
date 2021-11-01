@@ -12,7 +12,7 @@ class QueryResult;
 class QueryBuilder : public Reference {
 public:
 	virtual QueryBuilder *select();
-	virtual QueryBuilder *udpate();
+	virtual QueryBuilder *update();
 	virtual QueryBuilder *del();
 
 	virtual QueryBuilder *where();
@@ -27,7 +27,7 @@ public:
 	virtual QueryBuilder *like();
 
 	virtual QueryBuilder *select(const std::string &params);
-	virtual QueryBuilder *udpate(const std::string &params);
+	virtual QueryBuilder *update(const std::string &params);
 	virtual QueryBuilder *del(const std::string &params);
 
 	virtual QueryBuilder *where(const std::string &params);
@@ -57,7 +57,7 @@ public:
 	virtual QueryBuilder *wp(const std::string &col, const bool param);
 
 	virtual QueryBuilder *eselect(const std::string &params);
-	virtual QueryBuilder *eudpate(const std::string &params);
+	virtual QueryBuilder *eupdate(const std::string &params);
 	virtual QueryBuilder *edel(const std::string &params);
 
 	virtual QueryBuilder *ewhere(const std::string &params);

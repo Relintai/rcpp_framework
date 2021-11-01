@@ -68,7 +68,7 @@ void RBACModel::save_rank(const Ref<RBACRank> &rank) {
 
 		r->id = res->get_last_insert_rowid();
 	} else {
-		qb->udpate(RBAC_RANK_TABLE)->set();
+		qb->update(RBAC_RANK_TABLE)->set();
 		qb->esetp("name", rank->name);
 		qb->esetp("name_internal", rank->name_internal);
 		qb->esetp("settings", rank->settings);

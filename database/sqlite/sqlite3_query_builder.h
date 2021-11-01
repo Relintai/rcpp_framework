@@ -11,7 +11,7 @@ class SQLite3Database;
 class SQLite3QueryBuilder : public QueryBuilder {
 public:
 	QueryBuilder *select();
-	QueryBuilder *udpate();
+	QueryBuilder *update();
 	QueryBuilder *del();
 
 	QueryBuilder *where();
@@ -26,7 +26,7 @@ public:
 	QueryBuilder *like();
 
 	QueryBuilder *select(const std::string &params);
-	QueryBuilder *udpate(const std::string &params);
+	QueryBuilder *update(const std::string &params);
 	QueryBuilder *del(const std::string &params);
 
 	QueryBuilder *where(const std::string &params);
