@@ -22,7 +22,11 @@ public:
 	void create_validators();
 
 	void admin_handle_request_main(Request *request);
+	String admin_get_section_name();
 	void admin_add_section_links(Vector<AdminSectionLinkInfo> *links);
+
+	void admin_render_rank_list(Request *request);
+	void admin_render_rank_editor(Request *request);
 
 	void initialize();
 

@@ -69,6 +69,9 @@ public:
 	std::string to_string() const;
 	void print() const;
 
+	//todo
+	static String num(const int num) { return "1"; }
+
 	char *c_str();
 	const char *c_str() const;
 

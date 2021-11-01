@@ -11,6 +11,10 @@ void AdminController::admin_handle_request_main(Request *request) {
 
 }
 
+String AdminController::admin_get_section_name() {
+	return "";
+}
+
 void AdminController::admin_add_section_links(Vector<AdminSectionLinkInfo> *links) {
 	
 }

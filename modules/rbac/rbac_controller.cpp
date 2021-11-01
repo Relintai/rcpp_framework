@@ -15,11 +15,59 @@ void RBACController::create_validators() {
 }
 
 void RBACController::admin_handle_request_main(Request *request) {
+	String seg = request->get_current_path_segment();
+
+	if (seg == "") {
+		admin_render_rank_list(request);
+		return;
+	}
 
 }
 
+void RBACController::admin_render_rank_list(Request *request) {
+	HTMLBuilder b;
+
+	b.h3()->f()->w("RBAC Editor")->ch3();
+	b.h4()->f()->a()->href(request->get_url_root_parent())->f()->w("<- Back")->ca()->ch4();
+
+	for (std::map<int, Ref<RBACRank> >::iterator p = _permissions.begin(); p != _permissions.end(); p++) {
+		Ref<RBACRank> r = p->second;
+
+		if (!r.is_valid()) {
+			continue;
+		}
+
+		b.div()->cls("row");
+		{
+			b.a()->href(request->get_url_root("edit_permissions/") + String::num(r->id));
+			b.w("Id: ")->w(String::num(r->id))->w(", Name: ")->w(r->name)->w(", Name Internal: ")->w(r->name_internal);
+			b.ca();
+			
+			b.a()->href(request->get_url_root("edit_rank/") + String::num(r->id));
+			b.w("Edit Names");
+			b.ca();
+		}
+		b.cdiv();
+	}
+
+	b.a()->href(request->get_url_root("new_rank"));
+	b.w("New Rank");
+	b.ca();
+
+	request->body += b.result;
+}
+
+void RBACController::admin_render_rank_editor(Request *request) {
+
+}
+
+
+String RBACController::admin_get_section_name() {
+	return "Role Based Access Control";
+}
+
 void RBACController::admin_add_section_links(Vector<AdminSectionLinkInfo> *links) {
-	links->push_back(AdminSectionLinkInfo("Test", "test"));
+	links->push_back(AdminSectionLinkInfo("Editor", ""));
 }
 
 void RBACController::initialize() {

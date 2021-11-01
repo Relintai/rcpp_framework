@@ -59,6 +59,10 @@ void AdminPanel::render_admin_panel_list(Request *request) {
 
 		AdminPanelSection &s = _controllers[i];
 
+		b.div()->cls("section_header");
+		b.w(s.controller->admin_get_section_name());
+		b.cdiv();
+
 		s.controller->admin_add_section_links(&links);
 
 		for (int j = 0; j < links.size(); ++j) {

@@ -30,6 +30,7 @@ public:
 protected:
 	struct AdminPanelSection {
 		String section_url;
+		String name;
 		AdminController *controller;
 	};
 

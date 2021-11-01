@@ -27,6 +27,7 @@ class AdminController : public Controller {
 
 public:
 	virtual void admin_handle_request_main(Request *request);
+	virtual String admin_get_section_name();
 	virtual void admin_add_section_links(Vector<AdminSectionLinkInfo> *links);
 	virtual bool admin_full_render();
 
