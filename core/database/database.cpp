@@ -7,18 +7,18 @@
 void Database::connect(const std::string &connection_str) {
 }
 
-QueryResult *Database::query(const std::string &query) {
-	return nullptr;
+Ref<QueryResult> Database::query(const std::string &query) {
+	return Ref<QueryResult>();
 }
 void Database::query_run(const std::string &query) {
 }
 
-QueryBuilder *Database::get_query_builder() {
-	return new QueryBuilder();
+Ref<QueryBuilder> Database::get_query_builder() {
+	return Ref<QueryBuilder>(new QueryBuilder());
 }
 
-TableBuilder *Database::get_table_builder() {
-	return new TableBuilder();
+Ref<TableBuilder> Database::get_table_builder() {
+	return Ref<TableBuilder>(new TableBuilder());
 }
 
 std::string Database::escape(const std::string str) {

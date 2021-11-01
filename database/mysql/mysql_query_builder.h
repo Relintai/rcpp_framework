@@ -36,7 +36,7 @@ public:
 
 	void end_command();
 
-	QueryResult *run();
+	Ref<QueryResult> run();
 	void run_query();
 
 	MysqlQueryBuilder();

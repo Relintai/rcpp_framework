@@ -18,14 +18,14 @@ void SQLite3Database::_unregister() {
 	DatabaseManager::_unregister_db_creation_func("sqlite");
 }
 
-QueryBuilder *SQLite3Database::get_query_builder() {
+Ref<QueryBuilder> SQLite3Database::get_query_builder() {
 	SQLite3QueryBuilder *b = new SQLite3QueryBuilder();
 	b->_db = this;
 
 	return b;
 }
 
-TableBuilder *SQLite3Database::get_table_builder() {
+Ref<TableBuilder> SQLite3Database::get_table_builder() {
 	SQLite3TableBuilder *b = new SQLite3TableBuilder();
 	b->_db = this;
 
@@ -41,7 +41,7 @@ void SQLite3Database::connect(const std::string &connection_str) {
 	ret = sqlite3_open(connection_str.c_str(), &conn);
 }
 
-QueryResult *SQLite3Database::query(const std::string &query) {
+Ref<QueryResult> SQLite3Database::query(const std::string &query) {
 	Sqlite3QueryResult *res = new Sqlite3QueryResult();
 
 	res->query(query, conn);

@@ -96,7 +96,7 @@ public:
 
 	virtual QueryBuilder *reset();
 
-	virtual QueryResult *run();
+	virtual Ref<QueryResult> run();
 	virtual void run_query();
 
 	std::string get_result();

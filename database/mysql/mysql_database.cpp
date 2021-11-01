@@ -25,7 +25,7 @@ void MysqlDatabase::connect(const std::string &connection_str) {
 	}
 }
 
-QueryResult *MysqlDatabase::query(const std::string &query) {
+Ref<QueryResult> MysqlDatabase::query(const std::string &query) {
 	if (!mysql)
 		return nullptr;
 
@@ -48,7 +48,7 @@ QueryResult *MysqlDatabase::query(const std::string &query) {
 	res->result = result;
 	//res->next_row();
 
-	return res;
+	return Ref<QueryResult>(res);
 }
 
 void MysqlDatabase::query_run(const std::string &query) {
@@ -87,15 +87,15 @@ void MysqlDatabase::query_run(const std::string &query) {
 	*/
 }
 
-QueryBuilder *MysqlDatabase::get_query_builder() {
+Ref<QueryBuilder> MysqlDatabase::get_query_builder() {
 	MysqlQueryBuilder *b = new MysqlQueryBuilder();
 	b->_db = this;
 
-	return b;
+	return Ref<QueryBuilder>(b);
 }
 
-TableBuilder *MysqlDatabase::get_table_builder() {
-	return new MysqlTableBuilder();
+Ref<TableBuilder> MysqlDatabase::get_table_builder() {
+	return Ref<TableBuilder>(new MysqlTableBuilder());
 }
 
 std::string MysqlDatabase::escape(const std::string str) {

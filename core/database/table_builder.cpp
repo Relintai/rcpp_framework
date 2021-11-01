@@ -69,8 +69,8 @@ TableBuilder *TableBuilder::references(const std::string &table, const std::stri
 	return this;
 }
 
-QueryResult *TableBuilder::run() {
-	return nullptr;
+Ref<QueryResult> TableBuilder::run() {
+	return Ref<QueryResult>();
 }
 
 void TableBuilder::run_query() {

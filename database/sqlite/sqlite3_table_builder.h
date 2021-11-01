@@ -30,7 +30,7 @@ public:
 	TableBuilder *foreign_key(const std::string &name);
 	TableBuilder *references(const std::string &table, const std::string &name);
 
-	virtual QueryResult *run();
+	virtual Ref<QueryResult> run();
 	virtual void run_query();
 
 	SQLite3TableBuilder();

@@ -92,7 +92,7 @@ void MysqlQueryBuilder::end_command() {
 	query_result += ";";
 }
 
-QueryResult *MysqlQueryBuilder::run() {
+Ref<QueryResult> MysqlQueryBuilder::run() {
 	end_command();
 
 	if (!_db) {

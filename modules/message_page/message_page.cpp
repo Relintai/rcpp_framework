@@ -7,22 +7,17 @@
 #include "core/database/query_result.h"
 
 void MessagePage::index(Request *request) {
-	QueryBuilder *b = db->get_query_builder();
+	Ref<QueryBuilder> b = db->get_query_builder();
 
 	b->select("text")->from("message_page")->end_command();
 
-	QueryResult *res = db->query(b->query_result);
+	Ref<QueryResult> res = db->query(b->query_result);
 
 	std::vector<std::string> msgs;
 
-	if (res) {
-		while (res->next_row()) {
-			msgs.push_back(res->get_cell(0));
-		}
+	while (res->next_row()) {
+		msgs.push_back(res->get_cell(0));
 	}
-
-	delete res;
-	delete b;
 
 	std::string r = "<html><body>";
 
@@ -42,7 +37,7 @@ void MessagePage::index(Request *request) {
 }
 
 void MessagePage::migrate() {
-	TableBuilder *t = db->get_table_builder();
+	Ref<TableBuilder> t = db->get_table_builder();
 
 	t->drop_table("message_page");
 	db->query_run(t->result);
@@ -57,7 +52,7 @@ void MessagePage::migrate() {
 
 	db->query(t->result);
 
-	QueryBuilder *b = db->get_query_builder();
+	Ref<QueryBuilder> b = db->get_query_builder();
 
 	b->insert("message_page")->values("default, 'aaewdwd'");
 
@@ -71,8 +66,6 @@ void MessagePage::migrate() {
 	printf("%s\n", b->query_result.c_str());
 
 	db->query_run(b->query_result);
-
-	delete t;
 }
 
 MessagePage::MessagePage() :

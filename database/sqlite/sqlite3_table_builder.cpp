@@ -1,5 +1,7 @@
 #include "sqlite3_table_builder.h"
 
+#include "core/database/query_result.h"
+
 #include "sqlite3_database.h"
 
 TableBuilder *SQLite3TableBuilder::create_table(const std::string &name) {
@@ -105,7 +107,7 @@ TableBuilder *SQLite3TableBuilder::references(const std::string &table, const st
 	return this;
 }
 
-QueryResult *SQLite3TableBuilder::run() {
+Ref<QueryResult> SQLite3TableBuilder::run() {
 	if (!_db) {
 		printf("SQLite3TableBuilder::run !db!\n");
 

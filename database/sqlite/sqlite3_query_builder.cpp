@@ -282,7 +282,7 @@ void SQLite3QueryBuilder::end_command() {
 	query_result += ";";
 }
 
-QueryResult *SQLite3QueryBuilder::run() {
+Ref<QueryResult> SQLite3QueryBuilder::run() {
 	if (!_db) {
 		printf("SQLite3QueryBuilder::run !db!\n");
 

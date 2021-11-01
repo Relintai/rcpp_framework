@@ -16,11 +16,11 @@
 class MysqlDatabase : public Database {
 public:
 	void connect(const std::string &connection_str);
-	QueryResult *query(const std::string &query);
+	Ref<QueryResult> query(const std::string &query);
 	void query_run(const std::string &query);
 
-	QueryBuilder *get_query_builder();
-	TableBuilder *get_table_builder();
+	Ref<QueryBuilder> get_query_builder();
+	Ref<TableBuilder> get_table_builder();
 
 	std::string escape(const std::string str);
 	void escape(const std::string str, std::string *to);

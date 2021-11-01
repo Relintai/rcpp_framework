@@ -19,11 +19,11 @@ public:
 	static void _register();
 	static void _unregister();
 
-	QueryBuilder *get_query_builder();
-	TableBuilder *get_table_builder();
+	Ref<QueryBuilder> get_query_builder();
+	Ref<TableBuilder> get_table_builder();
 
 	void connect(const std::string &connection_str);
-	QueryResult *query(const std::string &query);
+	Ref<QueryResult> query(const std::string &query);
 	void query_run(const std::string &query);
 
 	std::string escape(const std::string str);

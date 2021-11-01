@@ -4,6 +4,8 @@
 #include <string>
 #include <memory>
 
+#include "core/reference.h"
+
 enum QueryErrorCode {
 	OK,
 	ERROR
@@ -29,11 +31,11 @@ public:
     //virtual void where(""); etc
 
 	virtual void connect(const std::string &connection_str);
-	virtual QueryResult *query(const std::string &query);
+	virtual Ref<QueryResult> query(const std::string &query);
 	virtual void query_run(const std::string &query);
 
-	virtual QueryBuilder *get_query_builder();
-	virtual TableBuilder *get_table_builder();
+	virtual Ref<QueryBuilder> get_query_builder();
+	virtual Ref<TableBuilder> get_table_builder();
 
 	virtual std::string escape(const std::string str);
 	virtual void escape(const std::string str, std::string *to);

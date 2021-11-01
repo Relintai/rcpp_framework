@@ -101,12 +101,9 @@ void UserModel::save_user(Ref<User> &user) {
 		b->end_command();
 		b->select_last_insert_id();
 
-		QueryResult *r = b->run();
+		Ref<QueryResult> r = b->run();
 
 		user->id = r->get_last_insert_rowid();
-
-		delete r;
-
 	} else {
 		b->udpate(_table_name);
 		b->set();

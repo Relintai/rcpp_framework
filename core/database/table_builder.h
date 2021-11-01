@@ -30,7 +30,7 @@ public:
 	virtual TableBuilder *foreign_key(const std::string &name);
 	virtual TableBuilder *references(const std::string &table, const std::string &name);
 
-	virtual QueryResult *run();
+	virtual Ref<QueryResult> run();
 	virtual void run_query();
 
 	void print();

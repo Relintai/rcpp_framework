@@ -219,8 +219,8 @@ QueryBuilder *QueryBuilder::reset() {
 	return this;
 }
 
-QueryResult *QueryBuilder::run() {
-	return nullptr;
+Ref<QueryResult> QueryBuilder::run() {
+	return Ref<QueryResult>();
 }
 
 void QueryBuilder::run_query() {
