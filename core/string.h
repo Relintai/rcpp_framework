@@ -69,8 +69,15 @@ public:
 	std::string to_string() const;
 	void print() const;
 
-	//todo
-	static String num(const int num) { return "1"; }
+	//Taken from the Godot Engine (MIT License)
+	//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+	//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	static String num(double p_num, int p_decimals = -1);
+	static String num_scientific(double p_num);
+	static String num_real(double p_num, bool p_trailing = true);
+	static String num_int64(int64_t p_num, int base = 10, bool capitalize_hex = false);
+	static String num_uint64(uint64_t p_num, int base = 10, bool capitalize_hex = false);
+	static String chr(char32_t p_char);
 
 	char *c_str();
 	const char *c_str() const;

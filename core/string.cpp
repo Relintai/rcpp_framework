@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <cstdio>
 #include <cstring>
+#include "core/math.h"
+
+static const int MAX_DECIMALS = 32;
 
 void String::push_back(const char element) {
 	ensure_capacity(_size + 1);
@@ -563,6 +566,323 @@ std::string String::to_string() const {
 
 void String::print() const {
 	::printf("%s\n", c_str());
+}
+
+//Taken from the Godot Engine (MIT License)
+//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+String String::num(double p_num, int p_decimals) {
+	if (Math::is_nan(p_num)) {
+		return "nan";
+	}
+
+	if (Math::is_inf(p_num)) {
+		if (signbit(p_num)) {
+			return "-inf";
+		} else {
+			return "inf";
+		}
+	}
+
+	if (p_decimals < 0) {
+		p_decimals = 14;
+		const double abs_num = Math::absd(p_num);
+		if (abs_num > 10) {
+			// We want to align the digits to the above sane default, so we only
+			// need to subtract log10 for numbers with a positive power of ten.
+			p_decimals -= (int)floor(log10(abs_num));
+		}
+	}
+	if (p_decimals > MAX_DECIMALS) {
+		p_decimals = MAX_DECIMALS;
+	}
+
+	char fmt[7];
+	fmt[0] = '%';
+	fmt[1] = '.';
+
+	if (p_decimals < 0) {
+		fmt[1] = 'l';
+		fmt[2] = 'f';
+		fmt[3] = 0;
+	} else if (p_decimals < 10) {
+		fmt[2] = '0' + p_decimals;
+		fmt[3] = 'l';
+		fmt[4] = 'f';
+		fmt[5] = 0;
+	} else {
+		fmt[2] = '0' + (p_decimals / 10);
+		fmt[3] = '0' + (p_decimals % 10);
+		fmt[4] = 'l';
+		fmt[5] = 'f';
+		fmt[6] = 0;
+	}
+	char buf[256];
+
+#if defined(__GNUC__) || defined(_MSC_VER)
+	snprintf(buf, 256, fmt, p_num);
+#else
+	sprintf(buf, fmt, p_num);
+#endif
+
+	buf[255] = 0;
+	//destroy trailing zeroes
+	{
+		bool period = false;
+		int z = 0;
+		while (buf[z]) {
+			if (buf[z] == '.') {
+				period = true;
+			}
+			z++;
+		}
+
+		if (period) {
+			z--;
+			while (z > 0) {
+				if (buf[z] == '0') {
+					buf[z] = 0;
+				} else if (buf[z] == '.') {
+					buf[z] = 0;
+					break;
+				} else {
+					break;
+				}
+
+				z--;
+			}
+		}
+	}
+
+	return buf;
+}
+
+//Taken from the Godot Engine (MIT License)
+//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+String String::num_int64(int64_t p_num, int base, bool capitalize_hex) {
+	bool sign = p_num < 0;
+
+	int64_t n = p_num;
+
+	int chars = 0;
+	do {
+		n /= base;
+		chars++;
+	} while (n);
+
+	if (sign) {
+		chars++;
+	}
+
+	String s;
+	s.resize(chars + 1);
+	char *c = s.dataw();
+	c[chars] = 0;
+	n = p_num;
+	do {
+		int mod = Math::absi(n % base);
+		if (mod >= 10) {
+			char a = (capitalize_hex ? 'A' : 'a');
+			c[--chars] = a + (mod - 10);
+		} else {
+			c[--chars] = '0' + mod;
+		}
+
+		n /= base;
+	} while (n);
+
+	if (sign) {
+		c[0] = '-';
+	}
+
+	return s;
+}
+
+//Taken from the Godot Engine (MIT License)
+//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+String String::num_uint64(uint64_t p_num, int base, bool capitalize_hex) {
+	uint64_t n = p_num;
+
+	int chars = 0;
+	do {
+		n /= base;
+		chars++;
+	} while (n);
+
+	String s;
+	s.resize(chars + 1);
+	char *c = s.dataw();
+	c[chars] = 0;
+	n = p_num;
+	do {
+		int mod = n % base;
+		if (mod >= 10) {
+			char a = (capitalize_hex ? 'A' : 'a');
+			c[--chars] = a + (mod - 10);
+		} else {
+			c[--chars] = '0' + mod;
+		}
+
+		n /= base;
+	} while (n);
+
+	return s;
+}
+
+//Taken from the Godot Engine (MIT License)
+//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+String String::num_real(double p_num, bool p_trailing) {
+	if (Math::is_nan(p_num)) {
+		return "nan";
+	}
+
+	if (Math::is_inf(p_num)) {
+		if (signbit(p_num)) {
+			return "-inf";
+		} else {
+			return "inf";
+		}
+	}
+
+	String s;
+	String sd;
+
+	// Integer part.
+
+	bool neg = p_num < 0;
+	p_num = Math::absd(p_num);
+	int64_t intn = (int64_t)p_num;
+
+	// Decimal part.
+
+	if (intn != p_num) {
+		double dec = p_num - (double)intn;
+
+		int digit = 0;
+
+#ifdef REAL_T_IS_DOUBLE
+		int decimals = 14;
+		double tolerance = 1e-14;
+#else
+		int decimals = 6;
+		double tolerance = 1e-6;
+#endif
+		// We want to align the digits to the above sane default, so we only
+		// need to subtract log10 for numbers with a positive power of ten.
+		if (p_num > 10) {
+			decimals -= (int)floor(log10(p_num));
+		}
+
+		if (decimals > MAX_DECIMALS) {
+			decimals = MAX_DECIMALS;
+		}
+
+		// In case the value ends up ending in "99999", we want to add a
+		// tiny bit to the value we're checking when deciding when to stop,
+		// so we multiply by slightly above 1 (1 + 1e-7 or 1e-15).
+		double check_multiplier = 1 + tolerance / 10;
+
+		int64_t dec_int = 0;
+		int64_t dec_max = 0;
+
+		while (true) {
+			dec *= 10.0;
+			dec_int = dec_int * 10 + (int64_t)dec % 10;
+			dec_max = dec_max * 10 + 9;
+			digit++;
+
+			if ((dec - (double)(int64_t)(dec * check_multiplier)) < tolerance) {
+				break;
+			}
+
+			if (digit == decimals) {
+				break;
+			}
+		}
+
+		dec *= 10;
+		int last = (int64_t)dec % 10;
+
+		if (last > 5) {
+			if (dec_int == dec_max) {
+				dec_int = 0;
+				intn++;
+			} else {
+				dec_int++;
+			}
+		}
+
+		String decimal;
+		for (int i = 0; i < digit; i++) {
+			char num[2] = { 0, 0 };
+			num[0] = '0' + dec_int % 10;
+			decimal = num + decimal;
+			dec_int /= 10;
+		}
+		sd = '.' + decimal;
+	} else if (p_trailing) {
+		sd = ".0";
+	} else {
+		sd = "";
+	}
+
+	if (intn == 0) {
+		s = "0";
+	} else {
+		while (intn) {
+			char32_t num = '0' + (intn % 10);
+			intn /= 10;
+			s = num + s;
+		}
+	}
+
+	s = s + sd;
+	if (neg) {
+		s = "-" + s;
+	}
+	return s;
+}
+
+//Taken from the Godot Engine (MIT License)
+//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+String String::num_scientific(double p_num) {
+	if (Math::is_nan(p_num)) {
+		return "nan";
+	}
+
+	if (Math::is_inf(p_num)) {
+		if (signbit(p_num)) {
+			return "-inf";
+		} else {
+			return "inf";
+		}
+	}
+
+	char buf[256];
+
+#if defined(__GNUC__) || defined(_MSC_VER)
+
+#if defined(__MINGW32__) && defined(_TWO_DIGIT_EXPONENT) && !defined(_UCRT)
+	// MinGW requires _set_output_format() to conform to C99 output for printf
+	unsigned int old_exponent_format = _set_output_format(_TWO_DIGIT_EXPONENT);
+#endif
+	snprintf(buf, 256, "%lg", p_num);
+
+#if defined(__MINGW32__) && defined(_TWO_DIGIT_EXPONENT) && !defined(_UCRT)
+	_set_output_format(old_exponent_format);
+#endif
+
+#else
+	sprintf(buf, "%.16lg", p_num);
+#endif
+
+	buf[255] = 0;
+
+	return buf;
 }
 
 char *String::c_str() {
