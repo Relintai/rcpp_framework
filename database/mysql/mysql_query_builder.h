@@ -18,19 +18,19 @@ public:
 	QueryBuilder *values();
 	QueryBuilder *cvalues();
 
-	QueryBuilder *nselect(const std::string &params);
-	QueryBuilder *nwhere(const std::string &params);
-	QueryBuilder *nfrom(const std::string &params);
-	QueryBuilder *ninsert(const std::string &table_name);
-	QueryBuilder *nvalues(const std::string &params_str);
+	QueryBuilder *nselect(const String &params);
+	QueryBuilder *nwhere(const String &params);
+	QueryBuilder *nfrom(const String &params);
+	QueryBuilder *ninsert(const String &table_name);
+	QueryBuilder *nvalues(const String &params_str);
 
 	QueryBuilder *limit(const int num);
 	QueryBuilder *offset(const int num);
 
-	std::string escape(const std::string &params);
+	String escape(const String &params);
 
 	QueryBuilder *prepare();
-	QueryBuilder *set_param(const int index, const std::string &value);
+	QueryBuilder *set_param(const int index, const String &value);
 	QueryBuilder *set_param(const int index, const int value);
 	QueryBuilder *set_param(const int index, const float value);
 

@@ -40,30 +40,30 @@ QueryBuilder *QueryBuilder::like() {
 	return this;
 }
 
-QueryBuilder *QueryBuilder::select(const std::string &params) {
+QueryBuilder *QueryBuilder::select(const String &params) {
 	return nselect(escape(params));
 }
-QueryBuilder *QueryBuilder::update(const std::string &params) {
+QueryBuilder *QueryBuilder::update(const String &params) {
 	return nupdate(escape(params));
 }
-QueryBuilder *QueryBuilder::del(const std::string &params) {
+QueryBuilder *QueryBuilder::del(const String &params) {
 	return ndel(escape(params));
 }
-QueryBuilder *QueryBuilder::where(const std::string &params) {
+QueryBuilder *QueryBuilder::where(const String &params) {
 	return nwhere(escape(params));
 }
 
-QueryBuilder *QueryBuilder::from(const std::string &params) {
+QueryBuilder *QueryBuilder::from(const String &params) {
 	return nfrom(escape(params));
 }
 
-QueryBuilder *QueryBuilder::insert(const std::string &table_name) {
+QueryBuilder *QueryBuilder::insert(const String &table_name) {
 	return this;
 }
-QueryBuilder *QueryBuilder::insert(const std::string &table_name, const std::string &columns) {
+QueryBuilder *QueryBuilder::insert(const String &table_name, const String &columns) {
 	return this;
 }
-QueryBuilder *QueryBuilder::values(const std::string &params_str) {
+QueryBuilder *QueryBuilder::values(const String &params_str) {
 	return nvalues(escape(params_str));
 }
 
@@ -71,7 +71,7 @@ QueryBuilder *QueryBuilder::val() {
 	return this;
 }
 
-QueryBuilder *QueryBuilder::val(const std::string &param) {
+QueryBuilder *QueryBuilder::val(const String &param) {
 	return nval(escape(param));
 }
 
@@ -86,7 +86,7 @@ QueryBuilder *QueryBuilder::val(const bool param) {
 	return this;
 }
 
-QueryBuilder *QueryBuilder::like(const std::string &str) {
+QueryBuilder *QueryBuilder::like(const String &str) {
 	return nlike(escape(str));
 }
 
@@ -96,63 +96,63 @@ QueryBuilder *QueryBuilder::set() {
 QueryBuilder *QueryBuilder::cset() {
 	return this;
 }
-QueryBuilder *QueryBuilder::setp(const std::string &col, const std::string &param) {
+QueryBuilder *QueryBuilder::setp(const String &col, const String &param) {
 	return nsetp(col, escape(param));
 }
-QueryBuilder *QueryBuilder::setp(const std::string &col, const char *param) {
+QueryBuilder *QueryBuilder::setp(const String &col, const char *param) {
 	return this;
 }
-QueryBuilder *QueryBuilder::setp(const std::string &col, const int param) {
+QueryBuilder *QueryBuilder::setp(const String &col, const int param) {
 	return this;
 }
-QueryBuilder *QueryBuilder::setp(const std::string &col, const bool param) {
+QueryBuilder *QueryBuilder::setp(const String &col, const bool param) {
 	return this;
 }
 
-QueryBuilder *QueryBuilder::wp(const std::string &col, const std::string &param) {
+QueryBuilder *QueryBuilder::wp(const String &col, const String &param) {
 	return nwp(col, escape(param));
 }
-QueryBuilder *QueryBuilder::wp(const std::string &col, const char *param) {
+QueryBuilder *QueryBuilder::wp(const String &col, const char *param) {
 	return this;
 }
-QueryBuilder *QueryBuilder::wp(const std::string &col, const int param) {
+QueryBuilder *QueryBuilder::wp(const String &col, const int param) {
 	return this;
 }
-QueryBuilder *QueryBuilder::wp(const std::string &col, const bool param) {
-	return this;
-}
-
-QueryBuilder *QueryBuilder::nselect(const std::string &params) {
-	return this;
-}
-QueryBuilder *QueryBuilder::nupdate(const std::string &params) {
-	return this;
-}
-QueryBuilder *QueryBuilder::ndel(const std::string &params) {
+QueryBuilder *QueryBuilder::wp(const String &col, const bool param) {
 	return this;
 }
 
-QueryBuilder *QueryBuilder::nwhere(const std::string &params) {
+QueryBuilder *QueryBuilder::nselect(const String &params) {
 	return this;
 }
-QueryBuilder *QueryBuilder::nfrom(const std::string &params) {
+QueryBuilder *QueryBuilder::nupdate(const String &params) {
 	return this;
 }
-QueryBuilder *QueryBuilder::nlike(const std::string &str) {
-	return this;
-}
-QueryBuilder *QueryBuilder::nvalues(const std::string &params_str) {
+QueryBuilder *QueryBuilder::ndel(const String &params) {
 	return this;
 }
 
-QueryBuilder *QueryBuilder::nval(const std::string &param) {
+QueryBuilder *QueryBuilder::nwhere(const String &params) {
+	return this;
+}
+QueryBuilder *QueryBuilder::nfrom(const String &params) {
+	return this;
+}
+QueryBuilder *QueryBuilder::nlike(const String &str) {
+	return this;
+}
+QueryBuilder *QueryBuilder::nvalues(const String &params_str) {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::nval(const String &param) {
 	return val(escape(param));
 }
-QueryBuilder *QueryBuilder::nsetp(const std::string &col, const std::string &escape_param) {
+QueryBuilder *QueryBuilder::nsetp(const String &col, const String &escape_param) {
 	return setp(col, escape(escape_param));
 }
 
-QueryBuilder *QueryBuilder::nwp(const std::string &col, const std::string &escape_param) {
+QueryBuilder *QueryBuilder::nwp(const String &col, const String &escape_param) {
 	return this;
 }
 
@@ -175,12 +175,12 @@ QueryBuilder *QueryBuilder::wildcard() {
 	return this;
 }
 
-QueryBuilder *QueryBuilder::w(const std::string &str) {
+QueryBuilder *QueryBuilder::w(const String &str) {
 	query_result += str + " ";
 
 	return this;
 }
-QueryBuilder *QueryBuilder::ew(const std::string &str) {
+QueryBuilder *QueryBuilder::ew(const String &str) {
 	return w(escape(str));
 }
 
@@ -188,14 +188,14 @@ QueryBuilder *QueryBuilder::select_last_insert_id() {
 	return this;
 }
 
-std::string QueryBuilder::escape(const std::string &params) {
+String QueryBuilder::escape(const String &params) {
 	return params;
 }
 
 QueryBuilder *QueryBuilder::prepare() {
 	return this;
 }
-QueryBuilder *QueryBuilder::set_param(const int index, const std::string &value) {
+QueryBuilder *QueryBuilder::set_param(const int index, const String &value) {
 	return this;
 }
 QueryBuilder *QueryBuilder::set_param(const int index, const int value) {
@@ -221,7 +221,7 @@ Ref<QueryResult> QueryBuilder::run() {
 void QueryBuilder::run_query() {
 }
 
-std::string QueryBuilder::get_result() {
+String QueryBuilder::get_result() {
 	end_command();
 
 	return query_result;

@@ -34,37 +34,37 @@ QueryBuilder *MysqlQueryBuilder::cvalues() {
 	return this;
 }
 
-QueryBuilder *MysqlQueryBuilder::nselect(const std::string &params) {
+QueryBuilder *MysqlQueryBuilder::nselect(const String &params) {
 	query_result += "SELECT " + params + " ";
 
 	return this;
 }
 
-QueryBuilder *MysqlQueryBuilder::nwhere(const std::string &params) {
+QueryBuilder *MysqlQueryBuilder::nwhere(const String &params) {
 	query_result += "WHERE " + params + " ";
 
 	return this;
 }
 
-QueryBuilder *MysqlQueryBuilder::nfrom(const std::string &params) {
+QueryBuilder *MysqlQueryBuilder::nfrom(const String &params) {
 	query_result += "FROM " + params + " ";
 
 	return this;
 }
 
-QueryBuilder *MysqlQueryBuilder::ninsert(const std::string &table_name) {
+QueryBuilder *MysqlQueryBuilder::ninsert(const String &table_name) {
 	query_result += "INSERT INTO " + table_name + " ";
 
 	return this;
 }
 
-QueryBuilder *MysqlQueryBuilder::nvalues(const std::string &params_str) {
+QueryBuilder *MysqlQueryBuilder::nvalues(const String &params_str) {
 	query_result += "VALUES(" + params_str + ") ";
 
 	return this;
 }
 
-std::string MysqlQueryBuilder::escape(const std::string &params) {
+String MysqlQueryBuilder::escape(const String &params) {
 	if (!_db) {
 		printf("MysqlQueryBuilder::escape !db!\n");
 
@@ -78,7 +78,7 @@ QueryBuilder *MysqlQueryBuilder::prepare() {
 	return this;
 }
 
-QueryBuilder *MysqlQueryBuilder::set_param(const int index, const std::string &value) {
+QueryBuilder *MysqlQueryBuilder::set_param(const int index, const String &value) {
 	return this;
 }
 QueryBuilder *MysqlQueryBuilder::set_param(const int index, const int value) {

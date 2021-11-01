@@ -461,7 +461,7 @@ const char String::operator[](const int index) const {
 	return _data[index];
 }
 
-char String::operator[](const int index) {
+char &String::operator[](const int index) {
 	return _data[index];
 }
 
@@ -617,6 +617,14 @@ String& String::operator=(const String &other) {
 }
 
 String& String::operator=(const std::string &other) {
+	clear();
+
+	append_str(other);
+
+	return *this;
+}
+
+String& String::operator=(const char* other) {
 	clear();
 
 	append_str(other);

@@ -68,7 +68,7 @@ public:
 	const char *data() const;
 
 	const char operator[](const int index) const;
-	char operator[](const int index);
+	char &operator[](const int index);
 
 	String &operator+=(const String &b);
 	String &operator+=(const char chr);
@@ -100,6 +100,7 @@ public:
 
 	String& operator=(const String &other);
 	String& operator=(const std::string &other);
+	String& operator=(const char* other);
 
 	String();
 	String(const String &other);

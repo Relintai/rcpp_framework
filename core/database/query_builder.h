@@ -1,7 +1,7 @@
 #ifndef QUERY_BUILDER_H
 #define QUERY_BUILDER_H
 
-#include <string>
+#include "core/string.h"
 
 #include "core/reference.h"
 
@@ -26,49 +26,49 @@ public:
 
 	virtual QueryBuilder *like();
 
-	virtual QueryBuilder *select(const std::string &params);
-	virtual QueryBuilder *update(const std::string &params);
-	virtual QueryBuilder *del(const std::string &params);
+	virtual QueryBuilder *select(const String &params);
+	virtual QueryBuilder *update(const String &params);
+	virtual QueryBuilder *del(const String &params);
 
-	virtual QueryBuilder *where(const std::string &params);
-	virtual QueryBuilder *from(const std::string &params);
-	virtual QueryBuilder *insert(const std::string &table_name);
-	virtual QueryBuilder *insert(const std::string &table_name, const std::string &columns);
-	virtual QueryBuilder *values(const std::string &params_str);
+	virtual QueryBuilder *where(const String &params);
+	virtual QueryBuilder *from(const String &params);
+	virtual QueryBuilder *insert(const String &table_name);
+	virtual QueryBuilder *insert(const String &table_name, const String &columns);
+	virtual QueryBuilder *values(const String &params_str);
 	virtual QueryBuilder *val();
-	virtual QueryBuilder *val(const std::string &param);
+	virtual QueryBuilder *val(const String &param);
 	virtual QueryBuilder *val(const char *param);
 	virtual QueryBuilder *val(const int param);
 	virtual QueryBuilder *val(const bool param);
 
-	virtual QueryBuilder *like(const std::string &str);
+	virtual QueryBuilder *like(const String &str);
 
 	virtual QueryBuilder *set();
 	virtual QueryBuilder *cset();
 
-	virtual QueryBuilder *setp(const std::string &col, const std::string &param);
-	virtual QueryBuilder *setp(const std::string &col, const char *param);
-	virtual QueryBuilder *setp(const std::string &col, const int param);
-	virtual QueryBuilder *setp(const std::string &col, const bool param);
+	virtual QueryBuilder *setp(const String &col, const String &param);
+	virtual QueryBuilder *setp(const String &col, const char *param);
+	virtual QueryBuilder *setp(const String &col, const int param);
+	virtual QueryBuilder *setp(const String &col, const bool param);
 
-	virtual QueryBuilder *wp(const std::string &col, const std::string &param);
-	virtual QueryBuilder *wp(const std::string &col, const char *param);
-	virtual QueryBuilder *wp(const std::string &col, const int param);
-	virtual QueryBuilder *wp(const std::string &col, const bool param);
+	virtual QueryBuilder *wp(const String &col, const String &param);
+	virtual QueryBuilder *wp(const String &col, const char *param);
+	virtual QueryBuilder *wp(const String &col, const int param);
+	virtual QueryBuilder *wp(const String &col, const bool param);
 
-	virtual QueryBuilder *nselect(const std::string &params);
-	virtual QueryBuilder *nupdate(const std::string &params);
-	virtual QueryBuilder *ndel(const std::string &params);
+	virtual QueryBuilder *nselect(const String &params);
+	virtual QueryBuilder *nupdate(const String &params);
+	virtual QueryBuilder *ndel(const String &params);
 
-	virtual QueryBuilder *nwhere(const std::string &params);
-	virtual QueryBuilder *nfrom(const std::string &params);
-	virtual QueryBuilder *nlike(const std::string &str);
-	virtual QueryBuilder *nvalues(const std::string &params_str);
-	virtual QueryBuilder *nval(const std::string &param);
+	virtual QueryBuilder *nwhere(const String &params);
+	virtual QueryBuilder *nfrom(const String &params);
+	virtual QueryBuilder *nlike(const String &str);
+	virtual QueryBuilder *nvalues(const String &params_str);
+	virtual QueryBuilder *nval(const String &param);
 	//note col is NOT escaped
-	virtual QueryBuilder *nsetp(const std::string &col, const std::string &escape_param);
+	virtual QueryBuilder *nsetp(const String &col, const String &escape_param);
 	//note col is NOT escaped
-	virtual QueryBuilder *nwp(const std::string &col, const std::string &escape_param);
+	virtual QueryBuilder *nwp(const String &col, const String &escape_param);
 
 	virtual QueryBuilder *limit(const int num);
 	virtual QueryBuilder *offset(const int num);
@@ -79,15 +79,15 @@ public:
 
 	virtual QueryBuilder *wildcard();
 
-	virtual QueryBuilder *w(const std::string &str);
-	virtual QueryBuilder *ew(const std::string &str);
+	virtual QueryBuilder *w(const String &str);
+	virtual QueryBuilder *ew(const String &str);
 
 	virtual QueryBuilder *select_last_insert_id();
 
-	virtual std::string escape(const std::string &params);
+	virtual String escape(const String &params);
 
 	virtual QueryBuilder *prepare();
-	virtual QueryBuilder *set_param(const int index, const std::string &value);
+	virtual QueryBuilder *set_param(const int index, const String &value);
 	virtual QueryBuilder *set_param(const int index, const int value);
 	virtual QueryBuilder *set_param(const int index, const float value);
 
@@ -98,14 +98,14 @@ public:
 	virtual Ref<QueryResult> run();
 	virtual void run_query();
 
-	std::string get_result();
+	String get_result();
 
 	void print();
 
 	QueryBuilder();
 	virtual ~QueryBuilder();
 
-	std::string query_result;
+	String query_result;
 };
 
 #endif
