@@ -30,6 +30,10 @@ void RBACController::admin_handle_request_main(Request *request) {
 		request->push_path();
 
 		admin_handle_edit_rank(request);
+	} else if (seg == "edit_permissions") {
+		request->push_path();
+
+		admin_handle_edit_permission(request);
 	}
 }
 
@@ -140,6 +144,90 @@ void RBACController::render_rank_view(Request *request, RBACAdminRankViewData *d
 	request->body += b.result;
 }
 
+void RBACController::admin_handle_edit_permission(Request *request) {
+
+	String seg = request->get_current_path_segment();
+
+	//check whether it's numeric
+	//if (!seg.is)
+
+	int id = seg.to_int();
+
+	if (id == 0) {
+		RLOG_MSG("RBACController::admin_handle_edit_permission: id == 0!\n");
+		request->send_redirect(request->get_url_root_parent());
+		return;
+	}
+
+	Ref<RBACRank> rank = _permissions[id];
+
+	if (!rank.is_valid()) {
+		RLOG_MSG("RBACController::admin_handle_edit_permission: !rank.is_valid()\n");
+		request->send_redirect(request->get_url_root_parent());
+		return;
+	}
+
+	RBACAdminEditPermissionView data;
+	data.rank = rank;
+
+	request->push_path();
+
+	String seg2 = request->get_current_path_segment();
+
+	if (seg2 == "new") {
+		admin_render_edit_permission_entry_view(request, &data);
+		return;
+	}
+
+	admin_render_edit_permission_main_view(request, &data);
+}
+
+void RBACController::admin_render_edit_permission_main_view(Request *request, RBACAdminEditPermissionView *data) {
+	HTMLBuilder b;
+
+	Ref<RBACRank> rank = data->rank;
+
+	b.h4()->f()->a()->href(request->get_url_root_parent())->f()->w("<- Back")->ca()->ch4();
+	b.h4()->f()->w("RBAC Editor")->ch4();
+
+	b.div()->cls("heading");
+	{
+		b.w("[ Id ]: ")->wn(rank->id)->w(", [ Name ]: ")->w(rank->name)->w(", [ Name Internal ]: ")->w(rank->name_internal);
+	}
+	b.cdiv();
+
+	b.br();
+
+	for (int i = 0; i < rank->permissions.size(); ++i) {
+		b.div()->cls("row");
+		{
+			//todo
+		}
+		b.cdiv();
+	}
+
+	b.br();
+
+	b.a()->href(request->get_url_root("new"));
+	b.w("New Permission");
+	b.ca();
+
+	request->body += b.result;
+}
+
+void RBACController::admin_render_edit_permission_entry_view(Request *request, RBACAdminEditPermissionView* data) {
+	HTMLBuilder b;
+
+	Ref<RBACRank> rank = data->rank;
+
+	b.h4()->f()->a()->href(request->get_url_root_parent(2))->f()->w("<- Back")->ca()->ch4();
+	b.h4()->f()->w("RBAC Editor")->ch4();
+
+	b.br();
+
+	request->body += b.result;
+}
+
 void RBACController::admin_render_rank_list(Request *request) {
 	HTMLBuilder b;
 
@@ -169,6 +257,7 @@ void RBACController::admin_render_rank_list(Request *request) {
 	}
 
 	b.br();
+
 	b.a()->href(request->get_url_root("new_rank"));
 	b.w("New Rank");
 	b.ca();

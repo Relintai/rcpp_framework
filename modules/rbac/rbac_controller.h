@@ -40,6 +40,19 @@ public:
 	void admin_handle_edit_rank(Request *request);
 	void render_rank_view(Request *request, RBACAdminRankViewData *data);
 
+	struct RBACAdminEditPermissionView {
+		Ref<RBACRank> rank;
+		Ref<RBACPermission> permission;
+		Vector<String> messages;
+
+		int rank_id = 0;
+		int permission_id = 0;
+	};
+
+	void admin_handle_edit_permission(Request *request);
+	void admin_render_edit_permission_main_view(Request *request, RBACAdminEditPermissionView* data);
+	void admin_render_edit_permission_entry_view(Request *request, RBACAdminEditPermissionView* data);
+
 	void admin_render_rank_list(Request *request);
 	void admin_render_rank_editor(Request *request);
 
