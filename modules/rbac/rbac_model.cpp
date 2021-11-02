@@ -30,11 +30,39 @@ std::map<int, Ref<RBACRank> > RBACModel::load_permissions() {
 		ranks[r->id] = r;
 	}
 
-/*
 	qb->reset();
-	qb->select("id,name,name_internal,settings,rank_permissions")->from(RBAC_PERMISSION_TABLE);
-	res =  qb->run();
-*/
+	qb->select("id,rank_id,name,url,revoke,sort_order,permissions")->from(RBAC_PERMISSION_TABLE);
+	res = qb->run();
+
+	while (res->next_row()) {
+		Ref<RBACPermission> p;
+		p.instance();
+
+		p->id = res->get_cell_int(0);
+		p->rank_id = res->get_cell_int(1);
+		p->name = res->get_cell_str(2);
+		p->url = res->get_cell_str(3);
+		p->revoke = res->get_cell_bool(4);
+		p->sort_order = res->get_cell_int(5);
+		p->permissions = res->get_cell_int(6);
+
+		Ref<RBACRank> r = ranks[p->rank_id];
+
+		if (!r.is_valid()) {
+			RLOG_ERR("RBACModel::load_permissions: !r.is_valid()!");
+			continue;
+		}
+
+		r->permissions.push_back(p);
+	}
+
+	for (std::map<int, Ref<RBACRank> >::iterator i = ranks.begin(); i != ranks.end(); ++i) {
+		Ref<RBACRank> r = i->second;
+
+		if (r.is_valid()) {
+			r->sort_permissions();
+		}
+	}
 
 	return ranks;
 }
@@ -45,8 +73,10 @@ void RBACModel::save(const Ref<RBACRank> &rank) {
 	for (int i = 0; i < rank->permissions.size(); ++i) {
 		Ref<RBACPermission> permission = rank->permissions[i];
 
-		if (permission->rank_id == 0) {
-			permission->rank_id = rank->id;
+		int rid = rank->id;
+
+		if (permission->rank_id != rid) {
+			permission->rank_id = rid;
 		}
 
 		save_permission(permission);
@@ -82,7 +112,34 @@ void RBACModel::save_rank(const Ref<RBACRank> &rank) {
 }
 
 void RBACModel::save_permission(const Ref<RBACPermission> &permission) {
+	Ref<QueryBuilder> qb = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
+	if (permission->id == 0) {
+		qb->insert(RBAC_PERMISSION_TABLE, "rank_id,name,url,revoke,sort_order,permissions")->values();
+		qb->val(permission->rank_id)->val(permission->name)->val(permission->url)->val(permission->revoke);
+		qb->val(permission->sort_order)->val(permission->permissions);
+		qb->cvalues();
+		qb->select_last_insert_id();
+		Ref<QueryResult> res = qb->run();
+		//qb->print();
+
+		Ref<RBACPermission> r = permission;
+
+		r->id = res->get_last_insert_rowid();
+	} else {
+		qb->update(RBAC_PERMISSION_TABLE)->set();
+		qb->setp("rank_id", permission->rank_id);
+		qb->setp("name", permission->name);
+		qb->setp("url", permission->url);
+		qb->setp("revoke", permission->revoke);
+		qb->setp("sort_order", permission->sort_order);
+		qb->setp("permissions", permission->permissions);
+		qb->cset();
+		qb->where()->wp("id", permission->id);
+		qb->end_command();
+		qb->run_query();
+		//qb->print();
+	}
 }
 
 void RBACModel::create_table() {
@@ -106,7 +163,6 @@ void RBACModel::create_table() {
 	tb->integer("rank_id")->not_null()->next_row();
 	tb->varchar("name", 60)->not_null()->next_row();
 	tb->varchar("url", 100)->not_null()->next_row();
-
 	tb->integer("revoke")->not_null()->next_row();
 	tb->integer("sort_order")->not_null()->next_row();
 	tb->integer("permissions")->not_null()->next_row();
