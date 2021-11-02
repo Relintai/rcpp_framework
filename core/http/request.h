@@ -69,6 +69,7 @@ public:
 	virtual const String &get_path_full() const;
 	const String &get_path_segment(const uint32_t i) const;
 	const String &get_current_path_segment() const;
+	const String &get_next_path_segment() const;
 	uint32_t get_path_segment_count() const;
 	uint32_t get_current_segment_index() const;
 	uint32_t get_remaining_segment_count() const;
@@ -77,6 +78,7 @@ public:
 
 	String get_url_root_parent(const int parent = 1) const;
 	String get_url_root() const;
+	String get_url_root_current() const;
 	String get_url_site() const;
 
 	String get_url_root_parent(const String &add) const;

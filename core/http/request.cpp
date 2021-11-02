@@ -178,6 +178,18 @@ const String &Request::get_current_path_segment() const {
 	return _path_stack[_path_stack_pointer];
 }
 
+const String &Request::get_next_path_segment() const {
+	int pst = _path_stack_pointer + 1;
+
+	if (pst >= _path_stack.size()) {
+		//for convenience
+		static const String e_str = "";
+		return e_str;
+	}
+
+	return _path_stack[pst];
+}
+
 uint32_t Request::get_path_segment_count() const {
 	return _path_stack.size();
 }
@@ -214,9 +226,32 @@ String Request::get_url_root_parent(const int parent) const {
 }
 
 String Request::get_url_root() const {
+	int pst = _path_stack_pointer + 1;
+
+	if (pst > _path_stack.size()) {
+		pst = _path_stack.size();
+	}
+
 	String path = "/";
 
 	for (uint32_t i = 0; i < _path_stack_pointer; ++i) {
+		path += _path_stack[i];
+		path += "/";
+	}
+
+	return path;
+}
+
+String Request::get_url_root_current() const {
+	int pst = _path_stack_pointer + 1;
+
+	if (pst > _path_stack.size()) {
+		pst = _path_stack.size();
+	}
+
+	String path = "/";
+
+	for (uint32_t i = 0; i < pst; ++i) {
 		path += _path_stack[i];
 		path += "/";
 	}
