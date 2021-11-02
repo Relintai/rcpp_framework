@@ -217,7 +217,7 @@ void RBACController::admin_render_permission_editor_main_view(Request *request, 
 		b.div()->cls("row");
 		{
 			b.w("-- Rank: [ Id ]: ")->wn(perm->id)->w(", [ Rank Id ]: ")->wn(perm->rank_id)->w(", [ Name ]: ")->w(perm->name);
-			b.w(" [ URL ]: ")->w(perm->url)->w(", [ Revoke ]: ")->wbn(perm->revoke)->w(", [ Sort Order ]: ")->wn(perm->sort_order);
+			b.w(" [ URL ]: ")->w(perm->url)->w(", [ Sort Order ]: ")->wn(perm->sort_order);
 			b.w(" [ Permissions ]: ")->wn(perm->permissions);
 		}
 		b.cdiv();
@@ -240,14 +240,12 @@ void RBACController::admin_render_permission_editor_entry_edit_create_view(Reque
 
 	String name;
 	String url;
-	bool revoke = false;
 	int sort_order = 0;
 	int permissions = 0;
 
 	if (perm.is_valid()) {
 		name = perm->name;
 		url = perm->url;
-		revoke = perm->revoke;
 		sort_order = perm->sort_order;
 		permissions = perm->permissions;
 	}
@@ -276,8 +274,6 @@ void RBACController::admin_render_permission_editor_entry_edit_create_view(Reque
 		b.input()->type("text")->name("name")->value(name)->f()->br();
 		b.w("URL:")->br();
 		b.input()->type("text")->name("url")->value(url)->f()->cinput()->br();
-		b.w("Revoke:")->br();
-		b.input()->type("checkbox")->name("revoke")->value("revoke")->checked(revoke)->f()->cinput()->br();
 
 		//todo permissions (checkboxes + register api)
 
@@ -307,7 +303,6 @@ bool RBACController::admin_process_permission_editor_entry_edit_create_post(Requ
 
 	perm->name = request->get_parameter("name");
 	perm->url = request->get_parameter("url");
-	perm->revoke = request->get_parameter("settings").to_int();
 	perm->permissions = request->get_parameter("permissions").to_int();
 
 	//set this up in the form by default

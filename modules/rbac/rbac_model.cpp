@@ -31,7 +31,7 @@ std::map<int, Ref<RBACRank> > RBACModel::load_permissions() {
 	}
 
 	qb->reset();
-	qb->select("id,rank_id,name,url,revoke,sort_order,permissions")->from(RBAC_PERMISSION_TABLE);
+	qb->select("id,rank_id,name,url,sort_order,permissions")->from(RBAC_PERMISSION_TABLE);
 	res = qb->run();
 
 	while (res->next_row()) {
@@ -42,9 +42,8 @@ std::map<int, Ref<RBACRank> > RBACModel::load_permissions() {
 		p->rank_id = res->get_cell_int(1);
 		p->name = res->get_cell_str(2);
 		p->url = res->get_cell_str(3);
-		p->revoke = res->get_cell_bool(4);
-		p->sort_order = res->get_cell_int(5);
-		p->permissions = res->get_cell_int(6);
+		p->sort_order = res->get_cell_int(4);
+		p->permissions = res->get_cell_int(5);
 
 		Ref<RBACRank> r = ranks[p->rank_id];
 
@@ -115,8 +114,8 @@ void RBACModel::save_permission(const Ref<RBACPermission> &permission) {
 	Ref<QueryBuilder> qb = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
 	if (permission->id == 0) {
-		qb->insert(RBAC_PERMISSION_TABLE, "rank_id,name,url,revoke,sort_order,permissions")->values();
-		qb->val(permission->rank_id)->val(permission->name)->val(permission->url)->val(permission->revoke);
+		qb->insert(RBAC_PERMISSION_TABLE, "rank_id,name,url,sort_order,permissions")->values();
+		qb->val(permission->rank_id)->val(permission->name)->val(permission->url);
 		qb->val(permission->sort_order)->val(permission->permissions);
 		qb->cvalues();
 		qb->select_last_insert_id();
@@ -131,7 +130,6 @@ void RBACModel::save_permission(const Ref<RBACPermission> &permission) {
 		qb->setp("rank_id", permission->rank_id);
 		qb->setp("name", permission->name);
 		qb->setp("url", permission->url);
-		qb->setp("revoke", permission->revoke);
 		qb->setp("sort_order", permission->sort_order);
 		qb->setp("permissions", permission->permissions);
 		qb->cset();
@@ -163,7 +161,6 @@ void RBACModel::create_table() {
 	tb->integer("rank_id")->not_null()->next_row();
 	tb->varchar("name", 60)->not_null()->next_row();
 	tb->varchar("url", 100)->not_null()->next_row();
-	tb->integer("revoke")->not_null()->next_row();
 	tb->integer("sort_order")->not_null()->next_row();
 	tb->integer("permissions")->not_null()->next_row();
 

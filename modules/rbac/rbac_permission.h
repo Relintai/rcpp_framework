@@ -13,7 +13,6 @@ public:
 	int rank_id;
 	String name;
 	String url;
-	bool revoke;
 	int sort_order;
 	int permissions;
 
