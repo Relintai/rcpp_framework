@@ -19,6 +19,7 @@ public:
 	HTMLTag *name(const String &val);
 	HTMLTag *content(const String &val);
 	HTMLTag *value(const String &val);
+	HTMLTag *checked(const bool val = true);
 	HTMLTag *method(const String &val);
 	HTMLTag *action(const String &val);
 	HTMLTag *type(const String &val);
@@ -317,6 +318,8 @@ public:
 	HTMLBuilder *wr(const double val, const bool p_trailing = true);
 	HTMLBuilder *wi(const int64_t val, const int base = 10, const bool capitalize_hex = false);
 	HTMLBuilder *wui(const uint64_t val, const int base = 10, const bool capitalize_hex = false);
+	HTMLBuilder *wbn(const bool val);
+	HTMLBuilder *wbs(const bool val);
 
 	//write_escaped
 	HTMLBuilder *we(const String &val);

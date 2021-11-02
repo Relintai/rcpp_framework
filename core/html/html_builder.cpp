@@ -48,6 +48,14 @@ HTMLTag *HTMLTag::value(const String &val) {
 	return this;
 }
 
+HTMLTag *HTMLTag::checked(const bool val) {
+	if (val) {
+		result += " checked";
+	}
+
+	return this;
+}
+
 HTMLTag *HTMLTag::method(const String &val) {
 	attrib("method", val);
 
@@ -1769,6 +1777,21 @@ HTMLBuilder *HTMLBuilder::wui(const uint64_t val, const int base, const bool cap
 	write_tag();
 
 	result += String::num_uint64(val, base, capitalize_hex);
+
+	return this;
+}
+
+HTMLBuilder *HTMLBuilder::wbn(const bool val) {
+	write_tag();
+
+	result += String::bool_num(val);
+
+	return this;
+}
+HTMLBuilder *HTMLBuilder::wbs(const bool val) {
+	write_tag();
+
+	result += String::bool_str(val);
 
 	return this;
 }
