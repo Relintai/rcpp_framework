@@ -1,10 +1,10 @@
 #include "string.h"
 
+#include "core/math.h"
 #include "error_macros.h"
 #include <stdlib.h>
 #include <cstdio>
 #include <cstring>
-#include "core/math.h"
 
 static const int MAX_DECIMALS = 32;
 
@@ -143,7 +143,7 @@ int String::find(const String &val, const int from) const {
 		if (found) {
 			return i;
 		}
- 	}
+	}
 
 	return -1;
 }
@@ -568,6 +568,21 @@ void String::print() const {
 	::printf("%s\n", c_str());
 }
 
+String String::bool_num(bool val) {
+	if (val) {
+		return String("1", 2);
+	} else {
+		return String("0", 2);
+	}
+}
+String String::bool_str(bool val) {
+	if (val) {
+		return String("true", 5);
+	} else {
+		return String("false", 6);
+	}
+}
+
 //Taken from the Godot Engine (MIT License)
 //Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
 //Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
@@ -985,8 +1000,12 @@ bool operator!=(const String &a, const String &b) {
 }
 
 bool operator==(const String &a, const char *b) {
+	if (a._size == 0) {
+		return b[0] == '\0';
+	}
+
 	int i = 0;
-	while (b[i] != '\0' && i < a._size) {
+	while (i < a._size && b[i] != '\0') {
 		if (a[i] != b[i]) {
 			return false;
 		}
@@ -1006,8 +1025,12 @@ bool operator!=(const String &a, const char *b) {
 }
 
 bool operator==(const char *b, const String &a) {
+	if (a._size == 0) {
+		return b[0] == '\0';
+	}
+
 	int i = 0;
-	while (b[i] != '\0' && i < a._size) {
+	while (i < a._size && b[i] != '\0') {
 		if (a[i] != b[i]) {
 			return false;
 		}

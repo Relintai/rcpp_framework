@@ -68,6 +68,9 @@ public:
 	uint32_t to_uint() const;
 	std::string to_string() const;
 	void print() const;
+	
+	static String bool_num(bool val);
+	static String bool_str(bool val);
 
 	//Taken from the Godot Engine (MIT License)
 	//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
