@@ -17,6 +17,10 @@ public:
 	T get(const int index);
 	const T &get(const int index) const;
 	void set(const int index, const T &value);
+	void swap(const int index1, const int index2);
+
+	void sort_inc();
+	void sort_dec();
 
 	int size() const;
 	int capacity() const;
@@ -108,6 +112,35 @@ template <class T>
 void Vector<T>::set(const int index, const T &value) {
 	_data[index] = value;
 }
+
+template <class T>
+void Vector<T>::swap(const int index1, const int index2) {
+	T e = _data[index1];
+	_data[index1] = _data[index2];
+	_data[index2] = e;
+}
+
+template <class T>
+void Vector<T>::sort_inc() {
+	for (int i = 0; i < _size; ++i) {
+		for (int j = i + 1; j < _size; ++j) {
+			if (_data[j] < _data[i]) {
+				swap(i, j);
+			}
+		}
+	}
+}
+
+template <class T>
+void Vector<T>::sort_dec() {
+	for (int i = 0; i < _size; ++i) {
+		for (int j = i + 1; j < _size; ++j) {
+			if (_data[j] > _data[i]) {
+				swap(i, j);
+			}
+		}
+	}
+} 
 
 template <class T>
 int Vector<T>::size() const {
