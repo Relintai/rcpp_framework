@@ -30,10 +30,10 @@ void RBACController::admin_handle_request_main(Request *request) {
 		request->push_path();
 
 		admin_handle_edit_rank(request);
-	} else if (seg == "edit_permissions") {
+	} else if (seg == "permission_editor") {
 		request->push_path();
 
-		admin_handle_edit_permission(request);
+		admin_permission_editor(request);
 	}
 }
 
@@ -144,7 +144,7 @@ void RBACController::render_rank_view(Request *request, RBACAdminRankViewData *d
 	request->body += b.result;
 }
 
-void RBACController::admin_handle_edit_permission(Request *request) {
+void RBACController::admin_permission_editor(Request *request) {
 
 	String seg = request->get_current_path_segment();
 
@@ -154,7 +154,7 @@ void RBACController::admin_handle_edit_permission(Request *request) {
 	int id = seg.to_int();
 
 	if (id == 0) {
-		RLOG_MSG("RBACController::admin_handle_edit_permission: id == 0!\n");
+		RLOG_MSG("RBACController::admin_permission_editor: id == 0!\n");
 		request->send_redirect(request->get_url_root_parent());
 		return;
 	}
@@ -162,7 +162,7 @@ void RBACController::admin_handle_edit_permission(Request *request) {
 	Ref<RBACRank> rank = _permissions[id];
 
 	if (!rank.is_valid()) {
-		RLOG_MSG("RBACController::admin_handle_edit_permission: !rank.is_valid()\n");
+		RLOG_MSG("RBACController::admin_permission_editor: !rank.is_valid()\n");
 		request->send_redirect(request->get_url_root_parent());
 		return;
 	}
@@ -172,22 +172,30 @@ void RBACController::admin_handle_edit_permission(Request *request) {
 
 	request->push_path();
 
-	String seg2 = request->get_current_path_segment();
+	String segn = request->get_current_path_segment();
 
-	if (seg2 == "new") {
-		admin_render_edit_permission_entry_view(request, &data);
+	if (segn == "new") {
+		request->push_path();
+
+		if (request->get_method() == HTTP_METHOD_POST) {
+			if (admin_process_permission_editor_entry_edit_create_post(request, &data)) {
+				return;
+			}
+		}
+
+		admin_render_permission_editor_entry_edit_create_view(request, &data);
 		return;
 	}
 
-	admin_render_edit_permission_main_view(request, &data);
+	admin_render_permission_editor_main_view(request, &data);
 }
 
-void RBACController::admin_render_edit_permission_main_view(Request *request, RBACAdminEditPermissionView *data) {
+void RBACController::admin_render_permission_editor_main_view(Request *request, RBACAdminEditPermissionView *data) {
 	HTMLBuilder b;
 
 	Ref<RBACRank> rank = data->rank;
 
-	b.h4()->f()->a()->href(request->get_url_root_parent())->f()->w("<- Back")->ca()->ch4();
+	b.h4()->f()->a()->href(request->get_url_root_parent(2))->f()->w("<- Back")->ca()->ch4();
 	b.h4()->f()->w("RBAC Editor")->ch4();
 
 	b.div()->cls("heading");
@@ -199,9 +207,18 @@ void RBACController::admin_render_edit_permission_main_view(Request *request, RB
 	b.br();
 
 	for (int i = 0; i < rank->permissions.size(); ++i) {
+		Ref<RBACPermission> perm = rank->permissions[i];
+
+		if (!perm.is_valid()) {
+			RLOG_ERR("RBACController::admin_render_permission_editor_main_view: !perm.is_valid()\n");
+			continue;
+		}
+
 		b.div()->cls("row");
 		{
-			//todo
+			b.w("-- Rank: [ Id ]: ")->wn(perm->id)->w(", [ Rank Id ]: ")->wn(perm->rank_id)->w(", [ Name ]: ")->w(perm->name);
+			b.w(" [ URL ]: ")->w(perm->url)->w(", [ Revoke ]: ")->wbn(perm->revoke)->w(", [ Sort Order ]: ")->wn(perm->sort_order);
+			b.w(" [ Permissions ]: ")->wn(perm->permissions);
 		}
 		b.cdiv();
 	}
@@ -215,17 +232,98 @@ void RBACController::admin_render_edit_permission_main_view(Request *request, RB
 	request->body += b.result;
 }
 
-void RBACController::admin_render_edit_permission_entry_view(Request *request, RBACAdminEditPermissionView* data) {
+void RBACController::admin_render_permission_editor_entry_edit_create_view(Request *request, RBACAdminEditPermissionView *data) {
 	HTMLBuilder b;
 
 	Ref<RBACRank> rank = data->rank;
+	Ref<RBACPermission> perm = data->permission;
 
-	b.h4()->f()->a()->href(request->get_url_root_parent(2))->f()->w("<- Back")->ca()->ch4();
+	String name;
+	String url;
+	bool revoke = false;
+	int sort_order = 0;
+	int permissions = 0;
+
+	if (perm.is_valid()) {
+		name = perm->name;
+		url = perm->url;
+		revoke = perm->revoke;
+		sort_order = perm->sort_order;
+		permissions = perm->permissions;
+	}
+
+	b.h4()->f()->a()->href(request->get_url_root_parent())->f()->w("<- Back")->ca()->ch4();
 	b.h4()->f()->w("RBAC Editor")->ch4();
-
 	b.br();
 
+	b.div()->cls("messages");
+	for (int i = 0; i < data->messages.size(); ++i) {
+		b.w(data->messages[i])->br();
+	}
+	b.cdiv();
+	b.br();
+
+	b.div()->cls("heading");
+	{
+		b.w("Rank: [ Id ]: ")->wn(rank->id)->w(", [ Name ]: ")->w(rank->name)->w(", [ Name Internal ]: ")->w(rank->name_internal);
+	}
+	b.cdiv();
+	b.br();
+
+	b.form()->method("POST")->action(request->get_url_root());
+	{
+		b.w("Name:")->br();
+		b.input()->type("text")->name("name")->value(name)->f()->br();
+		b.w("URL:")->br();
+		b.input()->type("text")->name("url")->value(url)->f()->cinput()->br();
+		b.w("Revoke:")->br();
+		b.input()->type("checkbox")->name("revoke")->value("revoke")->checked(revoke)->f()->cinput()->br();
+
+		//todo permissions (checkboxes + register api)
+
+		b.input()->type("submit")->value("Save");
+	}
+	b.cform();
+
 	request->body += b.result;
+}
+
+bool RBACController::admin_process_permission_editor_entry_edit_create_post(Request *request, RBACAdminEditPermissionView *data) {
+	Ref<RBACRank> rank = data->rank;
+
+	Ref<RBACPermission> perm = data->permission;
+
+	if (!perm.is_valid()) {
+		perm.instance();
+
+		perm->rank_id = rank->id;
+
+		if (rank->permissions.size() > 0) {
+			Ref<RBACPermission> p = rank->permissions[rank->permissions.size() - 1];
+
+			perm->sort_order = p->sort_order + 1;
+		}
+	}
+
+	perm->name = request->get_parameter("name");
+	perm->url = request->get_parameter("url");
+	perm->revoke = request->get_parameter("settings").to_int();
+	perm->permissions = request->get_parameter("permissions").to_int();
+
+	//set this up in the form by default
+	//perm->sort_order = request->get_parameter("sort_order").to_int();
+
+	RBACModel::get_singleton()->save_permission(perm);
+
+	if (perm->id == 0) {
+		RLOG_ERR("RBACController::admin_process_permission_editor_entry_edit_create_post: perm->id == 0!\n");
+	}
+
+	rank->permissions.push_back(perm);
+
+	request->send_redirect(request->get_url_root_parent());
+
+	return true;
 }
 
 void RBACController::admin_render_rank_list(Request *request) {
@@ -243,7 +341,7 @@ void RBACController::admin_render_rank_list(Request *request) {
 
 		b.div()->cls("row");
 		{
-			b.a()->href(request->get_url_root("edit_permissions/") + String::num(r->id));
+			b.a()->href(request->get_url_root("permission_editor/") + String::num(r->id));
 			b.w("[ Id ]: ")->wn(r->id)->w(", [ Name ]: ")->w(r->name)->w(", [ Name Internal ]: ")->w(r->name_internal);
 			b.ca();
 
