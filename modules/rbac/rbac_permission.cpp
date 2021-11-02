@@ -1,5 +1,13 @@
 #include "rbac_permission.h"
 
+bool RBACPermission::is_smaller(const Ref<RBACPermission> &b) const {
+	if (!b.is_valid()) {
+		return true;
+	}
+
+	return sort_order < b->sort_order;
+}
+
 RBACPermission::RBACPermission() :
 		Resource() {
 

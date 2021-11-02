@@ -22,6 +22,8 @@ public:
 
 	Vector<Ref<RBACPermission> > permissions;
 
+	void sort_permissions();
+
 	RBACRank();
 	~RBACRank();
 };

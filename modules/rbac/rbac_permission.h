@@ -17,6 +17,8 @@ public:
 	int sort_order;
 	int permissions;
 
+	bool is_smaller(const Ref<RBACPermission> &b) const;
+
 	RBACPermission();
 	~RBACPermission();
 };
