@@ -150,8 +150,6 @@ void SessionManager::load_sessions() {
 
 	Ref<QueryBuilder> b = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
-	CRASH_COND(true);
-
 	b->select("id, session_id");
 	b->from(_table_name);
 	//b->print();
