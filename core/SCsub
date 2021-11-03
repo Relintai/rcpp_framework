@@ -12,6 +12,7 @@ env.add_source_files(env.core_sources, "./http/*.cpp")
 env.add_source_files(env.core_sources, "./hash/*.cpp")
 env.add_source_files(env.core_sources, "./bry_http/*.cpp")
 env.add_source_files(env.core_sources, "./database/*.cpp")
+env.add_source_files(env.core_sources, "./os/*.cpp")
 
 # Build it all as a library
 lib = env.add_library("core", env.core_sources)

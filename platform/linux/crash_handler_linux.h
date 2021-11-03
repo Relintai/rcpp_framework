@@ -1,5 +1,5 @@
 /*************************************************************************/
-/*  safe_refcount.cpp                                                    */
+/*  crash_handler_x11.h                                                  */
 /*************************************************************************/
 /*                       This file is part of:                           */
 /*                           GODOT ENGINE                                */
@@ -28,20 +28,18 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#if defined(DEBUG_ENABLED) && !defined(NO_THREADS)
+#ifndef CRASH_HANDLER_LINUX_H
+#define CRASH_HANDLER_LINUX_H
 
-#include "safe_refcount.h"
+#include "core/os/crash_handler.h"
 
-//#include "core/error_macros.h"
+class CrashHandlerLinux : public CrashHandler {
+public:
+	void enable();
+	void disable();
 
-/*
-// On C++14 we don't have std::atomic::is_always_lockfree, so this is the best we can do
-void check_lockless_atomics() {
-	// Doing the check for the types we actually care about
-	if (!std::atomic<uint32_t>{}.is_lock_free() || !std::atomic<uint64_t>{}.is_lock_free() || !std::atomic_bool{}.is_lock_free()) {
-		WARN_PRINT("Your compiler doesn't seem to support lockless atomics. Performance will be degraded. Please consider upgrading to a different or newer compiler.");
-	}
-}
-*/
+	CrashHandlerLinux();
+	~CrashHandlerLinux();
+};
 
-#endif
+#endif // CRASH_HANDLER_LINUX_H

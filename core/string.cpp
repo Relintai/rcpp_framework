@@ -44,7 +44,9 @@ void String::erase(const char element) {
 void String::erase(const int start_index, const int length) {
 	int sil = start_index + length;
 
-	if (sil >= _size) {
+	ERR_FAIL_INDEX(sil, _size);
+
+	if (length >= _size) {
 		_size = 0;
 		_data[_size] = '\0';
 		return;
