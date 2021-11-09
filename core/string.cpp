@@ -554,6 +554,108 @@ int String::to_int() const {
 	return atoi(c_str());
 }
 
+bool String::is_numeric() const {
+	if (_size == 0) {
+		return false;
+	}
+
+	int starti = 0;
+
+	if (_data[0] == '-') {
+		starti += 1;
+	}
+
+	bool had_dot = false;
+	for (int i = starti; i < _size; ++i) {
+		if (_data[i] == '.') {
+			if (!had_dot) {
+				had_dot = true;
+				continue;
+			} else {
+				return false;
+			}
+		}
+
+		char c = _data[i];
+
+		if (c < '0' || c > '9') {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool String::is_int() const {
+	if (_size == 0) {
+		return false;
+	}
+
+	int starti = 0;
+
+	if (_data[0] == '-') {
+		starti += 1;
+	}
+
+	for (int i = starti; i < _size; ++i) {
+		char c = _data[i];
+
+		if (c < '0' || c > '9') {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool String::is_uint() const {
+	if (_size == 0) {
+		return false;
+	}
+
+	for (int i = 0; i < _size; ++i) {
+		char c = _data[i];
+
+		if (c < '0' || c > '9') {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool String::is_zero() const {
+	if (_size == 0) {
+		return false;
+	}
+
+	int starti = 0;
+
+	if (_data[0] == '-') {
+		starti += 1;
+	}
+
+	bool had_dot = false;
+	for (int i = starti; i < _size; ++i) {
+		if (_data[i] == '.') {
+			if (!had_dot) {
+				had_dot = true;
+				continue;
+			} else {
+				return false;
+			}
+		}
+
+		char c = _data[i];
+
+		if (c != '0') {
+			return false;
+		}
+	}
+
+	return true;
+}
+
 uint32_t String::to_uint() const {
 	return static_cast<uint32_t>(atoll(c_str()));
 }
@@ -930,7 +1032,7 @@ String String::utf8(const char *p_utf8, int p_len) {
 //Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
 //Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 bool String::parse_utf8(const char *p_utf8, int p_len) {
-//#define _UNICERROR(m_err) print_line("Unicode error: " + String(m_err));
+	//#define _UNICERROR(m_err) print_line("Unicode error: " + String(m_err));
 
 	if (!p_utf8) {
 		return true;

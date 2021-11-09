@@ -65,6 +65,12 @@ public:
 	float to_float() const;
 	double to_double() const;
 	int to_int() const;
+
+	bool is_numeric() const;
+	bool is_int() const;
+	bool is_uint() const;
+	bool is_zero() const;
+
 	uint32_t to_uint() const;
 	std::string to_string() const;
 	void print() const;
