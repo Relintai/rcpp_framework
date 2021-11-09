@@ -7,6 +7,12 @@
 #include "linux/platform_linux.h"
 #endif
 
+void PlatformInitializer::arg_setup(int argc, char **argv, char **envp) {
+	if (_platform) {
+		_platform->arg_setup(argc, argv, envp);
+	}
+}
+
 void PlatformInitializer::allocate_platform() {
 	ERR_FAIL_COND(_platform);
 

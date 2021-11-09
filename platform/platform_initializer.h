@@ -7,6 +7,8 @@
 
 class PlatformInitializer {
 public:	
+	static void arg_setup(int argc, char **argv, char **envp);
+
 	static void allocate_platform();
 	static void free_platform();
 
