@@ -902,6 +902,265 @@ String String::num_scientific(double p_num) {
 	return buf;
 }
 
+//Taken from the Godot Engine (MIT License)
+//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+String String::ascii(bool p_allow_extended) const {
+	if (!size()) {
+		return String();
+	}
+
+	String cs;
+	cs.resize(size());
+
+	for (int i = 0; i < size(); i++) {
+		cs[i] = operator[](i);
+	}
+
+	return cs;
+}
+
+//Taken from the Godot Engine (MIT License)
+//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+String String::utf8(const char *p_utf8, int p_len) {
+	String ret;
+	ret.parse_utf8(p_utf8, p_len);
+
+	return ret;
+};
+
+//Taken from the Godot Engine (MIT License)
+//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+bool String::parse_utf8(const char *p_utf8, int p_len) {
+//#define _UNICERROR(m_err) print_line("Unicode error: " + String(m_err));
+
+	if (!p_utf8) {
+		return true;
+	}
+
+	String aux;
+
+	int cstr_size = 0;
+	int str_size = 0;
+
+	/* HANDLE BOM (Byte Order Mark) */
+	if (p_len < 0 || p_len >= 3) {
+		bool has_bom = uint8_t(p_utf8[0]) == 0xEF && uint8_t(p_utf8[1]) == 0xBB && uint8_t(p_utf8[2]) == 0xBF;
+		if (has_bom) {
+			//just skip it
+			if (p_len >= 0) {
+				p_len -= 3;
+			}
+			p_utf8 += 3;
+		}
+	}
+
+	{
+		const char *ptrtmp = p_utf8;
+		const char *ptrtmp_limit = &p_utf8[p_len];
+		int skip = 0;
+		while (ptrtmp != ptrtmp_limit && *ptrtmp) {
+			if (skip == 0) {
+				uint8_t c = *ptrtmp >= 0 ? *ptrtmp : uint8_t(256 + *ptrtmp);
+
+				/* Determine the number of characters in sequence */
+				if ((c & 0x80) == 0) {
+					skip = 0;
+				} else if ((c & 0xE0) == 0xC0) {
+					skip = 1;
+				} else if ((c & 0xF0) == 0xE0) {
+					skip = 2;
+				} else if ((c & 0xF8) == 0xF0) {
+					skip = 3;
+				} else if ((c & 0xFC) == 0xF8) {
+					skip = 4;
+				} else if ((c & 0xFE) == 0xFC) {
+					skip = 5;
+				} else {
+					RLOG_ERR("UNICODE_ERROR: invalid skip\n");
+					return true; //invalid utf8
+				}
+
+				if (skip == 1 && (c & 0x1E) == 0) {
+					//printf("overlong rejected\n");
+					RLOG_ERR("UNICODE_ERROR: overlong rejected\n");
+					return true; //reject overlong
+				}
+
+				str_size++;
+
+			} else {
+				--skip;
+			}
+
+			cstr_size++;
+			ptrtmp++;
+		}
+
+		if (skip) {
+			RLOG_ERR("UNICODE_ERROR: no space left\n");
+			return true; //not enough spac
+		}
+	}
+
+	if (str_size == 0) {
+		clear();
+		return false;
+	}
+
+	resize(str_size + 1);
+	char *dst = dataw();
+	dst[str_size] = 0;
+
+	while (cstr_size) {
+		int len = 0;
+
+		/* Determine the number of characters in sequence */
+		if ((*p_utf8 & 0x80) == 0) {
+			len = 1;
+		} else if ((*p_utf8 & 0xE0) == 0xC0) {
+			len = 2;
+		} else if ((*p_utf8 & 0xF0) == 0xE0) {
+			len = 3;
+		} else if ((*p_utf8 & 0xF8) == 0xF0) {
+			len = 4;
+		} else if ((*p_utf8 & 0xFC) == 0xF8) {
+			len = 5;
+		} else if ((*p_utf8 & 0xFE) == 0xFC) {
+			len = 6;
+		} else {
+			RLOG_ERR("UNICODE_ERROR: invalid len\n");
+
+			return true; //invalid UTF8
+		}
+
+		if (len > cstr_size) {
+			RLOG_ERR("UNICODE_ERROR: no space left\n");
+			return true; //not enough space
+		}
+
+		if (len == 2 && (*p_utf8 & 0x1E) == 0) {
+			//printf("overlong rejected\n");
+			RLOG_ERR("UNICODE_ERROR: no space left\n");
+			return true; //reject overlong
+		}
+
+		/* Convert the first character */
+
+		uint32_t unichar = 0;
+
+		if (len == 1) {
+			unichar = *p_utf8;
+		} else {
+			unichar = (0xFF >> (len + 1)) & *p_utf8;
+
+			for (int i = 1; i < len; i++) {
+				if ((p_utf8[i] & 0xC0) != 0x80) {
+					RLOG_ERR("UNICODE_ERROR: invalid utf8\n");
+					return true; //invalid utf8
+				}
+				if (unichar == 0 && i == 2 && ((p_utf8[i] & 0x7F) >> (7 - len)) == 0) {
+					RLOG_ERR("UNICODE_ERROR: invalid utf8 overlong\n");
+					return true; //no overlong
+				}
+				unichar = (unichar << 6) | (p_utf8[i] & 0x3F);
+			}
+		}
+
+		//printf("char %i, len %i\n",unichar,len);
+		if (sizeof(wchar_t) == 2 && unichar > 0xFFFF) {
+			unichar = ' '; //too long for windows
+		}
+
+		*(dst++) = unichar;
+		cstr_size -= len;
+		p_utf8 += len;
+	}
+
+	return false;
+}
+
+String String::utf8() const {
+	int l = size();
+	if (!l) {
+		return String();
+	}
+
+	const char *d = data();
+	int fl = 0;
+	for (int i = 0; i < l; i++) {
+		uint32_t c = d[i];
+		if (c <= 0x7f) { // 7 bits.
+			fl += 1;
+		} else if (c <= 0x7ff) { // 11 bits
+			fl += 2;
+		} else if (c <= 0xffff) { // 16 bits
+			fl += 3;
+		} else if (c <= 0x001fffff) { // 21 bits
+			fl += 4;
+
+		} else if (c <= 0x03ffffff) { // 26 bits
+			fl += 5;
+		} else if (c <= 0x7fffffff) { // 31 bits
+			fl += 6;
+		}
+	}
+
+	String utf8s;
+	if (fl == 0) {
+		return utf8s;
+	}
+
+	utf8s.resize(fl + 1);
+	uint8_t *cdst = (uint8_t *)utf8s.dataw();
+
+#define APPEND_CHAR(m_c) *(cdst++) = m_c
+
+	for (int i = 0; i < l; i++) {
+		uint32_t c = d[i];
+
+		if (c <= 0x7f) { // 7 bits.
+			APPEND_CHAR(c);
+		} else if (c <= 0x7ff) { // 11 bits
+
+			APPEND_CHAR(uint32_t(0xc0 | ((c >> 6) & 0x1f))); // Top 5 bits.
+			APPEND_CHAR(uint32_t(0x80 | (c & 0x3f))); // Bottom 6 bits.
+		} else if (c <= 0xffff) { // 16 bits
+
+			APPEND_CHAR(uint32_t(0xe0 | ((c >> 12) & 0x0f))); // Top 4 bits.
+			APPEND_CHAR(uint32_t(0x80 | ((c >> 6) & 0x3f))); // Middle 6 bits.
+			APPEND_CHAR(uint32_t(0x80 | (c & 0x3f))); // Bottom 6 bits.
+		} else if (c <= 0x001fffff) { // 21 bits
+
+			APPEND_CHAR(uint32_t(0xf0 | ((c >> 18) & 0x07))); // Top 3 bits.
+			APPEND_CHAR(uint32_t(0x80 | ((c >> 12) & 0x3f))); // Upper middle 6 bits.
+			APPEND_CHAR(uint32_t(0x80 | ((c >> 6) & 0x3f))); // Lower middle 6 bits.
+			APPEND_CHAR(uint32_t(0x80 | (c & 0x3f))); // Bottom 6 bits.
+		} else if (c <= 0x03ffffff) { // 26 bits
+
+			APPEND_CHAR(uint32_t(0xf8 | ((c >> 24) & 0x03))); // Top 2 bits.
+			APPEND_CHAR(uint32_t(0x80 | ((c >> 18) & 0x3f))); // Upper middle 6 bits.
+			APPEND_CHAR(uint32_t(0x80 | ((c >> 12) & 0x3f))); // middle 6 bits.
+			APPEND_CHAR(uint32_t(0x80 | ((c >> 6) & 0x3f))); // Lower middle 6 bits.
+			APPEND_CHAR(uint32_t(0x80 | (c & 0x3f))); // Bottom 6 bits.
+		} else if (c <= 0x7fffffff) { // 31 bits
+
+			APPEND_CHAR(uint32_t(0xfc | ((c >> 30) & 0x01))); // Top 1 bit.
+			APPEND_CHAR(uint32_t(0x80 | ((c >> 24) & 0x3f))); // Upper upper middle 6 bits.
+			APPEND_CHAR(uint32_t(0x80 | ((c >> 18) & 0x3f))); // Lower upper middle 6 bits.
+			APPEND_CHAR(uint32_t(0x80 | ((c >> 12) & 0x3f))); // Upper lower middle 6 bits.
+			APPEND_CHAR(uint32_t(0x80 | ((c >> 6) & 0x3f))); // Lower lower middle 6 bits.
+			APPEND_CHAR(uint32_t(0x80 | (c & 0x3f))); // Bottom 6 bits.
+		}
+	}
+#undef APPEND_CHAR
+	*cdst = 0; //trailing zero
+
+	return utf8s;
+}
+
 char *String::c_str() {
 	return _data;
 }

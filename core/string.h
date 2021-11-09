@@ -82,6 +82,14 @@ public:
 	static String num_uint64(uint64_t p_num, int base = 10, bool capitalize_hex = false);
 	static String chr(char32_t p_char);
 
+	//Taken from the Godot Engine (MIT License)
+	//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+	//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	String ascii(bool p_allow_extended = false) const;
+	String utf8() const;
+	bool parse_utf8(const char *p_utf8, int p_len = -1); //return true on error
+	static String utf8(const char *p_utf8, int p_len = -1);
+
 	char *c_str();
 	const char *c_str() const;
 
