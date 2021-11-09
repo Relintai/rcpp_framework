@@ -5,6 +5,8 @@
 
 class PlatformLinux : public Platform {
 public:
+	virtual String get_executable_path();
+
 	PlatformLinux();
 	virtual ~PlatformLinux();
 

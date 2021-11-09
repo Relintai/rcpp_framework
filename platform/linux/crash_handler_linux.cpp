@@ -47,64 +47,7 @@
 #include "core/string.h"
 #include "core/containers/vector.h"
 
-String get_executable_path() {
-#ifdef __linux__
-	//fix for running from a symlink
-	char buf[256];
-	memset(buf, 0, 256);
-	ssize_t len = readlink("/proc/self/exe", buf, sizeof(buf));
-	String b;
-	if (len > 0) {
-		//b.parse_utf8(buf, len);
-		b = buf;
-	}
-	if (b == "") {
-		//WARN_PRINT("Couldn't get executable path from /proc/self/exe, using argv[0]");
-		//return OS::get_executable_path();
-
-		return "";
-	}
-	return b;
-	/*
-#elif defined(__OpenBSD__) || defined(__NetBSD__)
-	char resolved_path[MAXPATHLEN];
-
-	realpath(OS::get_executable_path().utf8().get_data(), resolved_path);
-
-	return String(resolved_path);
-#elif defined(__FreeBSD__)
-	int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
-	char buf[MAXPATHLEN];
-	size_t len = sizeof(buf);
-	if (sysctl(mib, 4, buf, &len, NULL, 0) != 0) {
-		WARN_PRINT("Couldn't get executable path from sysctl");
-		return OS::get_executable_path();
-	}
-	String b;
-	b.parse_utf8(buf);
-	return b;
-#elif defined(__APPLE__)
-	char temp_path[1];
-	uint32_t buff_size = 1;
-	_NSGetExecutablePath(temp_path, &buff_size);
-
-	char *resolved_path = new char[buff_size + 1];
-
-	if (_NSGetExecutablePath(resolved_path, &buff_size) == 1)
-		WARN_PRINT("MAXPATHLEN is too small");
-
-	String path(resolved_path);
-	delete[] resolved_path;
-
-	return path;
-	*/
-#else
-	//ERR_PRINT("Warning, don't know how to obtain executable path on this OS! Please override this function properly.");
-	//return OS::get_executable_path();
-	return "";
-#endif
-}
-
+#include "core/os/platform.h"
 
 int execute(const String &p_path, const Vector<String> &p_arguments, bool p_blocking, int64_t *r_child_id, String *r_pipe, int *r_exitcode) {
 #ifdef __EMSCRIPTEN__
@@ -120,7 +63,9 @@ int execute(const String &p_path, const Vector<String> &p_arguments, bool p_bloc
 		argss = "\"" + p_path + "\"";
 
 		for (int i = 0; i < p_arguments.size(); i++) {
-			argss += String(" \"") + p_arguments[i] + "\"";
+			argss += String(" \"");
+			argss += p_arguments[i];
+			argss += String("\"");
 		}
 
 		if (read_stderr) {
@@ -128,6 +73,7 @@ int execute(const String &p_path, const Vector<String> &p_arguments, bool p_bloc
 		} else {
 			argss += " 2>/dev/null"; //silence stderr
 		}
+
 		FILE *f = popen(argss.data(), "r");
 
 		if (!f) {
@@ -143,12 +89,15 @@ int execute(const String &p_path, const Vector<String> &p_arguments, bool p_bloc
 			//	p_pipe_mutex->lock();
 			//}
 			
-			(*r_pipe) += buf;//String::utf8(buf);
+			(*r_pipe) += String::utf8(buf);
+
 			//if (p_pipe_mutex) {
 			//	p_pipe_mutex->unlock();
 			//}
 		}
+
 		int rv = pclose(f);
+
 		if (r_exitcode) {
 			*r_exitcode = WEXITSTATUS(rv);
 		}
@@ -184,6 +133,7 @@ int execute(const String &p_path, const Vector<String> &p_arguments, bool p_bloc
 		execvp(p_path.c_str(), &args[0]);
 		// still alive? something failed..
 		fprintf(stderr, "**ERROR** OS_Unix::execute - Could not create child process while executing: %s\n", p_path.data());
+
 		raise(SIGKILL);
 	}
 
@@ -207,7 +157,7 @@ int execute(const String &p_path, const Vector<String> &p_arguments, bool p_bloc
 static void handle_crash(int sig) {
 	void *bt_buffer[256];
 	size_t size = backtrace(bt_buffer, 256);
-	String _execpath;// = OS::get_singleton()->get_executable_path();
+	String _execpath = Platform::get_singleton()->get_executable_path();
 
 	// Dump the backtrace to stderr with a message to the user
 	fprintf(stderr, "\n================================================================\n");
@@ -251,11 +201,12 @@ static void handle_crash(int sig) {
 			// Try to get the file/line number using addr2line
 			int ret;
 			int err = execute(String("addr2line"), args, true, nullptr, &output, &ret);
-			//if (err == 0) {
-			//	output.erase(output.size() - 1, 1);
-			//}
 
-			fprintf(stderr, "[%ld] %s (%ls)\n", (long int)i, fname, output.c_str());
+			if (err == 0) {
+				output.erase(output.size() - 1, 1);
+			}
+
+			fprintf(stderr, "[%ld] %s (%s)\n", (long int)i, fname, output.c_str());
 		}
 
 		free(strings);
