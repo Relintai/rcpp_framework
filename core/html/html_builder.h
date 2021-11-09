@@ -24,6 +24,7 @@ public:
 	HTMLTag *action(const String &val);
 	HTMLTag *type(const String &val);
 	HTMLTag *placeholder(const String &val);
+	HTMLTag *fora(const String &val); //for attrib -> for is reserved keyword
 	HTMLTag *rel(const String &val);
 	HTMLTag *rel_stylesheet();
 	HTMLTag *charset(const String &val);

@@ -80,6 +80,12 @@ HTMLTag *HTMLTag::placeholder(const String &val) {
 	return this;
 }
 
+HTMLTag *HTMLTag::fora(const String &val) {
+	attrib("for", val);
+
+	return this;
+}
+
 HTMLTag *HTMLTag::rel(const String &val) {
 	attrib("rel", val);
 
