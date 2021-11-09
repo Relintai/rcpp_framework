@@ -10,6 +10,10 @@ String Platform::get_executable_path() {
 	return arg_parser.executable_name;
 }
 
+int Platform::execute(const String &p_path, const Vector<String> &p_arguments, bool p_blocking, int64_t *r_child_id, String *r_pipe, int *r_exitcode, Mutex *p_pipe_mutex, bool read_stderr) {
+	return 0;
+}
+
 Platform *Platform::get_singleton() {
 	return _self;
 }

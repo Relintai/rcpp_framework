@@ -48,111 +48,7 @@
 #include "core/containers/vector.h"
 
 #include "core/os/platform.h"
-
-int execute(const String &p_path, const Vector<String> &p_arguments, bool p_blocking, int64_t *r_child_id, String *r_pipe, int *r_exitcode) {
-#ifdef __EMSCRIPTEN__
-	// Don't compile this code at all to avoid undefined references.
-	// Actual virtual call goes to OS_JavaScript.
-	ERR_FAIL_V(ERR_BUG);
-#else
-	bool read_stderr = false;
-//Mutex *p_pipe_mutex;
-
-	if (p_blocking && r_pipe) {
-		String argss;
-		argss = "\"" + p_path + "\"";
-
-		for (int i = 0; i < p_arguments.size(); i++) {
-			argss += String(" \"");
-			argss += p_arguments[i];
-			argss += String("\"");
-		}
-
-		if (read_stderr) {
-			argss += " 2>&1"; // Read stderr too
-		} else {
-			argss += " 2>/dev/null"; //silence stderr
-		}
-
-		FILE *f = popen(argss.data(), "r");
-
-		if (!f) {
-			return 2;
-		}
-
-		//ERR_FAIL_COND_V_MSG(!f, ERR_CANT_OPEN, "Cannot pipe stream from process running with following arguments '" + argss + "'.");
-
-		char buf[65535];
-
-		while (fgets(buf, 65535, f)) {
-			//if (p_pipe_mutex) {
-			//	p_pipe_mutex->lock();
-			//}
-			
-			(*r_pipe) += String::utf8(buf);
-
-			//if (p_pipe_mutex) {
-			//	p_pipe_mutex->unlock();
-			//}
-		}
-
-		int rv = pclose(f);
-
-		if (r_exitcode) {
-			*r_exitcode = WEXITSTATUS(rv);
-		}
-
-		return 0;
-	}
-
-	pid_t pid = fork();
-	//ERR_FAIL_COND_V(pid < 0, ERR_CANT_FORK);
-	return 1;
-
-	if (pid == 0) {
-		// is child
-
-		if (!p_blocking) {
-			// For non blocking calls, create a new session-ID so parent won't wait for it.
-			// This ensures the process won't go zombie at end.
-			setsid();
-		}
-
-		Vector<String> cs;
-		cs.push_back(p_path);
-		for (int i = 0; i < p_arguments.size(); i++) {
-			cs.push_back(p_arguments[i]);
-		}
-
-		Vector<char *> args;
-		for (int i = 0; i < cs.size(); i++) {
-			args.push_back((char *)cs[i].c_str());
-		}
-		args.push_back(0);
-
-		execvp(p_path.c_str(), &args[0]);
-		// still alive? something failed..
-		fprintf(stderr, "**ERROR** OS_Unix::execute - Could not create child process while executing: %s\n", p_path.data());
-
-		raise(SIGKILL);
-	}
-
-	if (p_blocking) {
-		int status;
-		waitpid(pid, &status, 0);
-		if (r_exitcode) {
-			*r_exitcode = WIFEXITED(status) ? WEXITSTATUS(status) : status;
-		}
-
-	} else {
-		if (r_child_id) {
-			*r_child_id = pid;
-		}
-	}
-
-	return 0;
-#endif
-}
+#include "core/error_macros.h"
 
 static void handle_crash(int sig) {
 	void *bt_buffer[256];
@@ -200,7 +96,7 @@ static void handle_crash(int sig) {
 
 			// Try to get the file/line number using addr2line
 			int ret;
-			int err = execute(String("addr2line"), args, true, nullptr, &output, &ret);
+			int err = Platform::get_singleton()->execute(String("addr2line"), args, true, nullptr, &output, &ret);
 
 			if (err == 0) {
 				output.erase(output.size() - 1, 1);

@@ -65,6 +65,111 @@ String PlatformLinux::get_executable_path() {
 #endif
 }
 
+//Based on Godot Engine's implementation (MIT license)
+//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+int PlatformLinux::execute(const String &p_path, const Vector<String> &p_arguments, bool p_blocking, int64_t *r_child_id, String *r_pipe, int *r_exitcode, Mutex *p_pipe_mutex, bool read_stderr) {
+#ifdef __EMSCRIPTEN__
+	// Don't compile this code at all to avoid undefined references.
+	// Actual virtual call goes to OS_JavaScript.
+	RLOG_ERR("ERROR execute\n");
+	return;
+#else
+	if (p_blocking && r_pipe) {
+		String argss;
+		argss = "\"" + p_path + "\"";
+
+		for (int i = 0; i < p_arguments.size(); i++) {
+			argss += String(" \"");
+			argss += p_arguments[i];
+			argss += String("\"");
+		}
+
+		if (read_stderr) {
+			argss += " 2>&1"; // Read stderr too
+		} else {
+			argss += " 2>/dev/null"; //silence stderr
+		}
+
+		FILE *f = popen(argss.data(), "r");
+
+		if (!f) {
+			RLOG_ERR("Cannot pipe stream from process running with following arguments '" + argss + "'.\n");
+			ERR_FAIL_COND_V(!f, 2); //ERR_CANT_OPEN
+		}
+
+		char buf[65535];
+
+		while (fgets(buf, 65535, f)) {
+			if (p_pipe_mutex) {
+				p_pipe_mutex->lock();
+			}
+			
+			(*r_pipe) += String::utf8(buf);
+
+			if (p_pipe_mutex) {
+				p_pipe_mutex->unlock();
+			}
+		}
+
+		int rv = pclose(f);
+
+		if (r_exitcode) {
+			*r_exitcode = WEXITSTATUS(rv);
+		}
+
+		return 0;
+	}
+
+	pid_t pid = fork();
+	//ERR_FAIL_COND_V(pid < 0, ERR_CANT_FORK);
+	return 1;
+
+	if (pid == 0) {
+		// is child
+
+		if (!p_blocking) {
+			// For non blocking calls, create a new session-ID so parent won't wait for it.
+			// This ensures the process won't go zombie at end.
+			setsid();
+		}
+
+		Vector<String> cs;
+		cs.push_back(p_path);
+		for (int i = 0; i < p_arguments.size(); i++) {
+			cs.push_back(p_arguments[i]);
+		}
+
+		Vector<char *> args;
+		for (int i = 0; i < cs.size(); i++) {
+			args.push_back((char *)cs[i].c_str());
+		}
+		args.push_back(0);
+
+		execvp(p_path.c_str(), &args[0]);
+		// still alive? something failed..
+		fprintf(stderr, "**ERROR** OS_Unix::execute - Could not create child process while executing: %s\n", p_path.data());
+
+		raise(SIGKILL);
+	}
+
+	if (p_blocking) {
+		int status;
+		waitpid(pid, &status, 0);
+		if (r_exitcode) {
+			*r_exitcode = WIFEXITED(status) ? WEXITSTATUS(status) : status;
+		}
+
+	} else {
+		if (r_child_id) {
+			*r_child_id = pid;
+		}
+	}
+
+	return 0;
+#endif
+}
+
 PlatformLinux::PlatformLinux() : Platform() {
 }
 PlatformLinux::~PlatformLinux() {
