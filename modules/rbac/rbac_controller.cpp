@@ -47,7 +47,6 @@ void RBACController::admin_handle_new_rank(Request *request) {
 		rank->name = request->get_parameter("name");
 		rank->name_internal = request->get_parameter("name_internal");
 		rank->settings = request->get_parameter("settings");
-		rank->rank_permissions = request->get_parameter("rank_permissions").to_int();
 
 		int base_permissions = 0;
 
@@ -60,6 +59,18 @@ void RBACController::admin_handle_new_rank(Request *request) {
 		}
 
 		rank->base_permissions = base_permissions;
+
+		int rank_permissions = 0;
+
+		for (int i = 0; i < _registered_rank_permissions.size(); ++i) {
+			String param = request->get_parameter("perm_rank_check_" + String::num(i));
+
+			if (param != "") {
+				rank_permissions |= _registered_rank_permissions[i].value;
+			}
+		}
+
+		rank->rank_permissions = rank_permissions;
 
 		RBACModel::get_singleton()->save_rank(rank);
 
@@ -102,7 +113,6 @@ void RBACController::admin_handle_edit_rank(Request *request) {
 		rank->name = request->get_parameter("name");
 		rank->name_internal = request->get_parameter("name_internal");
 		rank->settings = request->get_parameter("settings");
-		rank->rank_permissions = request->get_parameter("rank_permissions").to_int();
 
 		int base_permissions = 0;
 
@@ -115,6 +125,18 @@ void RBACController::admin_handle_edit_rank(Request *request) {
 		}
 
 		rank->base_permissions = base_permissions;
+
+		int rank_permissions = 0;
+
+		for (int i = 0; i < _registered_rank_permissions.size(); ++i) {
+			String param = request->get_parameter("perm_rank_check_" + String::num(i));
+
+			if (param != "") {
+				rank_permissions |= _registered_rank_permissions[i].value;
+			}
+		}
+
+		rank->rank_permissions = rank_permissions;
 
 		RBACModel::get_singleton()->save_rank(rank);
 
@@ -162,11 +184,24 @@ void RBACController::render_rank_view(Request *request, RBACAdminRankViewData *d
 		b.w("Custom Settings:")->br();
 		b.input()->type("text")->name("settings")->value(settings)->f()->cinput()->br();
 
+		b.w("Base Permissions:")->br();
+
 		for (int i = 0; i < _registered_permissions.size(); ++i) {
 			String checkbox_name = "perm_check_" + String::num(i);
 
 			b.input()->type("checkbox")->name(checkbox_name)->value(checkbox_name)->id(checkbox_name)->checked((base_permissions & _registered_permissions[i].value) != 0);
 			b.label()->fora(checkbox_name)->f()->w(_registered_permissions[i].name)->clabel();
+		}
+
+		b.br();
+
+		b.w("Rank Permissions:")->br();
+
+		for (int i = 0; i < _registered_rank_permissions.size(); ++i) {
+			String checkbox_name = "perm_rank_check_" + String::num(i);
+
+			b.input()->type("checkbox")->name(checkbox_name)->value(checkbox_name)->id(checkbox_name)->checked((rank_permissions & _registered_rank_permissions[i].value) != 0);
+			b.label()->fora(checkbox_name)->f()->w(_registered_rank_permissions[i].name)->clabel();
 		}
 
 		b.br();
@@ -365,6 +400,8 @@ void RBACController::admin_render_permission_editor_entry_edit_create_view(Reque
 		b.w("URL:")->br();
 		b.input()->type("text")->name("url")->value(url)->f()->cinput()->br();
 
+		b.w("Permissions:")->br();
+
 		for (int i = 0; i < _registered_permissions.size(); ++i) {
 			String checkbox_name = "perm_check_" + String::num(i);
 
@@ -457,6 +494,26 @@ void RBACController::admin_render_rank_list(Request *request) {
 					}
 
 					b.w(_registered_permissions[i].name);
+
+					++pcount;
+				}
+			}
+
+			if (pcount == 0) {
+				b.w("- None -");
+			}
+
+			b.w(", [ Rank Permissions ]: ");
+
+			pcount = 0;
+			perms = r->rank_permissions;
+			for (int i = 0; i < _registered_rank_permissions.size(); ++i) {
+				if ((_registered_rank_permissions[i].value & perms) != 0) {
+					if (pcount > 0) {
+						b.w(", ");
+					}
+
+					b.w(_registered_rank_permissions[i].name);
 
 					++pcount;
 				}
