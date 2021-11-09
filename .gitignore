@@ -5,6 +5,8 @@ bin/**
 *.a
 *.pyc
 
+.cache/**
+
 settings.json
 
 compile_commands.json
