@@ -7,6 +7,8 @@ class Platform {
 public:
 	virtual void arg_setup(int argc, char **argv, char **envp);
 
+	virtual String get_executable_path();
+
 	static Platform *get_singleton();
 
 	Platform();

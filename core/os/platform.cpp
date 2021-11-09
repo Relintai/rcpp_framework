@@ -6,6 +6,10 @@ void Platform::arg_setup(int argc, char **argv, char **envp) {
 	arg_parser.setup(argc, argv, envp);
 }
 
+String Platform::get_executable_path() {
+	return arg_parser.executable_name;
+}
+
 Platform *Platform::get_singleton() {
 	return _self;
 }
