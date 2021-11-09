@@ -9,12 +9,12 @@
 #define RBAC_RANK_TABLE "rbac_ranks"
 #define RBAC_PERMISSION_TABLE "rbac_permissions"
 
-std::map<int, Ref<RBACRank> > RBACModel::load_permissions() {
+std::map<int, Ref<RBACRank> > RBACModel::load_ranks() {
 	std::map<int, Ref<RBACRank> > ranks;
 
 	Ref<QueryBuilder> qb = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
-	qb->select("id,name,name_internal,settings,rank_permissions")->from(RBAC_RANK_TABLE);
+	qb->select("id,name,name_internal,settings,base_permissions,rank_permissions")->from(RBAC_RANK_TABLE);
 	Ref<QueryResult> res =  qb->run();
 
 	while (res->next_row()) {

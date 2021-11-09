@@ -57,7 +57,12 @@ public:
 	void admin_render_rank_list(Request *request);
 	void admin_render_rank_editor(Request *request);
 
+	void register_permission(const String& name, const int val);
+	void register_rank_permission(const String& name, const int val);
+	void clear_registered_permissions();
+
 	void initialize();
+	virtual void register_permissions();
 
 	static RBACController *get_singleton();
 
@@ -67,7 +72,23 @@ public:
 protected:
 	static RBACController *_self;
 
-	std::map<int, Ref<RBACRank> > _permissions;
+	std::map<int, Ref<RBACRank> > _ranks;
+
+	struct PermissionEntry {
+		String name;
+		int value;
+
+		PermissionEntry() {
+		}
+
+		PermissionEntry(const String& p_name, const int p_val) {
+			name = p_name;
+			value = p_val;
+		}
+	};
+
+	Vector<PermissionEntry> _registered_permissions;
+	Vector<PermissionEntry> _registered_rank_permissions;
 };
 
 #endif

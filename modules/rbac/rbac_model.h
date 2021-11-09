@@ -14,7 +14,7 @@ class RBACModel : public Model {
 	RCPP_OBJECT(RBACModel, Model);
 
 public:
-	virtual std::map<int, Ref<RBACRank> > load_permissions();
+	virtual std::map<int, Ref<RBACRank> > load_ranks();
 
 	virtual void save(const Ref<RBACRank> &rank);
 	virtual void save_rank(const Ref<RBACRank> &rank);
