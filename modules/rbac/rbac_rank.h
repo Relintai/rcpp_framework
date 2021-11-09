@@ -18,6 +18,7 @@ public:
 	String name_internal;
 	String settings;
 
+	int base_permissions;
 	int rank_permissions;
 
 	Vector<Ref<RBACPermission> > permissions;

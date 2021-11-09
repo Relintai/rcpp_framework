@@ -14,6 +14,7 @@ RBACRank::RBACRank() :
 		Resource() {
 
 	id = 0;
+	base_permissions = 0;
 	rank_permissions = 0;
 }
 

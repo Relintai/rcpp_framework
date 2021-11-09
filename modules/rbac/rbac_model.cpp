@@ -25,7 +25,8 @@ std::map<int, Ref<RBACRank> > RBACModel::load_permissions() {
 		r->name = res->get_cell_str(1);
 		r->name_internal = res->get_cell_str(2);
 		r->settings = res->get_cell_str(3);
-		r->rank_permissions = res->get_cell_int(4);
+		r->base_permissions = res->get_cell_int(4);
+		r->rank_permissions = res->get_cell_int(5);
 
 		ranks[r->id] = r;
 	}
@@ -86,8 +87,8 @@ void RBACModel::save_rank(const Ref<RBACRank> &rank) {
 	Ref<QueryBuilder> qb = DatabaseManager::get_singleton()->ddb->get_query_builder();
 
 	if (rank->id == 0) {
-		qb->insert(RBAC_RANK_TABLE, "name,name_internal,settings,rank_permissions")->values();
-		qb->val(rank->name)->val(rank->name_internal)->val(rank->settings)->val(rank->rank_permissions);
+		qb->insert(RBAC_RANK_TABLE, "name,name_internal,settings,base_permissions,rank_permissions")->values();
+		qb->val(rank->name)->val(rank->name_internal)->val(rank->settings)->val(rank->base_permissions)->val(rank->rank_permissions);
 		qb->cvalues();
 		qb->select_last_insert_id();
 		Ref<QueryResult> res = qb->run();
@@ -101,6 +102,7 @@ void RBACModel::save_rank(const Ref<RBACRank> &rank) {
 		qb->setp("name", rank->name);
 		qb->setp("name_internal", rank->name_internal);
 		qb->setp("settings", rank->settings);
+		qb->setp("base_permissions", rank->base_permissions);
 		qb->setp("rank_permissions", rank->rank_permissions);
 		qb->cset();
 		qb->where()->wp("id", rank->id);
@@ -148,6 +150,7 @@ void RBACModel::create_table() {
 	tb->varchar("name", 60)->not_null()->next_row();
 	tb->varchar("name_internal", 100)->not_null()->next_row();
 	tb->varchar("settings", 200)->not_null()->next_row();
+	tb->integer("base_permissions")->not_null()->next_row();
 	tb->integer("rank_permissions")->not_null()->next_row();
 	tb->primary_key("id");
 	tb->ccreate_table();
