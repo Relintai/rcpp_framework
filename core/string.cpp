@@ -42,20 +42,16 @@ void String::erase(const char element) {
 }
 
 void String::erase(const int start_index, const int length) {
+	ERR_FAIL_INDEX(start_index, _size);
+
 	int sil = start_index + length;
 
-	ERR_FAIL_INDEX(sil, _size + 1);
-
-	if (length >= _size) {
-		_size = 0;
-		_data[_size] = '\0';
-		return;
+	if (sil > _size) {
+		sil = _size;
 	}
 
-	int j = start_index;
-	for (int i = sil; i < _size; ++i) {
-		_data[j] = _data[i];
-		++j;
+	for (int i = start_index; i < _size; ++i) {
+		_data[i] = _data[sil + i];
 	}
 
 	_size -= length;
@@ -1010,7 +1006,9 @@ bool String::parse_utf8(const char *p_utf8, int p_len) {
 		return false;
 	}
 
-	resize(str_size + 1);
+	ensure_capacity(str_size + 1);
+	_size = str_size;
+
 	char *dst = dataw();
 	dst[str_size] = 0;
 
@@ -1113,7 +1111,8 @@ String String::utf8() const {
 		return utf8s;
 	}
 
-	utf8s.resize(fl + 1);
+	utf8s.ensure_capacity(fl + 1);
+	utf8s._size = fl;
 	uint8_t *cdst = (uint8_t *)utf8s.dataw();
 
 #define APPEND_CHAR(m_c) *(cdst++) = m_c
