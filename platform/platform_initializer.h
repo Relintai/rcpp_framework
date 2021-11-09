@@ -1,11 +1,15 @@
 #ifndef PLATFORM_INITIALIZER_H
 #define PLATFORM_INITIALIZER_H
 
+#include "core/os/platform.h"
 #include "core/os/crash_handler.h"
 
 
 class PlatformInitializer {
-public:
+public:	
+	static void allocate_platform();
+	static void free_platform();
+
 	static void allocate_crash_handler();
 	static void free_crash_handler();
 
@@ -14,6 +18,7 @@ public:
 
 protected:
 	static CrashHandler *_crash_handler;
+	static Platform *_platform;
 };
 
 #endif
