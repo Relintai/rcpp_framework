@@ -30,6 +30,8 @@ void RBACUserController::rbac_user_session_setup_middleware(Object *instance, Re
 }
 
 void RBACUserController::rbac_default_user_session_middleware(Object *instance, Request *request) {
+	//note: add a new file handler middleware func, so basic file handling is easy to set up before this
+
 	Ref<RBACRank> rank;
 
 	if (request->session) {
@@ -68,6 +70,9 @@ void RBACUserController::rbac_default_user_session_middleware(Object *instance, 
 
 	if (!rank->has_permission(request, RBAC_PERMISSION_READ)) {
 		if (rank->has_rank_permission(RBAC_RANK_PERMISSION_USE_REDIRECT)) {
+			//Note this can make the webapp prone to enumerations, if not done correctly
+			//e.g. redirect from /admin, but sending 404 on a non existing uri, which does not have
+			//a special rbac entry
 			request->send_redirect(RBACController::get_singleton()->get_redirect_url());
 			return;
 		}
