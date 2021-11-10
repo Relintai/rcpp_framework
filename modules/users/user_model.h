@@ -12,11 +12,13 @@ class UserModel : public Object {
 	RCPP_OBJECT(UserModel, Object);
 	
 public:
-	Ref<User> get_user(const int id);
-	Ref<User> get_user(const String &user_name_input);
-	void save_user(Ref<User> &user);
+	virtual Ref<User> get_user(const int id);
+	virtual Ref<User> get_user(const String &user_name_input);
+	virtual void save_user(Ref<User> &user);
 
-	Vector<Ref<User> > get_all();
+	virtual Vector<Ref<User> > get_all();
+
+	virtual Ref<User> create_user(); 
 
 	bool is_username_taken(const String &user_name_input);
 	bool is_email_taken(const String &email_input);

@@ -8,6 +8,8 @@
 
 #include "rbac_permission.h"
 
+class Request;
+
 class RBACRank : public Resource {
 	RCPP_OBJECT(RBACRank, Resource);
 
@@ -22,6 +24,8 @@ public:
 	int rank_permissions;
 
 	Vector<Ref<RBACPermission> > permissions;
+
+	bool has_permission(Request *request, const int permission);
 
 	void sort_permissions();
 

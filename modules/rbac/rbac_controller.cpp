@@ -580,6 +580,24 @@ void RBACController::register_permissions() {
 	register_rank_permission("Admin Panel", RBAC_PERMISSION_ADMIN_PANEL);
 }
 
+Ref<RBACRank> RBACController::get_rank(int rank_id) {
+	return _ranks[rank_id];
+}
+
+int RBACController::get_default_rank_id() {
+	//todo
+	return 0;
+}
+
+Ref<RBACRank> RBACController::get_default_rank() {
+	return _ranks[get_default_rank_id()];
+}
+
+bool RBACController::continue_on_missing_default_rank() {
+	//todo, add setting
+	return false;
+}
+
 RBACController *RBACController::get_singleton() {
 	return _self;
 }

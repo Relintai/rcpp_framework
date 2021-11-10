@@ -29,7 +29,7 @@ Ref<User> UserModel::get_user(const int id) {
 	}
 
 	Ref<User> user;
-	user.instance();
+	user = create_user();
 
 	user->id = id;
 	user->name_user_input = r->get_cell(0);
@@ -64,7 +64,7 @@ Ref<User> UserModel::get_user(const String &user_name_input) {
 	}
 
 	Ref<User> user;
-	user.instance();
+	user = create_user();
 
 	user->id = r->get_cell_int(0);
 	user->name_user_input = user_name_input;
@@ -138,8 +138,7 @@ Vector<Ref<User> > UserModel::get_all() {
 	Ref<QueryResult> r = b->run();
 
 	while (r->next_row()) {
-		Ref<User> user;
-		user.instance();
+		Ref<User> user = create_user();
 
 		user->id = r->get_cell_int(0);
 		user->name_user_input = r->get_cell(1);
@@ -156,6 +155,13 @@ Vector<Ref<User> > UserModel::get_all() {
 	}
 
 	return users;
+}
+
+Ref<User> UserModel::create_user() {
+	Ref<User> u;
+	u.instance();
+
+	return u;
 }
 
 bool UserModel::is_username_taken(const String &user_name_input) {

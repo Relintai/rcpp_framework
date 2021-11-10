@@ -64,6 +64,12 @@ public:
 	void initialize();
 	virtual void register_permissions();
 
+	Ref<RBACRank> get_rank(int rank_id);
+	int get_default_rank_id();
+	Ref<RBACRank> get_default_rank();
+
+	bool continue_on_missing_default_rank();
+
 	static RBACController *get_singleton();
 
 	RBACController();
