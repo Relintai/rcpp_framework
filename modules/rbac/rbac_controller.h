@@ -78,6 +78,7 @@ public:
 protected:
 	static RBACController *_self;
 
+	int _default_rank_id;
 	std::map<int, Ref<RBACRank> > _ranks;
 
 	struct PermissionEntry {

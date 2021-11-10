@@ -19,10 +19,12 @@ public:
 	virtual void save(const Ref<RBACRank> &rank);
 	virtual void save_rank(const Ref<RBACRank> &rank);
 	virtual void save_permission(const Ref<RBACPermission> &permission);
+	virtual int get_default_rank();
 
 	void create_table();
 	void drop_table();
 	void migrate();
+	virtual void create_default_entries();
 
 	static RBACModel *get_singleton();
 

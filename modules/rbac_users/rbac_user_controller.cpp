@@ -66,7 +66,7 @@ void RBACUserController::rbac_default_user_session_middleware(Object *instance, 
 		}
 	}
 
-	if (rank->has_permission(request, RBAC_PERMISSION_READ)) {
+	if (!rank->has_permission(request, RBAC_PERMISSION_READ)) {
 		//todo implement redirect perm
 
 		request->send_error(404);

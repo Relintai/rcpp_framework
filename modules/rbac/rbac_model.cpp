@@ -9,6 +9,8 @@
 #define RBAC_RANK_TABLE "rbac_ranks"
 #define RBAC_PERMISSION_TABLE "rbac_permissions"
 
+#include "rbac_default_permissions.h"
+
 std::map<int, Ref<RBACRank> > RBACModel::load_ranks() {
 	std::map<int, Ref<RBACRank> > ranks;
 
@@ -142,6 +144,11 @@ void RBACModel::save_permission(const Ref<RBACPermission> &permission) {
 	}
 }
 
+int RBACModel::get_default_rank() {
+	//todo, load this, and save it to a table (probably a new settings class)
+	return 3;
+}
+
 void RBACModel::create_table() {
 	Ref<TableBuilder> tb = DatabaseManager::get_singleton()->ddb->get_table_builder();
 
@@ -182,6 +189,36 @@ void RBACModel::drop_table() {
 void RBACModel::migrate() {
 	drop_table();
 	create_table();
+	create_default_entries();
+}
+
+void RBACModel::create_default_entries() {
+	Ref<RBACRank> admin;
+	admin.instance();
+
+	admin->name = "Admin";
+	admin->base_permissions = RBAC_PERMISSION_ALL;
+	admin->rank_permissions = RBAC_PERMISSION_ADMIN_PANEL;
+
+	save_rank(admin);
+
+	Ref<RBACRank> user;
+	user.instance();
+
+	user->name = "User";
+	user->base_permissions = RBAC_PERMISSION_READ;
+	user->rank_permissions = 0;
+
+	save_rank(user);
+
+	Ref<RBACRank> guest;
+	guest.instance();
+
+	guest->name = "Guest";
+	guest->base_permissions = RBAC_PERMISSION_READ;
+	guest->rank_permissions = 0;
+
+	save_rank(guest);
 }
 
 RBACModel *RBACModel::get_singleton() {

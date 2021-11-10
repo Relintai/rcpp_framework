@@ -567,6 +567,7 @@ void RBACController::clear_registered_permissions() {
 
 void RBACController::initialize() {
 	_ranks = RBACModel::get_singleton()->load_ranks();
+	_default_rank_id = RBACModel::get_singleton()->get_default_rank();
 
 	register_permissions();
 }
@@ -585,8 +586,7 @@ Ref<RBACRank> RBACController::get_rank(int rank_id) {
 }
 
 int RBACController::get_default_rank_id() {
-	//todo
-	return 0;
+	return _default_rank_id;
 }
 
 Ref<RBACRank> RBACController::get_default_rank() {
@@ -608,6 +608,8 @@ RBACController::RBACController() :
 	if (_self) {
 		printf("RBACController::RBACController(): Error! self is not null!/n");
 	}
+
+	_default_rank_id = 0;
 
 	_self = this;
 }
