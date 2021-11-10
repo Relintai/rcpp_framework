@@ -8,6 +8,10 @@ bool RBACRank::has_permission(Request *request, const int permission) {
 	return (base_permissions & permission) != 0;
 }
 
+bool RBACRank::has_rank_permission(const int permission) {
+	return (rank_permissions & permission) != 0;
+}
+
 void RBACRank::sort_permissions() {
 	for (int i = 0; i < permissions.size(); ++i) {
 		for (int j = i + 1; j < permissions.size(); ++j) {

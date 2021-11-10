@@ -68,6 +68,8 @@ public:
 	int get_default_rank_id();
 	Ref<RBACRank> get_default_rank();
 
+	String &get_redirect_url();
+
 	bool continue_on_missing_default_rank();
 
 	static RBACController *get_singleton();
@@ -80,6 +82,7 @@ protected:
 
 	int _default_rank_id;
 	std::map<int, Ref<RBACRank> > _ranks;
+	String _redirect_url;
 
 	struct PermissionEntry {
 		String name;

@@ -578,7 +578,8 @@ void RBACController::register_permissions() {
 	register_permission("Update", RBAC_PERMISSION_UPDATE);
 	register_permission("Delete", RBAC_PERMISSION_DELETE);
 
-	register_rank_permission("Admin Panel", RBAC_PERMISSION_ADMIN_PANEL);
+	register_rank_permission("Admin Panel", RBAC_RANK_PERMISSION_ADMIN_PANEL);
+	register_rank_permission("Use Redirect", RBAC_RANK_PERMISSION_USE_REDIRECT);
 }
 
 Ref<RBACRank> RBACController::get_rank(int rank_id) {
@@ -591,6 +592,10 @@ int RBACController::get_default_rank_id() {
 
 Ref<RBACRank> RBACController::get_default_rank() {
 	return _ranks[get_default_rank_id()];
+}
+
+String &RBACController::get_redirect_url() {
+	return _redirect_url;
 }
 
 bool RBACController::continue_on_missing_default_rank() {

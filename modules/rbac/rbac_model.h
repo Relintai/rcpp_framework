@@ -20,6 +20,7 @@ public:
 	virtual void save_rank(const Ref<RBACRank> &rank);
 	virtual void save_permission(const Ref<RBACPermission> &permission);
 	virtual int get_default_rank();
+	virtual String get_redirect_url();
 
 	void create_table();
 	void drop_table();

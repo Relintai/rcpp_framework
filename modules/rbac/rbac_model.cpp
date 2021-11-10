@@ -149,6 +149,11 @@ int RBACModel::get_default_rank() {
 	return 3;
 }
 
+String RBACModel::get_redirect_url() {
+	//todo, load this, and save it to a table (probably a new settings class)
+	return String("/user/login");
+}
+
 void RBACModel::create_table() {
 	Ref<TableBuilder> tb = DatabaseManager::get_singleton()->ddb->get_table_builder();
 
@@ -198,7 +203,7 @@ void RBACModel::create_default_entries() {
 
 	admin->name = "Admin";
 	admin->base_permissions = RBAC_PERMISSION_ALL;
-	admin->rank_permissions = RBAC_PERMISSION_ADMIN_PANEL;
+	admin->rank_permissions = RBAC_RANK_PERMISSION_ADMIN_PANEL;
 
 	save_rank(admin);
 
@@ -216,7 +221,7 @@ void RBACModel::create_default_entries() {
 
 	guest->name = "Guest";
 	guest->base_permissions = RBAC_PERMISSION_READ;
-	guest->rank_permissions = 0;
+	guest->rank_permissions = RBAC_RANK_PERMISSION_USE_REDIRECT;
 
 	save_rank(guest);
 }

@@ -12,7 +12,8 @@ enum RBACDefaultPermissions {
 };
 
 enum RBACDefaultRankPermissions {
-    RBAC_PERMISSION_ADMIN_PANEL = 1 << 0,
+    RBAC_RANK_PERMISSION_ADMIN_PANEL = 1 << 0,
+    RBAC_RANK_PERMISSION_USE_REDIRECT = 1 << 1,
 };
 
 #endif

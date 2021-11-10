@@ -67,7 +67,10 @@ void RBACUserController::rbac_default_user_session_middleware(Object *instance, 
 	}
 
 	if (!rank->has_permission(request, RBAC_PERMISSION_READ)) {
-		//todo implement redirect perm
+		if (rank->has_rank_permission(RBAC_RANK_PERMISSION_USE_REDIRECT)) {
+			request->send_redirect(RBACController::get_singleton()->get_redirect_url());
+			return;
+		}
 
 		request->send_error(404);
 		return;
