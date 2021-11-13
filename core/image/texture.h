@@ -4,6 +4,12 @@
 #include "image.h"
 #include <SDL.h>
 
+//remove sdl dependency
+//should be allocated with a selected renderer
+//could have an RID in them, and the renderer could look them up
+//should have a similar inheritance tree like godot's
+//Should be inherited from Reference
+
 class Texture {
 public:
     Color get_color_mod() const;

@@ -7,6 +7,8 @@
 #include "texture.h"
 #include "core/color.h"
 
+//remove sdl dependency
+
 class Sprite {
 public:
 	Rect2 get_texture_clip_rect() const;

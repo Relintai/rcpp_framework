@@ -7,6 +7,12 @@
 #include "core/vector.h"
 #include <SDL.h>
 
+//add an image loader registratin api -> so you can just pass a path in a load method and it will try to find a suitable loader.
+//remove sdl dependency
+//have everything implemented here
+//should have resizing and saving api -> thumbnail generation etc
+//Should be inherited from Reference
+
 class Image {
 public:
 	void create(const Uint32 flags, const int width, const int height);
