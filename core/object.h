@@ -1,9 +1,8 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <list>
-#include <string>
-#include <vector>
+#include "core/string.h"
+#include "core/containers/vector.h"
 
 class Database;
 
@@ -13,30 +12,30 @@ private:                                                                        
 	void operator=(const m_class &p_rval) {}                                                                                                     \
                                                                                                                                                  \
 public:                                                                                                                                          \
-	virtual std::string get_class() const override {                                                                                             \
-		return std::string(#m_class);                                                                                                            \
+	virtual String get_class() const override {                                                                                             \
+		return String(#m_class);                                                                                                            \
 	}                                                                                                                                            \
 	static void *get_class_ptr_static() {                                                                                                        \
 		static int ptr;                                                                                                                          \
 		return &ptr;                                                                                                                             \
 	}                                                                                                                                            \
-	static std::string get_class_static() {                                                                                                      \
-		return std::string(#m_class);                                                                                                            \
+	static String get_class_static() {                                                                                                      \
+		return String(#m_class);                                                                                                            \
 	}                                                                                                                                            \
-	static std::string get_parent_class_static() {                                                                                               \
+	static String get_parent_class_static() {                                                                                               \
 		return m_inherits::get_class_static();                                                                                                   \
 	}                                                                                                                                            \
-	static void get_inheritance_list_static(std::list<std::string> *p_inheritance_list) {                                                        \
+	static void get_inheritance_list_static(Vector<String> *p_inheritance_list) {                                                        \
 		m_inherits::get_inheritance_list_static(p_inheritance_list);                                                                             \
-		p_inheritance_list->push_back(std::string(#m_class));                                                                                    \
+		p_inheritance_list->push_back(String(#m_class));                                                                                    \
 	}                                                                                                                                            \
-	static std::string inherits_static() {                                                                                                       \
-		return std::string(#m_inherits);                                                                                                         \
+	static String inherits_static() {                                                                                                       \
+		return String(#m_inherits);                                                                                                         \
 	}                                                                                                                                            \
-	virtual bool is_class(const std::string &p_class) const override { return (p_class == (#m_class)) ? true : m_inherits::is_class(p_class); }  \
+	virtual bool is_class(const String &p_class) const override { return (p_class == (#m_class)) ? true : m_inherits::is_class(p_class); }  \
 	virtual bool is_class_ptr(void *p_ptr) const override { return (p_ptr == get_class_ptr_static()) ? true : m_inherits::is_class_ptr(p_ptr); } \
                                                                                                                                                  \
-	static void get_valid_parents_static(std::list<std::string> *p_parents) {                                                                    \
+	static void get_valid_parents_static(Vector<String> *p_parents) {                                                                    \
 		if (m_class::_get_valid_parents_static != m_inherits::_get_valid_parents_static) {                                                       \
 			m_class::_get_valid_parents_static(p_parents);                                                                                       \
 		}                                                                                                                                        \
@@ -50,22 +49,22 @@ class Object {
 public:
 	Database *db;
 
-	virtual std::string get_class() const { return "Object"; }
+	virtual String get_class() const { return "Object"; }
 	static void *get_class_ptr_static() {
 		static int ptr;
 		return &ptr;
 	}
 
-	static std::string get_class_static() { return "Object"; }
-	static std::string get_parent_class_static() { return std::string(); }
+	static String get_class_static() { return "Object"; }
+	static String get_parent_class_static() { return String(); }
 
-	static void get_inheritance_list_static(std::list<std::string> *p_inheritance_list) { p_inheritance_list->push_back("Object"); }
+	static void get_inheritance_list_static(Vector<String> *p_inheritance_list) { p_inheritance_list->push_back("Object"); }
 
-	virtual bool is_class(const std::string &p_class) const { return (p_class == "Object"); }
+	virtual bool is_class(const String &p_class) const { return (p_class == "Object"); }
 	virtual bool is_class_ptr(void *p_ptr) const { return get_class_ptr_static() == p_ptr; }
 
-	static void get_valid_parents_static(std::list<std::string> *p_parents) {}
-	static void _get_valid_parents_static(std::list<std::string> *p_parents) {}
+	static void get_valid_parents_static(Vector<String> *p_parents) {}
+	static void _get_valid_parents_static(Vector<String> *p_parents) {}
 
 	//dbconnection
 	//setting object?
