@@ -1,6 +1,6 @@
 #include "string.h"
 
-#include "core/math.h"
+#include "core/math/math.h"
 #include "error_macros.h"
 #include <stdlib.h>
 #include <cstdio>
