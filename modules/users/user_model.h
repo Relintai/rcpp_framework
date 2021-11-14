@@ -30,6 +30,7 @@ public:
 	virtual void create_table();
 	virtual void drop_table();
 	virtual void migrate();
+	virtual void create_test_users();
 
 	static UserModel *get_singleton();
 
