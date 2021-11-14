@@ -27,7 +27,6 @@ void ArgParser::parse_args(int argc, char **argv, int executable_index) {
 	post_process_args();
 }
 void ArgParser::parse_env(char **envp) {
-	
 }
 
 void ArgParser::post_process_args() {
@@ -57,12 +56,16 @@ void ArgParser::post_process_args() {
 			}
 		}
 	}
+
+	if (main_arg) {
+		arguments_set.insert(arg_main_command);
+	}
 }
 
 bool ArgParser::has_arg(const String &arg) const {
 	std::set<String>::iterator search = arguments_set.find(arg);
 
-    return (search != arguments_set.end());
+	return (search != arguments_set.end());
 }
 
 String *ArgParser::get_value(const String &arg) {
