@@ -72,9 +72,11 @@ void AdminPanel::render_admin_panel_list(Request *request) {
 		for (int j = 0; j < links.size(); ++j) {
 			AdminSectionLinkInfo &li = links[j];
 
+			b.div()->cls("section_entry");
 			b.a()->href(rootlink + s.section_url + "/" + li.link);
 			b.w(li.name);
 			b.ca();
+			b.cdiv();
 		}
 
 		links.clear();
