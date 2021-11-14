@@ -164,12 +164,11 @@ void UserController::handle_register_request_default(Request *request) {
 
 		if (data.error_str.size() == 0) {
 			Ref<User> user;
-			user.instance();
+			user = UserModel::get_singleton()->create_user();
 
 			user->name_user_input = data.uname_val;
 			user->email_user_input = data.email_val;
-			//todo
-			user->rank = 1;
+			
 			UserModel::get_singleton()->create_password(user, data.pass_val);
 			UserModel::get_singleton()->save_user(user);
 
