@@ -162,6 +162,25 @@ QueryBuilder *SQLite3QueryBuilder::val(const bool param) {
 	return this;
 }
 
+QueryBuilder *SQLite3QueryBuilder::valf(const float param) {
+	//todo add a better way
+	std::stringstream ss;
+	ss << param;
+
+	query_result += ss.str() + ", ";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::vald(const double param) {
+	//todo add a better way
+	std::stringstream ss;
+	ss << param;
+
+	query_result += ss.str() + ", ";
+
+	return this;
+}
+
 QueryBuilder *SQLite3QueryBuilder::nlike(const String &str) {
 	query_result += "LIKE '" + str + "' ";
 
@@ -202,6 +221,24 @@ QueryBuilder *SQLite3QueryBuilder::setp(const String &col, const bool param) {
 		query_result += col + "=1, ";
 	else
 		query_result += col + "=0, ";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::setpf(const String &col, const float param) {
+	//todo add a better way
+	std::stringstream ss;
+	ss << param;
+
+	query_result += col + "=" + ss.str() + ", ";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::setpd(const String &col, const double param) {
+	//todo add a better way
+	std::stringstream ss;
+	ss << param;
+
+	query_result += col + "=" + ss.str() + ", ";
 
 	return this;
 }

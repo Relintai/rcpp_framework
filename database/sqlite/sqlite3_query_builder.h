@@ -43,6 +43,8 @@ public:
 	QueryBuilder *val(const char *param);
 	QueryBuilder *val(const int param);
 	QueryBuilder *val(const bool param);
+	QueryBuilder *valf(const float param);
+	QueryBuilder *vald(const double param);
 
 	QueryBuilder *nlike(const String &str);
 
@@ -52,6 +54,8 @@ public:
 	QueryBuilder *setp(const String &col, const char *param);
 	QueryBuilder *setp(const String &col, const int param);
 	QueryBuilder *setp(const String &col, const bool param);
+	QueryBuilder *setpf(const String &col, const float param);
+	QueryBuilder *setpd(const String &col, const double param);
 
 	QueryBuilder *nwp(const String &col, const String &param);
 	QueryBuilder *wp(const String &col, const char *param);

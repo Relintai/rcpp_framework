@@ -12,6 +12,8 @@ public:
 	virtual const String get_cell_str(const int index);
 	virtual const bool get_cell_bool(const int index);
 	virtual const int get_cell_int(const int index);
+	virtual const float get_cell_float(const int index);
+	virtual const double get_cell_double(const int index);
     
 	virtual bool is_cell_null(const int index);
 

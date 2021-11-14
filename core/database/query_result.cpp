@@ -33,6 +33,35 @@ const int QueryResult::get_cell_int(const int index) {
 	return r;
 }
 
+const float QueryResult::get_cell_float(const int index) {
+	if (is_cell_null(index)) {
+		return 0;
+	}
+
+	//todo better way
+	std::stringstream ss;
+	ss.str(get_cell(index));
+
+	float r;
+	ss >> r;
+
+	return r;
+}
+const double QueryResult::get_cell_double(const int index) {
+	if (is_cell_null(index)) {
+		return 0;
+	}
+
+	//todo better way
+	std::stringstream ss;
+	ss.str(get_cell(index));
+
+	double r;
+	ss >> r;
+
+	return r;
+}
+
 bool QueryResult::is_cell_null(const int index) {
 	return true;
 }
