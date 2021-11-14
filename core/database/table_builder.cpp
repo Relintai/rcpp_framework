@@ -10,6 +10,17 @@ TableBuilder *TableBuilder::integer(const String &name) {
 	return this;
 }
 
+TableBuilder *TableBuilder::integer(const String &name, const int length) {
+	return this;
+}
+
+TableBuilder *TableBuilder::tiny_integer(const String &name) {
+	return this;
+}
+TableBuilder *TableBuilder::tiny_integer(const String &name, const int length) {
+	return this;
+}
+
 TableBuilder *TableBuilder::date(const String &name) {
 	return this;
 }
@@ -23,6 +34,10 @@ TableBuilder *TableBuilder::not_null() {
 }
 
 TableBuilder *TableBuilder::null() {
+	return this;
+}
+
+TableBuilder *TableBuilder::defval(const String &val) {
 	return this;
 }
 

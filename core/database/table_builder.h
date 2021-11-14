@@ -10,11 +10,18 @@ class QueryResult;
 class TableBuilder : public Reference {
 public:
 	virtual TableBuilder *create_table(const String &name);
+	
 	virtual TableBuilder *integer(const String &name);
+	virtual TableBuilder *integer(const String &name, const int length);
+
+	virtual TableBuilder *tiny_integer(const String &name);
+	virtual TableBuilder *tiny_integer(const String &name, const int length);
+
 	virtual TableBuilder *date(const String &name);
 	virtual TableBuilder *varchar(const String &name, const int length);
 	virtual TableBuilder *not_null();
 	virtual TableBuilder *null();
+	virtual TableBuilder *defval(const String &val);
 	virtual TableBuilder *auto_increment();
 	virtual TableBuilder *primary_key(const String &name);
 	virtual TableBuilder *primary_key();

@@ -10,11 +10,18 @@ class SQLite3Database;
 class SQLite3TableBuilder : public TableBuilder {
 public:
 	TableBuilder *create_table(const String &name);
+
 	TableBuilder *integer(const String &name);
+	TableBuilder *integer(const String &name, const int length);
+
+	TableBuilder *tiny_integer(const String &name);
+	TableBuilder *tiny_integer(const String &name, const int length);
+
 	TableBuilder *date(const String &name);
 	TableBuilder *varchar(const String &name, const int length);
 	TableBuilder *not_null();
 	TableBuilder *null();
+	TableBuilder *defval(const String &val);
 	TableBuilder *auto_increment();
 	TableBuilder *primary_key(const String &name);
 	TableBuilder *primary_key();

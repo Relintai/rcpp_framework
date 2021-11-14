@@ -15,6 +15,27 @@ TableBuilder *SQLite3TableBuilder::integer(const String &name) {
 
 	return this;
 }
+TableBuilder *SQLite3TableBuilder::integer(const String &name, const int length) {
+	result += name + " INTEGER(";
+	result += String::num(length);
+	result += ") ";
+
+	return this;
+}
+
+TableBuilder *SQLite3TableBuilder::tiny_integer(const String &name) {
+	result += name + " INTEGER ";
+
+	return this;
+}
+TableBuilder *SQLite3TableBuilder::tiny_integer(const String &name, const int length) {
+	result += name + " INTEGER(";
+	result += String::num(length);
+	result += ") ";
+
+
+	return this;
+}
 
 TableBuilder *SQLite3TableBuilder::date(const String &name) {
 	result += name + " DATE ";
@@ -36,6 +57,14 @@ TableBuilder *SQLite3TableBuilder::not_null() {
 
 TableBuilder *SQLite3TableBuilder::null() {
 	result += "NULL ";
+
+	return this;
+}
+
+TableBuilder *SQLite3TableBuilder::defval(const String &val) {
+	result += "DEFAULT '";
+	result += val;
+	result += "'";
 
 	return this;
 }
