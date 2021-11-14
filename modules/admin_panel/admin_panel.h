@@ -26,6 +26,7 @@ public:
 	virtual void render_footer(Request *request);
 
 	void set_default_header(const String &val);
+	void set_default_body_top(const String &val);
 	void set_default_footer(const String &val);
 
 	static AdminPanel *get_singleton();
@@ -45,6 +46,7 @@ protected:
 	Vector<AdminPanelSection> _controllers; 
 
 	String _default_headers;
+	String _default_body_top;
 	String _default_footer;
 };
 

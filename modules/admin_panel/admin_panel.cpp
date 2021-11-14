@@ -110,6 +110,8 @@ void AdminPanel::clear() {
 
 void AdminPanel::render_headers(Request *request) {
 	request->head += _default_headers;
+
+	request->body += _default_body_top;
 }
 
 void AdminPanel::render_footer(Request *request) {
@@ -118,6 +120,9 @@ void AdminPanel::render_footer(Request *request) {
 
 void AdminPanel::set_default_header(const String &val) {
 	_default_headers = val;
+}
+void AdminPanel::set_default_body_top(const String &val) {
+	_default_body_top = val;
 }
 void AdminPanel::set_default_footer(const String &val) {
 	_default_footer = val;
