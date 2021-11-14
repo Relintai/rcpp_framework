@@ -102,6 +102,13 @@ QueryBuilder *QueryBuilder::val(const bool param) {
 	return this;
 }
 
+QueryBuilder *QueryBuilder::valf(const float param) {
+	return this;
+}
+QueryBuilder *QueryBuilder::vald(const double param) {
+	return this;
+}
+
 QueryBuilder *QueryBuilder::like(const String &str) {
 	return nlike(escape(str));
 }
@@ -122,6 +129,12 @@ QueryBuilder *QueryBuilder::setp(const String &col, const int param) {
 	return this;
 }
 QueryBuilder *QueryBuilder::setp(const String &col, const bool param) {
+	return this;
+}
+QueryBuilder *QueryBuilder::setpf(const String &col, const float param) {
+	return this;
+}
+QueryBuilder *QueryBuilder::setpd(const String &col, const double param) {
 	return this;
 }
 

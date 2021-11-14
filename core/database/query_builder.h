@@ -46,6 +46,8 @@ public:
 	virtual QueryBuilder *val(const char *param);
 	virtual QueryBuilder *val(const int param);
 	virtual QueryBuilder *val(const bool param);
+	virtual QueryBuilder *valf(const float param);
+	virtual QueryBuilder *vald(const double param);
 
 	virtual QueryBuilder *like(const String &str);
 
@@ -56,6 +58,8 @@ public:
 	virtual QueryBuilder *setp(const String &col, const char *param);
 	virtual QueryBuilder *setp(const String &col, const int param);
 	virtual QueryBuilder *setp(const String &col, const bool param);
+	virtual QueryBuilder *setpf(const String &col, const float param);
+	virtual QueryBuilder *setpd(const String &col, const double param);
 
 	virtual QueryBuilder *wp(const String &col, const String &param);
 	virtual QueryBuilder *wp(const String &col, const char *param);
