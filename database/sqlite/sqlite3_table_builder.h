@@ -17,6 +17,15 @@ public:
 	TableBuilder *tiny_integer(const String &name);
 	TableBuilder *tiny_integer(const String &name, const int length);
 
+	TableBuilder *small_integer(const String &name);
+	TableBuilder *small_integer(const String &name, const int length);
+
+	TableBuilder *real_float(const String &name);
+	TableBuilder *real_float(const String &name, const int size, const int d);
+
+	TableBuilder *real_double(const String &name);
+	TableBuilder *real_double(const String &name, const int size, const int d);
+
 	TableBuilder *date(const String &name);
 	TableBuilder *varchar(const String &name, const int length);
 	TableBuilder *not_null();

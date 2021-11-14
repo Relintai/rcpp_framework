@@ -21,6 +21,27 @@ TableBuilder *TableBuilder::tiny_integer(const String &name, const int length) {
 	return this;
 }
 
+TableBuilder *TableBuilder::small_integer(const String &name) {
+	return this;
+}
+TableBuilder *TableBuilder::small_integer(const String &name, const int length) {
+	return this;
+}
+
+TableBuilder *TableBuilder::real_float(const String &name) {
+	return this;
+}
+TableBuilder *TableBuilder::real_float(const String &name, const int size, const int d) {
+	return this;
+}
+
+TableBuilder *TableBuilder::real_double(const String &name) {
+	return this;
+}
+TableBuilder *TableBuilder::real_double(const String &name, const int size, const int d) {
+	return this;
+}
+
 TableBuilder *TableBuilder::date(const String &name) {
 	return this;
 }

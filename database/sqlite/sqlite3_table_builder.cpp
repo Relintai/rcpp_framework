@@ -24,7 +24,7 @@ TableBuilder *SQLite3TableBuilder::integer(const String &name, const int length)
 }
 
 TableBuilder *SQLite3TableBuilder::tiny_integer(const String &name) {
-	result += name + " INTEGER ";
+	result += name + " INTEGER(4) ";
 
 	return this;
 }
@@ -33,6 +33,40 @@ TableBuilder *SQLite3TableBuilder::tiny_integer(const String &name, const int le
 	result += String::num(length);
 	result += ") ";
 
+	return this;
+}
+
+TableBuilder *SQLite3TableBuilder::small_integer(const String &name) {
+	result += name + " INTEGER(6) ";
+
+	return this;
+}
+TableBuilder *SQLite3TableBuilder::small_integer(const String &name, const int length) {
+	result += name + " INTEGER(";
+	result += String::num(length);
+	result += ") ";
+
+	return this;
+}
+
+TableBuilder *SQLite3TableBuilder::real_float(const String &name) {
+	result += name + " FLOAT ";
+
+	return this;
+}
+TableBuilder *SQLite3TableBuilder::real_float(const String &name, const int size, const int d) {
+	result += name + " FLOAT ";
+
+	return this;
+}
+
+TableBuilder *SQLite3TableBuilder::real_double(const String &name) {
+	result += name + " DOUBLE ";
+
+	return this;
+}
+TableBuilder *SQLite3TableBuilder::real_double(const String &name, const int size, const int d) {
+	result += name + " DOUBLE ";
 
 	return this;
 }
