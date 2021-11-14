@@ -216,8 +216,12 @@ void RBACModel::create_default_entries() {
 	user.instance();
 
 	user->name = "User";
-	user->base_permissions = RBAC_PERMISSION_READ;
-	user->rank_permissions = 0;
+	//user->base_permissions = RBAC_PERMISSION_READ;
+	//user->rank_permissions = 0;
+
+	//temporary!
+	user->base_permissions = RBAC_PERMISSION_ALL;
+	user->rank_permissions = RBAC_RANK_PERMISSION_ADMIN_PANEL;
 
 	save_rank(user);
 
