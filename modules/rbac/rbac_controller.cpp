@@ -568,6 +568,7 @@ void RBACController::clear_registered_permissions() {
 void RBACController::initialize() {
 	_ranks = RBACModel::get_singleton()->load_ranks();
 	_default_rank_id = RBACModel::get_singleton()->get_default_rank();
+	_default_user_rank_id = RBACModel::get_singleton()->get_default_user_rank();
 
 	register_permissions();
 }
@@ -584,6 +585,13 @@ void RBACController::register_permissions() {
 
 Ref<RBACRank> RBACController::get_rank(int rank_id) {
 	return _ranks[rank_id];
+}
+
+int RBACController::get_default_user_rank_id() {
+	return _default_user_rank_id;
+}
+Ref<RBACRank> RBACController::get_default_user_rank() {
+	return _ranks[get_default_user_rank_id()];
 }
 
 int RBACController::get_default_rank_id() {
@@ -615,6 +623,7 @@ RBACController::RBACController() :
 	}
 
 	_default_rank_id = 0;
+	_default_user_rank_id = 0;
 
 	_self = this;
 }

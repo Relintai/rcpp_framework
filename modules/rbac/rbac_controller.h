@@ -65,6 +65,10 @@ public:
 	virtual void register_permissions();
 
 	Ref<RBACRank> get_rank(int rank_id);
+
+	int get_default_user_rank_id();
+	Ref<RBACRank> get_default_user_rank();
+	
 	int get_default_rank_id();
 	Ref<RBACRank> get_default_rank();
 
@@ -81,6 +85,7 @@ protected:
 	static RBACController *_self;
 
 	int _default_rank_id;
+	int _default_user_rank_id;
 	std::map<int, Ref<RBACRank> > _ranks;
 	String _redirect_url;
 

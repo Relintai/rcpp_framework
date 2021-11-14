@@ -149,6 +149,11 @@ int RBACModel::get_default_rank() {
 	return 3;
 }
 
+int RBACModel::get_default_user_rank() {
+	//todo, load this, and save it to a table (probably a new settings class)
+	return 2;
+}
+
 String RBACModel::get_redirect_url() {
 	//todo, load this, and save it to a table (probably a new settings class)
 	return String("/user/login");

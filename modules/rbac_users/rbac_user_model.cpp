@@ -41,7 +41,7 @@ Ref<User> RBACUserModel::create_user() {
 	Ref<RBACUser> u;
 	u.instance();
 
-	u->rank = RBACController::get_singleton()->get_default_rank_id();
+	u->rank = RBACController::get_singleton()->get_default_user_rank_id();
 	u->rbac_rank = RBACController::get_singleton()->get_rank(u->rank);
 
 	return u;
