@@ -32,7 +32,9 @@ void AdminPanel::handle_request_main(Request *request) {
 				return;
 			}
 
+			render_headers(request);
 			render_controller_panel(request, c);
+			render_footer(request);
 
 			//request->pop_path();
 
@@ -44,7 +46,7 @@ void AdminPanel::handle_request_main(Request *request) {
 }
 
 void AdminPanel::render_admin_panel_list(Request *request) {
-	//set up headers
+	render_headers(request);
 
 	String rootlink = request->get_url_root();
 
@@ -80,7 +82,7 @@ void AdminPanel::render_admin_panel_list(Request *request) {
 
 	b.cdiv();
 
-	//set up footers
+	render_footer(request);
 
 	request->body += b.result;
 	request->compile_and_send_body();
@@ -104,6 +106,21 @@ void AdminPanel::register_admin_controller(const String &section, AdminControlle
 
 void AdminPanel::clear() {
 	_controllers.clear();
+}
+
+void AdminPanel::render_headers(Request *request) {
+	request->head += _default_headers;
+}
+
+void AdminPanel::render_footer(Request *request) {
+	request->body += _default_footer;
+}
+
+void AdminPanel::set_default_header(const String &val) {
+	_default_headers = val;
+}
+void AdminPanel::set_default_footer(const String &val) {
+	_default_footer = val;
 }
 
 AdminPanel *AdminPanel::get_singleton() {
