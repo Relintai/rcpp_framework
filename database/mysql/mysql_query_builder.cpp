@@ -88,8 +88,10 @@ QueryBuilder *MysqlQueryBuilder::set_param(const int index, const float value) {
 	return this;
 }
 
-void MysqlQueryBuilder::end_command() {
+QueryBuilder *MysqlQueryBuilder::end_command() {
 	query_result += ";";
+
+	return this;
 }
 
 Ref<QueryResult> MysqlQueryBuilder::run() {

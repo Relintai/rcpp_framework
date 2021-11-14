@@ -19,6 +19,10 @@ public:
 	QueryBuilder *insert();
 	QueryBuilder *values();
 	QueryBuilder *cvalues();
+	QueryBuilder *next_value();
+
+	QueryBuilder *begin_transaction();
+	QueryBuilder *commit();
 
 	QueryBuilder *str();
 	QueryBuilder *cstr();
@@ -72,7 +76,7 @@ public:
 	QueryBuilder *set_param(const int index, const int value);
 	QueryBuilder *set_param(const int index, const float value);
 
-	void end_command();
+	QueryBuilder *end_command();
 
 	Ref<QueryResult> run();
 	void run_query();

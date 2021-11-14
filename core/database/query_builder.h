@@ -20,6 +20,12 @@ public:
 	virtual QueryBuilder *insert();
 	virtual QueryBuilder *values();
 	virtual QueryBuilder *cvalues();
+	virtual QueryBuilder *next_value();
+
+	virtual QueryBuilder *begin_transaction();
+	virtual QueryBuilder *commit();
+
+	virtual QueryBuilder *nl();
 
 	virtual QueryBuilder *str();
 	virtual QueryBuilder *cstr();
@@ -91,7 +97,7 @@ public:
 	virtual QueryBuilder *set_param(const int index, const int value);
 	virtual QueryBuilder *set_param(const int index, const float value);
 
-	virtual void end_command();
+	virtual QueryBuilder *end_command();
 
 	virtual QueryBuilder *reset();
 

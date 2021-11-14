@@ -47,6 +47,23 @@ QueryBuilder *SQLite3QueryBuilder::cvalues() {
 
 	return this;
 }
+QueryBuilder *SQLite3QueryBuilder::next_value() {
+	query_result[query_result.size() - 2] = ' ';
+	query_result += "), (";
+
+	return this;
+}
+
+QueryBuilder *SQLite3QueryBuilder::begin_transaction() {
+	query_result += "BEGIN TRANSACTION;";
+
+	return this;
+}
+QueryBuilder *SQLite3QueryBuilder::commit() {
+	query_result += "COMMIT;";
+
+	return this;
+}
 
 QueryBuilder *SQLite3QueryBuilder::str() {
 	query_result += "'";
@@ -278,8 +295,10 @@ QueryBuilder *SQLite3QueryBuilder::set_param(const int index, const float value)
 	return this;
 }
 
-void SQLite3QueryBuilder::end_command() {
+QueryBuilder *SQLite3QueryBuilder::end_command() {
 	query_result += ";";
+
+	return this;
 }
 
 Ref<QueryResult> SQLite3QueryBuilder::run() {

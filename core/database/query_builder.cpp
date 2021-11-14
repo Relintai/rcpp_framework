@@ -28,6 +28,22 @@ QueryBuilder *QueryBuilder::values() {
 QueryBuilder *QueryBuilder::cvalues() {
 	return this;
 }
+QueryBuilder *QueryBuilder::next_value() {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::begin_transaction() {
+	return this;
+}
+QueryBuilder *QueryBuilder::commit() {
+	return this;
+}
+
+QueryBuilder *QueryBuilder::nl() {
+	query_result += "\n";
+
+	return this;
+}
 
 QueryBuilder *QueryBuilder::str() {
 	return this;
@@ -176,7 +192,7 @@ QueryBuilder *QueryBuilder::wildcard() {
 }
 
 QueryBuilder *QueryBuilder::w(const String &str) {
-	query_result += str + " ";
+	query_result += str;
 
 	return this;
 }
@@ -205,7 +221,8 @@ QueryBuilder *QueryBuilder::set_param(const int index, const float value) {
 	return this;
 }
 
-void QueryBuilder::end_command() {
+QueryBuilder *QueryBuilder::end_command() {
+	return this;
 }
 
 QueryBuilder *QueryBuilder::reset() {
