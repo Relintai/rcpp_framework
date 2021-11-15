@@ -73,13 +73,13 @@ def configure(env):
         env.ParseConfig("pkg-config openssl --cflags --libs")
         env.Append(CPPDEFINES=["OPENSSL_FOUND"])
 
-    env.Prepend(CPPPATH=["#modules/drogon/drogon/lib/inc"])
-    env.Prepend(CPPPATH=["#modules/drogon"])
+    env.Append(CPPPATH=["#modules/drogon/drogon/lib/inc"])
+    env.Append(CPPPATH=["#modules/drogon"])
 
-    env.Prepend(CPPPATH=["#modules/drogon/trantor"])
-    env.Prepend(CPPPATH=["#modules/drogon/trantor/net"])
-    env.Prepend(CPPPATH=["#modules/drogon/trantor/net/inner"])
-    env.Prepend(CPPPATH=["#modules/drogon/trantor/utils"])
+    env.Append(CPPPATH=["#modules/drogon/trantor"])
+    env.Append(CPPPATH=["#modules/drogon/trantor/net"])
+    env.Append(CPPPATH=["#modules/drogon/trantor/net/inner"])
+    env.Append(CPPPATH=["#modules/drogon/trantor/utils"])
 
     env.Append(LINKFLAGS=["-ldl"])
     
