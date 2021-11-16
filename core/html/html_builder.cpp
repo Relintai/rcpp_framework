@@ -110,6 +110,117 @@ HTMLTag *HTMLTag::charset_utf_8() {
 	return this;
 }
 
+HTMLTag *HTMLTag::itbutton() {
+	attrib("type", "button");
+
+	return this;
+}
+HTMLTag *HTMLTag::itcheckbox() {
+	attrib("type", "checkbox");
+
+	return this;
+}
+HTMLTag *HTMLTag::itcolor() {
+	attrib("type", "color");
+
+	return this;
+}
+HTMLTag *HTMLTag::itdate() {
+	attrib("type", "date");
+
+	return this;
+}
+HTMLTag *HTMLTag::itdatetime_local() {
+	attrib("type", "datetime_local");
+
+	return this;
+}
+HTMLTag *HTMLTag::itemail() {
+	attrib("type", "email");
+
+	return this;
+}
+HTMLTag *HTMLTag::itfile() {
+	attrib("type", "file");
+
+	return this;
+}
+HTMLTag *HTMLTag::ithidden() {
+	attrib("type", "hidden");
+
+	return this;
+}
+HTMLTag *HTMLTag::itimage() {
+	attrib("type", "image");
+
+	return this;
+}
+HTMLTag *HTMLTag::itmonth() {
+	attrib("type", "month");
+
+	return this;
+}
+HTMLTag *HTMLTag::itnumber() {
+	attrib("type", "number");
+
+	return this;
+}
+HTMLTag *HTMLTag::itpassword() {
+	attrib("type", "password");
+
+	return this;
+}
+HTMLTag *HTMLTag::itradio() {
+	attrib("type", "radio");
+
+	return this;
+}
+HTMLTag *HTMLTag::itrange() {
+	attrib("type", "range");
+
+	return this;
+}
+HTMLTag *HTMLTag::itreset() {
+	attrib("type", "reset");
+
+	return this;
+}
+HTMLTag *HTMLTag::itsearch() {
+	attrib("type", "search");
+
+	return this;
+}
+HTMLTag *HTMLTag::itsubmit() {
+	attrib("type", "submit");
+
+	return this;
+}
+HTMLTag *HTMLTag::ittel() {
+	attrib("type", "tel");
+
+	return this;
+}
+HTMLTag *HTMLTag::ittext() {
+	attrib("type", "text");
+
+	return this;
+}
+HTMLTag *HTMLTag::ittime() {
+	attrib("type", "time");
+
+	return this;
+}
+HTMLTag *HTMLTag::iturl() {
+	attrib("type", "url");
+
+	return this;
+}
+HTMLTag *HTMLTag::itweek() {
+	attrib("type", "week");
+
+	return this;
+}
+
 HTMLTag *HTMLTag::attrib(const String &attr, const String &val) {
 	result += " " + attr + "=\"" + val + "\"";
 

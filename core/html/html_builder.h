@@ -30,6 +30,29 @@ public:
 	HTMLTag *charset(const String &val);
 	HTMLTag *charset_utf_8();
 
+	HTMLTag *itbutton();
+	HTMLTag *itcheckbox();
+	HTMLTag *itcolor();
+	HTMLTag *itdate();
+	HTMLTag *itdatetime_local();
+	HTMLTag *itemail();
+	HTMLTag *itfile();
+	HTMLTag *ithidden();
+	HTMLTag *itimage();
+	HTMLTag *itmonth();
+	HTMLTag *itnumber();
+	HTMLTag *itpassword();
+	HTMLTag *itradio();
+	HTMLTag *itrange();
+	HTMLTag *itreset();
+	HTMLTag *itsearch();
+	HTMLTag *itsubmit();
+	HTMLTag *ittel();
+	HTMLTag *ittext();
+	HTMLTag *ittime();
+	HTMLTag *iturl();
+	HTMLTag *itweek();
+
 	HTMLTag *attrib(const String &attr, const String &val);
 
 	HTMLTag *start(const String &p_new_tag, const bool p_simple = false);
