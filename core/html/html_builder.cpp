@@ -1546,6 +1546,29 @@ HTMLBuilder *HTMLBuilder::fdiv(const String &body, const String &cls, const Stri
 	return this;
 }
 
+HTMLTag *HTMLBuilder::textarea(const String &name, const String &cls, const String &id) {
+	HTMLTag *t = textarea();
+
+	t->name(name);
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+HTMLBuilder *HTMLBuilder::ftextarea(const String &name, const String &body, const String &cls, const String &id) {
+	textarea(name, cls, id);
+	w(body);
+	ctextarea();
+
+	return this;
+}
+
 //Closing tags
 
 HTMLBuilder *HTMLBuilder::ca() {

@@ -78,6 +78,9 @@ public:
 	static void db_save_all(const Vector<Ref<Resource> > &resources);
 #endif
 
+	//add serialization to and from requests
+	//could also build a form validator automatically using the property registration api
+
 	//Resource::register<T>() foreach parents cast call
 	//RBACRank::register()
 
