@@ -2186,6 +2186,26 @@ HTMLTag *HTMLBuilder::input_week() {
 	return tag.start("input")->itweek();
 }
 
+HTMLBuilder *HTMLBuilder::label(const String& pfor, const String& plabel, const String& cls, const String& id) {
+	HTMLTag *t = label();
+
+	t->fora(pfor);
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	w(plabel);
+
+	clabel();
+
+	return this;
+}
+
 HTMLTag *HTMLBuilder::input_button(const String &name, const String &value, const String &cls, const String &id) {
 	HTMLTag *t = input_button();
 

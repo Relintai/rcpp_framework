@@ -22,9 +22,16 @@ public:
 	HTMLTag *accept(const String &val);
 	HTMLTag *src(const String &val);
 	HTMLTag *alt(const String &val);
-	HTMLTag *autocomplete(const String &val);
 	HTMLTag *inputmode(const String &val);
 	HTMLTag *list(const String &val);
+
+	HTMLTag *autocomplete(const String &val);
+
+
+
+		//autocomplete
+	//onclick, etc
+
 
 	HTMLTag *checked(const bool val = true);
 	HTMLTag *autofocus(const bool val = true);
@@ -396,9 +403,7 @@ public:
 	HTMLTag *input_url();
 	HTMLTag *input_week();
 
-	//label!
-	//autocomplete
-	//onclick, etc
+	HTMLBuilder *label(const String& pfor, const String& plabel, const String& cls = "", const String& id = "");
 
 	HTMLTag *input_button(const String& name, const String& value = "", const String& cls = "", const String& id = "");
 	HTMLTag *input_checkbox(const String& name, const String& value = "", const String& cls = "", const String& id = "");
