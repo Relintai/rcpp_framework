@@ -1850,6 +1850,139 @@ HTMLBuilder *HTMLBuilder::cwbr() {
 	return this;
 }
 
+HTMLTag *HTMLBuilder::input_button() {
+	write_tag();
+
+	return tag.start("input")->itbutton();
+}
+
+HTMLTag *HTMLBuilder::input_checkbox() {
+	write_tag();
+
+	return tag.start("input")->itcheckbox();
+}
+
+HTMLTag *HTMLBuilder::input_color() {
+	write_tag();
+
+	return tag.start("input")->itcolor();
+}
+
+HTMLTag *HTMLBuilder::input_date() {
+	write_tag();
+
+	return tag.start("input")->itdate();
+}
+
+HTMLTag *HTMLBuilder::input_datetime_local() {
+	write_tag();
+
+	return tag.start("input")->itdatetime_local();
+}
+
+HTMLTag *HTMLBuilder::input_email() {
+	write_tag();
+
+	return tag.start("input")->itemail();
+}
+
+HTMLTag *HTMLBuilder::input_file() {
+	write_tag();
+
+	return tag.start("input")->itfile();
+}
+
+HTMLTag *HTMLBuilder::input_hidden() {
+	write_tag();
+
+	return tag.start("input")->ithidden();
+}
+
+HTMLTag *HTMLBuilder::input_image() {
+	write_tag();
+
+	return tag.start("input")->itimage();
+}
+
+HTMLTag *HTMLBuilder::input_month() {
+	write_tag();
+
+	return tag.start("input")->itmonth();
+}
+
+HTMLTag *HTMLBuilder::input_number() {
+	write_tag();
+
+	return tag.start("input")->itnumber();
+}
+
+HTMLTag *HTMLBuilder::input_password() {
+	write_tag();
+
+	return tag.start("input")->itpassword();
+}
+
+HTMLTag *HTMLBuilder::input_radio() {
+	write_tag();
+
+	return tag.start("input")->itradio();
+}
+
+HTMLTag *HTMLBuilder::input_range() {
+	write_tag();
+
+	return tag.start("input")->itrange();
+}
+
+HTMLTag *HTMLBuilder::input_reset() {
+	write_tag();
+
+	return tag.start("input")->itreset();
+}
+
+HTMLTag *HTMLBuilder::input_search() {
+	write_tag();
+
+	return tag.start("input")->itsearch();
+}
+
+HTMLTag *HTMLBuilder::input_submit() {
+	write_tag();
+
+	return tag.start("input")->itsubmit();
+}
+
+HTMLTag *HTMLBuilder::input_tel() {
+	write_tag();
+
+	return tag.start("input")->ittel();
+}
+
+HTMLTag *HTMLBuilder::input_text() {
+	write_tag();
+
+	return tag.start("input")->ittext();
+}
+
+HTMLTag *HTMLBuilder::input_time() {
+	write_tag();
+
+	return tag.start("input")->ittime();
+}
+
+HTMLTag *HTMLBuilder::input_url() {
+	write_tag();
+
+	return tag.start("input")->iturl();
+}
+
+HTMLTag *HTMLBuilder::input_week() {
+	write_tag();
+
+	return tag.start("input")->itweek();
+}
+
+
 void HTMLBuilder::f() {
 	write_tag();
 }

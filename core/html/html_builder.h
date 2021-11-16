@@ -332,6 +332,29 @@ public:
 	HTMLBuilder *cvideo();
 	HTMLBuilder *cwbr();
 
+	HTMLTag *input_button();
+	HTMLTag *input_checkbox();
+	HTMLTag *input_color();
+	HTMLTag *input_date();
+	HTMLTag *input_datetime_local();
+	HTMLTag *input_email();
+	HTMLTag *input_file();
+	HTMLTag *input_hidden();
+	HTMLTag *input_image();
+	HTMLTag *input_month();
+	HTMLTag *input_number();
+	HTMLTag *input_password();
+	HTMLTag *input_radio();
+	HTMLTag *input_range();
+	HTMLTag *input_reset();
+	HTMLTag *input_search();
+	HTMLTag *input_submit();
+	HTMLTag *input_tel();
+	HTMLTag *input_text();
+	HTMLTag *input_time();
+	HTMLTag *input_url();
+	HTMLTag *input_week();
+
 	void f();
 
 	//write
