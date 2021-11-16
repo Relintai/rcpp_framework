@@ -502,6 +502,17 @@ HTMLTag *HTMLTag::method(const String &val) {
 	return this;
 }
 
+HTMLTag *HTMLTag::method_get() {
+	attrib("method", "get");
+
+	return this;
+}
+HTMLTag *HTMLTag::method_post() {
+	attrib("method", "post");
+
+	return this;
+}
+
 HTMLTag *HTMLTag::action(const String &val) {
 	attrib("action", val);
 
@@ -2329,6 +2340,47 @@ HTMLBuilder *HTMLBuilder::cwbr() {
 	result += "</wbr>";
 
 	return this;
+}
+
+HTMLTag *HTMLBuilder::form_get() {
+	write_tag();
+
+	return tag.start("form")->method_get();
+}
+HTMLTag *HTMLBuilder::form_post() {
+	write_tag();
+
+	return tag.start("form")->method_post();
+}
+HTMLTag *HTMLBuilder::form_get(const String &action, const String &cls, const String &id) {
+	HTMLTag *t = form_get();
+
+	t->fora(action);
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+HTMLTag *HTMLBuilder::form_post(const String &action, const String &cls, const String &id) {
+	HTMLTag *t = form_post();
+
+	t->fora(action);
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
 }
 
 HTMLTag *HTMLBuilder::input_button() {

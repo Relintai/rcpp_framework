@@ -111,6 +111,9 @@ public:
 	HTMLTag *pattern(const String &val);
 
 	HTMLTag *method(const String &val);
+	HTMLTag *method_get();
+	HTMLTag *method_post();
+
 	HTMLTag *action(const String &val);
 	HTMLTag *type(const String &val);
 	HTMLTag *placeholder(const String &val);
@@ -430,6 +433,11 @@ public:
 	HTMLBuilder *cvar();
 	HTMLBuilder *cvideo();
 	HTMLBuilder *cwbr();
+
+	HTMLTag *form_get();
+	HTMLTag *form_post();
+	HTMLTag *form_get(const String& action, const String& cls = "", const String& id = "");
+	HTMLTag *form_post(const String& action, const String& cls = "", const String& id = "");
 
 	HTMLTag *input_button();
 	HTMLTag *input_checkbox();
