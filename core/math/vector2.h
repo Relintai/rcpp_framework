@@ -1,6 +1,8 @@
 #ifndef VECTOR2_H
 #define VECTOR2_H
 
+#include "core/string.h"
+
 class Vector2 {
 public:
 	Vector2 abs() const;
@@ -30,19 +32,46 @@ public:
 	Vector2(const float p_x, const float p_y);
 
 	Vector2 &operator+=(const Vector2 &b);
+	Vector2 operator+(const Vector2 &b) const;
 	Vector2 &operator-=(const Vector2 &b);
+	Vector2 operator-(const Vector2 &b) const;
+	Vector2 &operator*=(const Vector2 &b);
+	Vector2 operator*(const Vector2 &b) const;
+	Vector2 &operator/=(const Vector2 &b);
+	Vector2 operator/(const Vector2 &b) const;
 
-	friend Vector2 operator+(Vector2 lhs, const Vector2 &rhs);
-	friend Vector2 operator-(Vector2 lhs, const Vector2 &rhs);
+	Vector2 &operator+=(float scalar);
+	Vector2 operator+(float scalar) const;
+	Vector2 &operator-=(float scalar);
+	Vector2 operator-(float scalar) const;
+	Vector2 &operator*=(float scalar);
+	Vector2 operator*(float scalar) const;
+	Vector2 &operator/=(float scalar);
+	Vector2 operator/(float scalar) const;
 
-	Vector2 &operator*=(const float b);
-	friend Vector2 operator*(Vector2 lhs, const float rhs);
+	Vector2 operator-() const;
 
-	friend bool operator==(const Vector2 &a, const Vector2 &b);
-	friend bool operator!=(const Vector2 &a, const Vector2 &b);
+	bool operator==(const Vector2 &b) const;
+	bool operator!=(const Vector2 &b) const;
 
-	float x;
-	float y;
+	const float &operator[](int axis) const;
+	float &operator[](int axis);
+
+	operator String() const;
+
+	enum Axis {
+		AXIS_X = 0,
+		AXIS_Y
+	};
+
+	union {
+		struct {
+			float x;
+			float y;
+		};
+
+		float coordinates[2];
+	};
 };
 
 #endif

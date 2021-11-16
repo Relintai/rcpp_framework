@@ -115,6 +115,16 @@ void Vector3::sub(const Vector3 &b) {
 	z -= b.z;
 }
 
+void Vector3::zero() {
+	x = 0;
+	y = 0;
+	z = 0;
+}
+
+Vector3 Vector3::inverse() const {
+	return Vector3(1.0 / x, 1.0 / y, 1.0 / z);
+}
+
 Vector3::Vector3() {
 	x = 0;
 	y = 0;
@@ -141,6 +151,10 @@ Vector3 &Vector3::operator+=(const Vector3 &b) {
 	return *this;
 }
 
+Vector3 Vector3::operator+(const Vector3 &b) const {
+	return Vector3(x + b.x, y + b.y, z + b.z);
+}
+
 Vector3 &Vector3::operator-=(const Vector3 &b) {
 	x -= b.x;
 	y -= b.y;
@@ -149,42 +163,93 @@ Vector3 &Vector3::operator-=(const Vector3 &b) {
 	return *this;
 }
 
-Vector3 &Vector3::operator*=(const float b) {
-	x *= b;
-	y *= b;
-	z *= b;
+Vector3 Vector3::operator-(const Vector3 &b) const {
+	return Vector3(x - b.x, y - b.y, z - b.z);
+}
+
+Vector3 &Vector3::operator*=(const Vector3 &b) {
+	x *= b.x;
+	y *= b.y;
+	z *= b.z;
 
 	return *this;
 }
 
-Vector3 operator*(Vector3 lhs, const float rhs) {
-	lhs.x *= rhs;
-	lhs.y *= rhs;
-	lhs.z *= rhs;
-
-	return lhs;
+Vector3 Vector3::operator*(const Vector3 &b) const {
+	return Vector3(x * b.x, y * b.y, z * b.z);
 }
 
-Vector3 operator+(Vector3 lhs, const Vector3 &rhs) {
-	lhs.x += rhs.x;
-	lhs.y += rhs.y;
-	lhs.z += rhs.z;
+Vector3 &Vector3::operator/=(const Vector3 &b) {
+	x /= b.x;
+	y /= b.y;
+	z /= b.z;
 
-	return lhs;
+	return *this;
 }
 
-Vector3 operator-(Vector3 lhs, const Vector3 &rhs) {
-	lhs.x -= rhs.x;
-	lhs.y -= rhs.y;
-	lhs.z -= rhs.z;
-
-	return lhs;
+Vector3 Vector3::operator/(const Vector3 &b) const {
+	return Vector3(x / b.x, y / b.y, z / b.z);
 }
 
-bool operator==(const Vector3 &a, const Vector3 &b) {
-	return a.is_equal_approx(b);
+Vector3 &Vector3::operator+=(float scalar) {
+	x += scalar;
+	y += scalar;
+	z += scalar;
+
+	return *this;
+}
+Vector3 Vector3::operator+(float scalar) const {
+	return Vector3(x + scalar, y + scalar, z + scalar);
+}
+Vector3 &Vector3::operator-=(float scalar) {
+	x += scalar;
+	y += scalar;
+	z += scalar;
+
+	return *this;
+}
+Vector3 Vector3::operator-(float scalar) const {
+	return Vector3(x - scalar, y - scalar, z - scalar);
 }
 
-bool operator!=(const Vector3 &a, const Vector3 &b) {
-	return !(a == b);
+Vector3 &Vector3::operator*=(float scalar) {
+	x *= scalar;
+	y *= scalar;
+	z *= scalar;
+
+	return *this;
+}
+Vector3 Vector3::operator*(float scalar) const {
+	return Vector3(x * scalar, y * scalar, z * scalar);
+}
+Vector3 &Vector3::operator/=(float scalar) {
+	x /= scalar;
+	y /= scalar;
+	z /= scalar;
+
+	return *this;
+}
+Vector3 Vector3::operator/(float scalar) const {
+	return Vector3(x / scalar, y / scalar, z / scalar);
+}
+Vector3 Vector3::operator-() const {
+	return Vector3(-x, -y, -z);
+}
+
+bool Vector3::operator==(const Vector3 &b) const {
+	return x == b.x && y == y && z == b.z;
+}
+bool Vector3::operator!=(const Vector3 &b) const {
+	return x != b.x || y == b.y || z == b.z;
+}
+
+const float &Vector3::operator[](int axis) const {
+	return coordinates[axis];
+}
+float &Vector3::operator[](int axis) {
+	return coordinates[axis];
+}
+
+Vector3::operator String() const {
+	return "[" + String::num(x) + "," + String::num(y) + "," + String::num(z) + "]";
 }

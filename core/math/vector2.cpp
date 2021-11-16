@@ -128,6 +128,10 @@ Vector2 &Vector2::operator+=(const Vector2 &b) {
 	return *this;
 }
 
+Vector2 Vector2::operator+(const Vector2 &b) const {
+	return Vector2(x + b.x, y + b.y);
+}
+
 Vector2 &Vector2::operator-=(const Vector2 &b) {
 	x -= b.x;
 	y -= b.y;
@@ -135,38 +139,87 @@ Vector2 &Vector2::operator-=(const Vector2 &b) {
 	return *this;
 }
 
-Vector2 &Vector2::operator*=(const float b) {
-	x *= b;
-	y *= b;
+Vector2 Vector2::operator-(const Vector2 &b) const {
+	return Vector2(x - b.x, y - b.y);
+}
+
+Vector2 &Vector2::operator*=(const Vector2 &b) {
+	x *= b.x;
+	y *= b.y;
 
 	return *this;
 }
 
-Vector2 operator*(Vector2 lhs, const float rhs) {
-	lhs.x *= rhs;
-	lhs.y *= rhs;
-
-	return lhs;
+Vector2 Vector2::operator*(const Vector2 &b) const {
+	return Vector2(x * b.x, y * b.y);
 }
 
-Vector2 operator+(Vector2 lhs, const Vector2 &rhs) {
-	lhs.x += rhs.x;
-	lhs.y += rhs.y;
+Vector2 &Vector2::operator/=(const Vector2 &b) {
+	x /= b.x;
+	y /= b.y;
 
-	return lhs;
+	return *this;
 }
 
-Vector2 operator-(Vector2 lhs, const Vector2 &rhs) {
-	lhs.x -= rhs.x;
-	lhs.y -= rhs.y;
-
-	return lhs;
+Vector2 Vector2::operator/(const Vector2 &b) const {
+	return Vector2(x / b.x, y / b.y);
 }
 
-bool operator==(const Vector2 &a, const Vector2 &b) {
-	return a.is_equal_approx(b);
+Vector2 &Vector2::operator+=(float scalar) {
+	x += scalar;
+	y += scalar;
+
+	return *this;
+}
+Vector2 Vector2::operator+(float scalar) const {
+	return Vector2(x + scalar, y + scalar);
+}
+Vector2 &Vector2::operator-=(float scalar) {
+	x += scalar;
+	y += scalar;
+
+	return *this;
+}
+Vector2 Vector2::operator-(float scalar) const {
+	return Vector2(x - scalar, y - scalar);
 }
 
-bool operator!=(const Vector2 &a, const Vector2 &b) {
-	return !(a == b);
+Vector2 &Vector2::operator*=(float scalar) {
+	x *= scalar;
+	y *= scalar;
+
+	return *this;
+}
+Vector2 Vector2::operator*(float scalar) const {
+	return Vector2(x * scalar, y * scalar);
+}
+Vector2 &Vector2::operator/=(float scalar) {
+	x /= scalar;
+	y /= scalar;
+
+	return *this;
+}
+Vector2 Vector2::operator/(float scalar) const {
+	return Vector2(x / scalar, y / scalar);
+}
+Vector2 Vector2::operator-() const {
+	return Vector2(-x, -y);
+}
+
+bool Vector2::operator==(const Vector2 &b) const {
+	return x == b.x && y == y;
+}
+bool Vector2::operator!=(const Vector2 &b) const {
+	return x != b.x || y == b.y;
+}
+
+const float &Vector2::operator[](int axis) const {
+	return coordinates[axis];
+}
+float &Vector2::operator[](int axis) {
+	return coordinates[axis];
+}
+
+Vector2::operator String() const {
+	return "[" + String::num(x) + "," + String::num(y) + "]";
 }

@@ -1,6 +1,8 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
+#include "core/string.h"
+
 class Vector3 {
 public:
 	Vector3 abs() const;
@@ -24,25 +26,56 @@ public:
 	void add(const Vector3 &b);
 	void sub(const Vector3 &b);
 
+	void zero();
+	Vector3 inverse() const;
+
 	Vector3();
 	Vector3(const Vector3 &b);
 	Vector3(const float p_x, const float p_y, const float p_z);
 
 	Vector3 &operator+=(const Vector3 &b);
+	Vector3 operator+(const Vector3 &b) const;
 	Vector3 &operator-=(const Vector3 &b);
+	Vector3 operator-(const Vector3 &b) const;
+	Vector3 &operator*=(const Vector3 &b);
+	Vector3 operator*(const Vector3 &b) const;
+	Vector3 &operator/=(const Vector3 &b);
+	Vector3 operator/(const Vector3 &b) const;
 
-	friend Vector3 operator+(Vector3 lhs, const Vector3 &rhs);
-	friend Vector3 operator-(Vector3 lhs, const Vector3 &rhs);
+	Vector3 &operator+=(float scalar);
+	Vector3 operator+(float scalar) const;
+	Vector3 &operator-=(float scalar);
+	Vector3 operator-(float scalar) const;
+	Vector3 &operator*=(float scalar);
+	Vector3 operator*(float scalar) const;
+	Vector3 &operator/=(float scalar);
+	Vector3 operator/(float scalar) const;
 
-	Vector3 &operator*=(const float b);
-	friend Vector3 operator*(Vector3 lhs, const float rhs);
+	Vector3 operator-() const;
 
-	friend bool operator==(const Vector3 &a, const Vector3 &b);
-	friend bool operator!=(const Vector3 &a, const Vector3 &b);
+	bool operator==(const Vector3 &b) const;
+	bool operator!=(const Vector3 &b) const;
 
-	float x;
-	float y;
-	float z;
+	const float &operator[](int axis) const;
+	float &operator[](int axis);
+
+	operator String() const;
+
+	enum Axis {
+		AXIS_X = 0,
+		AXIS_Y,
+		AXIS_Z
+	};
+
+	union {
+		struct {
+			float x;
+			float y;
+			float z;
+		};
+
+		float coordinates[3];
+	};
 };
 
 #endif
