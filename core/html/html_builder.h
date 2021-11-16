@@ -82,7 +82,7 @@ public:
 	HTMLTag *autocomplete_url();
 	HTMLTag *autocomplete_photo();
 
-	//onclick, etc
+	HTMLTag *onclick(const String &val);
 
 	HTMLTag *checked(const bool val = true);
 	HTMLTag *autofocus(const bool val = true);

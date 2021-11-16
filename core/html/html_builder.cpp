@@ -344,6 +344,12 @@ HTMLTag *HTMLTag::autocomplete_photo() {
 	return this;
 }
 
+HTMLTag *HTMLTag::onclick(const String &val) {
+	attrib("onclick", val);
+
+	return this;
+}
+
 HTMLTag *HTMLTag::inputmode(const String &val) {
 	attrib("inputmode", val);
 
