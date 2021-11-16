@@ -307,6 +307,9 @@ public:
 	HTMLTag *a(const String& href, const String& cls = "", const String& id = "");
 	HTMLBuilder *fa(const String& href, const String& body, const String& cls = "", const String& id = "");
 
+	HTMLTag *div(const String& cls, const String& id = "");
+	HTMLBuilder *fdiv(const String& body, const String& cls = "", const String& id = "");
+
 	//closing tags c prefix means close
 	//Note simple tags should not have these like <br>
 	//Note that I might have a few that shouldn't be here, those will be removed as I find them

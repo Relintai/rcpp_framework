@@ -1524,6 +1524,28 @@ HTMLBuilder *HTMLBuilder::fa(const String &href, const String &body, const Strin
 	return this;
 }
 
+HTMLTag *HTMLBuilder::div(const String &cls, const String &id) {
+	HTMLTag *t = div();
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+
+HTMLBuilder *HTMLBuilder::fdiv(const String &body, const String &cls, const String &id) {
+	div(cls, id);
+	w(body);
+	cdiv();
+
+	return this;
+}
+
 //Closing tags
 
 HTMLBuilder *HTMLBuilder::ca() {
