@@ -85,6 +85,7 @@ public:
 	HTMLTag *onclick(const String &val);
 
 	HTMLTag *checked(const bool val = true);
+	HTMLTag *selected(const bool val = true);
 	HTMLTag *autofocus(const bool val = true);
 	HTMLTag *disabled(const bool val = true);
 	HTMLTag *multiple(const bool val = true);
@@ -312,6 +313,11 @@ public:
 
 	HTMLTag *textarea(const String& name, const String& cls = "", const String& id = "");
 	HTMLBuilder *ftextarea(const String& name, const String& body, const String& cls = "", const String& id = "");
+
+	HTMLTag *select(const String& name, const String& cls = "", const String& id = "");
+
+	HTMLTag *option(const String& value);
+	HTMLBuilder *foption(const String& value, const String& body, const bool selected = false);
 
 	//closing tags c prefix means close
 	//Note simple tags should not have these like <br>

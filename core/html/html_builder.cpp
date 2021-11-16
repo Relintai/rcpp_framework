@@ -370,6 +370,14 @@ HTMLTag *HTMLTag::checked(const bool val) {
 	return this;
 }
 
+HTMLTag *HTMLTag::selected(const bool val) {
+	if (val) {
+		result += " selected";
+	}
+
+	return this;
+}
+
 HTMLTag *HTMLTag::autofocus(const bool val) {
 	if (val) {
 		result += " autofocus";
@@ -1565,6 +1573,37 @@ HTMLBuilder *HTMLBuilder::ftextarea(const String &name, const String &body, cons
 	textarea(name, cls, id);
 	w(body);
 	ctextarea();
+
+	return this;
+}
+
+HTMLTag *HTMLBuilder::select(const String &name, const String &cls, const String &id) {
+	HTMLTag *t = select();
+
+	t->name(name);
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::option(const String &value) {
+	HTMLTag *t = option();
+
+	t->value(value);
+
+	return t;
+}
+HTMLBuilder *HTMLBuilder::foption(const String &value, const String &body, const bool selected) {
+	option(value)->selected(selected);
+	w(body);
+	coption();
 
 	return this;
 }
