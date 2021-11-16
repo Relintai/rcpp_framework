@@ -73,6 +73,277 @@ HTMLTag *HTMLTag::autocomplete(const String &val) {
 	return this;
 }
 
+HTMLTag *HTMLTag::autocomplete_off() {
+	attrib("autocomplete", "off");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_on() {
+	attrib("autocomplete", "on");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_name() {
+	attrib("autocomplete", "name");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_name_honorific_prefix() {
+	attrib("autocomplete", "honorific-prefix");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_name_given_name() {
+	attrib("autocomplete", "given-name");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_name_additional_name() {
+	attrib("autocomplete", "additional-name");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_name_family_name() {
+	attrib("autocomplete", "family-name");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_name_honorific_suffix() {
+	attrib("autocomplete", "honorific-suffix");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_name_nickname() {
+	attrib("autocomplete", "nickname");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_email() {
+	attrib("autocomplete", "email");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_username() {
+	attrib("autocomplete", "username");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_new_password() {
+	attrib("autocomplete", "new-password");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_current_password() {
+	attrib("autocomplete", "current-password");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_one_time_code() {
+	attrib("autocomplete", "one-time-code");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_organization_title() {
+	attrib("autocomplete", "organization-title");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_organization() {
+	attrib("autocomplete", "organization");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_street_address() {
+	attrib("autocomplete", "street-address");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_address_line1() {
+	attrib("autocomplete", "address-line1");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_address_line2() {
+	attrib("autocomplete", "address-line2");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_address_line3() {
+	attrib("autocomplete", "address-line3");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_address_level_1() {
+	attrib("autocomplete", "address-level1");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_address_level_2() {
+	attrib("autocomplete", "address-level2");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_address_level_3() {
+	attrib("autocomplete", "address-level3");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_address_level_4() {
+	attrib("autocomplete", "address-level4");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_country() {
+	attrib("autocomplete", "country");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_country_name() {
+	attrib("autocomplete", "country-name");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_postal_code() {
+	attrib("autocomplete", "postal-code");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_cc_name() {
+	attrib("autocomplete", "cc-name");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_cc_given_name() {
+	attrib("autocomplete", "cc-given-name");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_cc_additional_name() {
+	attrib("autocomplete", "cc-additional-name");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_cc_family_name() {
+	attrib("autocomplete", "cc-family-name");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_cc_number() {
+	attrib("autocomplete", "cc-number");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_cc_exp() {
+	attrib("autocomplete", "cc-exp");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_cc_exp_month() {
+	attrib("autocomplete", "cc-exp-month");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_cc_exp_year() {
+	attrib("autocomplete", "cc-exp-year");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_cc_csc() {
+	attrib("autocomplete", "cc-csc");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_cc_type() {
+	attrib("autocomplete", "cc-type");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_transaction_currency() {
+	attrib("autocomplete", "transaction-currency");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_transaction_amount() {
+	attrib("autocomplete", "transaction-amount");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_language() {
+	attrib("autocomplete", "language");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_bday() {
+	attrib("autocomplete", "bday");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_bday_day() {
+	attrib("autocomplete", "bday-day");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_bday_month() {
+	attrib("autocomplete", "bday-month");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_bday_year() {
+	attrib("autocomplete", "bday-year");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_sex() {
+	attrib("autocomplete", "sex");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_tel() {
+	attrib("autocomplete", "tel");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_tel_country_code() {
+	attrib("autocomplete", "tel-country-code");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_tel_national() {
+	attrib("autocomplete", "tel-national");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_tel_area_code() {
+	attrib("autocomplete", "tel-area-code");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_tel_local() {
+	attrib("autocomplete", "tel-local");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_tel_extension() {
+	attrib("autocomplete", "tel-extension");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_impp() {
+	attrib("autocomplete", "impp");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_url() {
+	attrib("autocomplete", "url");
+
+	return this;
+}
+HTMLTag *HTMLTag::autocomplete_photo() {
+	attrib("autocomplete", "photo");
+
+	return this;
+}
+
 HTMLTag *HTMLTag::inputmode(const String &val) {
 	attrib("inputmode", val);
 
@@ -2186,7 +2457,7 @@ HTMLTag *HTMLBuilder::input_week() {
 	return tag.start("input")->itweek();
 }
 
-HTMLBuilder *HTMLBuilder::label(const String& pfor, const String& plabel, const String& cls, const String& id) {
+HTMLBuilder *HTMLBuilder::label(const String &pfor, const String &plabel, const String &cls, const String &id) {
 	HTMLTag *t = label();
 
 	t->fora(pfor);
@@ -2750,7 +3021,7 @@ HTMLTag *HTMLBuilder::input_url(const String &name, const String &value, const S
 	return t;
 }
 
-HTMLTag *HTMLBuilder::input_week(const String& name, const String& cls, const String& id, const String& vmin, const String& vmax) {
+HTMLTag *HTMLBuilder::input_week(const String &name, const String &cls, const String &id, const String &vmin, const String &vmax) {
 	HTMLTag *t = input_week();
 
 	t->name(name);
@@ -2773,7 +3044,6 @@ HTMLTag *HTMLBuilder::input_week(const String& name, const String& cls, const St
 
 	return t;
 }
-
 
 void HTMLBuilder::f() {
 	write_tag();

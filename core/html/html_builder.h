@@ -27,11 +27,62 @@ public:
 
 	HTMLTag *autocomplete(const String &val);
 
+	HTMLTag *autocomplete_off();
+	HTMLTag *autocomplete_on();
+	HTMLTag *autocomplete_name();
+	HTMLTag *autocomplete_name_honorific_prefix();
+	HTMLTag *autocomplete_name_given_name();
+	HTMLTag *autocomplete_name_additional_name();
+	HTMLTag *autocomplete_name_family_name();
+	HTMLTag *autocomplete_name_honorific_suffix();
+	HTMLTag *autocomplete_name_nickname();
+	HTMLTag *autocomplete_email();
+	HTMLTag *autocomplete_username();
+	HTMLTag *autocomplete_new_password();
+	HTMLTag *autocomplete_current_password();
+	HTMLTag *autocomplete_one_time_code();
+	HTMLTag *autocomplete_organization_title();
+	HTMLTag *autocomplete_organization();
+	HTMLTag *autocomplete_street_address();
+	HTMLTag *autocomplete_address_line1();
+	HTMLTag *autocomplete_address_line2();
+	HTMLTag *autocomplete_address_line3();
+	HTMLTag *autocomplete_address_level_1();
+	HTMLTag *autocomplete_address_level_2();
+	HTMLTag *autocomplete_address_level_3();
+	HTMLTag *autocomplete_address_level_4();
+	HTMLTag *autocomplete_country();
+	HTMLTag *autocomplete_country_name();
+	HTMLTag *autocomplete_postal_code();
+	HTMLTag *autocomplete_cc_name();
+	HTMLTag *autocomplete_cc_given_name();
+	HTMLTag *autocomplete_cc_additional_name();
+	HTMLTag *autocomplete_cc_family_name();
+	HTMLTag *autocomplete_cc_number();
+	HTMLTag *autocomplete_cc_exp();
+	HTMLTag *autocomplete_cc_exp_month();
+	HTMLTag *autocomplete_cc_exp_year();
+	HTMLTag *autocomplete_cc_csc();
+	HTMLTag *autocomplete_cc_type();
+	HTMLTag *autocomplete_transaction_currency();
+	HTMLTag *autocomplete_transaction_amount();
+	HTMLTag *autocomplete_language();
+	HTMLTag *autocomplete_bday();
+	HTMLTag *autocomplete_bday_day();
+	HTMLTag *autocomplete_bday_month();
+	HTMLTag *autocomplete_bday_year();
+	HTMLTag *autocomplete_sex();
+	HTMLTag *autocomplete_tel();
+	HTMLTag *autocomplete_tel_country_code();
+	HTMLTag *autocomplete_tel_national();
+	HTMLTag *autocomplete_tel_area_code();
+	HTMLTag *autocomplete_tel_local();
+	HTMLTag *autocomplete_tel_extension();
+	HTMLTag *autocomplete_impp();
+	HTMLTag *autocomplete_url();
+	HTMLTag *autocomplete_photo();
 
-
-		//autocomplete
 	//onclick, etc
-
 
 	HTMLTag *checked(const bool val = true);
 	HTMLTag *autofocus(const bool val = true);
