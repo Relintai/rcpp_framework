@@ -83,6 +83,33 @@ void Rect2::shrink(const float by) {
 	w -= by;
 }
 
+//Taken from the Godot Engine (MIT License)
+//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+void Rect2::expand_to(const Vector2 &p_vector) {
+	Vector2 begin = Vector2(x, y);
+	Vector2 end = Vector2(x, y) + Vector2(w, h);
+
+	if (p_vector.x < begin.x) {
+		begin.x = p_vector.x;
+	}
+	if (p_vector.y < begin.y) {
+		begin.y = p_vector.y;
+	}
+
+	if (p_vector.x > end.x) {
+		end.x = p_vector.x;
+	}
+	if (p_vector.y > end.y) {
+		end.y = p_vector.y;
+	}
+
+	x = begin.x;
+	y = begin.y;
+	w = end.x - begin.x;
+	h = end.y - begin.y;
+}
+
 #ifdef SDL_AVAILABLE
 SDL_Rect Rect2::as_rect() const {
 	SDL_Rect r;
@@ -108,47 +135,47 @@ SDL_FRect Rect2::as_frect() const {
 #endif
 
 Rect2 &Rect2::operator+=(const Rect2 &b) {
-    x += b.x;
+	x += b.x;
 	y += b.y;
 	w += b.w;
 	h += b.h;
 
-    return *this;
+	return *this;
 }
 
 Rect2 &Rect2::operator-=(const Rect2 &b) {
-    x -= b.x;
+	x -= b.x;
 	y -= b.y;
 	w -= b.w;
 	h -= b.h;
 
-    return *this;
+	return *this;
 }
 
 Rect2 operator+(Rect2 lhs, const Rect2 &rhs) {
-    lhs.x += rhs.x;
+	lhs.x += rhs.x;
 	lhs.y += rhs.y;
 	lhs.w += rhs.w;
 	lhs.h += rhs.h;
 
-    return lhs;
+	return lhs;
 }
 
 Rect2 operator-(Rect2 lhs, const Rect2 &rhs) {
-    lhs.x -= rhs.x;
+	lhs.x -= rhs.x;
 	lhs.y -= rhs.y;
 	lhs.w -= rhs.w;
 	lhs.h -= rhs.h;
 
-    return lhs;
+	return lhs;
 }
 
 bool operator==(const Rect2 &a, const Rect2 &b) {
-    return a.is_equal_approx(b);
+	return a.is_equal_approx(b);
 }
 
 bool operator!=(const Rect2 &a, const Rect2 &b) {
-    return !a.is_equal_approx(b);
+	return !a.is_equal_approx(b);
 }
 
 Rect2::Rect2() {

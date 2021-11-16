@@ -5,6 +5,8 @@
 #include <SDL.h>
 #endif
 
+#include "vector2.h"
+
 class Rect2 {
 public:
 	float get_area() const;
@@ -17,6 +19,8 @@ public:
 
 	void grow(const float by);
 	void shrink(const float by);
+
+	void expand_to(const Vector2 &p_vector);
 
 #ifdef SDL_AVAILABLE
 	SDL_Rect as_rect() const;
