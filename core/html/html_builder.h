@@ -19,7 +19,36 @@ public:
 	HTMLTag *name(const String &val);
 	HTMLTag *content(const String &val);
 	HTMLTag *value(const String &val);
+	HTMLTag *accept(const String &val);
+	HTMLTag *src(const String &val);
+	HTMLTag *alt(const String &val);
+	HTMLTag *autocomplete(const String &val);
+	HTMLTag *inputmode(const String &val);
+	HTMLTag *list(const String &val);
+
 	HTMLTag *checked(const bool val = true);
+	HTMLTag *autofocus(const bool val = true);
+	HTMLTag *disabled(const bool val = true);
+	HTMLTag *multiple(const bool val = true);
+	HTMLTag *required(const bool val = true);
+
+	HTMLTag *max(const String &val);
+	HTMLTag *min(const String &val);
+	HTMLTag *step(const String &val);
+	HTMLTag *step_any();
+
+	HTMLTag *minlength(const int val);
+	HTMLTag *minlength(const String &val);
+	HTMLTag *maxlength(const int val);
+	HTMLTag *maxlength(const String &val);
+	HTMLTag *size(const int val);
+	HTMLTag *size(const String &val);
+
+	HTMLTag *width(const int val);
+	HTMLTag *width(const String &val);
+	HTMLTag *height(const int val);
+	HTMLTag *height(const String &val);
+
 	HTMLTag *method(const String &val);
 	HTMLTag *action(const String &val);
 	HTMLTag *type(const String &val);
@@ -52,6 +81,15 @@ public:
 	HTMLTag *ittime();
 	HTMLTag *iturl();
 	HTMLTag *itweek();
+
+	HTMLTag *inputmode_none();
+	HTMLTag *inputmode_text();
+	HTMLTag *inputmode_decimal();
+	HTMLTag *inputmode_numeric();
+	HTMLTag *inputmode_tel();
+	HTMLTag *inputmode_search();
+	HTMLTag *inputmode_email();
+	HTMLTag *inputmode_url();
 
 	HTMLTag *attrib(const String &attr, const String &val);
 
@@ -354,6 +392,35 @@ public:
 	HTMLTag *input_time();
 	HTMLTag *input_url();
 	HTMLTag *input_week();
+
+	//label!
+	//autocomplete
+	//onclick, etc
+
+	HTMLTag *input_button(const String& name, const String& value = "", const String& cls = "", const String& id = "");
+	HTMLTag *input_checkbox(const String& name, const String& value = "", const String& cls = "", const String& id = "");
+	HTMLTag *input_color(const String& name, const String& value = "", const String& cls = "", const String& id = "");
+	HTMLTag *input_date(const String& name, const String& value = "", const String& cls = "", const String& id = "", const String& date_min = "", const String& date_max = "", const String& date_step = "");
+	HTMLTag *input_datetime_local(const String& name, const String& value = "", const String& cls = "", const String& id = "", const String& date_min = "", const String& date_max = "", const String& date_step = "");
+	HTMLTag *input_email(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "");
+	HTMLTag *input_file(const String& name, const String& accept = "", const String& cls = "", const String& id = "");
+	HTMLTag *input_image(const String& name, const String& src = "", const String& alt = "", const String& cls = "", const String& id = "", const int width = 0, const int height = 0);
+	HTMLTag *input_month(const String& name, const String& cls = "", const String& id = "");
+	HTMLTag *input_number(const String& name, const String& = "", const String& = "", const String& cls = "", const String& id = "");
+	HTMLTag *input_password(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "", const String& minlength = "", const String& maxlength = "", const String& size = "");
+	HTMLTag *input_radio(const String& name, const String& value = "", const String& cls = "", const String& id = "");
+	HTMLTag *input_range(const String& name, const String& value = "", const String& vmin = "", const String& vmax = "", const String& vstep = "", const String& cls = "", const String& id = "");
+	HTMLTag *input_reset(const String& name, const String& value = "", const String& cls = "", const String& id = "");
+
+	/*
+	HTMLTag *input_search();
+	HTMLTag *input_submit();
+	HTMLTag *input_tel();
+	HTMLTag *input_text();
+	HTMLTag *input_time();
+	HTMLTag *input_url();
+	HTMLTag *input_week();
+	*/
 
 	void f();
 

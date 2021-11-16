@@ -1,4 +1,5 @@
 #include "html_builder.h"
+#include "core/string.h"
 
 HTMLTag *HTMLTag::str(const String &str) {
 	result += " " + str;
@@ -48,10 +49,156 @@ HTMLTag *HTMLTag::value(const String &val) {
 	return this;
 }
 
+HTMLTag *HTMLTag::accept(const String &val) {
+	attrib("accept", val);
+
+	return this;
+}
+
+HTMLTag *HTMLTag::src(const String &val) {
+	attrib("src", val);
+
+	return this;
+}
+
+HTMLTag *HTMLTag::alt(const String &val) {
+	attrib("alt", val);
+
+	return this;
+}
+
+HTMLTag *HTMLTag::autocomplete(const String &val) {
+	attrib("autocomplete", val);
+
+	return this;
+}
+
+HTMLTag *HTMLTag::inputmode(const String &val) {
+	attrib("inputmode", val);
+
+	return this;
+}
+
+HTMLTag *HTMLTag::list(const String &val) {
+	attrib("list", val);
+
+	return this;
+}
+
 HTMLTag *HTMLTag::checked(const bool val) {
 	if (val) {
 		result += " checked";
 	}
+
+	return this;
+}
+
+HTMLTag *HTMLTag::autofocus(const bool val) {
+	if (val) {
+		result += " autofocus";
+	}
+
+	return this;
+}
+
+HTMLTag *HTMLTag::disabled(const bool val) {
+	if (val) {
+		result += " disabled";
+	}
+
+	return this;
+}
+
+HTMLTag *HTMLTag::multiple(const bool val) {
+	if (val) {
+		result += " multiple";
+	}
+
+	return this;
+}
+
+HTMLTag *HTMLTag::required(const bool val) {
+	if (val) {
+		result += " required";
+	}
+
+	return this;
+}
+
+HTMLTag *HTMLTag::max(const String &val) {
+	attrib("max", val);
+
+	return this;
+}
+
+HTMLTag *HTMLTag::min(const String &val) {
+	attrib("min", val);
+
+	return this;
+}
+
+HTMLTag *HTMLTag::step(const String &val) {
+	attrib("step", val);
+
+	return this;
+}
+HTMLTag *HTMLTag::step_any() {
+	attrib("step", "any");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::minlength(const int val) {
+	attrib("minlength", String::num(val));
+
+	return this;
+}
+HTMLTag *HTMLTag::minlength(const String &val) {
+	attrib("minlength", val);
+
+	return this;
+}
+HTMLTag *HTMLTag::maxlength(const int val) {
+	attrib("maxlength", String::num(val));
+
+	return this;
+}
+HTMLTag *HTMLTag::maxlength(const String &val) {
+	attrib("maxlength", val);
+
+	return this;
+}
+HTMLTag *HTMLTag::size(const int val) {
+	attrib("size", String::num(val));
+
+	return this;
+}
+HTMLTag *HTMLTag::size(const String &val) {
+	attrib("size", val);
+
+	return this;
+}
+
+HTMLTag *HTMLTag::width(const int val) {
+	attrib("width", String::num(val));
+
+	return this;
+}
+
+HTMLTag *HTMLTag::width(const String &val) {
+	attrib("width", val);
+
+	return this;
+}
+
+HTMLTag *HTMLTag::height(const int val) {
+	attrib("height", String::num(val));
+
+	return this;
+}
+
+HTMLTag *HTMLTag::height(const String &val) {
+	attrib("height", val);
 
 	return this;
 }
@@ -217,6 +364,47 @@ HTMLTag *HTMLTag::iturl() {
 }
 HTMLTag *HTMLTag::itweek() {
 	attrib("type", "week");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::inputmode_none() {
+	attrib("inputmode", "none");
+
+	return this;
+}
+HTMLTag *HTMLTag::inputmode_text() {
+	attrib("inputmode", "text");
+
+	return this;
+}
+HTMLTag *HTMLTag::inputmode_decimal() {
+	attrib("inputmode", "decimal");
+
+	return this;
+}
+HTMLTag *HTMLTag::inputmode_numeric() {
+	attrib("inputmode", "numeric");
+
+	return this;
+}
+HTMLTag *HTMLTag::inputmode_tel() {
+	attrib("inputmode", "tel");
+
+	return this;
+}
+HTMLTag *HTMLTag::inputmode_search() {
+	attrib("inputmode", "search");
+
+	return this;
+}
+HTMLTag *HTMLTag::inputmode_email() {
+	attrib("inputmode", "email");
+
+	return this;
+}
+HTMLTag *HTMLTag::inputmode_url() {
+	attrib("inputmode", "url");
 
 	return this;
 }
@@ -1982,6 +2170,353 @@ HTMLTag *HTMLBuilder::input_week() {
 	return tag.start("input")->itweek();
 }
 
+HTMLTag *HTMLBuilder::input_button(const String &name, const String &value, const String &cls, const String &id) {
+	HTMLTag *t = input_button();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_checkbox(const String &name, const String &value, const String &cls, const String &id) {
+	HTMLTag *t = input_checkbox();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_color(const String &name, const String &value, const String &cls, const String &id) {
+	HTMLTag *t = input_color();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_date(const String &name, const String &value, const String &cls, const String &id, const String &date_min, const String &date_max, const String &date_step) {
+	HTMLTag *t = input_date();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	if (date_min != "") {
+		t->min(date_min);
+	}
+
+	if (date_max != "") {
+		t->max(date_max);
+	}
+
+	if (date_step != "") {
+		t->step(date_step);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_datetime_local(const String &name, const String &value, const String &cls, const String &id, const String &date_min, const String &date_max, const String &date_step) {
+	HTMLTag *t = input_datetime_local();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	if (date_min != "") {
+		t->min(date_min);
+	}
+
+	if (date_max != "") {
+		t->max(date_max);
+	}
+
+	if (date_step != "") {
+		t->step(date_step);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_email(const String &name, const String &value, const String &placeholder, const String &cls, const String &id) {
+	HTMLTag *t = input_email();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	if (placeholder != "") {
+		t->placeholder(placeholder);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_file(const String &name, const String &accept, const String &cls, const String &id) {
+	HTMLTag *t = input_email();
+
+	t->name(name);
+
+	if (accept != "") {
+		t->accept(accept);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_image(const String &name, const String &src, const String &alt, const String &cls, const String &id, const int width, const int height) {
+	HTMLTag *t = input_image();
+
+	t->name(name);
+
+	if (src != "") {
+		t->src(src);
+	}
+
+	if (alt != "") {
+		t->alt(alt);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	if (width != 0) {
+		t->width(width);
+	}
+
+	if (height != 0) {
+		t->height(height);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_month(const String &name, const String &cls, const String &id) {
+	HTMLTag *t = input_month();
+
+	t->name(name);
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_number(const String &name, const String &vmin, const String &vmax, const String &cls, const String &id) {
+	HTMLTag *t = input_number();
+
+	t->name(name);
+
+	if (vmin != "") {
+		t->min(vmin);
+	}
+
+	if (vmax != "") {
+		t->max(vmax);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_password(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size) {
+	HTMLTag *t = input_password();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (placeholder != "") {
+		t->placeholder(placeholder);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	if (minlength != "") {
+		t->minlength(minlength);
+	}
+
+	if (maxlength != "") {
+		t->maxlength(maxlength);
+	}
+
+	if (size != "") {
+		t->size(size);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_radio(const String &name, const String &value, const String &cls, const String &id) {
+	HTMLTag *t = input_password();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_range(const String &name, const String &value, const String &vmin, const String &vmax, const String &vstep, const String &cls, const String &id) {
+	HTMLTag *t = input_range();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (vmin != "") {
+		t->min(vmin);
+	}
+
+	if (vmax != "") {
+		t->max(vmax);
+	}
+
+	if (vstep != "") {
+		t->step(vstep);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_reset(const String& name, const String& value, const String& cls, const String& id) {
+	HTMLTag *t = input_reset();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
 
 void HTMLBuilder::f() {
 	write_tag();
