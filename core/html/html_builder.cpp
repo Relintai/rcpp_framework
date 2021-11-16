@@ -1501,7 +1501,7 @@ HTMLTag *HTMLBuilder::wbr() {
 }
 
 HTMLTag *HTMLBuilder::a(const String &href, const String &cls, const String &id) {
-	HTMLTag *t = input_text();
+	HTMLTag *t = a();
 
 	t->href(href);
 
