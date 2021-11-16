@@ -125,6 +125,16 @@ HTMLTag *HTMLTag::required(const bool val) {
 	return this;
 }
 
+HTMLTag *HTMLTag::spellcheck(const bool val) {
+	if (val) {
+		attrib("spellcheck", "true");
+	} else {
+		attrib("spellcheck", "false");
+	}
+
+	return this;
+}
+
 HTMLTag *HTMLTag::max(const String &val) {
 	attrib("max", val);
 
@@ -199,6 +209,12 @@ HTMLTag *HTMLTag::height(const int val) {
 
 HTMLTag *HTMLTag::height(const String &val) {
 	attrib("height", val);
+
+	return this;
+}
+
+HTMLTag *HTMLTag::pattern(const String &val) {
+	attrib("pattern", val);
 
 	return this;
 }
@@ -2498,7 +2514,7 @@ HTMLTag *HTMLBuilder::input_range(const String &name, const String &value, const
 	return t;
 }
 
-HTMLTag *HTMLBuilder::input_reset(const String& name, const String& value, const String& cls, const String& id) {
+HTMLTag *HTMLBuilder::input_reset(const String &name, const String &value, const String &cls, const String &id) {
 	HTMLTag *t = input_reset();
 
 	t->name(name);
@@ -2517,6 +2533,227 @@ HTMLTag *HTMLBuilder::input_reset(const String& name, const String& value, const
 
 	return t;
 }
+
+HTMLTag *HTMLBuilder::input_search(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size, const String &pattern) {
+	HTMLTag *t = input_search();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (placeholder != "") {
+		t->placeholder(placeholder);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	if (minlength != "") {
+		t->minlength(minlength);
+	}
+
+	if (maxlength != "") {
+		t->maxlength(maxlength);
+	}
+
+	if (size != "") {
+		t->size(size);
+	}
+
+	if (pattern != "") {
+		t->pattern(pattern);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_submit(const String &value, const String &cls, const String &id) {
+	HTMLTag *t = input_submit();
+
+	t->value(value);
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_tel(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size, const String &pattern) {
+	HTMLTag *t = input_tel();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (placeholder != "") {
+		t->placeholder(placeholder);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	if (minlength != "") {
+		t->minlength(minlength);
+	}
+
+	if (maxlength != "") {
+		t->maxlength(maxlength);
+	}
+
+	if (size != "") {
+		t->size(size);
+	}
+
+	if (pattern != "") {
+		t->pattern(pattern);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_text(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size) {
+	HTMLTag *t = input_text();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (placeholder != "") {
+		t->placeholder(placeholder);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	if (minlength != "") {
+		t->minlength(minlength);
+	}
+
+	if (maxlength != "") {
+		t->maxlength(maxlength);
+	}
+
+	if (size != "") {
+		t->size(size);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_time(const String &name, const String &cls, const String &id, const String &vmin, const String &vmax, const String &vstep) {
+	HTMLTag *t = input_time();
+
+	t->name(name);
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	if (vmin != "") {
+		t->min(vmin);
+	}
+
+	if (vmax != "") {
+		t->max(vmax);
+	}
+
+	if (vstep != "") {
+		t->step(vstep);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_url(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size) {
+	HTMLTag *t = input_url();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	if (placeholder != "") {
+		t->placeholder(placeholder);
+	}
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	if (minlength != "") {
+		t->minlength(minlength);
+	}
+
+	if (maxlength != "") {
+		t->maxlength(maxlength);
+	}
+
+	if (size != "") {
+		t->size(size);
+	}
+
+	return t;
+}
+
+HTMLTag *HTMLBuilder::input_week(const String& name, const String& cls, const String& id, const String& vmin, const String& vmax) {
+	HTMLTag *t = input_week();
+
+	t->name(name);
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	if (vmin != "") {
+		t->min(vmin);
+	}
+
+	if (vmax != "") {
+		t->max(vmax);
+	}
+
+	return t;
+}
+
 
 void HTMLBuilder::f() {
 	write_tag();

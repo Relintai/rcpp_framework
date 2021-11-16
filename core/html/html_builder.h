@@ -31,6 +31,7 @@ public:
 	HTMLTag *disabled(const bool val = true);
 	HTMLTag *multiple(const bool val = true);
 	HTMLTag *required(const bool val = true);
+	HTMLTag *spellcheck(const bool val);
 
 	HTMLTag *max(const String &val);
 	HTMLTag *min(const String &val);
@@ -48,6 +49,8 @@ public:
 	HTMLTag *width(const String &val);
 	HTMLTag *height(const int val);
 	HTMLTag *height(const String &val);
+
+	HTMLTag *pattern(const String &val);
 
 	HTMLTag *method(const String &val);
 	HTMLTag *action(const String &val);
@@ -411,16 +414,13 @@ public:
 	HTMLTag *input_radio(const String& name, const String& value = "", const String& cls = "", const String& id = "");
 	HTMLTag *input_range(const String& name, const String& value = "", const String& vmin = "", const String& vmax = "", const String& vstep = "", const String& cls = "", const String& id = "");
 	HTMLTag *input_reset(const String& name, const String& value = "", const String& cls = "", const String& id = "");
-
-	/*
-	HTMLTag *input_search();
-	HTMLTag *input_submit();
-	HTMLTag *input_tel();
-	HTMLTag *input_text();
-	HTMLTag *input_time();
-	HTMLTag *input_url();
-	HTMLTag *input_week();
-	*/
+	HTMLTag *input_search(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "", const String& minlength = "", const String& maxlength = "", const String& size = "", const String& pattern = "");
+	HTMLTag *input_submit(const String& value, const String& cls = "", const String& id = "");
+	HTMLTag *input_tel(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "", const String& minlength = "", const String& maxlength = "", const String& size = "", const String& pattern = "");
+	HTMLTag *input_text(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "", const String& minlength = "", const String& maxlength = "", const String& size = "");
+	HTMLTag *input_time(const String& name, const String& cls = "", const String& id = "", const String& vmin = "", const String& vmax = "", const String& vstep = "");
+	HTMLTag *input_url(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "", const String& minlength = "", const String& maxlength = "", const String& size = "");
+	HTMLTag *input_week(const String& name, const String& cls = "", const String& id = "", const String& vmin = "", const String& vmax = "");
 
 	void f();
 
