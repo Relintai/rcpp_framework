@@ -1500,6 +1500,30 @@ HTMLTag *HTMLBuilder::wbr() {
 	return tag.start("wbr");
 }
 
+HTMLTag *HTMLBuilder::a(const String &href, const String &cls, const String &id) {
+	HTMLTag *t = input_text();
+
+	t->href(href);
+
+	if (cls != "") {
+		t->cls(cls);
+	}
+
+	if (id != "") {
+		t->id(id);
+	}
+
+	return t;
+}
+
+HTMLBuilder *HTMLBuilder::fa(const String &href, const String &body, const String &cls, const String &id) {
+	a(href, cls, id);
+	w(body);
+	ca();
+
+	return this;
+}
+
 //Closing tags
 
 HTMLBuilder *HTMLBuilder::ca() {
