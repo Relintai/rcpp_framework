@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <cstdint>
+#include "math_defs.h"
+#include "core/typedefs.h"
 
 #define MATH_PI 3.1415926535897932384626433833
 #define EPSILON 0.00001
@@ -55,8 +57,8 @@ public:
 	static float inv_sqrt(const float x);
 	static float fast_inv_sqrt(const float x);
 
-	inline static float absf(const float x) { return x > 0 ? x : -x; }
-	inline static double absd(const double x) { return x > 0 ? x : -x; }
+	inline static float abs(const float x) { return x > 0 ? x : -x; }
+	inline static double abs(const double x) { return x > 0 ? x : -x; }
 	inline static int absi(const int x) { return x > 0 ? x : -x; }
 
 	inline static float deg2rad(const float x) { return x * MATH_PI / 180.0; }
@@ -67,8 +69,26 @@ public:
 	inline static double rad2deg(const double x) { return x * 180.0 / MATH_PI; }
 	inline static int rad2deg(const int x) { return x * 180.0 / MATH_PI; }
 
+	inline static double lerp(double from, double to, double weight) { return from + (to - from) * weight; }
+	inline static float lerp(float from, float to, float weight) { return from + (to - from) * weight; }
+
 	static float is_equal_approx(const float a, const float b);
 	static float is_zero_approx(const float a);
+
+    //Taken from the Godot Engine (MIT License)
+    //Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+    //Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	static _ALWAYS_INLINE_ bool is_equal_approx_ratio(float a, float b, float epsilon = CMP_EPSILON, float min_epsilon = CMP_EPSILON) {
+		// this is an approximate way to check that numbers are close, as a ratio of their average size
+		// helps compare approximate numbers that may be very big or very small
+		real_t diff = abs(a - b);
+		if (diff == 0.0 || diff < min_epsilon) {
+			return true;
+		}
+		real_t avg_size = (abs(a) + abs(b)) / 2.0;
+		diff /= avg_size;
+		return diff < epsilon;
+	}
 
 	static void seed(const unsigned int s);
 	static void randomize();

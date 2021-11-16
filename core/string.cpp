@@ -701,7 +701,7 @@ String String::num(double p_num, int p_decimals) {
 
 	if (p_decimals < 0) {
 		p_decimals = 14;
-		const double abs_num = Math::absd(p_num);
+		const double abs_num = Math::abs(p_num);
 		if (abs_num > 10) {
 			// We want to align the digits to the above sane default, so we only
 			// need to subtract log10 for numbers with a positive power of ten.
@@ -868,7 +868,7 @@ String String::num_real(double p_num, bool p_trailing) {
 	// Integer part.
 
 	bool neg = p_num < 0;
-	p_num = Math::absd(p_num);
+	p_num = Math::abs(p_num);
 	int64_t intn = (int64_t)p_num;
 
 	// Decimal part.
