@@ -166,7 +166,7 @@ void String::get_substr_nt(char *into_buf, const int start_index, const int len)
 	into_buf[len + 1] = '\0';
 }
 
-String String::substr(const int start_index, const int len) {
+String String::substr(const int start_index, const int len) const {
 	ERR_FAIL_INDEX_V(start_index, _size, String());
 
 	int sil = start_index + len;

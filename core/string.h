@@ -26,7 +26,7 @@ public:
 	int find(const String &val, const int from = 0) const;
 	void get_substr(char *into_buf, const int start_index, const int len);
 	void get_substr_nt(char *into_buf, const int start_index, const int len);
-	String substr(const int start_index, const int len);
+	String substr(const int start_index, const int len) const;
 
 	void replace_from(const int start_index, const int length, const String &with);
 	void replace(const String &find_str, const String &with);
