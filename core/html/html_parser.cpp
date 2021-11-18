@@ -119,33 +119,37 @@ void HTMLParserTag::parse_args(const String &args) {
 		}
 
 		a.attribute = args.substr(i, equals_index - i);
-		//a.attribute.print();
 
 		//todo
 		//a.trim();
 
 		int next_char_index = equals_index + 1;
 
+		if (next_char_index >= args.size()) {
+			//an attribute looks like this "... attrib="
+			attributes.push_back(a);
+			return;
+		}
+
 		//skip spaces
-		while (data[next_char_index] == ' ') {
+		while (args[next_char_index] == ' ') {
 			++next_char_index;
 
-			if (next_char_index >= data.size()) {
-				//an attribute looks like this "attrib=     "
+			if (next_char_index >= args.size()) {
+				//an attribute looks like this "... attrib=     "
 				attributes.push_back(a);
 				return;
 			}
 		}
 
-		char c = data[next_char_index];
-		char find_char;
+		char c = args[next_char_index];
+		char find_char = ' ';
 
 		if (c == '"' || c == '\'') {
 			++next_char_index;
 			find_char = c;
-		} else {
-			find_char = ' ';
 		}
+
 
 		int end_index = args.find(find_char, next_char_index);
 
@@ -155,17 +159,13 @@ void HTMLParserTag::parse_args(const String &args) {
 
 			a.data = args.substr(next_char_index, args.size() - next_char_index - 1);
 			attributes.push_back(a);
-			a.data.print();
 			return;
 		}
 
-		a.data = args.substr(next_char_index, end_index - next_char_index - 1);
+		a.data = args.substr(next_char_index, end_index - next_char_index);
 		attributes.push_back(a);
-		//a.data.print();
 
 		i = end_index + 1;
-
-		printf("\n");
 	}
 }
 
