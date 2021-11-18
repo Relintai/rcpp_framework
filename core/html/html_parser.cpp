@@ -186,6 +186,7 @@ void HTMLParser::parse(const String &data) {
 					HTMLParserTag t;
 
 					t.data = data.substr(i, j - i + 1);
+					t.process();
 
 					tags.push_back(t);
 
@@ -208,10 +209,6 @@ void HTMLParser::parse(const String &data) {
 				}
 			}
 		}
-	}
-
-	for (int i = 0; i < tags.size(); ++i) {
-		tags[i].process();
 	}
 }
 
