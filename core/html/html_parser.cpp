@@ -186,21 +186,35 @@ void HTMLParserTag::parse_args(const String &args) {
 	}
 }
 
-String HTMLParserTag::to_string() {
+String HTMLParserTag::to_string(const int level) {
 	String s;
+
+	for (int i = 0; i < level; ++i) {
+		s += " ";
+	}
 
 	if (type == HTML_PARSER_TAG_TYPE_CONTENT) {
 		s = data;
 	} else if (type == HTML_PARSER_TAG_TYPE_OPENING_TAG) {
+		int ln = level + 1;
+
 		s = "<" + tag;
 
 		for (int i = 0; i < attributes.size(); ++i) {
 			s += " " + attributes[i]->to_string();
 		}
 
-		s += ">";
+		s += ">\n";
+
+		for (int i = 0; i < tags.size(); ++i) {
+			s += tags[i]->to_string(ln);
+		}
+
+		s += "</" + tag + ">\n";
 	} else if (type == HTML_PARSER_TAG_TYPE_CLOSING_TAG) {
-		s = "</" + tag + ">";
+		//HTMLParserTag should handle this automatically
+		//it's here for debugging purposes though
+		s = "</" + tag + "(!)>";
 	} else if (type == HTML_PARSER_TAG_TYPE_SELF_CLOSING_TAG) {
 		s = "<" + tag;
 
@@ -208,15 +222,11 @@ String HTMLParserTag::to_string() {
 			s += " " + attributes[i]->to_string();
 		}
 
-		s += "/>";
+		s += "/>\n";
 	} else if (type == HTML_PARSER_TAG_TYPE_COMMENT) {
-		s = "<!-- " + data + " -->";
+		s = "<!-- " + data + " -->\n";
 	} else if (type == HTML_PARSER_TAG_TYPE_DOCTYPE) {
-		s = "<!doctype " + data + ">";
-	}
-
-	for (int i = 0; i < tags.size(); ++i) {
-		s += tags[i]->to_string();
+		s = data + "\n";
 	}
 
 	return s;
@@ -275,9 +285,16 @@ void HTMLParser::parse(const String &data) {
 		}
 	}
 
+	if (root) {
+		delete root;
+	}
+
+	root = new HTMLParserTag();
+
 	//process tags into hierarchical order
 	Vector<HTMLParserTag *> tag_stack;
 	for (int i = 0; i < tags.size(); ++i) {
+		tags[i]->print();
 	}
 }
 

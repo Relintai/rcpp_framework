@@ -40,7 +40,7 @@ public:
 	void process();
 	void parse_args(const String &args);
 
-	String to_string();
+	String to_string(const int level = 0);
 	void print();
 
 	HTMLParserTag();
