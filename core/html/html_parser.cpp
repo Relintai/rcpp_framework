@@ -461,8 +461,6 @@ void HTMLParser::parse(const String &data) {
 			delete t;
 		}
 	}
-
-	root->print();
 }
 
 String HTMLParser::to_string() {
