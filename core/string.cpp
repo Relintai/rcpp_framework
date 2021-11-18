@@ -542,6 +542,17 @@ void String::append_str(const std::string &str) {
 	_data[_size] = '\0';
 }
 
+void String::append_repeat(const char *str, const int times) {
+	for (int i = 0; i < times; ++i) {
+		append_str(str);
+	}
+}
+void String::append_repeat(const String &other, const int times) {
+	for (int i = 0; i < times; ++i) {
+		append_str(other);
+	}
+}
+
 float String::to_float() const {
 	return atof(c_str());
 }

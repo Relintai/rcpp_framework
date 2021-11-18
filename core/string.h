@@ -62,6 +62,9 @@ public:
 	void append_str(const String &other);
 	void append_str(const std::string &str);
 
+	void append_repeat(const char* str, const int times);
+	void append_repeat(const String &other, const int times);
+
 	float to_float() const;
 	double to_double() const;
 	int to_int() const;
