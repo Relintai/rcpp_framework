@@ -230,6 +230,13 @@ HTMLParserTag::HTMLParserTag() {
 }
 
 HTMLParserTag::~HTMLParserTag() {
+	for (int i = 0; i < tags.size(); ++i) {
+		delete tags[i];
+	}
+
+	for (int i = 0; i < attributes.size(); ++i) {
+		delete attributes[i];
+	}
 }
 
 void HTMLParser::parse(const String &data) {
@@ -244,7 +251,6 @@ void HTMLParser::parse(const String &data) {
 
 					t->data = data.substr(i, j - i + 1);
 					t->process();
-					t->print();
 
 					tags.push_back(t);
 
@@ -270,25 +276,30 @@ void HTMLParser::parse(const String &data) {
 	}
 
 	//process tags into hierarchical order
-	//Vector<HTMLParserTag> tag_stack;
-	//for (int i = 0; i < tags.size(); ++i) {
-	//}
-
+	Vector<HTMLParserTag *> tag_stack;
 	for (int i = 0; i < tags.size(); ++i) {
-		delete tags[i];
 	}
 }
 
 String HTMLParser::to_string() {
-	return html->to_string();
+	if (!root) {
+		return "";
+	}
+
+	return root->to_string();
 }
 void HTMLParser::print() {
-	html->print();
+	if (root) {
+		root->print();
+	}
 }
 
 HTMLParser::HTMLParser() {
-	html = nullptr;
+	root = nullptr;
 }
 
 HTMLParser::~HTMLParser() {
+	if (root) {
+		delete root;
+	}
 }

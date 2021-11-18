@@ -49,7 +49,7 @@ public:
 
 class HTMLParser {
 public:
-	HTMLParserTag *html;
+	HTMLParserTag *root;
 
 	void parse(const String &data);
 	//void parse_tag(const String &data, const int index);
