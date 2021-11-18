@@ -1,6 +1,23 @@
 #include "html_parser.h"
 
+String HTMLParserAttribute::to_string() {
+	if (single) {
+		return attribute;
+	}
+
+	if (data.find('"' == -1)) {
+		return attribute + "=\"" + data + "\"";
+	} else {
+		return attribute + "=\'" + data + "\'";
+	}
+}
+
+void HTMLParserAttribute::print() {
+	to_string().print();
+}
+
 HTMLParserAttribute::HTMLParserAttribute() {
+	single = false;
 }
 
 HTMLParserAttribute::~HTMLParserAttribute() {
@@ -81,7 +98,7 @@ void HTMLParserTag::process() {
 		}
 
 		//grab the tag itself
-		tag = tag_text.substr(0, fspc_index + 1);
+		tag = tag_text.substr(0, fspc_index);
 
 		String args = tag_text.substr(fspc_index + 1, tag_text.size() - fspc_index - 1);
 		parse_args(args);
@@ -109,16 +126,17 @@ void HTMLParserTag::parse_args(const String &args) {
 
 		int equals_index = args.find('=', i);
 
-		HTMLParserAttribute a;
+		HTMLParserAttribute *a = new HTMLParserAttribute();
 
 		if (equals_index == -1) {
-			a.attribute = args.substr(i, args.size() - 1);
+			a->attribute = args.substr(i, args.size() - i);
+			a->single = true;
 			attributes.push_back(a);
 
 			return;
 		}
 
-		a.attribute = args.substr(i, equals_index - i);
+		a->attribute = args.substr(i, equals_index - i);
 
 		//todo
 		//a.trim();
@@ -150,23 +168,61 @@ void HTMLParserTag::parse_args(const String &args) {
 			find_char = c;
 		}
 
-
 		int end_index = args.find(find_char, next_char_index);
 
 		if (end_index == -1) {
 			//missing closing ' or " if c is ' or "
 			//else missing parameter
 
-			a.data = args.substr(next_char_index, args.size() - next_char_index - 1);
+			a->data = args.substr(next_char_index, args.size() - next_char_index - 1);
 			attributes.push_back(a);
 			return;
 		}
 
-		a.data = args.substr(next_char_index, end_index - next_char_index);
+		a->data = args.substr(next_char_index, end_index - next_char_index);
 		attributes.push_back(a);
 
 		i = end_index + 1;
 	}
+}
+
+String HTMLParserTag::to_string() {
+	String s;
+
+	if (type == HTML_PARSER_TAG_TYPE_CONTENT) {
+		s = data;
+	} else if (type == HTML_PARSER_TAG_TYPE_OPENING_TAG) {
+		s = "<" + tag;
+
+		for (int i = 0; i < attributes.size(); ++i) {
+			s += " " + attributes[i]->to_string();
+		}
+
+		s += ">";
+	} else if (type == HTML_PARSER_TAG_TYPE_CLOSING_TAG) {
+		s = "</" + tag + ">";
+	} else if (type == HTML_PARSER_TAG_TYPE_SELF_CLOSING_TAG) {
+		s = "<" + tag;
+
+		for (int i = 0; i < attributes.size(); ++i) {
+			s += " " + attributes[i]->to_string();
+		}
+
+		s += "/>";
+	} else if (type == HTML_PARSER_TAG_TYPE_COMMENT) {
+		s = "<!-- " + data + " -->";
+	} else if (type == HTML_PARSER_TAG_TYPE_DOCTYPE) {
+		s = "<!doctype " + data + ">";
+	}
+
+	for (int i = 0; i < tags.size(); ++i) {
+		s += tags[i]->to_string();
+	}
+
+	return s;
+}
+void HTMLParserTag::print() {
+	to_string().print();
 }
 
 HTMLParserTag::HTMLParserTag() {
@@ -177,16 +233,18 @@ HTMLParserTag::~HTMLParserTag() {
 }
 
 void HTMLParser::parse(const String &data) {
-	Vector<HTMLParserTag> tags;
+	Vector<HTMLParserTag *> tags;
 
+	//split into tags
 	for (int i = 0; i < data.size(); ++i) {
 		if (data[i] == '<') {
 			for (int j = i + 1; j < data.size(); ++j) {
 				if (data[j] == '>') {
-					HTMLParserTag t;
+					HTMLParserTag *t = new HTMLParserTag();
 
-					t.data = data.substr(i, j - i + 1);
-					t.process();
+					t->data = data.substr(i, j - i + 1);
+					t->process();
+					t->print();
 
 					tags.push_back(t);
 
@@ -197,10 +255,10 @@ void HTMLParser::parse(const String &data) {
 		} else {
 			for (int j = i + 1; j < data.size(); ++j) {
 				if (data[j] == '<') {
-					HTMLParserTag t;
+					HTMLParserTag *t = new HTMLParserTag();
 
-					t.data = data.substr(i, j - i);
-					t.type = HTMLParserTag::HTML_PARSER_TAG_TYPE_CONTENT;
+					t->data = data.substr(i, j - i);
+					t->type = HTMLParserTag::HTML_PARSER_TAG_TYPE_CONTENT;
 
 					tags.push_back(t);
 
@@ -210,9 +268,26 @@ void HTMLParser::parse(const String &data) {
 			}
 		}
 	}
+
+	//process tags into hierarchical order
+	//Vector<HTMLParserTag> tag_stack;
+	//for (int i = 0; i < tags.size(); ++i) {
+	//}
+
+	for (int i = 0; i < tags.size(); ++i) {
+		delete tags[i];
+	}
+}
+
+String HTMLParser::to_string() {
+	return html->to_string();
+}
+void HTMLParser::print() {
+	html->print();
 }
 
 HTMLParser::HTMLParser() {
+	html = nullptr;
 }
 
 HTMLParser::~HTMLParser() {

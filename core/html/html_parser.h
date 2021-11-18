@@ -1,13 +1,17 @@
 #ifndef HTML_BUILDER_H
 #define HTML_BUILDER_H
 
-#include "core/string.h"
 #include "core/containers/vector.h"
+#include "core/string.h"
 
 class HTMLParserAttribute {
 public:
 	String attribute;
 	String data;
+	bool single;
+
+	String to_string();
+	void print();
 
 	HTMLParserAttribute();
 	virtual ~HTMLParserAttribute();
@@ -30,11 +34,14 @@ public:
 	String tag;
 	String data;
 
-	Vector<HTMLParserTag> tags;
-	Vector<HTMLParserAttribute> attributes;
+	Vector<HTMLParserTag*> tags;
+	Vector<HTMLParserAttribute*> attributes;
 
 	void process();
-	void parse_args(const String& args);
+	void parse_args(const String &args);
+
+	String to_string();
+	void print();
 
 	HTMLParserTag();
 	virtual ~HTMLParserTag();
@@ -42,10 +49,13 @@ public:
 
 class HTMLParser {
 public:
-	HTMLParserTag html;
+	HTMLParserTag *html;
 
 	void parse(const String &data);
 	//void parse_tag(const String &data, const int index);
+
+	String to_string();
+	void print();
 
 	HTMLParser();
 	virtual ~HTMLParser();
