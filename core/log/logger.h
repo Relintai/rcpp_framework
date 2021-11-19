@@ -1,7 +1,7 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include "core/string.h"
+class String;
 
 class Logger {
 public:

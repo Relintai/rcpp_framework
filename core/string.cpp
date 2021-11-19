@@ -184,6 +184,29 @@ String String::substr(const int start_index, const int len) const {
 	return str;
 }
 
+String String::substr_index(const int start_index, const int end_index) const {
+	ERR_FAIL_INDEX_V(start_index, _size, String());
+	ERR_FAIL_INDEX_V(end_index, _size, String());
+	ERR_FAIL_COND_V(start_index > end_index, String());
+
+	String str;
+	str.ensure_capacity(end_index - start_index + 1);
+	for (int i = start_index; i <= end_index; ++i) {
+		str._data[str._size++] = _data[i];
+	}
+
+	str._data[str._size] = '\0';
+
+	return str;
+}
+
+bool String::contains(const char val) const {
+	return find(val) != -1;
+}
+bool String::contains(const String &val) const {
+	return find(val) != -1;
+}
+
 void String::replace_from(const int start_index, const int length, const String &with) {
 	ERR_FAIL_INDEX(start_index, _size);
 
@@ -248,6 +271,216 @@ int String::compare(const String &other) const {
 
 		return 0;
 	}
+}
+
+void String::to_lower() {
+	for (int i = 0; i < _size; ++i) {
+		char c = _data[i];
+
+		if (c >= 56 && c <= 90) {
+			_data[i] = c + 32;
+		}
+	}
+}
+String String::as_lower() const {
+	String a = *this;
+
+	a.to_lower();
+
+	return a;
+}
+
+void String::trim() {
+	trim_end();
+	trim_beginning();
+}
+void String::trim_beginning() {
+	if (_size == 0) {
+		return;
+	}
+
+	bool found = false;
+	int last_index = 0;
+	for (int i = 0; i < _size; ++i) {
+		char c = _data[i];
+
+		if (c == ' ' || c == '\n' || c == '\t' || c == '\r') {
+			found = true;
+			last_index == i;
+		} else {
+			break;
+		}
+	}
+
+	if (!found) {
+		return;
+	}
+
+	++last_index;
+
+	if (last_index == _size) {
+		_size = 0;
+		_data[_size] = '\0';
+		return;
+	}
+
+	for (int i = 0; i < _size - last_index; ++i) {
+		_data[i] = _data[i + last_index];
+	}
+
+	_size -= last_index;
+
+	_data[_size] = '\0';
+}
+void String::trim_end() {
+	if (_size == 0) {
+		return;
+	}
+
+	int last_index = _size;
+	for (int i = _size - 1; i <= 0; --i) {
+		char c = _data[i];
+
+		if (c == ' ' || c == '\n' || c == '\t' || c == '\r') {
+			last_index == i;
+		} else {
+			break;
+		}
+	}
+
+	if (last_index == _size) {
+		return;
+	}
+
+	_data[last_index] = '\0';
+
+	_size = last_index;
+}
+
+int String::get_slice_count(const char splitter) const {
+	int count = 0;
+
+	for (int i = 0; i < _size; ++i) {
+		if (_data[i] == splitter) {
+			++count;
+		}
+	}
+
+	return count;
+}
+int String::get_slice_count(const String &splitter) const {
+	int count = 0;
+
+	int n = find(splitter, n);
+	while (n != -1) {
+		++count;
+		n = find(splitter, n);
+	}
+
+	return count;
+}
+String String::get_slice(const char splitter, int index) {
+	int count = 0;
+
+	int start_index = 0;
+
+	for (int i = 0; i < _size; ++i) {
+		if (_data[i] == splitter) {
+			++count;
+
+			if (count == index) {
+				start_index = i + 1;
+			}
+
+			if (count == index + 1) {
+				return substr_index(start_index, i - 1);
+			}
+		}
+	}
+
+	if (count == 0) {
+		return "";
+	}
+
+	return substr_index(start_index, _size - 1);
+}
+String String::get_slice(const String &splitter, int index) {
+	int count = 0;
+
+	int start_index = 0;
+
+	int n = find(splitter, n);
+	while (n != -1) {
+		++count;
+		n = find(splitter, n);
+
+		if (count == index) {
+			start_index = n + splitter.size();
+		}
+
+		if (count == index + 1) {
+			return substr_index(start_index, n - 1);
+		}
+	}
+
+	if (count == 0) {
+		return "";
+	}
+
+	return substr_index(start_index, _size - 1);
+}
+
+Vector<String> String::split(const char splitter) const {
+	Vector<String> v;
+
+	if (_size == 0) {
+		return v;
+	}
+
+	int start_index = 0;
+
+	for (int i = 1; i < _size; ++i) {
+		if (_data[i] == splitter) {
+
+			if (start_index == i) {
+				v.push_back(String());
+			} else {
+				v.push_back(substr_index(start_index, i - 1));
+			}
+			
+			start_index = i + 1;
+		}
+	}
+
+	if (start_index < _size - 1) {
+		v.push_back(substr_index(start_index, _size - 1));
+	}
+
+	return v;
+}
+Vector<String> String::split(const String &splitter) const {
+	Vector<String> v;
+
+	if (_size == 0) {
+		return v;
+	}
+
+	int start_index = 0;
+
+	int n = 0;
+	while (n != -1) {
+		n = find(splitter, n);
+
+		v.push_back(substr_index(start_index, n - 1));
+
+		start_index = n + splitter.size();
+	}
+
+	if (start_index < _size - 1) {
+		v.push_back(substr_index(start_index, _size - 1));
+	}
+
+	return v;
 }
 
 uint8_t String::read_uint8_bytes_at(int &index, bool advance_index) {
@@ -551,6 +784,14 @@ void String::append_repeat(const String &other, const int times) {
 	for (int i = 0; i < times; ++i) {
 		append_str(other);
 	}
+}
+
+bool String::to_bool() const {
+	if (is_numeric()) {
+		return to_int() != 0;
+	}
+
+	return as_lower() == "true";
 }
 
 float String::to_float() const {

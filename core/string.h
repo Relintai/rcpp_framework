@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "core/containers/vector.h"
+
 class String {
 public:
 	void push_back(const char element);
@@ -27,11 +29,29 @@ public:
 	void get_substr(char *into_buf, const int start_index, const int len);
 	void get_substr_nt(char *into_buf, const int start_index, const int len);
 	String substr(const int start_index, const int len) const;
-
+	String substr_index(const int start_index, const int end_index) const;
+	bool contains(const char val) const;
+	bool contains(const String &val) const;
+	
 	void replace_from(const int start_index, const int length, const String &with);
 	void replace(const String &find_str, const String &with);
 
 	int compare(const String &other) const;
+
+	void to_lower();
+	String as_lower() const;
+
+	void trim();
+	void trim_beginning();
+	void trim_end();
+
+	int get_slice_count(const char splitter) const;
+	int get_slice_count(const String &splitter) const;
+	String get_slice(const char splitter, int index);
+	String get_slice(const String &splitter, int index);
+
+	Vector<String> split(const char splitter) const;
+	Vector<String> split(const String &splitter) const;
 
 	uint8_t read_uint8_bytes_at(int &index, bool advance_index = true);
 	uint16_t read_uint16_bytes_at(int &index, bool advance_index = true);
@@ -65,6 +85,7 @@ public:
 	void append_repeat(const char* str, const int times);
 	void append_repeat(const String &other, const int times);
 
+	bool to_bool() const;
 	float to_float() const;
 	double to_double() const;
 	int to_int() const;

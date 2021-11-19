@@ -1,5 +1,7 @@
 #include "logger.h"
 
+#include "core/string.h"
+
 #include <cstdio>
 
 void Logger::log_trace(const String &str)
