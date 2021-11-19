@@ -10,6 +10,11 @@ public:
 	String data;
 	bool single;
 
+	bool match_attrib(const String &attrib);
+	bool match_data(const String &d);
+	bool match_data(const Vector<String> &d);
+	bool contains_data(const String &d);
+
 	String to_string();
 	void print();
 

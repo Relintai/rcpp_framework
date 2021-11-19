@@ -1,6 +1,20 @@
 #include "html_parser.h"
 #include "core/error_macros.h"
 
+bool HTMLParserAttribute::match_attrib(const String &attrib) {
+	return attribute == attrib;
+}
+bool HTMLParserAttribute::match_data(const String &d) {
+	return data == d;
+}
+bool HTMLParserAttribute::match_data(const Vector<String> &d) {
+	//todo
+	return false;
+}
+bool HTMLParserAttribute::contains_data(const String &d) {
+	return attribute.find(d) != -1;
+}
+
 String HTMLParserAttribute::to_string() {
 	if (single) {
 		return attribute;
