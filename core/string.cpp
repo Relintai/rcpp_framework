@@ -358,7 +358,7 @@ void String::trim_end() {
 }
 
 int String::get_slice_count(const char splitter) const {
-	int count = 0;
+	int count = 1;
 
 	for (int i = 0; i < _size; ++i) {
 		if (_data[i] == splitter) {
