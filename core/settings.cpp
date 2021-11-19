@@ -89,14 +89,11 @@ void Settings::parse_ini_file(const String &path) {
 			continue;
 		}
 
-		s.print();
-
 		String k = s.substr_index(0, eindex - 1);
 		String v = s.substr_index(eindex + 1, s.size() - 1);
 
 		_data[k] = v;
 	}
-
 }
 
 Settings *Settings::get_singleton() {
