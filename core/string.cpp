@@ -369,7 +369,7 @@ int String::get_slice_count(const char splitter) const {
 	return count;
 }
 int String::get_slice_count(const String &splitter) const {
-	int count = 0;
+	int count = 1;
 
 	int n = find(splitter, n);
 	while (n != -1) {
