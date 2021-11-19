@@ -380,6 +380,10 @@ int String::get_slice_count(const String &splitter) const {
 	return count;
 }
 String String::get_slice(const char splitter, int index) {
+	if (_size == 0) {
+		return "";
+	}
+
 	int count = 0;
 
 	int start_index = 0;
@@ -398,13 +402,13 @@ String String::get_slice(const char splitter, int index) {
 		}
 	}
 
-	if (count == 0) {
-		return "";
-	}
-
 	return substr_index(start_index, _size - 1);
 }
 String String::get_slice(const String &splitter, int index) {
+	if (_size == 0) {
+		return "";
+	}
+
 	int count = 0;
 
 	int start_index = 0;
@@ -421,10 +425,6 @@ String String::get_slice(const String &splitter, int index) {
 		if (count == index + 1) {
 			return substr_index(start_index, n - 1);
 		}
-	}
-
-	if (count == 0) {
-		return "";
 	}
 
 	return substr_index(start_index, _size - 1);
