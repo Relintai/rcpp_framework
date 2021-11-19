@@ -94,10 +94,6 @@ void Settings::parse_ini_file(const String &path) {
 		String k = s.substr_index(0, eindex - 1);
 		String v = s.substr_index(eindex + 1, s.size() - 1);
 
-		k.print();
-		v.print();
-		printf("-------\n");
-
 		_data[k] = v;
 	}
 
