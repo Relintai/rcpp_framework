@@ -3,7 +3,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void Settings::parse_file(const String &path) {
+String Settings::get_value(const String &key, const String &def) {
+	std::map<String, String>::iterator e = _data.find(key);
+
+	if (e != _data.end()) {
+		return e->second;
+	} else {
+		return def;
+	}
+}
+int Settings::get_value_int(const String &key, const int def) {
+	std::map<String, String>::iterator e = _data.find(key);
+
+	if (e != _data.end()) {
+		return e->second.to_int();
+	} else {
+		return def;
+	}
+}
+float Settings::get_value_float(const String &key, const float def) {
+	std::map<String, String>::iterator e = _data.find(key);
+
+	if (e != _data.end()) {
+		return e->second.to_float();
+	} else {
+		return def;
+	}
+}
+double Settings::get_value_double(const String &key, const double def) {
+	std::map<String, String>::iterator e = _data.find(key);
+
+	if (e != _data.end()) {
+		return e->second.to_double();
+	} else {
+		return def;
+	}
+}
+bool Settings::get_value_bool(const String &key, const bool def) {
+	std::map<String, String>::iterator e = _data.find(key);
+
+	if (e != _data.end()) {
+		return e->second.to_bool();
+	} else {
+		return def;
+	}
+}
+
+void Settings::parse_ini_file(const String &path) {
 	FILE *f = fopen(path.c_str(), "r");
 
 	if (!f) {
@@ -21,7 +67,40 @@ void Settings::parse_file(const String &path) {
 	fread(config_str.dataw(), 1, fsize, f);
 	fclose(f);
 
-	settings.Parse(config_str.c_str());
+	config_str.replace('\r', ' ');
+	Vector<String> ns = config_str.split('\n');
+
+	for (int i = 0; i < ns.size(); ++i) {
+		String s = ns[i];
+
+		s.trim();
+
+		if (s.size() == 0) {
+			continue;
+		}
+
+		if (s[0] == '#') {
+			continue;
+		}
+
+		int eindex = s.find('=');
+
+		if (eindex == -1 || eindex == s.size() - 1) {
+			continue;
+		}
+
+		s.print();
+
+		String k = s.substr_index(0, eindex - 1);
+		String v = s.substr_index(eindex + 1, s.size() - 1);
+
+		k.print();
+		v.print();
+		printf("-------\n");
+
+		_data[k] = v;
+	}
+
 }
 
 Settings *Settings::get_singleton() {
