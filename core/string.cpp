@@ -142,7 +142,7 @@ int String::find(const String &val, const int from) const {
 			return i;
 		}
 	}
-	
+
 	return -1;
 }
 
@@ -233,10 +233,10 @@ void String::replace_from(const int start_index, const int length, const String 
 		}
 
 		_size -= loffs;
-	}
-
-	for (int i = 0; i < length; ++i) {
-		_data[i + start_index] = with._data[i];
+	} else {
+		for (int i = 0; i < length; ++i) {
+			_data[i + start_index] = with._data[i];
+		}
 	}
 }
 
@@ -252,6 +252,29 @@ void String::replace(const String &find_str, const String &with) {
 	while ((start_pos = find(find_str, start_pos)) != -1) {
 		replace_from(start_pos, find_str.size(), with);
 		start_pos += with.size();
+	}
+}
+
+void String::replace(const String &find_str, const String &with, const int count) {
+	if (empty()) {
+		return;
+	}
+
+	if (find_str.empty())
+		return;
+
+	int c = 0;
+
+	int start_pos = 0;
+	while ((start_pos = find(find_str, start_pos)) != -1) {
+		replace_from(start_pos, find_str.size(), with);
+		start_pos += with.size();
+
+		++c;
+
+		if (c == count) {
+			return;
+		}
 	}
 }
 
@@ -357,6 +380,61 @@ void String::trim_end() {
 	_size = last_index;
 }
 
+bool String::ends_with(const char c) const {
+	if (_size == 0) {
+		return false;
+	}
+
+	return _data[_size - 1] == c;
+}
+bool String::ends_with(const String &str) const {
+	if (str.size() == 0) {
+		// maybe this should be false?
+		return true;
+	}
+
+	if (_size < str.size()) {
+		return false;
+	}
+
+	int diff = _size - str.size();
+
+	for (int i = str.size() - 1; i >= 0; --i) {
+		if (_data[i + diff] != str._data[i]) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool String::starts_with(const char c) const {
+	if (_size == 0) {
+		return false;
+	}
+
+	return _data[0] == c;
+}
+
+bool String::starts_with(const String &str) const {
+	if (str.size() == 0) {
+		// maybe this should be false?
+		return true;
+	}
+
+	if (_size < str.size()) {
+		return false;
+	}
+
+	for (int i = 0; i < str.size(); ++i) {
+		if (_data[i] != str._data[i]) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
 int String::get_slice_count(const char splitter) const {
 	int count = 1;
 
@@ -447,7 +525,7 @@ Vector<String> String::split(const char splitter) const {
 			} else {
 				v.push_back(substr_index(start_index, i - 1));
 			}
-			
+
 			start_index = i + 1;
 		}
 	}
@@ -498,7 +576,7 @@ uint16_t String::read_uint16_bytes_at(int &index, bool advance_index) {
 	char carr[3];
 	char *p = carr;
 
-	//printf("%u %u\n", static_cast<uint8_t>(p[0]),  static_cast<uint8_t>(p[1]));
+	// printf("%u %u\n", static_cast<uint8_t>(p[0]),  static_cast<uint8_t>(p[1]));
 
 	get_substr_nt(p, index, 2);
 
@@ -558,7 +636,7 @@ int16_t String::read_int16_bytes_at(int &index, bool advance_index) {
 	char carr[3];
 	char *p = carr;
 
-	//printf("%u %u\n", static_cast<uint8_t>(p[0]),  static_cast<uint8_t>(p[1]));
+	// printf("%u %u\n", static_cast<uint8_t>(p[0]),  static_cast<uint8_t>(p[1]));
 
 	get_substr_nt(p, index, 2);
 
@@ -614,7 +692,7 @@ void String::append_uint16_bytes(const uint16_t val) {
 
 	const char *vp = static_cast<const char *>((void *)&val);
 
-	//printf("a %u %u\n", static_cast<uint8_t>(vp[0]),  static_cast<uint8_t>(vp[1]));
+	// printf("a %u %u\n", static_cast<uint8_t>(vp[0]),  static_cast<uint8_t>(vp[1]));
 
 	memcpy(&_data[_size], vp, 2);
 
@@ -656,7 +734,7 @@ void String::append_int16_bytes(const int16_t val) {
 
 	const char *vp = static_cast<const char *>((void *)&val);
 
-	//printf("a %u %u\n", static_cast<uint8_t>(vp[0]),  static_cast<uint8_t>(vp[1]));
+	// printf("a %u %u\n", static_cast<uint8_t>(vp[0]),  static_cast<uint8_t>(vp[1]));
 
 	memcpy(&_data[_size], vp, 2);
 
@@ -935,9 +1013,9 @@ String String::bool_str(bool val) {
 	}
 }
 
-//Taken from the Godot Engine (MIT License)
-//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 String String::num(double p_num, int p_decimals) {
 	if (Math::is_nan(p_num)) {
 		return "nan";
@@ -993,7 +1071,7 @@ String String::num(double p_num, int p_decimals) {
 #endif
 
 	buf[255] = 0;
-	//destroy trailing zeroes
+	// destroy trailing zeroes
 	{
 		bool period = false;
 		int z = 0;
@@ -1024,9 +1102,9 @@ String String::num(double p_num, int p_decimals) {
 	return buf;
 }
 
-//Taken from the Godot Engine (MIT License)
-//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 String String::num_int64(int64_t p_num, int base, bool capitalize_hex) {
 	bool sign = p_num < 0;
 
@@ -1066,9 +1144,9 @@ String String::num_int64(int64_t p_num, int base, bool capitalize_hex) {
 	return s;
 }
 
-//Taken from the Godot Engine (MIT License)
-//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 String String::num_uint64(uint64_t p_num, int base, bool capitalize_hex) {
 	uint64_t n = p_num;
 
@@ -1098,9 +1176,9 @@ String String::num_uint64(uint64_t p_num, int base, bool capitalize_hex) {
 	return s;
 }
 
-//Taken from the Godot Engine (MIT License)
-//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 String String::num_real(double p_num, bool p_trailing) {
 	if (Math::is_nan(p_num)) {
 		return "nan";
@@ -1213,9 +1291,9 @@ String String::num_real(double p_num, bool p_trailing) {
 	return s;
 }
 
-//Taken from the Godot Engine (MIT License)
-//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 String String::num_scientific(double p_num) {
 	if (Math::is_nan(p_num)) {
 		return "nan";
@@ -1252,9 +1330,9 @@ String String::num_scientific(double p_num) {
 	return buf;
 }
 
-//Taken from the Godot Engine (MIT License)
-//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 String String::ascii(bool p_allow_extended) const {
 	if (!size()) {
 		return String();
@@ -1270,9 +1348,9 @@ String String::ascii(bool p_allow_extended) const {
 	return cs;
 }
 
-//Taken from the Godot Engine (MIT License)
-//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 String String::utf8(const char *p_utf8, int p_len) {
 	String ret;
 	ret.parse_utf8(p_utf8, p_len);
@@ -1280,9 +1358,9 @@ String String::utf8(const char *p_utf8, int p_len) {
 	return ret;
 };
 
-//Taken from the Godot Engine (MIT License)
-//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 bool String::parse_utf8(const char *p_utf8, int p_len) {
 	//#define _UNICERROR(m_err) print_line("Unicode error: " + String(m_err));
 
@@ -1299,7 +1377,7 @@ bool String::parse_utf8(const char *p_utf8, int p_len) {
 	if (p_len < 0 || p_len >= 3) {
 		bool has_bom = uint8_t(p_utf8[0]) == 0xEF && uint8_t(p_utf8[1]) == 0xBB && uint8_t(p_utf8[2]) == 0xBF;
 		if (has_bom) {
-			//just skip it
+			// just skip it
 			if (p_len >= 0) {
 				p_len -= 3;
 			}
@@ -1330,13 +1408,13 @@ bool String::parse_utf8(const char *p_utf8, int p_len) {
 					skip = 5;
 				} else {
 					RLOG_ERR("UNICODE_ERROR: invalid skip\n");
-					return true; //invalid utf8
+					return true; // invalid utf8
 				}
 
 				if (skip == 1 && (c & 0x1E) == 0) {
-					//printf("overlong rejected\n");
+					// printf("overlong rejected\n");
 					RLOG_ERR("UNICODE_ERROR: overlong rejected\n");
-					return true; //reject overlong
+					return true; // reject overlong
 				}
 
 				str_size++;
@@ -1351,7 +1429,7 @@ bool String::parse_utf8(const char *p_utf8, int p_len) {
 
 		if (skip) {
 			RLOG_ERR("UNICODE_ERROR: no space left\n");
-			return true; //not enough spac
+			return true; // not enough spac
 		}
 	}
 
@@ -1385,18 +1463,18 @@ bool String::parse_utf8(const char *p_utf8, int p_len) {
 		} else {
 			RLOG_ERR("UNICODE_ERROR: invalid len\n");
 
-			return true; //invalid UTF8
+			return true; // invalid UTF8
 		}
 
 		if (len > cstr_size) {
 			RLOG_ERR("UNICODE_ERROR: no space left\n");
-			return true; //not enough space
+			return true; // not enough space
 		}
 
 		if (len == 2 && (*p_utf8 & 0x1E) == 0) {
-			//printf("overlong rejected\n");
+			// printf("overlong rejected\n");
 			RLOG_ERR("UNICODE_ERROR: no space left\n");
-			return true; //reject overlong
+			return true; // reject overlong
 		}
 
 		/* Convert the first character */
@@ -1411,19 +1489,19 @@ bool String::parse_utf8(const char *p_utf8, int p_len) {
 			for (int i = 1; i < len; i++) {
 				if ((p_utf8[i] & 0xC0) != 0x80) {
 					RLOG_ERR("UNICODE_ERROR: invalid utf8\n");
-					return true; //invalid utf8
+					return true; // invalid utf8
 				}
 				if (unichar == 0 && i == 2 && ((p_utf8[i] & 0x7F) >> (7 - len)) == 0) {
 					RLOG_ERR("UNICODE_ERROR: invalid utf8 overlong\n");
-					return true; //no overlong
+					return true; // no overlong
 				}
 				unichar = (unichar << 6) | (p_utf8[i] & 0x3F);
 			}
 		}
 
-		//printf("char %i, len %i\n",unichar,len);
+		// printf("char %i, len %i\n",unichar,len);
 		if (sizeof(wchar_t) == 2 && unichar > 0xFFFF) {
-			unichar = ' '; //too long for windows
+			unichar = ' '; // too long for windows
 		}
 
 		*(dst++) = unichar;
@@ -1509,7 +1587,7 @@ String String::utf8() const {
 		}
 	}
 #undef APPEND_CHAR
-	*cdst = 0; //trailing zero
+	*cdst = 0; // trailing zero
 
 	return utf8s;
 }

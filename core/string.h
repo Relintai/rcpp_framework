@@ -35,6 +35,7 @@ public:
 	
 	void replace_from(const int start_index, const int length, const String &with);
 	void replace(const String &find_str, const String &with);
+	void replace(const String &find_str, const String &with, const int count);
 
 	int compare(const String &other) const;
 
@@ -44,6 +45,12 @@ public:
 	void trim();
 	void trim_beginning();
 	void trim_end();
+
+	bool ends_with(const char c) const;
+	bool ends_with(const String &str) const;
+
+	bool starts_with(const char c) const;
+	bool starts_with(const String &str) const;
 
 	int get_slice_count(const char splitter) const;
 	int get_slice_count(const String &splitter) const;
