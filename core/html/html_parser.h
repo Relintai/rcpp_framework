@@ -42,6 +42,17 @@ public:
 	Vector<HTMLParserTag*> tags;
 	Vector<HTMLParserAttribute*> attributes;
 
+	HTMLParserTag *get_first(const String &t);
+	HTMLParserTag *get_first(const String &t, const String &attrib, const String &val);
+
+	String get_attribute_value(const String &attrib);
+
+	HTMLParserAttribute *get_attribute(const String &attrib);
+	bool has_attribute(const String &attrib);
+
+	HTMLParserAttribute *get_attribute(const String &attrib, const String &contains_val);
+	bool has_attribute(const String &attrib, const String &contains_val);
+
 	void process();
 	void parse_args(const String &args);
 
