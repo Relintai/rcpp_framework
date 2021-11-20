@@ -83,6 +83,12 @@ TableBuilder *SQLite3TableBuilder::varchar(const String &name, const int length)
 	return this;
 }
 
+TableBuilder *SQLite3TableBuilder::text(const String &name) {
+	result += name + " TEXT ";
+
+	return this;
+}
+
 TableBuilder *SQLite3TableBuilder::not_null() {
 	//result += "NOT NULL ";
 

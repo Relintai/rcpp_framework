@@ -50,6 +50,10 @@ TableBuilder *TableBuilder::varchar(const String &name, const int length) {
 	return this;
 }
 
+TableBuilder *TableBuilder::text(const String &name) {
+	return this;
+}
+
 TableBuilder *TableBuilder::not_null() {
 	return this;
 }

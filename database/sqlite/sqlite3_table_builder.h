@@ -27,7 +27,10 @@ public:
 	TableBuilder *real_double(const String &name, const int size, const int d);
 
 	TableBuilder *date(const String &name);
+
 	TableBuilder *varchar(const String &name, const int length);
+	TableBuilder *text(const String &name);
+
 	TableBuilder *not_null();
 	TableBuilder *null();
 	TableBuilder *defval(const String &val);
