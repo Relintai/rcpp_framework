@@ -72,6 +72,8 @@ def configure(env):
     if not err:
         env.ParseConfig("pkg-config openssl --cflags --libs")
         env.Append(CPPDEFINES=["OPENSSL_FOUND"])
+        env.Append(CPPDEFINES=["USE_OPENSSL"])
+        
 
     env.Append(CPPPATH=["#modules/drogon/drogon/lib/inc"])
     env.Append(CPPPATH=["#modules/drogon"])
