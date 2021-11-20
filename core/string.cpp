@@ -127,7 +127,7 @@ int String::find(const char val, const int from) const {
 }
 
 int String::find(const String &val, const int from) const {
-	int ve = _size - val.size();
+	int ve = _size - val.size() + 1;
 
 	for (int i = from; i < ve; ++i) {
 		bool found = true;
@@ -142,7 +142,7 @@ int String::find(const String &val, const int from) const {
 			return i;
 		}
 	}
-
+	
 	return -1;
 }
 
