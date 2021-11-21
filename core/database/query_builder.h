@@ -21,7 +21,7 @@ public:
 	virtual QueryBuilder *values();
 	virtual QueryBuilder *cvalues();
 	virtual QueryBuilder *next_value();
-
+	
 	virtual QueryBuilder *begin_transaction();
 	virtual QueryBuilder *commit();
 
@@ -82,6 +82,18 @@ public:
 
 	virtual QueryBuilder *limit(const int num);
 	virtual QueryBuilder *offset(const int num);
+
+	virtual QueryBuilder *order_by_asc(const String &col);
+	virtual QueryBuilder *order_by_desc(const String &col);
+	virtual QueryBuilder *order_by(const String &col);
+
+	virtual QueryBuilder *order_by();
+	virtual QueryBuilder *corder_by();
+	virtual QueryBuilder *asc();
+	virtual QueryBuilder *desc();
+	virtual QueryBuilder *order_by_add_col(const String &col);
+	virtual QueryBuilder *asc(const String &col);
+	virtual QueryBuilder *desc(const String &col);
 
 	//l=logical (and, or are operators)
 	virtual QueryBuilder *land();

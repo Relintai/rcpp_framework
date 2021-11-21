@@ -193,6 +193,58 @@ QueryBuilder *QueryBuilder::offset(const int num) {
 	return this;
 }
 
+QueryBuilder *QueryBuilder::order_by_asc(const String &col) {
+	query_result += "ORDER BY " + col + " ASC, ";
+
+	return this;
+}
+QueryBuilder *QueryBuilder::order_by_desc(const String &col) {
+	query_result += "ORDER BY " + col + " DESC, ";
+
+	return this;
+}
+QueryBuilder *QueryBuilder::order_by(const String &col) {
+	query_result += "ORDER BY " + col + ", ";
+
+	return this;
+}
+
+QueryBuilder *QueryBuilder::order_by() {
+	query_result += "ORDER BY ";
+
+	return this;
+}
+QueryBuilder *QueryBuilder::corder_by() {
+	query_result[query_result.size() - 2] = ' ';
+
+	return this;
+}
+QueryBuilder *QueryBuilder::asc() {
+	query_result += "ASC, ";
+
+	return this;
+}
+QueryBuilder *QueryBuilder::desc() {
+	query_result += "DESC, ";
+
+	return this;
+}
+QueryBuilder *QueryBuilder::order_by_add_col(const String &col) {
+	query_result += col + ", ";
+
+	return this;
+}
+QueryBuilder *QueryBuilder::asc(const String &col) {
+	query_result += col + " ASC, ";
+
+	return this;
+}
+QueryBuilder *QueryBuilder::desc(const String &col) {
+	query_result += col + " DESC, ";
+
+	return this;
+}
+
 QueryBuilder *QueryBuilder::land() {
 	return this;
 }
