@@ -904,6 +904,10 @@ void String::append_repeat(const String &other, const int times) {
 }
 
 bool String::to_bool() const {
+	if (_size == 0) {
+		return 0;
+	}
+
 	if (is_numeric()) {
 		return to_int() != 0;
 	}
@@ -912,14 +916,26 @@ bool String::to_bool() const {
 }
 
 float String::to_float() const {
+	if (_size == 0) {
+		return 0;
+	}
+
 	return atof(c_str());
 }
 
 double String::to_double() const {
+	if (_size == 0) {
+		return 0;
+	}
+
 	return atof(c_str());
 }
 
 int String::to_int() const {
+	if (_size == 0) {
+		return 0;
+	}
+
 	return atoi(c_str());
 }
 
