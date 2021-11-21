@@ -208,7 +208,7 @@ void HTMLParserTag::process() {
 		tag = tag_text.substr(0, fspc_index);
 
 		if (fspc_index + 1 == tag_text.size()) {
-			//no args, but had a space like <br />
+			// no args, but had a space like <br />
 			return;
 		}
 
@@ -414,25 +414,103 @@ HTMLParserTag::~HTMLParserTag() {
 void HTMLParser::parse(const String &data) {
 	Vector<HTMLParserTag *> tags;
 
+	// <script> content parsing is based on https://stackoverflow.com/questions/14574471/how-do-browsers-parse-a-script-tag-exactly
+	const int STATE_NONE = 0;
+	const int STATE_DATA_1 = 1;
+	const int STATE_DATA_2 = 2;
+	const int STATE_DATA_3 = 3;
+
+	int state = STATE_NONE;
+
 	// split into tags
 	for (int i = 0; i < data.size(); ++i) {
-		if (data[i] == '<') {
-			for (int j = i + 1; j < data.size(); ++j) {
-				if (data[j] == '>') {
-					HTMLParserTag *t = new HTMLParserTag();
+		if (state == STATE_NONE) {
+			if (data[i] == '<') {
+				// tag
 
-					t->data = data.substr(i, j - i + 1);
-					t->process();
+				if (data.is_word_at(i, "<script")) {
+					// after the opening <script> tag, the parser goes to data1 state
+					state = STATE_DATA_1;
+					// no else, we need to process the tag istelf!
+				}
 
-					tags.push_back(t);
+				for (int j = i + 1; j < data.size(); ++j) {
+					if (data[j] == '>') {
+						HTMLParserTag *t = new HTMLParserTag();
 
-					i = j;
-					break;
+						t->data = data.substr(i, j - i + 1);
+						t->process();
+
+						tags.push_back(t);
+
+						i = j;
+						break;
+					}
+				}
+			} else {
+				// content
+
+				for (int j = i + 1; j < data.size(); ++j) {
+					if (data[j] == '<') {
+						HTMLParserTag *t = new HTMLParserTag();
+
+						t->data = data.substr(i, j - i);
+						t->type = HTMLParserTag::HTML_PARSER_TAG_TYPE_CONTENT;
+
+						tags.push_back(t);
+
+						i = j - 1;
+						break;
+					}
 				}
 			}
 		} else {
-			for (int j = i + 1; j < data.size(); ++j) {
-				if (data[j] == '<') {
+			// script tag content
+
+			bool done = false;
+			for (int j = i; j < data.size(); ++j) {
+				char c = data[j];
+
+				if (c != '<' && c != '-') {
+					continue;
+				}
+
+				if (data.is_word_at(j, "-->")) {
+					// if --> is encountered while in any state, switch to data1 state
+					state = STATE_DATA_1;
+					continue;
+				}
+
+				if (state == STATE_DATA_1) {
+
+					if (data.is_word_at(j, "<!--")) {
+						// if <!-- is encountered while in data1 state, switch to data2 state
+						state = STATE_DATA_2;
+					} else if (data.is_word_at(j, "</script")) {
+						// if </script[\s/>] is encountered while in any other state (than data3), stop parsing
+						done = true;
+					}
+
+				} else if (state == STATE_DATA_2) {
+
+					if (data.is_word_at(j, "<script")) {
+						// if <script[\s/>] is encountered while in data2 state, switch to data3 state
+						state = STATE_DATA_3;
+					} else if (data.is_word_at(j, "</script")) {
+						// if </script[\s/>] is encountered while in any other state (than data3), stop parsing
+						done = true;
+					}
+
+				} else if (state == STATE_DATA_3) {
+
+					// if </script[\s/>] is encountered while in data3 state, switch to data2 state
+					if (data.is_word_at(j, "</script")) {
+						state = STATE_DATA_2;
+					}
+				}
+
+				if (done) {
+					state = STATE_NONE;
 					HTMLParserTag *t = new HTMLParserTag();
 
 					t->data = data.substr(i, j - i);
