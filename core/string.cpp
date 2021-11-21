@@ -207,6 +207,45 @@ bool String::contains(const String &val) const {
 	return find(val) != -1;
 }
 
+bool String::is_word_at(const int index, const char *str) const {
+	ERR_FAIL_INDEX_V(index, _size, false);
+
+	int i = 0;
+
+	while (str[i] != '\0') {
+		int iind = index + i;
+
+		if (iind >= _size) {
+			return false;
+		}
+
+		if (_data[iind] != str[i]) {
+			return false;
+		}
+
+		++i;
+	}
+
+	return true;
+}
+bool String::is_word_at(const int index, const String &val) const {
+	ERR_FAIL_INDEX_V(index, _size, false);
+
+	if (index + val.size() >= _size) {
+		return false;
+	}
+
+	for (int i = 0; i < val.size(); ++i) {
+		int iind = index + i;
+
+		if (_data[iind] != val[i]) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
 void String::replace_from(const int start_index, const int length, const String &with) {
 	ERR_FAIL_INDEX(start_index, _size);
 

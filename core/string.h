@@ -32,6 +32,9 @@ public:
 	String substr_index(const int start_index, const int end_index) const;
 	bool contains(const char val) const;
 	bool contains(const String &val) const;
+
+	bool is_word_at(const int index, const char* str) const;
+	bool is_word_at(const int index, const String &val) const;
 	
 	void replace_from(const int start_index, const int length, const String &with);
 	void replace(const String &find_str, const String &with);
