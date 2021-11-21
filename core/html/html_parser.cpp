@@ -163,7 +163,7 @@ void HTMLParserTag::process() {
 				comment_start_index = 4;
 			}
 
-			tag = data.substr(comment_start_index, comment_start_index - data.size() - 3);
+			tag = data.substr(comment_start_index, data.size() - comment_start_index - 3);
 		}
 
 		if (data.size() < 11) {
