@@ -207,6 +207,11 @@ void HTMLParserTag::process() {
 		// grab the tag itself
 		tag = tag_text.substr(0, fspc_index);
 
+		if (fspc_index + 1 == tag_text.size()) {
+			//no args, but had a space like <br />
+			return;
+		}
+
 		String args = tag_text.substr(fspc_index + 1, tag_text.size() - fspc_index - 1);
 		parse_args(args);
 	}
