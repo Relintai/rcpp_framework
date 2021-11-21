@@ -30,6 +30,8 @@ using namespace drogon;
 class Request;
 
 class DWebApplication : public WebApplication {
+	RCPP_OBJECT(DWebApplication, WebApplication);
+
 public:
 	void load_settings();
 	void setup_routes();

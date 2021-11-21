@@ -13,7 +13,9 @@
 
 class Request;
 
-class WebApplication {
+class WebApplication : public Object {
+	RCPP_OBJECT(WebApplication, Object);
+
 public:
 	static std::string default_error_404_body;
 	static std::string default_generic_error_body;
