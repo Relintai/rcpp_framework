@@ -8,8 +8,74 @@ Variant::Type Variant::get_type() {
 }
 
 void Variant::clear() {
+	switch (_type) {
+		case TYPE_NULL:
+			break;
+		case TYPE_BOOL:
+			_bool = false;
+			break;
+		case TYPE_INT:
+			_int = 0;
+			break;
+		case TYPE_UINT:
+			_uint = 0;
+			break;
+		case TYPE_FLOAT:
+			_float = 0;
+			break;
+		case TYPE_STRING:
+			if (_string->owner) {
+				delete _string->string;
+			}
+
+			delete _string;
+			_string = nullptr;
+
+			break;
+		case TYPE_OBJECT:
+			delete _object;
+			_object = nullptr;
+
+			break;
+		case TYPE_POINTER:
+			_pointer = nullptr;
+			
+			break;
+		default:
+			break;
+	}
+	
+	_type = TYPE_NULL;
 }
 void Variant::zero() {
+	switch (_type) {
+		case TYPE_NULL:
+			break;
+		case TYPE_BOOL:
+			_bool = false;
+			break;
+		case TYPE_INT:
+			_int = 0;
+			break;
+		case TYPE_UINT:
+			_uint = 0;
+			break;
+		case TYPE_FLOAT:
+			_float = 0;
+			break;
+		case TYPE_STRING:
+			_string->string->resize(0);
+			break;
+		case TYPE_OBJECT:
+			_object->object = nullptr;
+			_object->reference.unref();
+			break;
+		case TYPE_POINTER:
+			_pointer = nullptr;
+			break;
+		default:
+			break;
+	}
 }
 
 void Variant::parse(const String &str) {
@@ -76,7 +142,7 @@ int Variant::to_int() const {
 		case TYPE_OBJECT:
 		case TYPE_POINTER:
 			// just read the value of the pointer as int
-			// Could return 1 or 0, but this is almost the same, but hopefully be more useful
+			// Could return 1 or 0, but this is almost the same, but hopefully it's more useful
 			return _int;
 		default:
 			return 0;
@@ -102,7 +168,7 @@ uint64_t Variant::to_uint() const {
 		case TYPE_OBJECT:
 		case TYPE_POINTER:
 			// just read the value of the pointer as uint
-			// Could return 1 or 0, but this is almost the same, but hopefully be more useful
+			// Could return 1 or 0, but this is almost the same, but hopefully it's more useful
 			return _uint;
 		default:
 			return 0;
@@ -167,18 +233,83 @@ String Variant::to_string() const {
 	}
 }
 Object *Variant::to_object() const {
-	return nullptr;
+	switch (_type) {
+		case TYPE_NULL:
+			return nullptr;
+		case TYPE_BOOL:
+			return nullptr;
+		case TYPE_INT:
+			return nullptr;
+		case TYPE_UINT:
+			return nullptr;
+		case TYPE_FLOAT:
+			return nullptr;
+		case TYPE_STRING:
+			return nullptr;
+		case TYPE_OBJECT:
+			return _object->object;
+		case TYPE_POINTER:
+			return nullptr;
+		default:
+			return nullptr;
+	}
 }
 Reference *Variant::to_reference() const {
-	return nullptr;
+	switch (_type) {
+		case TYPE_NULL:
+			return nullptr;
+		case TYPE_BOOL:
+			return nullptr;
+		case TYPE_INT:
+			return nullptr;
+		case TYPE_UINT:
+			return nullptr;
+		case TYPE_FLOAT:
+			return nullptr;
+		case TYPE_STRING:
+			return nullptr;
+		case TYPE_OBJECT:
+			return Object::cast_to<Reference>(_object->object);
+		case TYPE_POINTER:
+			return nullptr;
+		default:
+			return nullptr;
+	}
 }
 void *Variant::to_pointer() const {
-	return nullptr;
+	switch (_type) {
+		case TYPE_NULL:
+			return nullptr;
+		case TYPE_BOOL:
+			return nullptr;
+		case TYPE_INT:
+			return nullptr;
+		case TYPE_UINT:
+			return nullptr;
+		case TYPE_FLOAT:
+			return nullptr;
+		case TYPE_STRING:
+			return nullptr;
+		case TYPE_OBJECT:
+			return nullptr;
+		case TYPE_POINTER:
+			return _pointer;
+		default:
+			return nullptr;
+	}
 }
 String *Variant::get_string_ptr() const {
+	if (_type == TYPE_STRING) {
+		return _string->string;
+	}
+
 	return nullptr;
 }
 bool Variant::is_string_owned() const {
+	if (_type == TYPE_STRING) {
+		return _string->owner;
+	}
+
 	return false;
 }
 
@@ -190,28 +321,60 @@ void Variant::set_null() {
 void Variant::set_bool(const bool value) {
 	clear();
 
+	_type = TYPE_BOOL;
 	_bool = value;
 }
 void Variant::set_int(const int value) {
 	clear();
 
+	_type = TYPE_INT;
 	_int = value;
 }
 void Variant::set_uint(const uint64_t value) {
 	clear();
 
+	_type = TYPE_UINT;
 	_uint = value;
 }
 void Variant::set_float(const float value) {
 	clear();
 
+	_type = TYPE_FLOAT;
 	_float = value;
 }
 void Variant::set_string(String *value, const bool copy) {
 	clear();
+
+	if (!value) {
+		return;
+	}
+
+	_type = TYPE_STRING;
+
+	_string = new StringData();
+
+	if (copy) {
+		_string->string = new String(*value);
+		_string->owner = true;
+	} else {
+		_string->string = value;
+		_string->owner = false;
+	}
 }
 void Variant::set_string(const String &value, const bool copy) {
 	clear();
+
+	_type = TYPE_STRING;
+
+	_string = new StringData();
+
+	if (copy) {
+		_string->string = new String(value);
+		_string->owner = true;
+	} else {
+		_string->string = &const_cast<String &>(value);
+		_string->owner = false;
+	}
 }
 void Variant::set_object(Object *value) {
 	clear();
@@ -229,9 +392,41 @@ void Variant::set_object(Object *value) {
 }
 void Variant::set_pointer(void *value) {
 	clear();
+
+	_type = TYPE_POINTER;
+	_pointer = value;
 }
 void Variant::set_variant(const Variant &value) {
 	clear();
+
+	switch (_type) {
+		case TYPE_NULL:
+			break;
+		case TYPE_BOOL:
+			_bool = value._bool;
+			break;
+		case TYPE_INT:
+			_int = value._int;
+			break;
+		case TYPE_UINT:
+			_uint = value._uint;
+			break;
+		case TYPE_FLOAT:
+			_float = value._float;
+			break;
+		case TYPE_STRING:
+			set_string(value._string->string, true);
+			break;
+		case TYPE_OBJECT:
+			set_object(value._object->object);
+			break;
+		case TYPE_POINTER:
+			_pointer = value._pointer;
+		default:
+			break;
+	}
+
+	_type = value._type;
 }
 
 Variant::operator bool() const {
@@ -267,14 +462,61 @@ bool Variant::operator==(const Variant &other) const {
 		return false;
 	}
 
+	switch (_type) {
+		case TYPE_NULL:
+			return true;
+		case TYPE_BOOL:
+			return _bool == other._bool;
+		case TYPE_INT:
+			return _int == other._int;
+		case TYPE_UINT:
+			return _uint == other._uint;
+		case TYPE_FLOAT:
+			return _float == other._float;
+		case TYPE_STRING:
+			return (*_string->string) == (*other._string->string);
+		case TYPE_OBJECT:
+			return (_object->object) == (other._object->object);
+		case TYPE_POINTER:
+			return _pointer == other._pointer;
+		default:
+			break;
+	}
+
 	return false;
 }
 bool Variant::operator!=(const Variant &other) const {
 	return !(operator==(other));
 }
 bool Variant::operator<(const Variant &other) const {
-	if (_type != other._type) {
-		return _type < other._type;
+	switch (_type) {
+		case TYPE_NULL: {
+			if (other.is_null()) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		case TYPE_BOOL: {
+			return _bool < other.to_bool();
+		}
+		case TYPE_INT:
+			return _int < other.to_int();
+			return _int == other._int;
+		case TYPE_UINT:
+			return _uint < other.to_uint();
+			return _uint == other._uint;
+		case TYPE_FLOAT:
+			return _float < other.to_float();
+			return _float == other._float;
+		case TYPE_STRING:
+			return (*_string->string) < other.to_string();
+		case TYPE_OBJECT:
+			return (_object->object) < other.to_object();
+		case TYPE_POINTER:
+			return _pointer < other.to_pointer();
+		default:
+			break;
 	}
 
 	return false;
