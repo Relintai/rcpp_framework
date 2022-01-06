@@ -102,6 +102,7 @@ public:
 	double to_double() const;
 	int to_int() const;
 
+	bool is_bool() const;
 	bool is_numeric() const;
 	bool is_int() const;
 	bool is_uint() const;

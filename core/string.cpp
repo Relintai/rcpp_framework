@@ -951,6 +951,44 @@ int String::to_int() const {
 	return atoi(c_str());
 }
 
+bool String::is_bool() const {
+	if (_size == 0) {
+		return false;
+	}
+
+	if (_size == 1) {
+		if (_data[0] == '0') {
+			return true;
+		} else if (_data[0] == '1') {
+			return true;
+		}
+
+		return false;
+	}
+
+	if (_size == 4) {
+		String l = as_lower();
+
+		if (l[0] == 't' && l[1] == 'r' && l[2] == 'u' && l[3] == 'e') {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	if (_size == 5) {
+		String l = as_lower();
+
+		if (l[0] == 'f' && l[1] == 'a' && l[2] == 'l' && l[3] == 's' && l[3] == 'e') {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	return false;
+}
+
 bool String::is_numeric() const {
 	if (_size == 0) {
 		return false;

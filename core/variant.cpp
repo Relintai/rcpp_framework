@@ -39,12 +39,12 @@ void Variant::clear() {
 			break;
 		case TYPE_POINTER:
 			_pointer = nullptr;
-			
+
 			break;
 		default:
 			break;
 	}
-	
+
 	_type = TYPE_NULL;
 }
 void Variant::zero() {
@@ -79,9 +79,34 @@ void Variant::zero() {
 }
 
 void Variant::parse(const String &str) {
+	if (str.is_bool()) {
+		set_bool(str.to_bool());
+		return;
+	}
+
+	if (str.is_int()) {
+		set_int(str.to_int());
+		return;
+	}
+
+	if (str.is_uint()) {
+		set_uint(str.to_uint());
+		return;
+	}
+
+	if (str.is_numeric()) {
+		set_float(str.to_float());
+		return;
+	}
+
+	set_string(str);
 }
 Variant Variant::parse_string(const String &str) {
-	return Variant();
+	Variant v = Variant();
+
+	v.parse(str);
+
+	return v;
 }
 
 bool Variant::is_null() const {
