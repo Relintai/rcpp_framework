@@ -25,6 +25,9 @@ public:
 
 	Vector<Ref<RBACPermission> > permissions;
 
+	Ref<RBACPermission> match_request(Request *request);
+
+	bool get_permissions(Request *request);
 	bool has_permission(Request *request, const int permission);
 	bool has_rank_permission(const int permission);
 

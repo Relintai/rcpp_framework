@@ -2,10 +2,32 @@
 
 #include "core/http/request.h"
 
-bool RBACRank::has_permission(Request *request, const int permission) {
-	//todo try to find a match from the permissions array
+Ref<RBACPermission> RBACRank::match_request(Request *request) {
+	return Ref<RBACPermission>();
+}
 
-	return (base_permissions & permission) != 0;
+bool RBACRank::get_permissions(Request *request) {
+	int perm = base_permissions;
+
+	Ref<RBACPermission> match = match_request(request);
+
+	if (match.is_valid()) {
+		perm = match->permissions;
+	}
+
+	return perm;
+}
+
+bool RBACRank::has_permission(Request *request, const int permission) {
+	int perm = base_permissions;
+
+	Ref<RBACPermission> match = match_request(request);
+
+	if (match.is_valid()) {
+		perm = match->permissions;
+	}
+
+	return (perm & permission) != 0;
 }
 
 bool RBACRank::has_rank_permission(const int permission) {

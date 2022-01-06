@@ -15,7 +15,10 @@ class RBACUser : public User {
 public:
 	Ref<RBACRank> rbac_rank;
 
+	int get_permissions(Request *request);
 	bool has_permission(Request *request, const int permission);
+	int get_additional_permissions(Request *request);
+	bool has_additional_permission(Request *request, const int permission);
 
 	RBACUser();
 	~RBACUser();
