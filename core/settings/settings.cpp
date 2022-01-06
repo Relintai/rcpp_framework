@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 String Settings::get_value(const String &key, const String &def) {
-	std::map<String, String>::iterator e = _data.find(key);
+	std::map<String, Variant>::iterator e = _data.find(key);
 
 	if (e != _data.end()) {
 		return e->second;
@@ -13,7 +13,7 @@ String Settings::get_value(const String &key, const String &def) {
 	}
 }
 int Settings::get_value_int(const String &key, const int def) {
-	std::map<String, String>::iterator e = _data.find(key);
+	std::map<String, Variant>::iterator e = _data.find(key);
 
 	if (e != _data.end()) {
 		return e->second.to_int();
@@ -22,7 +22,7 @@ int Settings::get_value_int(const String &key, const int def) {
 	}
 }
 float Settings::get_value_float(const String &key, const float def) {
-	std::map<String, String>::iterator e = _data.find(key);
+	std::map<String, Variant>::iterator e = _data.find(key);
 
 	if (e != _data.end()) {
 		return e->second.to_float();
@@ -31,16 +31,16 @@ float Settings::get_value_float(const String &key, const float def) {
 	}
 }
 double Settings::get_value_double(const String &key, const double def) {
-	std::map<String, String>::iterator e = _data.find(key);
+	std::map<String, Variant>::iterator e = _data.find(key);
 
 	if (e != _data.end()) {
-		return e->second.to_double();
+		return e->second.to_float();
 	} else {
 		return def;
 	}
 }
 bool Settings::get_value_bool(const String &key, const bool def) {
-	std::map<String, String>::iterator e = _data.find(key);
+	std::map<String, Variant>::iterator e = _data.find(key);
 
 	if (e != _data.end()) {
 		return e->second.to_bool();

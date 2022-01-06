@@ -3,6 +3,7 @@
 
 #include <map>
 
+#include "core/variant.h"
 #include "core/string.h"
 
 class Settings {
@@ -23,7 +24,7 @@ public:
 protected:
 	static Settings *_singleton;
 
-	std::map<String, String> _data;
+	std::map<String, Variant> _data;
 };
 
 #endif
