@@ -3,7 +3,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-String Settings::get_value(const String &key, const String &def) {
+Variant Settings::get_value(const String &key, const Variant &def) {
+	std::map<String, Variant>::iterator e = _data.find(key);
+
+	if (e != _data.end()) {
+		return e->second;
+	} else {
+		return def;
+	}
+}
+String Settings::get_value_string(const String &key, const String &def) {
 	std::map<String, Variant>::iterator e = _data.find(key);
 
 	if (e != _data.end()) {
@@ -92,7 +101,7 @@ void Settings::parse_ini_file(const String &path) {
 		String k = s.substr_index(0, eindex - 1);
 		String v = s.substr_index(eindex + 1, s.size() - 1);
 
-		_data[k] = v;
+		_data[k] = Variant::parse_string(v);
 	}
 }
 

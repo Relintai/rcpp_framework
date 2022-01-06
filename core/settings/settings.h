@@ -8,7 +8,8 @@
 
 class Settings {
 public:
-	String get_value(const String &key, const String &def = "");
+	Variant get_value(const String &key, const Variant &def = Variant());
+	String get_value_string(const String &key, const String &def = "");
 	int get_value_int(const String &key, const int def = 0);
 	float get_value_float(const String &key, const float def = 0);
 	double get_value_double(const String &key, const double def = 0);
