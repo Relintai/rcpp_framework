@@ -54,6 +54,7 @@ public:
 	void set_int(const int value);
 	void set_uint(const uint64_t value);
 	void set_float(const float value);
+	void set_float(const double value);
 	void set_string(String *value, bool copy = false);
 	void set_string(const String &value, bool copy = true);
 	void set_object(Object *value);
@@ -64,6 +65,7 @@ public:
 	operator int() const;
 	operator uint64_t() const;
 	operator float() const;
+	operator double() const;
 	operator String() const;
 	operator Object *() const;
 	operator Reference *() const;
@@ -78,6 +80,7 @@ public:
 	Variant(const int value);
 	Variant(const uint64_t value);
 	Variant(const float value);
+	Variant(const double value);
 	Variant(String *value, const bool copy = false);
 	Variant(const String &value, const bool copy = true);
 	Variant(Object *value);

@@ -367,6 +367,12 @@ void Variant::set_float(const float value) {
 	_type = TYPE_FLOAT;
 	_float = value;
 }
+void Variant::set_float(const double value) {
+	clear();
+
+	_type = TYPE_FLOAT;
+	_float = value;
+}
 void Variant::set_string(String *value, const bool copy) {
 	clear();
 
@@ -466,6 +472,9 @@ Variant::operator uint64_t() const {
 Variant::operator float() const {
 	return to_float();
 }
+Variant::operator double() const {
+	return to_float();
+}
 Variant::operator String() const {
 	return to_string();
 }
@@ -563,6 +572,11 @@ Variant::Variant(const uint64_t value) {
 	_uint = value;
 }
 Variant::Variant(const float value) {
+	_type = TYPE_FLOAT;
+
+	_float = value;
+}
+Variant::Variant(const double value) {
 	_type = TYPE_FLOAT;
 
 	_float = value;
