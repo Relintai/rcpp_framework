@@ -11,6 +11,8 @@
 
 #include "rbac_default_permissions.h"
 
+#include "modules/users/user.h"
+
 std::map<int, Ref<RBACRank> > RBACModel::load_ranks() {
 	std::map<int, Ref<RBACRank> > ranks;
 
@@ -207,7 +209,7 @@ void RBACModel::create_default_entries() {
 	admin.instance();
 
 	admin->name = "Admin";
-	admin->base_permissions = RBAC_PERMISSION_ALL;
+	admin->base_permissions = User::PERMISSION_ALL;
 	admin->rank_permissions = RBAC_RANK_PERMISSION_ADMIN_PANEL;
 
 	save_rank(admin);
@@ -216,11 +218,11 @@ void RBACModel::create_default_entries() {
 	user.instance();
 
 	user->name = "User";
-	//user->base_permissions = RBAC_PERMISSION_READ;
+	//user->base_permissions = User::PERMISSION_READ;
 	//user->rank_permissions = 0;
 
 	//temporary!
-	user->base_permissions = RBAC_PERMISSION_ALL;
+	user->base_permissions = User::PERMISSION_ALL;
 	user->rank_permissions = RBAC_RANK_PERMISSION_ADMIN_PANEL;
 
 	save_rank(user);
@@ -229,7 +231,7 @@ void RBACModel::create_default_entries() {
 	guest.instance();
 
 	guest->name = "Guest";
-	guest->base_permissions = RBAC_PERMISSION_READ;
+	guest->base_permissions = User::PERMISSION_READ;
 	guest->rank_permissions = RBAC_RANK_PERMISSION_USE_REDIRECT;
 
 	save_rank(guest);

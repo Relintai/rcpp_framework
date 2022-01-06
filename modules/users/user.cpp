@@ -80,6 +80,22 @@ void User::from_json(const String &p_data) {
 	locked = uobj["locked"].GetBool();
 }
 
+int User::get_permissions(Request *request) {
+	return PERMISSION_ALL;
+}
+
+bool User::has_permission(Request *request, const int permission) {
+	return true;
+}
+
+int User::get_additional_permissions(Request *request) {
+	return 0;
+}
+
+bool User::has_additional_permission(Request *request, const int permission) {
+	return true;
+}
+
 User::User() :
 		Resource() {
 

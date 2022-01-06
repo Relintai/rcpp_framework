@@ -68,7 +68,7 @@ void RBACUserController::rbac_default_user_session_middleware(Object *instance, 
 		}
 	}
 
-	if (!rank->has_permission(request, RBAC_PERMISSION_READ)) {
+	if (!rank->has_permission(request, User::PERMISSION_READ)) {
 		if (rank->has_rank_permission(RBAC_RANK_PERMISSION_USE_REDIRECT)) {
 			//Note this can make the webapp prone to enumerations, if not done correctly
 			//e.g. redirect from /admin, but sending 404 on a non existing uri, which does not have

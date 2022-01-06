@@ -10,6 +10,7 @@
 #include "core/http/session_manager.h"
 #include "rbac_default_permissions.h"
 #include "rbac_model.h"
+#include "modules/users/user.h"
 
 void RBACController::handle_request_main(Request *request) {
 }
@@ -574,10 +575,10 @@ void RBACController::initialize() {
 }
 
 void RBACController::register_permissions() {
-	register_permission("Create", RBAC_PERMISSION_CREATE);
-	register_permission("Read", RBAC_PERMISSION_READ);
-	register_permission("Update", RBAC_PERMISSION_UPDATE);
-	register_permission("Delete", RBAC_PERMISSION_DELETE);
+	register_permission("Create", User::PERMISSION_CREATE);
+	register_permission("Read", User::PERMISSION_READ);
+	register_permission("Update", User::PERMISSION_UPDATE);
+	register_permission("Delete", User::PERMISSION_DELETE);
 
 	register_rank_permission("Admin Panel", RBAC_RANK_PERMISSION_ADMIN_PANEL);
 	register_rank_permission("Use Redirect", RBAC_RANK_PERMISSION_USE_REDIRECT);
