@@ -3,7 +3,27 @@
 #include "core/http/request.h"
 
 Ref<RBACPermission> RBACRank::match_request(Request *request) {
-	return Ref<RBACPermission>();
+	const String &full_path = request->get_path_full();
+
+	Ref<RBACPermission> perm;
+	int current_max = 0;
+
+	for (int i = 0; i < permissions.size(); ++i) {
+		Ref<RBACPermission> p;
+
+		if (!p.is_valid()) {
+			continue;
+		}
+
+		int c = full_path.first_difference_index(p->url);
+
+		if (c > current_max) {
+			perm = p;
+			current_max = c;
+		}
+	}
+
+	return perm;
 }
 
 bool RBACRank::get_permissions(Request *request) {

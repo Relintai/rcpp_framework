@@ -335,6 +335,18 @@ int String::compare(const String &other) const {
 	}
 }
 
+int String::first_difference_index(const String &other) const {
+	int c = size() < other.size() ? size() : other.size();
+
+	for (int i = 0; i < c; ++i) {
+		if (_data[i] != other._data[i]) {
+			return i;
+		}
+	}
+
+	return c;
+}
+
 void String::to_lower() {
 	for (int i = 0; i < _size; ++i) {
 		char c = _data[i];

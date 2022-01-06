@@ -42,6 +42,8 @@ public:
 
 	int compare(const String &other) const;
 
+	int first_difference_index(const String &other) const;
+
 	void to_lower();
 	String as_lower() const;
 
