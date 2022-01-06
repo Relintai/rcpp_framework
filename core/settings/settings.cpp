@@ -58,6 +58,10 @@ bool Settings::get_value_bool(const String &key, const bool def) {
 	}
 }
 
+void Settings::set_value(const String &key, const Variant &value) {
+	_data[key] = value;
+}
+
 void Settings::parse_ini_file(const String &path) {
 	FILE *f = fopen(path.c_str(), "r");
 

@@ -15,6 +15,8 @@ public:
 	double get_value_double(const String &key, const double def = 0);
 	bool get_value_bool(const String &key, const bool def = false);
 
+	void set_value(const String &key, const Variant &value);
+
 	void parse_ini_file(const String &path);
 
 	static Settings *get_singleton();
