@@ -7,7 +7,7 @@
 #include "core/http/request.h"
 #include "core/http/session_manager.h"
 
-#include "admin_controller.h"
+#include "admin_node.h"
 
 void AdminPanel::handle_request_main(Request *request) {
 	//todo check permissions
@@ -23,7 +23,7 @@ void AdminPanel::handle_request_main(Request *request) {
 		AdminPanelSection &s = _controllers[i];
 
 		if (s.section_url == seg) {
-			AdminController *c = s.controller;
+			AdminNode *c = s.controller;
 
 			request->push_path();
 
@@ -92,14 +92,14 @@ void AdminPanel::render_admin_panel_list(Request *request) {
 	request->compile_and_send_body();
 }
 
-void AdminPanel::render_controller_panel(Request *request, AdminController *controller) {
+void AdminPanel::render_controller_panel(Request *request, AdminNode *controller) {
 	//set up headers
 	controller->admin_handle_request_main(request);
 	//set up footers
 	request->compile_and_send_body();
 }
 
-void AdminPanel::register_admin_controller(const String &section, AdminController *controller) {
+void AdminPanel::register_admin_controller(const String &section, AdminNode *controller) {
 	AdminPanelSection sec;
 
 	sec.section_url = section;
@@ -147,7 +147,7 @@ AdminPanel *AdminPanel::get_singleton() {
 }
 
 AdminPanel::AdminPanel() :
-		Controller() {
+		WebNode() {
 
 	if (_self) {
 		printf("AdminPanel::AdminPanel(): Error! self is not null!/n");

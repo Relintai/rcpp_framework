@@ -3,7 +3,7 @@
 
 #include <map>
 
-#include "modules/admin_panel/admin_controller.h"
+#include "modules/admin_panel/admin_node.h"
 
 #include "core/containers/vector.h"
 #include "core/string.h"
@@ -14,8 +14,8 @@
 class Request;
 class FormValidator;
 
-class RBACController : public AdminController {
-	RCPP_OBJECT(RBACController, AdminController);
+class RBACController : public AdminNode {
+	RCPP_OBJECT(RBACController, AdminNode);
 
 public:
 	void handle_request_main(Request *request);

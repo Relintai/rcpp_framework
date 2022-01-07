@@ -1,7 +1,7 @@
-#ifndef ADMIN_CONTROLLER_H
-#define ADMIN_CONTROLLER_H
+#ifndef ADMIN_NODE_H
+#define ADMIN_NODE_H
 
-#include "core/http/controller.h"
+#include "core/http/web_node.h"
 
 #include "core/containers/vector.h"
 #include "core/string.h"
@@ -22,8 +22,8 @@ struct AdminSectionLinkInfo {
 	}
 };
 
-class AdminController : public Controller {
-	RCPP_OBJECT(AdminController, Controller);
+class AdminNode : public WebNode {
+	RCPP_OBJECT(AdminNode, WebNode);
 
 public:
 	virtual void admin_handle_request_main(Request *request);
@@ -31,8 +31,8 @@ public:
 	virtual void admin_add_section_links(Vector<AdminSectionLinkInfo> *links);
 	virtual bool admin_full_render();
 
-	AdminController();
-	~AdminController();
+	AdminNode();
+	~AdminNode();
 
 protected:
 };

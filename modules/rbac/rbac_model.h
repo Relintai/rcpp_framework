@@ -1,7 +1,7 @@
 #ifndef RBAC_MODEL_H
 #define RBAC_MODEL_H
 
-#include "core/http/model.h"
+#include "core/http/web_node.h"
 
 #include <map>
 #include "core/containers/vector.h"
@@ -10,8 +10,8 @@
 #include "rbac_permission.h"
 #include "rbac_rank.h"
 
-class RBACModel : public Model {
-	RCPP_OBJECT(RBACModel, Model);
+class RBACModel : public WebNode {
+	RCPP_OBJECT(RBACModel, WebNode);
 
 public:
 	virtual std::map<int, Ref<RBACRank> > load_ranks();

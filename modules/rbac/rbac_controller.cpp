@@ -617,7 +617,7 @@ RBACController *RBACController::get_singleton() {
 }
 
 RBACController::RBACController() :
-		AdminController() {
+		AdminNode() {
 
 	if (_self) {
 		printf("RBACController::RBACController(): Error! self is not null!/n");

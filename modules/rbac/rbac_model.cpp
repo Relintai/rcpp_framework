@@ -242,7 +242,7 @@ RBACModel *RBACModel::get_singleton() {
 }
 
 RBACModel::RBACModel() :
-		Model() {
+		WebNode() {
 
 	if (_self) {
 		printf("RBACModel::RBACModel(): Error! self is not null!/n");
