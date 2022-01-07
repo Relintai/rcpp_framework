@@ -1,7 +1,7 @@
-#ifndef WEB_APPLICATION_H
-#define WEB_APPLICATION_H
+#ifndef WEB_ROOT_H
+#define WEB_ROOT_H
 
-#include "core/object.h"
+#include "core/http/web_node.h"
 #include <functional>
 #include <map>
 #include <string>
@@ -12,15 +12,16 @@
 #include "handler_instance.h"
 
 class Request;
+class WebServer;
 
-class WebApplication : public Object {
-	RCPP_OBJECT(WebApplication, Object);
+class WebRoot : public WebNode {
+	RCPP_OBJECT(WebRoot, WebNode);
 
 public:
 	static std::string default_error_404_body;
 	static std::string default_generic_error_body;
 
-	void handle_request(Request *request);
+	void handle_request_main(Request *request);
 	void send_error(int error_code, Request *request);
 	void send_file(const std::string &path, Request *request);
 
@@ -39,8 +40,10 @@ public:
 	void unregister_request_update(Request *request);
 	void update();
 
-	WebApplication();
-	virtual ~WebApplication();
+	WebServer *get_server();
+
+	WebRoot();
+	virtual ~WebRoot();
 
 public:
 	HandlerInstance index_func;

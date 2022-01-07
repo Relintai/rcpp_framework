@@ -4,6 +4,7 @@
 #include "core/containers/vector.h"
 #include "core/string.h"
 
+#include <vector>
 #include <map>
 #include <mutex>
 
@@ -14,13 +15,13 @@
 
 #include "http_enums.h"
 
-class WebApplication;
+class WebServer;
 class Cookie;
 class HTTPSession;
 
 class Request {
 public:
-	WebApplication *application;
+	WebServer *server;
 
 	uint32_t current_middleware_index;
 	HandlerInstance handler_instance;

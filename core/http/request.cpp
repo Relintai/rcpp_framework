@@ -1,11 +1,12 @@
 #include "request.h"
 
 #include "core/http/cookie.h"
-#include "web_application.h"
+#include "web_server.h"
 
 #include "http_session.h"
 
 #include "session_manager.h"
+#include "core/http/web_root.h"
 
 HTTPSession *Request::get_or_create_session() {
 	if (session) {
@@ -100,12 +101,12 @@ void Request::send_file(const String &p_file_path) {
 }
 
 void Request::send_error(int error_code) {
-	application->send_error(error_code, this);
+	server->get_web_root()->send_error(error_code, this);
 }
 
 void Request::reset() {
 	session = nullptr;
-	application = nullptr;
+	server = nullptr;
 	current_middleware_index = 0;
 	middleware_stack = nullptr;
 	_path_stack.clear();

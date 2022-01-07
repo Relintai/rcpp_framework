@@ -1,4 +1,4 @@
-#include "web_application.h"
+#include "web_root.h"
 
 #include <functional>
 #include <string>
@@ -12,23 +12,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void WebApplication::load_settings() {
+#include "core/http/web_server.h"
+
+void WebRoot::load_settings() {
 }
 
-void WebApplication::setup_routes() {
-	default_error_handler_func = WebApplication::default_fallback_error_handler;
+void WebRoot::setup_routes() {
+	default_error_handler_func = WebRoot::default_fallback_error_handler;
 
-	error_handler_map[404] = WebApplication::default_404_error_handler;
+	error_handler_map[404] = WebRoot::default_404_error_handler;
 }
 
-void WebApplication::setup_middleware() {
+void WebRoot::setup_middleware() {
 	//If you want sessions add this to your inherited class. Should probably be the first one.
 	//middlewares.push_back(HandlerInstance(::SessionManager::session_setup_middleware));
 
 	middlewares.push_back(HandlerInstance([this](Object *instance, Request *request){ this->default_routing_middleware(instance, request); }));
 }
 
-void WebApplication::default_routing_middleware(Object *instance, Request *request) {
+void WebRoot::default_routing_middleware(Object *instance, Request *request) {
 	std::string path = request->get_path_full();
 
 	if (FileCache::get_singleton()->wwwroot_has_file(path)) {
@@ -63,25 +65,25 @@ void WebApplication::default_routing_middleware(Object *instance, Request *reque
 	request->next_stage();
 }
 
-void WebApplication::default_fallback_error_handler(int error_code, Request *request) {
+void WebRoot::default_fallback_error_handler(int error_code, Request *request) {
 	request->compiled_body = default_generic_error_body;
 	
 	request->send();
 }
 
-void WebApplication::default_404_error_handler(int error_code, Request *request) {
+void WebRoot::default_404_error_handler(int error_code, Request *request) {
 	request->compiled_body = default_error_404_body;
 	request->send();
 }
 
-void WebApplication::handle_request(Request *request) {
+void WebRoot::handle_request_main(Request *request) {
 	request->middleware_stack = &middlewares;
 
-	//note that middlewares handle the routing -> WebApplication::default_routing_middleware by default
+	//note that middlewares handle the routing -> WebRoot::default_routing_middleware by default
 	request->next_stage();
 }
 
-void WebApplication::send_error(int error_code, Request *request) {
+void WebRoot::send_error(int error_code, Request *request) {
 	std::function<void(int, Request *)> func = error_handler_map[error_code];
 
 	if (!func) {
@@ -92,21 +94,21 @@ void WebApplication::send_error(int error_code, Request *request) {
 	func(error_code, request);
 }
 
-void WebApplication::send_file(const std::string &path, Request *request) {
+void WebRoot::send_file(const std::string &path, Request *request) {
 	std::string fp = FileCache::get_singleton()->wwwroot + path;
 
 	request->send_file(fp);
 }
 
-void WebApplication::migrate() {
+void WebRoot::migrate() {
 }
 
-void WebApplication::register_request_update(Request *request) {
+void WebRoot::register_request_update(Request *request) {
 	std::lock_guard<std::mutex> lock(_update_registered_requests_mutex);
 
 	_update_registered_requests.push_back(request);
 }
-void WebApplication::unregister_request_update(Request *request) {
+void WebRoot::unregister_request_update(Request *request) {
 	std::lock_guard<std::mutex> lock(_update_registered_requests_mutex);
 
 	std::size_t s = _update_registered_requests.size();
@@ -123,7 +125,7 @@ void WebApplication::unregister_request_update(Request *request) {
 	}
 }
 
-void WebApplication::update() {
+void WebRoot::update() {
 	for (std::size_t i = 0; i < _update_registered_requests.size(); ++i) {
 		Request *r = _update_registered_requests[i];
 
@@ -131,14 +133,19 @@ void WebApplication::update() {
 	}
 }
 
-WebApplication::WebApplication() {
+WebServer *WebRoot::get_server() {
+	//todo this shoult probably be cached
+	return Object::cast_to<WebServer>(get_tree());
 }
 
-WebApplication::~WebApplication() {
+WebRoot::WebRoot() : WebNode() {
+}
+
+WebRoot::~WebRoot() {
 	main_route_map.clear();
 	error_handler_map.clear();
 	middlewares.clear();
 }
 
-std::string WebApplication::default_error_404_body = "<html><body>404 :(</body></html>";
-std::string WebApplication::default_generic_error_body = "<html><body>Internal server error! :(</body></html>";
+std::string WebRoot::default_error_404_body = "<html><body>404 :(</body></html>";
+std::string WebRoot::default_generic_error_body = "<html><body>Internal server error! :(</body></html>";

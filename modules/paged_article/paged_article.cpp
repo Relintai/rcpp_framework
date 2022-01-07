@@ -8,8 +8,6 @@
 #include <tinydir/tinydir.h>
 #include <iostream>
 
-#include "core/http/web_application.h"
-
 void PagedArticle::index(Request *request) {
 	const String r = request->get_current_path_segment();
 

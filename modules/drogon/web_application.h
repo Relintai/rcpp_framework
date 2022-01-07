@@ -1,7 +1,7 @@
 #ifndef DWEB_APPLICATION_H
 #define DWEB_APPLICATION_H
 
-#include "core/http/web_application.h"
+#include "core/http/web_server.h"
 
 #include "core/object.h"
 #include <functional>
@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 
+#include <memory>
 #include <mutex>
 
 #include "core/http/handler_instance.h"
@@ -29,16 +30,10 @@ using namespace drogon;
 
 class Request;
 
-class DWebApplication : public WebApplication {
-	RCPP_OBJECT(DWebApplication, WebApplication);
+class DWebApplication : public WebServer {
+	RCPP_OBJECT(DWebApplication, WebServer);
 
 public:
-	void load_settings();
-	void setup_routes();
-	void setup_middleware();
-
-	void migrate();
-
 	void add_listener(const std::string &ip, uint16_t port,
 			bool useSSL = false, const std::string &certFile = "", const std::string &keyFile = "", bool useOldTLS = false,
 			const std::vector<std::pair<std::string, std::string> > &sslConfCmds = {});
@@ -198,7 +193,7 @@ protected:
 	std::string _home_page_file{ "index.html" };
 
 	const std::unique_ptr<ListenerManager> _listener_manager;
-	std::unique_ptr<SessionManager> _session_manager;
+	std::unique_ptr<drogon::SessionManager> _session_manager;
 
 	bool _enable_server_header{ true };
 	bool _enable_date_header{ true };

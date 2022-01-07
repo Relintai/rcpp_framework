@@ -27,22 +27,6 @@
 #include <io.h>
 #endif
 
-void DWebApplication::load_settings() {
-}
-
-void DWebApplication::setup_routes() {
-	default_error_handler_func = WebApplication::default_fallback_error_handler;
-
-	error_handler_map[404] = WebApplication::default_404_error_handler;
-}
-
-void DWebApplication::setup_middleware() {
-	middlewares.push_back(HandlerInstance([this](Object *instance, Request *request) { this->default_routing_middleware(instance, request); }));
-}
-
-void DWebApplication::migrate() {
-}
-
 void DWebApplication::add_listener(const std::string &ip, uint16_t port, bool useSSL, const std::string &certFile, const std::string &keyFile, bool useOldTLS, const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
 	assert(!_running);
 
@@ -540,7 +524,7 @@ void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::funct
 	//callback(resp);
 
 	DRequest *request = DRequest::get();
-	request->application = this;
+	request->server = this;
 	request->request = std::shared_ptr<drogon::HttpRequestImpl>(req);
 	request->callback = callback; //std::move(callback);
 
@@ -656,8 +640,8 @@ void DWebApplication::find_session_for_request(const HttpRequestImplPtr &req) {
 //void forward(const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout);
 //void forward(const HttpRequestImplPtr &req,std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout = 0);
 
-DWebApplication::DWebApplication() :
-		_listener_manager(new ListenerManager()) {
+DWebApplication::DWebApplication() : 
+		_listener_manager(new ListenerManager()), WebServer() {
 	//staticFileRouterPtr_(new StaticFileRouter{}),
 	/*
 		httpCtrlsRouterPtr_(new HttpControllersRouter(*staticFileRouterPtr_,
@@ -687,7 +671,4 @@ DWebApplication::DWebApplication() :
 }
 
 DWebApplication::~DWebApplication() {
-	main_route_map.clear();
-	error_handler_map.clear();
-	middlewares.clear();
 }
