@@ -1,5 +1,5 @@
-#ifndef DWEB_APPLICATION_H
-#define DWEB_APPLICATION_H
+#ifndef DROGON_WEB_SERVER_H
+#define DROGON_WEB_SERVER_H
 
 #include "core/http/web_server.h"
 
@@ -30,8 +30,8 @@ using namespace drogon;
 
 class Request;
 
-class DWebApplication : public WebServer {
-	RCPP_OBJECT(DWebApplication, WebServer);
+class DrogonWebServer : public WebServer {
+	RCPP_OBJECT(DrogonWebServer, WebServer);
 
 public:
 	void add_listener(const std::string &ip, uint16_t port,
@@ -147,8 +147,8 @@ public:
 	//void forward(const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout);
 	//void forward(const HttpRequestImplPtr &req,std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout = 0);
 
-	DWebApplication();
-	virtual ~DWebApplication();
+	DrogonWebServer();
+	virtual ~DrogonWebServer();
 
 protected:
 	// We use a uuid string as session id;

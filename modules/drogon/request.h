@@ -15,7 +15,7 @@
 
 //using namespace drogon;
 
-class DWebApplication;
+class DrogonWebServer;
 
 class DRequest : public Request {
 public:

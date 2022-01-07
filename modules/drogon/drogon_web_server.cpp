@@ -1,4 +1,4 @@
-#include "web_application.h"
+#include "drogon_web_server.h"
 
 #include <functional>
 #include <string>
@@ -27,32 +27,32 @@
 #include <io.h>
 #endif
 
-void DWebApplication::add_listener(const std::string &ip, uint16_t port, bool useSSL, const std::string &certFile, const std::string &keyFile, bool useOldTLS, const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
+void DrogonWebServer::add_listener(const std::string &ip, uint16_t port, bool useSSL, const std::string &certFile, const std::string &keyFile, bool useOldTLS, const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
 	assert(!_running);
 
 	_listener_manager->addListener(ip, port, useSSL, certFile, keyFile, useOldTLS, sslConfCmds);
 }
 
-void DWebApplication::set_thread_num(size_t thread_num) {
+void DrogonWebServer::set_thread_num(size_t thread_num) {
 	if (_thread_num == 0) {
 		_thread_num = std::thread::hardware_concurrency();
 	}
 
 	_thread_num = _thread_num;
 }
-size_t DWebApplication::get_thread_num() const {
+size_t DrogonWebServer::get_thread_num() const {
 	return _thread_num;
 }
 
-void DWebApplication::set_ssl_config_commands(const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
+void DrogonWebServer::set_ssl_config_commands(const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
 	_ssl_conf_cmds = sslConfCmds;
 }
-void DWebApplication::set_ssl_files(const std::string &certPath, const std::string &keyPath) {
+void DrogonWebServer::set_ssl_files(const std::string &certPath, const std::string &keyPath) {
 	_ssl_cert_path = certPath;
 	_ssl_key_path = keyPath;
 }
 
-void DWebApplication::run() {
+void DrogonWebServer::run() {
 	if (!get_loop()->isInLoopThread()) {
 		get_loop()->moveToCurrentThread();
 	}
@@ -155,9 +155,9 @@ void DWebApplication::run() {
 
 	// Create all listeners.
 	auto ioLoops = _listener_manager->createListeners(get_loop(),
-			std::bind(&DWebApplication::on_async_request, this, std::placeholders::_1, std::placeholders::_2),
-			std::bind(&DWebApplication::on_new_websock_request, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
-			std::bind(&DWebApplication::on_connection, this, std::placeholders::_1),
+			std::bind(&DrogonWebServer::on_async_request, this, std::placeholders::_1, std::placeholders::_2),
+			std::bind(&DrogonWebServer::on_new_websock_request, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
+			std::bind(&DrogonWebServer::on_connection, this, std::placeholders::_1),
 			_idle_connection_timeout, _ssl_cert_path, _ssl_key_path, _ssl_conf_cmds, _thread_num, _sync_advices, _pre_sending_advices);
 
 	assert(ioLoops.size() == _thread_num);
@@ -212,55 +212,55 @@ void DWebApplication::run() {
 	get_loop()->loop();
 }
 
-void DWebApplication::stop() {
+void DrogonWebServer::stop() {
 }
 
-void DWebApplication::enable_session(const size_t timeout) {
+void DrogonWebServer::enable_session(const size_t timeout) {
 	_use_session = true;
 	_session_timeout = timeout;
 }
 
-void DWebApplication::disable_session() {
+void DrogonWebServer::disable_session() {
 	_use_session = false;
 }
 
 //todo think about it
-const std::string &DWebApplication::get_document_root() const {
+const std::string &DrogonWebServer::get_document_root() const {
 	return _root_path;
 }
-void DWebApplication::set_document_root(const std::string &rootPath) {
+void DrogonWebServer::set_document_root(const std::string &rootPath) {
 	_root_path = rootPath;
 }
 
-void DWebApplication::set_static_file_headers(const std::vector<std::pair<std::string, std::string> > &headers) {
+void DrogonWebServer::set_static_file_headers(const std::vector<std::pair<std::string, std::string> > &headers) {
 	//	staticFileRouterPtr_->setStaticFileHeaders(headers);
 }
 
-const std::string &DWebApplication::get_upload_path() const {
+const std::string &DrogonWebServer::get_upload_path() const {
 	return _upload_path;
 }
 
-const std::shared_ptr<trantor::Resolver> &DWebApplication::get_resolver() const {
+const std::shared_ptr<trantor::Resolver> &DrogonWebServer::get_resolver() const {
 	static std::shared_ptr<trantor::Resolver> resolver = trantor::Resolver::newResolver(get_loop());
 	return resolver;
 }
 
-void DWebApplication::set_upload_path(const std::string &uploadPath) {
+void DrogonWebServer::set_upload_path(const std::string &uploadPath) {
 	_upload_path = uploadPath;
 }
-void DWebApplication::set_file_types(const std::vector<std::string> &types) {
+void DrogonWebServer::set_file_types(const std::vector<std::string> &types) {
 	//staticFileRouterPtr_->setFileTypes(types);
 	//return *this;
 }
 
-void DWebApplication::set_max_connection_num(size_t maxConnections) {
+void DrogonWebServer::set_max_connection_num(size_t maxConnections) {
 	_max_connection_num = maxConnections;
 }
-void DWebApplication::set_max_connection_num_per_ip(size_t maxConnectionsPerIP) {
+void DrogonWebServer::set_max_connection_num_per_ip(size_t maxConnectionsPerIP) {
 	_max_connection_num_per_ip = maxConnectionsPerIP;
 }
 
-void DWebApplication::set_log_path(const std::string &logPath, const std::string &logfileBaseName, size_t logfileSize) {
+void DrogonWebServer::set_log_path(const std::string &logPath, const std::string &logfileBaseName, size_t logfileSize) {
 	if (logPath.empty())
 		return;
 
@@ -286,174 +286,174 @@ void DWebApplication::set_log_path(const std::string &logPath, const std::string
 	_logfile_base_name = logfileBaseName;
 	_logfile_size = logfileSize;
 }
-void DWebApplication::set_log_level(trantor::Logger::LogLevel level) {
+void DrogonWebServer::set_log_level(trantor::Logger::LogLevel level) {
 	trantor::Logger::setLogLevel(level);
 }
 
-void DWebApplication::enable_sendfile(bool sendFile) {
+void DrogonWebServer::enable_sendfile(bool sendFile) {
 	_use_sendfile = sendFile;
 }
 
-void DWebApplication::enable_gzip(bool useGzip) {
+void DrogonWebServer::enable_gzip(bool useGzip) {
 	_use_gzip = useGzip;
 }
 
-bool DWebApplication::is_gzip_enabled() const {
+bool DrogonWebServer::is_gzip_enabled() const {
 	return _use_gzip;
 }
 
-void DWebApplication::enable_brotli(bool useBrotli) {
+void DrogonWebServer::enable_brotli(bool useBrotli) {
 	_use_brotli = useBrotli;
 }
 
-bool DWebApplication::is_brotli_enabled() const {
+bool DrogonWebServer::is_brotli_enabled() const {
 	return _use_brotli;
 }
 
-void DWebApplication::set_static_files_cache_time(int cacheTime) {
+void DrogonWebServer::set_static_files_cache_time(int cacheTime) {
 	//staticFileRouterPtr_->setStaticFilesCacheTime(cacheTime);
 }
 
-int DWebApplication::static_files_cache_time() const {
+int DrogonWebServer::static_files_cache_time() const {
 	//return staticFileRouterPtr_->staticFilesCacheTime();
 	return 0;
 }
 
-void DWebApplication::set_idle_connection_timeout(size_t timeout) {
+void DrogonWebServer::set_idle_connection_timeout(size_t timeout) {
 	_idle_connection_timeout = timeout;
 }
-void DWebApplication::set_keepalive_requests_number(const size_t number) {
+void DrogonWebServer::set_keepalive_requests_number(const size_t number) {
 	_keepalive_requests_number = number;
 }
-void DWebApplication::set_pipelining_requests_number(const size_t number) {
+void DrogonWebServer::set_pipelining_requests_number(const size_t number) {
 	_pipelining_requests_number = number;
 }
 
-void DWebApplication::set_gzip_static(bool useGzipStatic) {
+void DrogonWebServer::set_gzip_static(bool useGzipStatic) {
 	//staticFileRouterPtr_->setGzipStatic(useGzipStatic);
 }
-void DWebApplication::set_br_static(bool useGzipStatic) {
+void DrogonWebServer::set_br_static(bool useGzipStatic) {
 	//staticFileRouterPtr_->setBrStatic(useGzipStatic);
 }
 
-void DWebApplication::set_client_max_body_size(size_t maxSize) {
+void DrogonWebServer::set_client_max_body_size(size_t maxSize) {
 	_client_max_body_size = maxSize;
 }
-void DWebApplication::set_client_max_memory_body_size(size_t maxSize) {
+void DrogonWebServer::set_client_max_memory_body_size(size_t maxSize) {
 	_client_max_memory_body_size = maxSize;
 }
-void DWebApplication::set_client_max_web_socket_message_size(size_t maxSize) {
+void DrogonWebServer::set_client_max_web_socket_message_size(size_t maxSize) {
 	_client_max_web_socket_message_size = maxSize;
 }
 
-void DWebApplication::set_home_page(const std::string &homePageFile) {
+void DrogonWebServer::set_home_page(const std::string &homePageFile) {
 	_home_page_file = homePageFile;
 }
-const std::string &DWebApplication::get_home_page() const {
+const std::string &DrogonWebServer::get_home_page() const {
 	return _home_page_file;
 }
 
-void DWebApplication::set_implicit_page_enable(bool useImplicitPage) {
+void DrogonWebServer::set_implicit_page_enable(bool useImplicitPage) {
 	//staticFileRouterPtr_->setImplicitPageEnable(useImplicitPage);
 }
-bool DWebApplication::is_implicit_page_enabled() const {
+bool DrogonWebServer::is_implicit_page_enabled() const {
 	//return staticFileRouterPtr_->isImplicitPageEnabled();
 	return false;
 }
-void DWebApplication::set_implicit_page(const std::string &implicitPageFile) {
+void DrogonWebServer::set_implicit_page(const std::string &implicitPageFile) {
 	//staticFileRouterPtr_->setImplicitPage(implicitPageFile);
 }
 
-const std::string &DWebApplication::get_implicit_page() const {
+const std::string &DrogonWebServer::get_implicit_page() const {
 	//return staticFileRouterPtr_->getImplicitPage();
 	static std::string s = "";
 	return s;
 }
-size_t DWebApplication::get_client_max_body_size() const {
+size_t DrogonWebServer::get_client_max_body_size() const {
 	return _client_max_body_size;
 }
-size_t DWebApplication::get_client_max_memory_body_size() const {
+size_t DrogonWebServer::get_client_max_memory_body_size() const {
 	return _client_max_memory_body_size;
 }
-size_t DWebApplication::get_client_max_web_socket_message_size() const {
+size_t DrogonWebServer::get_client_max_web_socket_message_size() const {
 	return _client_max_web_socket_message_size;
 }
 
-size_t DWebApplication::keepalive_requests_number() const {
+size_t DrogonWebServer::keepalive_requests_number() const {
 	return _keepalive_requests_number;
 }
-size_t DWebApplication::pipelining_requests_number() const {
+size_t DrogonWebServer::pipelining_requests_number() const {
 	return _pipelining_requests_number;
 }
 
-bool DWebApplication::is_running() {
+bool DrogonWebServer::is_running() {
 	return _running;
 }
 
-void DWebApplication::set_unicode_escaping_in_json(bool enable) {
+void DrogonWebServer::set_unicode_escaping_in_json(bool enable) {
 	_using_unicode_escaping = enable;
 }
 
-bool DWebApplication::is_unicode_escaping_used_in_json() const {
+bool DrogonWebServer::is_unicode_escaping_used_in_json() const {
 	return _using_unicode_escaping;
 }
-void DWebApplication::set_float_precision_in_json(unsigned int precision, const std::string &precisionType) {
+void DrogonWebServer::set_float_precision_in_json(unsigned int precision, const std::string &precisionType) {
 	_float_precision_in_json = std::make_pair(precision, precisionType);
 }
 
-const std::pair<unsigned int, std::string> &DWebApplication::get_float_precision_in_json() const {
+const std::pair<unsigned int, std::string> &DrogonWebServer::get_float_precision_in_json() const {
 	return _float_precision_in_json;
 }
 
-trantor::EventLoop *DWebApplication::get_loop() const {
+trantor::EventLoop *DrogonWebServer::get_loop() const {
 	return _loop;
 }
-trantor::EventLoop *DWebApplication::get_io_loop(size_t id) const {
+trantor::EventLoop *DrogonWebServer::get_io_loop(size_t id) const {
 	assert(_listener_manager);
 
 	return _listener_manager->getIOLoop(id);
 }
 
-void DWebApplication::set_server_header_field(const std::string &server) {
+void DrogonWebServer::set_server_header_field(const std::string &server) {
 	assert(!_running);
 	assert(server.find("\r\n") == std::string::npos);
 	_server_header = "server: " + server + "\r\n";
 }
 
-void DWebApplication::enable_server_header(bool flag) {
+void DrogonWebServer::enable_server_header(bool flag) {
 	_enable_server_header = flag;
 }
-void DWebApplication::enable_date_header(bool flag) {
+void DrogonWebServer::enable_date_header(bool flag) {
 	_enable_date_header = flag;
 }
 
-bool DWebApplication::send_server_header() const {
+bool DrogonWebServer::send_server_header() const {
 	return _enable_server_header;
 }
-bool DWebApplication::send_date_header() const {
+bool DrogonWebServer::send_date_header() const {
 	return _enable_date_header;
 }
 
-const std::string &DWebApplication::get_server_header_string() const {
+const std::string &DrogonWebServer::get_server_header_string() const {
 	return _server_header;
 }
 
-std::vector<trantor::InetAddress> DWebApplication::get_listeners() const {
+std::vector<trantor::InetAddress> DrogonWebServer::get_listeners() const {
 	return _listener_manager->getListeners();
 }
 
-bool DWebApplication::use_sendfile() const {
+bool DrogonWebServer::use_sendfile() const {
 	return _use_sendfile;
 }
 
-bool DWebApplication::support_ssl() const {
+bool DrogonWebServer::support_ssl() const {
 #ifdef OPENSSL_FOUND
 	return true;
 #endif
 	return false;
 }
 
-size_t DWebApplication::get_current_thread_index() const {
+size_t DrogonWebServer::get_current_thread_index() const {
 	trantor::EventLoop *loop = trantor::EventLoop::getEventLoopOfCurrentThread();
 
 	if (loop) {
@@ -463,15 +463,15 @@ size_t DWebApplication::get_current_thread_index() const {
 	return (std::numeric_limits<size_t>::max)();
 }
 
-void DWebApplication::enable_reuse_port(bool enable) {
+void DrogonWebServer::enable_reuse_port(bool enable) {
 	_reuse_port = enable;
 }
 
-bool DWebApplication::reuse_port() const {
+bool DrogonWebServer::reuse_port() const {
 	return _reuse_port;
 }
 
-void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback) {
+void DrogonWebServer::on_async_request(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback) {
 
 	LOG_TRACE << "new request:" << req->peerAddr().toIpPort() << "->" << req->localAddr().toIpPort();
 	LOG_TRACE << "Headers " << req->methodString() << " " << req->path();
@@ -533,7 +533,7 @@ void DWebApplication::on_async_request(const HttpRequestImplPtr &req, std::funct
 	handle_request(request);
 }
 
-void DWebApplication::on_new_websock_request(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback, const WebSocketConnectionImplPtr &wsConnPtr) {
+void DrogonWebServer::on_new_websock_request(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback, const WebSocketConnectionImplPtr &wsConnPtr) {
 	LOG_INFO << "on_new_websock_request";
 
 	/*
@@ -565,7 +565,7 @@ void DWebApplication::on_new_websock_request(const HttpRequestImplPtr &req, std:
 				});
 	}*/
 }
-void DWebApplication::on_connection(const trantor::TcpConnectionPtr &conn) {
+void DrogonWebServer::on_connection(const trantor::TcpConnectionPtr &conn) {
 	static std::mutex mtx;
 	LOG_TRACE << "connect!!!" << _max_connection_num
 			  << " num=" << _connection_num.load();
@@ -622,7 +622,7 @@ void DWebApplication::on_connection(const trantor::TcpConnectionPtr &conn) {
 	}
 }
 
-void DWebApplication::find_session_for_request(const HttpRequestImplPtr &req) {
+void DrogonWebServer::find_session_for_request(const HttpRequestImplPtr &req) {
 	if (_use_session) {
 		std::string sessionId = req->getCookie("JSESSIONID");
 		bool needSetJsessionid = false;
@@ -640,7 +640,7 @@ void DWebApplication::find_session_for_request(const HttpRequestImplPtr &req) {
 //void forward(const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout);
 //void forward(const HttpRequestImplPtr &req,std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout = 0);
 
-DWebApplication::DWebApplication() : 
+DrogonWebServer::DrogonWebServer() : 
 		_listener_manager(new ListenerManager()), WebServer() {
 	//staticFileRouterPtr_(new StaticFileRouter{}),
 	/*
@@ -670,5 +670,5 @@ DWebApplication::DWebApplication() :
 	_upload_path = _root_path + "uploads";
 }
 
-DWebApplication::~DWebApplication() {
+DrogonWebServer::~DrogonWebServer() {
 }
