@@ -16,6 +16,7 @@ env.add_source_files(env.core_sources, "./database/*.cpp")
 env.add_source_files(env.core_sources, "./os/*.cpp")
 env.add_source_files(env.core_sources, "./threading/*.cpp")
 env.add_source_files(env.core_sources, "./settings/*.cpp")
+env.add_source_files(env.core_sources, "./nodes/*.cpp")
 
 # Build it all as a library
 lib = env.add_library("core", env.core_sources)
