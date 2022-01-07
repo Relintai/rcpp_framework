@@ -21,6 +21,10 @@ void WebNode::migrate() {
 
 }
 
+void WebNode::create_default_entries() {
+
+}
+
 WebNode::WebNode() : Node() {
     create_validators();
 }
