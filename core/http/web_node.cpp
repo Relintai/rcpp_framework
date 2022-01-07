@@ -21,7 +21,7 @@ void WebNode::migrate() {
 
 }
 
-WebNode::WebNode() {
+WebNode::WebNode() : Node() {
     create_validators();
 }
 
