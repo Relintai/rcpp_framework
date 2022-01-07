@@ -50,15 +50,15 @@ public:
 	};
 
 	void admin_permission_editor(Request *request);
-	void admin_render_permission_editor_main_view(Request *request, RBACAdminEditPermissionView* data);
-	void admin_render_permission_editor_entry_edit_create_view(Request *request, RBACAdminEditPermissionView* data);
-	bool admin_process_permission_editor_entry_edit_create_post(Request *request, RBACAdminEditPermissionView* data);
+	void admin_render_permission_editor_main_view(Request *request, RBACAdminEditPermissionView *data);
+	void admin_render_permission_editor_entry_edit_create_view(Request *request, RBACAdminEditPermissionView *data);
+	bool admin_process_permission_editor_entry_edit_create_post(Request *request, RBACAdminEditPermissionView *data);
 
 	void admin_render_rank_list(Request *request);
 	void admin_render_rank_editor(Request *request);
 
-	void register_permission(const String& name, const int val);
-	void register_rank_permission(const String& name, const int val);
+	void register_permission(const String &name, const int val);
+	void register_rank_permission(const String &name, const int val);
 	void clear_registered_permissions();
 
 	void initialize();
@@ -68,13 +68,29 @@ public:
 
 	int get_default_user_rank_id();
 	Ref<RBACRank> get_default_user_rank();
-	
+
 	int get_default_rank_id();
 	Ref<RBACRank> get_default_rank();
 
 	String &get_redirect_url();
 
 	bool continue_on_missing_default_rank();
+
+	// db
+
+	virtual std::map<int, Ref<RBACRank> > db_load_ranks();
+
+	virtual void db_save(const Ref<RBACRank> &rank);
+	virtual void db_save_rank(const Ref<RBACRank> &rank);
+	virtual void db_save_permission(const Ref<RBACPermission> &permission);
+	virtual int db_get_default_rank();
+	virtual int db_get_default_user_rank();
+	virtual String db_get_redirect_url();
+
+	void create_table();
+	void drop_table();
+	void migrate();
+	void create_default_entries();
 
 	static RBACController *get_singleton();
 
@@ -96,11 +112,14 @@ protected:
 		PermissionEntry() {
 		}
 
-		PermissionEntry(const String& p_name, const int p_val) {
+		PermissionEntry(const String &p_name, const int p_val) {
 			name = p_name;
 			value = p_val;
 		}
 	};
+
+	String _rbac_ranks_table;
+	String _rbac_permissions_table;
 
 	Vector<PermissionEntry> _registered_permissions;
 	Vector<PermissionEntry> _registered_rank_permissions;

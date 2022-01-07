@@ -9,8 +9,13 @@
 #include "core/http/request.h"
 #include "core/http/session_manager.h"
 #include "rbac_default_permissions.h"
-#include "rbac_model.h"
 #include "modules/users/user.h"
+
+#include "core/database/database.h"
+#include "core/database/database_manager.h"
+#include "core/database/query_builder.h"
+#include "core/database/query_result.h"
+#include "core/database/table_builder.h"
 
 void RBACController::handle_request_main(Request *request) {
 }
@@ -73,7 +78,7 @@ void RBACController::admin_handle_new_rank(Request *request) {
 
 		rank->rank_permissions = rank_permissions;
 
-		RBACModel::get_singleton()->save_rank(rank);
+		db_save_rank(rank);
 
 		_ranks[rank->id] = rank;
 
@@ -139,7 +144,7 @@ void RBACController::admin_handle_edit_rank(Request *request) {
 
 		rank->rank_permissions = rank_permissions;
 
-		RBACModel::get_singleton()->save_rank(rank);
+		db_save_rank(rank);
 
 		data.messages.push_back("Save Success!");
 	}
@@ -456,7 +461,7 @@ bool RBACController::admin_process_permission_editor_entry_edit_create_post(Requ
 	//set this up in the form by default
 	//perm->sort_order = request->get_parameter("sort_order").to_int();
 
-	RBACModel::get_singleton()->save_permission(perm);
+	db_save_permission(perm);
 
 	if (perm->id == 0) {
 		RLOG_ERR("RBACController::admin_process_permission_editor_entry_edit_create_post: perm->id == 0!\n");
@@ -567,9 +572,9 @@ void RBACController::clear_registered_permissions() {
 }
 
 void RBACController::initialize() {
-	_ranks = RBACModel::get_singleton()->load_ranks();
-	_default_rank_id = RBACModel::get_singleton()->get_default_rank();
-	_default_user_rank_id = RBACModel::get_singleton()->get_default_user_rank();
+	_ranks = db_load_ranks();
+	_default_rank_id = db_get_default_rank();
+	_default_user_rank_id = db_get_default_user_rank();
 
 	register_permissions();
 }
@@ -612,6 +617,233 @@ bool RBACController::continue_on_missing_default_rank() {
 	return false;
 }
 
+//DB
+
+std::map<int, Ref<RBACRank> > RBACController::db_load_ranks() {
+	std::map<int, Ref<RBACRank> > ranks;
+
+	Ref<QueryBuilder> qb = get_query_builder();
+
+	qb->select("id,name,name_internal,settings,base_permissions,rank_permissions")->from(_rbac_ranks_table);
+	Ref<QueryResult> res =  qb->run();
+
+	while (res->next_row()) {
+		Ref<RBACRank> r;
+		r.instance();
+
+		r->id = res->get_cell_int(0);
+		r->name = res->get_cell_str(1);
+		r->name_internal = res->get_cell_str(2);
+		r->settings = res->get_cell_str(3);
+		r->base_permissions = res->get_cell_int(4);
+		r->rank_permissions = res->get_cell_int(5);
+
+		ranks[r->id] = r;
+	}
+
+	qb->reset();
+	qb->select("id,rank_id,name,url,sort_order,permissions")->from(_rbac_permissions_table);
+	res = qb->run();
+
+	while (res->next_row()) {
+		Ref<RBACPermission> p;
+		p.instance();
+
+		p->id = res->get_cell_int(0);
+		p->rank_id = res->get_cell_int(1);
+		p->name = res->get_cell_str(2);
+		p->url = res->get_cell_str(3);
+		p->sort_order = res->get_cell_int(4);
+		p->permissions = res->get_cell_int(5);
+
+		Ref<RBACRank> r = ranks[p->rank_id];
+
+		if (!r.is_valid()) {
+			RLOG_ERR("RBACModel::load_permissions: !r.is_valid()!");
+			continue;
+		}
+
+		r->permissions.push_back(p);
+	}
+
+	for (std::map<int, Ref<RBACRank> >::iterator i = ranks.begin(); i != ranks.end(); ++i) {
+		Ref<RBACRank> r = i->second;
+
+		if (r.is_valid()) {
+			r->sort_permissions();
+		}
+	}
+
+	return ranks;
+}
+
+void RBACController::db_save(const Ref<RBACRank> &rank) {
+	db_save_rank(rank);
+
+	for (int i = 0; i < rank->permissions.size(); ++i) {
+		Ref<RBACPermission> permission = rank->permissions[i];
+
+		int rid = rank->id;
+
+		if (permission->rank_id != rid) {
+			permission->rank_id = rid;
+		}
+
+		db_save_permission(permission);
+	}
+}
+
+void RBACController::db_save_rank(const Ref<RBACRank> &rank) {
+	Ref<QueryBuilder> qb = get_query_builder();
+
+	if (rank->id == 0) {
+		qb->insert(_rbac_ranks_table, "name,name_internal,settings,base_permissions,rank_permissions")->values();
+		qb->val(rank->name)->val(rank->name_internal)->val(rank->settings)->val(rank->base_permissions)->val(rank->rank_permissions);
+		qb->cvalues();
+		qb->select_last_insert_id();
+		Ref<QueryResult> res = qb->run();
+		//qb->print();
+
+		Ref<RBACRank> r = rank;
+
+		r->id = res->get_last_insert_rowid();
+	} else {
+		qb->update(_rbac_ranks_table)->set();
+		qb->setp("name", rank->name);
+		qb->setp("name_internal", rank->name_internal);
+		qb->setp("settings", rank->settings);
+		qb->setp("base_permissions", rank->base_permissions);
+		qb->setp("rank_permissions", rank->rank_permissions);
+		qb->cset();
+		qb->where()->wp("id", rank->id);
+		qb->end_command();
+		qb->run_query();
+		//qb->print();
+	}
+}
+
+void RBACController::db_save_permission(const Ref<RBACPermission> &permission) {
+	Ref<QueryBuilder> qb = get_query_builder();
+
+	if (permission->id == 0) {
+		qb->insert(_rbac_permissions_table, "rank_id,name,url,sort_order,permissions")->values();
+		qb->val(permission->rank_id)->val(permission->name)->val(permission->url);
+		qb->val(permission->sort_order)->val(permission->permissions);
+		qb->cvalues();
+		qb->select_last_insert_id();
+		Ref<QueryResult> res = qb->run();
+		//qb->print();
+
+		Ref<RBACPermission> r = permission;
+
+		r->id = res->get_last_insert_rowid();
+	} else {
+		qb->update(_rbac_permissions_table)->set();
+		qb->setp("rank_id", permission->rank_id);
+		qb->setp("name", permission->name);
+		qb->setp("url", permission->url);
+		qb->setp("sort_order", permission->sort_order);
+		qb->setp("permissions", permission->permissions);
+		qb->cset();
+		qb->where()->wp("id", permission->id);
+		qb->end_command();
+		qb->run_query();
+		//qb->print();
+	}
+}
+
+int RBACController::db_get_default_rank() {
+	//todo, load this, and save it to a table (probably a new settings class)
+	return 3;
+}
+
+int RBACController::db_get_default_user_rank() {
+	//todo, load this, and save it to a table (probably a new settings class)
+	return 2;
+}
+
+String RBACController::db_get_redirect_url() {
+	//todo, load this, and save it to a table (probably a new settings class)
+	return String("/user/login");
+}
+
+void RBACController::create_table() {
+	Ref<TableBuilder> tb = get_table_builder();
+
+	tb->create_table(_rbac_ranks_table);
+	tb->integer("id")->auto_increment()->next_row();
+	tb->varchar("name", 60)->not_null()->next_row();
+	tb->varchar("name_internal", 100)->not_null()->next_row();
+	tb->varchar("settings", 200)->not_null()->next_row();
+	tb->integer("base_permissions")->not_null()->next_row();
+	tb->integer("rank_permissions")->not_null()->next_row();
+	tb->primary_key("id");
+	tb->ccreate_table();
+	//tb->run_query();
+	//tb->print();
+
+	//tb->result = "";
+
+	tb->create_table(_rbac_permissions_table);
+	tb->integer("id")->auto_increment()->next_row();
+	tb->integer("rank_id")->not_null()->next_row();
+	tb->varchar("name", 60)->not_null()->next_row();
+	tb->varchar("url", 100)->not_null()->next_row();
+	tb->integer("sort_order")->not_null()->next_row();
+	tb->integer("permissions")->not_null()->next_row();
+
+	tb->primary_key("id");
+	tb->foreign_key("rank_id")->references(_rbac_ranks_table, "id");
+	tb->ccreate_table();
+	tb->run_query();
+	//tb->print();
+}
+void RBACController::drop_table() {
+	Ref<TableBuilder> tb = get_table_builder();
+
+	tb->drop_table_if_exists(_rbac_permissions_table)->drop_table_if_exists(_rbac_ranks_table)->run_query();
+	//tb->print();
+}
+void RBACController::migrate() {
+	drop_table();
+	create_table();
+	create_default_entries();
+}
+
+void RBACController::create_default_entries() {
+	Ref<RBACRank> admin;
+	admin.instance();
+
+	admin->name = "Admin";
+	admin->base_permissions = User::PERMISSION_ALL;
+	admin->rank_permissions = RBAC_RANK_PERMISSION_ADMIN_PANEL;
+
+	db_save_rank(admin);
+
+	Ref<RBACRank> user;
+	user.instance();
+
+	user->name = "User";
+	//user->base_permissions = User::PERMISSION_READ;
+	//user->rank_permissions = 0;
+
+	//temporary!
+	user->base_permissions = User::PERMISSION_ALL;
+	user->rank_permissions = RBAC_RANK_PERMISSION_ADMIN_PANEL;
+
+	db_save_rank(user);
+
+	Ref<RBACRank> guest;
+	guest.instance();
+
+	guest->name = "Guest";
+	guest->base_permissions = User::PERMISSION_READ;
+	guest->rank_permissions = RBAC_RANK_PERMISSION_USE_REDIRECT;
+
+	db_save_rank(guest);
+}
+
+
 RBACController *RBACController::get_singleton() {
 	return _self;
 }
@@ -625,6 +857,9 @@ RBACController::RBACController() :
 
 	_default_rank_id = 0;
 	_default_user_rank_id = 0;
+
+	_rbac_ranks_table = "rbac_ranks";
+	_rbac_permissions_table = "rbac_permissions";
 
 	_self = this;
 }
