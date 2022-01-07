@@ -3211,6 +3211,18 @@ HTMLTag *HTMLBuilder::input_week(const String &name, const String &cls, const St
 	return t;
 }
 
+HTMLTag *HTMLBuilder::input_hidden(const String& name, const String& value) {
+	HTMLTag *t = input_hidden();
+
+	t->name(name);
+
+	if (value != "") {
+		t->value(value);
+	}
+
+	return t;
+}
+
 void HTMLBuilder::f() {
 	write_tag();
 }

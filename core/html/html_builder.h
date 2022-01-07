@@ -500,6 +500,7 @@ public:
 	HTMLTag *input_time(const String& name, const String& cls = "", const String& id = "", const String& vmin = "", const String& vmax = "", const String& vstep = "");
 	HTMLTag *input_url(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "", const String& minlength = "", const String& maxlength = "", const String& size = "");
 	HTMLTag *input_week(const String& name, const String& cls = "", const String& id = "", const String& vmin = "", const String& vmax = "");
+	HTMLTag *input_hidden(const String& name, const String& value);
 
 	void f();
 
