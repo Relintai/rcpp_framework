@@ -17,6 +17,7 @@ public:
 	~SharedResource();
 
 private:
+	//todo add read write lock instead of this
 	Mutex _mutex;
 };
 
