@@ -50,14 +50,14 @@ void UserController::handle_login_request_default(Request *request) {
 
 	if (request->get_method() == HTTP_METHOD_POST) {
 
-		//this is probbaly not needed
-		//it's ok for now as I need to test the validators more
+		// this is probbaly not needed
+		// it's ok for now as I need to test the validators more
 		Vector<String> errors;
 		_login_validator->validate(request, &errors);
 		for (int i = 0; i < errors.size(); ++i) {
 			data.error_str += errors[i] + "<br>";
 		}
-		//not needed end
+		// not needed end
 
 		data.uname_val = request->get_parameter("username");
 		data.pass_val = request->get_parameter("password");
@@ -109,7 +109,7 @@ void UserController::render_login_request_default(Request *request, LoginRequest
 	b.div()->cls("login");
 	{
 
-		//todo href path helper
+		// todo href path helper
 		b.form()->method("POST")->href("/user/login");
 		{
 			b.w("Username");
@@ -154,8 +154,8 @@ void UserController::handle_register_request_default(Request *request) {
 		data.pass_val = request->get_parameter("password");
 		data.pass_check_val = request->get_parameter("password_check");
 
-		//todo username length etc check
-		//todo pw length etc check
+		// todo username length etc check
+		// todo pw length etc check
 
 		if (is_username_taken(data.uname_val)) {
 			data.error_str += "Username already taken!<br>";
@@ -175,7 +175,7 @@ void UserController::handle_register_request_default(Request *request) {
 
 			user->name_user_input = data.uname_val;
 			user->email_user_input = data.email_val;
-			
+
 			create_password(user, data.pass_val);
 			db_save_user(user);
 
@@ -223,7 +223,7 @@ void UserController::render_register_request_default(Request *request, RegisterR
 
 	b.div()->cls("register");
 	{
-		//todo href path helper
+		// todo href path helper
 		b.form()->method("POST")->href("/user/register");
 		{
 			b.w("Username");
@@ -271,7 +271,7 @@ void UserController::render_already_logged_in_error(Request *request) {
 void UserController::render_login_success(Request *request) {
 	request->body = "Login Success!<br>";
 
-	//request->compile_and_send_body();
+	// request->compile_and_send_body();
 	request->send_redirect("/user/settings");
 }
 
@@ -337,7 +337,7 @@ void UserController::handle_settings_request(Ref<User> &user, Request *request) 
 				if (is_username_taken(data.uname_val)) {
 					data.error_str += "Username already taken!<br>";
 				} else {
-					//todo sanitize for html special chars!
+					// todo sanitize for html special chars!
 					user->name_user_input = data.uname_val;
 					changed = true;
 					data.uname_val = "";
@@ -348,8 +348,8 @@ void UserController::handle_settings_request(Ref<User> &user, Request *request) 
 				if (is_email_taken(data.email_val)) {
 					data.error_str += "Email already in use!<br>";
 				} else {
-					//todo sanitize for html special chars!
-					//also send email
+					// todo sanitize for html special chars!
+					// also send email
 					user->email_user_input = data.email_val;
 					changed = true;
 					data.email_val = "";
@@ -393,7 +393,7 @@ void UserController::render_settings_request(Ref<User> &user, Request *request, 
 
 	b.div()->cls("settings");
 	{
-		//todo href path helper
+		// todo href path helper
 		b.form()->method("POST")->href("/user/settings");
 		{
 			b.w("Username");
@@ -461,7 +461,7 @@ void UserController::handle_delete_request(Ref<User> &user, Request *request) {
 
 void UserController::create_validators() {
 	if (!_login_validator) {
-		//Login
+		// Login
 		_login_validator = new FormValidator();
 
 		_login_validator->new_field("username", "Username")->need_to_exist()->need_to_be_alpha_numeric()->need_minimum_length(5)->need_maximum_length(20);
@@ -472,7 +472,7 @@ void UserController::create_validators() {
 	}
 
 	if (!_registration_validator) {
-		//Registration
+		// Registration
 		_registration_validator = new FormValidator();
 
 		_registration_validator->new_field("username", "Username")->need_to_exist()->need_to_be_alpha_numeric()->need_minimum_length(5)->need_maximum_length(20);
@@ -514,7 +514,7 @@ void UserController::user_session_setup_middleware(Object *instance, Request *re
 			if (u.is_valid()) {
 				request->reference_data["user"] = u;
 			} else {
-				//log
+				// log
 				request->session->remove_int("user_id");
 			}
 		}
@@ -522,7 +522,6 @@ void UserController::user_session_setup_middleware(Object *instance, Request *re
 
 	request->next_stage();
 }
-
 
 Ref<User> UserController::db_get_user(const int id) {
 	if (id == 0) {
@@ -635,7 +634,7 @@ void UserController::db_save_user(Ref<User> &user) {
 		b->cset();
 		b->where()->wp("id", user->id);
 
-		//b->print();
+		// b->print();
 
 		b->run_query();
 	}
@@ -647,7 +646,7 @@ Vector<Ref<User> > UserController::db_get_all() {
 	b->select("id, username, email, rank, pre_salt, post_salt, password_hash, banned, password_reset_token, locked");
 	b->from(_table_name);
 	b->end_command();
-	//b->print();
+	// b->print();
 
 	Vector<Ref<User> > users;
 
@@ -709,7 +708,7 @@ void UserController::create_password(Ref<User> &user, const String &p_password) 
 		return;
 	}
 
-	//todo improve a bit
+	// todo improve a bit
 	user->pre_salt = hash_password(user, user->name_user_input + user->email_user_input);
 	user->post_salt = hash_password(user, user->email_user_input + user->name_user_input);
 
@@ -748,7 +747,7 @@ void UserController::create_table() {
 	tb->primary_key("id");
 	tb->ccreate_table();
 	tb->run_query();
-	//tb->print();
+	// tb->print();
 }
 void UserController::drop_table() {
 	Ref<TableBuilder> tb = get_table_builder();
@@ -770,7 +769,6 @@ void UserController::create_test_users() {
 
 	create_password(user, "Password");
 	db_save_user(user);
-
 
 	user = create_user();
 
