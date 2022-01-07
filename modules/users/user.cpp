@@ -20,7 +20,6 @@
 #include "core/http/request.h"
 #include "core/http/session_manager.h"
 #include "core/utils.h"
-#include "user_model.h"
 
 String User::to_json(rapidjson::Document *into) {
 	rapidjson::Document *document;

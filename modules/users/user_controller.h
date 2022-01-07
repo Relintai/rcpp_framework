@@ -1,19 +1,19 @@
 #ifndef USER_CONTROLLER_H
 #define USER_CONTROLLER_H
 
-#include "core/string.h"
 #include "core/containers/vector.h"
+#include "core/string.h"
 
-#include "core/object.h"
+#include "core/http/web_node.h"
 
 #include "user.h"
 
 class Request;
 class FormValidator;
 
-class UserController : public Object {
-	RCPP_OBJECT(UserController, Object);
-	
+class UserController : public WebNode {
+	RCPP_OBJECT(UserController, WebNode);
+
 public:
 	virtual void handle_request_default(Request *request);
 
@@ -64,6 +64,28 @@ public:
 
 	static void user_session_setup_middleware(Object *instance, Request *request);
 
+	// db
+
+	virtual Ref<User> db_get_user(const int id);
+	virtual Ref<User> db_get_user(const String &user_name_input);
+	virtual void db_save_user(Ref<User> &user);
+
+	virtual Vector<Ref<User> > db_get_all();
+
+	virtual Ref<User> create_user();
+
+	bool is_username_taken(const String &user_name_input);
+	bool is_email_taken(const String &email_input);
+
+	virtual bool check_password(const Ref<User> &user, const String &p_password);
+	virtual void create_password(Ref<User> &user, const String &p_password);
+	virtual String hash_password(const Ref<User> &user, const String &p_password);
+
+	virtual void create_table();
+	virtual void drop_table();
+	virtual void migrate();
+	virtual void create_test_users();
+
 	static UserController *get_singleton();
 
 	UserController();
@@ -75,6 +97,11 @@ protected:
 	static FormValidator *_login_validator;
 	static FormValidator *_registration_validator;
 	static FormValidator *_profile_validator;
+
+	String _file_path;
+
+	static String _path;
+	static String _table_name;
 };
 
 #endif
