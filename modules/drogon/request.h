@@ -49,9 +49,6 @@ protected:
 	void _file_chunk_sent();
 	void _response_additional_setup(const drogon::HttpResponsePtr &req);
 
-	Vector<String> _path_stack;
-	uint32_t _path_stack_pointer;
-
 	Vector<::Cookie> _added_cookies;
 	Vector<String> _removed_cookies;
 
