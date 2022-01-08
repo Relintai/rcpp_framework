@@ -12,12 +12,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void WebRoot::load_settings() {
+void WebRoot::setup() {
+	setup_error_handlers();
+	setup_middleware();
 }
 
-void WebRoot::setup_routes() {
+void WebRoot::setup_error_handlers() {
 	default_error_handler_func = WebRoot::default_fallback_error_handler;
-
 	error_handler_map[404] = WebRoot::default_404_error_handler;
 }
 
@@ -90,17 +91,10 @@ bool WebRoot::try_send_wwwroot_file(Request *request) {
 	return false;
 }
 
-void WebRoot::send_error(int error_code, Request *request) {
-
-}
-
 void WebRoot::send_file(const std::string &path, Request *request) {
 	std::string fp = FileCache::get_singleton()->wwwroot + path;
 
 	request->send_file(fp);
-}
-
-void WebRoot::migrate() {
 }
 
 void WebRoot::register_request_update(Request *request) {
@@ -135,12 +129,13 @@ void WebRoot::update() {
 
 WebRoot::WebRoot() :
 		WebRouterNode() {
+
+	setup();
 }
 
 WebRoot::~WebRoot() {
-	main_route_map.clear();
 	error_handler_map.clear();
-	middlewares.clear();
+	_middlewares.clear();
 }
 
 std::string WebRoot::default_error_404_body = "<html><body>404 :(</body></html>";

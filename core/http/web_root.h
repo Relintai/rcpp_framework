@@ -17,12 +17,9 @@ class Request;
 
 // FileCache -> set up, for this webroot, don't use singleton
 
-// clean up unused things here
 // remove handler instances!
 
 // Update the rest of the modules to the new systems
-
-// remove middleware stack from request
 
 class WebRoot : public WebRouterNode {
 	RCPP_OBJECT(WebRoot, WebRouterNode);
@@ -35,19 +32,16 @@ public:
 	void handle_error_send_request(Request *request, const int error_code);
 
 	bool try_send_wwwroot_file(Request *request);
-	void send_error(int error_code, Request *request);
 	void send_file(const std::string &path, Request *request);
 
 	static void default_fallback_error_handler(Request *request, int error_code);
 	static void default_404_error_handler(Request *request, int error_code);
 
-	virtual void load_settings();
-	virtual void setup_routes();
+	virtual void setup();
+	virtual void setup_error_handlers();
 	virtual void setup_middleware();
 
 	void default_routing_middleware(Object *instance, Request *request);
-
-	virtual void migrate();
 
 	void register_request_update(Request *request);
 	void unregister_request_update(Request *request);
@@ -57,10 +51,6 @@ public:
 	virtual ~WebRoot();
 
 public:
-	HandlerInstance index_func;
-	std::map<std::string, HandlerInstance> main_route_map;
-	std::vector<HandlerInstance> middlewares;
-
 	Vector<Ref<Middleware> > _middlewares;
 
 	std::map<int, std::function<void(Request *, int)> > error_handler_map;
