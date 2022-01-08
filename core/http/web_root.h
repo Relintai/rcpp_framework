@@ -1,7 +1,7 @@
 #ifndef WEB_ROOT_H
 #define WEB_ROOT_H
 
-#include "core/http/web_node.h"
+#include "web_router_node.h"
 #include <functional>
 #include <map>
 #include <string>
@@ -14,8 +14,8 @@
 class Request;
 class WebServer;
 
-class WebRoot : public WebNode {
-	RCPP_OBJECT(WebRoot, WebNode);
+class WebRoot : public WebRouterNode {
+	RCPP_OBJECT(WebRoot, WebRouterNode);
 
 public:
 	static std::string default_error_404_body;

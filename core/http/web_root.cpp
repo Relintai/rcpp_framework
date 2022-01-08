@@ -138,7 +138,7 @@ WebServer *WebRoot::get_server() {
 	return Object::cast_to<WebServer>(get_tree());
 }
 
-WebRoot::WebRoot() : WebNode() {
+WebRoot::WebRoot() : WebRouterNode() {
 }
 
 WebRoot::~WebRoot() {
