@@ -13,6 +13,8 @@ class HTTPSession;
 class Request;
 
 class SessionManager : public Object {
+	RCPP_OBJECT(SessionManager, Object);
+
 public:
 	void add_session(HTTPSession *session);
 	void remove_session(HTTPSession *session);

@@ -9,6 +9,8 @@
 class SQLite3Database;
 
 class SQLite3QueryBuilder : public QueryBuilder {
+	RCPP_OBJECT(SQLite3QueryBuilder, QueryBuilder);
+
 public:
 	QueryBuilder *select();
 	QueryBuilder *update();

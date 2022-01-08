@@ -6,6 +6,8 @@
 #include "core/database/table_builder.h"
 
 class MysqlTableBuilder : public TableBuilder {
+	RCPP_OBJECT(MysqlTableBuilder, TableBuilder);
+
 public:
 	TableBuilder *create_table(const String &name);
 	TableBuilder *integer(const String &name);

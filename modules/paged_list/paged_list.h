@@ -9,6 +9,8 @@
 #include "modules/paged_article/paged_article.h"
 
 class PagedList : public Object {
+	RCPP_OBJECT(PagedList, Object);
+
 public:
 	void index(Request *request);
 

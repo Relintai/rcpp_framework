@@ -9,6 +9,8 @@
 #include <mutex>
 
 class HTTPSession : public Object {
+	RCPP_OBJECT(HTTPSession, Object);
+
 public:
 	void add_object(const String &key, Object *obj);
 	void remove_object(const String &key);

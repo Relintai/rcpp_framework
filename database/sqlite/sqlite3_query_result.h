@@ -9,6 +9,8 @@
 #include "./sqlite/sqlite3.h"
 
 class Sqlite3QueryResult : public QueryResult {
+	RCPP_OBJECT(Sqlite3QueryResult, QueryResult);
+
 public:
 	bool next_row();
 	const char* get_cell(const int index);

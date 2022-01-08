@@ -7,6 +7,8 @@
 class NodeTree;
 
 class Node : public Object {
+	RCPP_OBJECT(Node, Object);
+
 public:
 	enum {
 		NOTIFICATION_ENTER_TREE = 0,

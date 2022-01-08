@@ -8,6 +8,8 @@
 class QueryResult;
 
 class TableBuilder : public Reference {
+	RCPP_OBJECT(TableBuilder, Reference);
+	
 public:
 	virtual TableBuilder *create_table(const String &name);
 	

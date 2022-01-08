@@ -6,6 +6,8 @@
 #include "core/reference.h"
 
 class QueryResult : public Reference {
+	RCPP_OBJECT(QueryResult, Reference);
+
 public:
 	virtual bool next_row();
 	virtual const char *get_cell(const int index);

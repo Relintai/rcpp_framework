@@ -10,6 +10,8 @@ class QueryResult;
 //methods that start with an e escape their params.
 
 class QueryBuilder : public Reference {
+	RCPP_OBJECT(QueryBuilder, Reference);
+
 public:
 	virtual QueryBuilder *select();
 	virtual QueryBuilder *update();

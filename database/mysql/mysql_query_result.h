@@ -6,6 +6,8 @@
 #include <mysql.h>
 
 class MysqlQueryResult : public QueryResult {
+	RCPP_OBJECT(MysqlQueryResult, QueryResult);
+
 public:
 	bool next_row();
 	const char* get_cell(const int index);

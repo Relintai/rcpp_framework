@@ -8,6 +8,8 @@
 class SQLite3Database;
 
 class SQLite3TableBuilder : public TableBuilder {
+	RCPP_OBJECT(SQLite3TableBuilder, TableBuilder);
+
 public:
 	TableBuilder *create_table(const String &name);
 

@@ -10,6 +10,8 @@ class MysqlDatabase;
 class MysqlQueryResult;
 
 class MysqlQueryBuilder : public QueryBuilder {
+	RCPP_OBJECT(MysqlQueryBuilder, QueryBuilder);
+
 public:
 	QueryBuilder *select();
 	QueryBuilder *where();

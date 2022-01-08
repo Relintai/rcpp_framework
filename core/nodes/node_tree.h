@@ -6,6 +6,8 @@
 class Node;
 
 class NodeTree : public Object {
+	RCPP_OBJECT(NodeTree, Object);
+
 public:
 	Node *get_root();
 	virtual void set_root(Node *root);

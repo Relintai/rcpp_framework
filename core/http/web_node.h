@@ -14,6 +14,8 @@ class QueryBuilder;
 #endif
 
 class WebNode : public Node {
+	RCPP_OBJECT(WebNode, Node);
+
 public:
 	Settings *get_settings();
 	void set_settings(Settings *settings);
