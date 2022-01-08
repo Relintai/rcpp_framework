@@ -7,6 +7,7 @@
 
 class Request;
 class Settings;
+class WebServer;
 
 #ifdef DATABASES_ENABLED
 class DataBase;
@@ -40,6 +41,8 @@ public:
 	virtual void drop_table();
 	virtual void migrate();
 	virtual void create_default_entries();
+
+	WebServer *get_server();
 
 	WebNode();
 	~WebNode();

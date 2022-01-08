@@ -12,20 +12,18 @@
 #include "handler_instance.h"
 
 class Request;
-class WebServer;
 
 //Middleware turn into a class (reference)
 //add them to a folder
 //method should return bool -> true to continue, false if done
 
-//Error handlers
-//Add to WebNode api -> send_error(code) v handle_error_send_request(request, int error, variant additional data ?);
-//have generic one implemented by default
-//Webroot overrides -> uses same logic as now
-
-//notification -> variant additional data?
-
 //FileCache -> set up, for this webroot, don't use singleton
+
+//clean up unused things here
+//remove handler instances!
+
+//Update the rest of the modules to the new systems
+
 
 class WebRoot : public WebRouterNode {
 	RCPP_OBJECT(WebRoot, WebRouterNode);
@@ -55,8 +53,6 @@ public:
 	void register_request_update(Request *request);
 	void unregister_request_update(Request *request);
 	void update();
-
-	WebServer *get_server();
 
 	WebRoot();
 	virtual ~WebRoot();

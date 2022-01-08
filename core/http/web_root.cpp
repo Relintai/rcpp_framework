@@ -12,8 +12,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "core/http/web_server.h"
-
 void WebRoot::load_settings() {
 }
 
@@ -163,11 +161,6 @@ void WebRoot::update() {
 
 		r->update();
 	}
-}
-
-WebServer *WebRoot::get_server() {
-	// todo this shoult probably be cached
-	return Object::cast_to<WebServer>(get_tree());
 }
 
 WebRoot::WebRoot() :
