@@ -12,6 +12,7 @@ class WebRouterNode : public WebNode {
 public:
 	void handle_request_main(Request *request);
 	bool try_route_request_to_children(Request *request);
+	WebNode *get_request_handler_child(Request *request);
 
 	void build_handler_map();
 

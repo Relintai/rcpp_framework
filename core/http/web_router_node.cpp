@@ -33,6 +33,23 @@ bool WebRouterNode::try_route_request_to_children(Request *request) {
 	return true;
 }
 
+WebNode *WebRouterNode::get_request_handler_child(Request *request) {
+	WebNode *handler = nullptr;
+
+	// if (path == "/") {
+	if (request->get_path_segment_count() == 0) {
+		// quick shortcut
+		handler = _index_node;
+	} else {
+		const String &main_route = request->get_current_path_segment();
+		handler = _node_route_map[main_route];
+
+		request->push_path();
+	}
+
+	return handler;
+}
+
 void WebRouterNode::build_handler_map() {
 	_index_node = nullptr;
 	_node_route_map.clear();
