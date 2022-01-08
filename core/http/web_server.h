@@ -4,13 +4,13 @@
 #include "core/nodes/node_tree.h"
 
 class Request;
-class WebRoot;
+class WebNode;
 
 class WebServer : public NodeTree {
 	RCPP_OBJECT(WebServer, NodeTree);
 
 public:
-	WebRoot *get_web_root();
+	WebNode *get_web_root();
 
 	void set_root(Node *root);
 
@@ -20,7 +20,7 @@ public:
 	virtual ~WebServer();
 
 protected:
-	WebRoot *_web_root;
+	WebNode *_web_root;
 
 };
 

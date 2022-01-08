@@ -1,14 +1,14 @@
 #include "web_server.h"
 
 #include "request.h"
-#include "core/http/web_root.h"
+#include "core/http/web_node.h"
 
-WebRoot *WebServer::get_web_root() {
+WebNode *WebServer::get_web_root() {
 	return _web_root;
 }
 
 void WebServer::set_root(Node *root) {
-	WebRoot *web_root = Object::cast_to<WebRoot>(root);
+	WebNode *web_root = Object::cast_to<WebNode>(root);
 
 	ERR_FAIL_COND(!web_root);
 
