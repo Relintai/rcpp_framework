@@ -503,26 +503,6 @@ void UserController::create_validators() {
 	}
 }
 
-void UserController::user_session_setup_middleware(Object *instance, Request *request) {
-	if (request->session) {
-		int user_id = request->session->get_int("user_id");
-
-		if (user_id != 0) {
-
-			Ref<User> u = UserController::get_singleton()->db_get_user(user_id);
-
-			if (u.is_valid()) {
-				request->reference_data["user"] = u;
-			} else {
-				// log
-				request->session->remove_int("user_id");
-			}
-		}
-	}
-
-	request->next_stage();
-}
-
 Ref<User> UserController::db_get_user(const int id) {
 	if (id == 0) {
 		return Ref<User>();
@@ -810,3 +790,30 @@ FormValidator *UserController::_profile_validator = nullptr;
 
 String UserController::_path = "./";
 String UserController::_table_name = "users";
+
+
+// returnring true means handled, false means continue
+bool UserSessionSetupMiddleware::on_before_handle_request_main(Request *request) {
+	if (request->session) {
+		int user_id = request->session->get_int("user_id");
+
+		if (user_id != 0) {
+
+			Ref<User> u = UserController::get_singleton()->db_get_user(user_id);
+
+			if (u.is_valid()) {
+				request->reference_data["user"] = u;
+			} else {
+				// log
+				request->session->remove_int("user_id");
+			}
+		}
+	}
+
+	return false;
+}
+
+UserSessionSetupMiddleware::UserSessionSetupMiddleware() {
+}
+UserSessionSetupMiddleware::~UserSessionSetupMiddleware() {
+}

@@ -7,7 +7,7 @@ bool Middleware::on_before_handle_request_main(Request *request) {
 	return false;
 }
 
-Middleware::Middleware() {
+Middleware::Middleware() : Reference() {
 }
 
 Middleware::~Middleware() {

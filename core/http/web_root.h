@@ -1,30 +1,28 @@
 #ifndef WEB_ROOT_H
 #define WEB_ROOT_H
 
-#include "web_router_node.h"
+#include "core/containers/vector.h"
+#include "mutex"
 #include <functional>
 #include <map>
 #include <string>
 #include <vector>
 
-#include "mutex"
+#include "web_router_node.h"
 
 #include "handler_instance.h"
+#include "middleware.h"
 
 class Request;
 
-//Middleware turn into a class (reference)
-//add them to a folder
-//method should return bool -> true to continue, false if done
+// FileCache -> set up, for this webroot, don't use singleton
 
-//FileCache -> set up, for this webroot, don't use singleton
+// clean up unused things here
+// remove handler instances!
 
-//clean up unused things here
-//remove handler instances!
+// Update the rest of the modules to the new systems
 
-//Update the rest of the modules to the new systems
-
-//remove middleware stack from request
+// remove middleware stack from request
 
 class WebRoot : public WebRouterNode {
 	RCPP_OBJECT(WebRoot, WebRouterNode);
@@ -62,6 +60,8 @@ public:
 	HandlerInstance index_func;
 	std::map<std::string, HandlerInstance> main_route_map;
 	std::vector<HandlerInstance> middlewares;
+
+	Vector<Ref<Middleware> > _middlewares;
 
 	std::map<int, std::function<void(Request *, int)> > error_handler_map;
 	std::function<void(Request *, int)> default_error_handler_func;

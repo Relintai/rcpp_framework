@@ -3,11 +3,12 @@
 
 #include "core/string.h"
 #include "core/containers/vector.h"
+#include <mutex>
+#include <map>
 
 #include "core/object.h"
 
-#include <map>
-#include <mutex>
+#include "middleware.h"
 
 class HTTPSession;
 class Request;
@@ -29,8 +30,6 @@ public:
 
 	virtual String generate_session_id(const String &base = "");
 
-	static void session_setup_middleware(Object *instance, Request *request);
-
 	virtual void migrate();
 	virtual void create_table();
 	virtual void drop_table();
@@ -49,6 +48,17 @@ protected:
 
 	static String _table_name;
 	static String _data_table_name;
+};
+
+class SessionSetupMiddleware : public Middleware {
+	RCPP_OBJECT(SessionSetupMiddleware, Middleware);
+
+public:
+	//returnring true means handled, false means continue
+	bool on_before_handle_request_main(Request *request);
+
+	SessionSetupMiddleware();
+	~SessionSetupMiddleware();
 };
 
 #endif

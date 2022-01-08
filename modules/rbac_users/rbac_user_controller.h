@@ -3,17 +3,14 @@
 
 #include "modules/users/user_controller.h"
 
+#include "core/http/middleware.h"
+
 class Request;
 
 class RBACUserController : public UserController {
 	RCPP_OBJECT(RBACUserController, UserController);
 
 public:
-	// just session setup
-	static void rbac_user_session_setup_middleware(Object *instance, Request *request);
-	// this one also handles missing read permission / redirect
-	static void rbac_default_user_session_middleware(Object *instance, Request *request);
-
 	// db
 
 	Ref<User> db_get_user(const int id);
@@ -28,5 +25,30 @@ public:
 
 protected:
 };
+
+// just session setup
+class RBACUserSessionSetupMiddleware : public Middleware {
+	RCPP_OBJECT(RBACUserSessionSetupMiddleware, Middleware);
+
+public:
+	//returnring true means handled, false means continue
+	bool on_before_handle_request_main(Request *request);
+
+	RBACUserSessionSetupMiddleware();
+	~RBACUserSessionSetupMiddleware();
+};
+
+// this one also handles missing read permission / redirect
+class RBACDefaultUserSessionSetupMiddleware : public Middleware {
+	RCPP_OBJECT(RBACDefaultUserSessionSetupMiddleware, Middleware);
+
+public:
+	//returnring true means handled, false means continue
+	bool on_before_handle_request_main(Request *request);
+
+	RBACDefaultUserSessionSetupMiddleware();
+	~RBACDefaultUserSessionSetupMiddleware();
+};
+
 
 #endif

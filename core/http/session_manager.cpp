@@ -152,7 +152,7 @@ void SessionManager::load_sessions() {
 
 	b->select("id, session_id");
 	b->from(_table_name);
-	//b->print();
+	// b->print();
 	Ref<QueryResult> r = b->run();
 
 	while (r->next_row()) {
@@ -171,7 +171,7 @@ void SessionManager::load_sessions() {
 
 	b->select("session_db_id, key, value");
 	b->from(_data_table_name);
-	//b->print();
+	// b->print();
 	r = b->run();
 
 	while (r->next_row()) {
@@ -213,7 +213,7 @@ void SessionManager::clear() {
 }
 
 String SessionManager::generate_session_id(const String &base) {
-	//todo make something simpler / better
+	// todo make something simpler / better
 
 	SHA256 *h = SHA256::get();
 	String sid = base;
@@ -229,26 +229,6 @@ String SessionManager::generate_session_id(const String &base) {
 	return sid;
 }
 
-void SessionManager::session_setup_middleware(Object *instance, Request *request) {
-	const String sid = request->get_cookie("session_id");
-
-	if (sid == "") {
-		//You could create a session here if you want to always assign sessions to visitors.
-		//Example code:
-		//HTTPSession *session = SessionManager::get_singleton()->create_session();
-		//request->session = session;
-		//request->add_cookie(::Cookie("session_id", session->session_id));
-
-		request->next_stage();
-
-		return;
-	}
-
-	request->session = SessionManager::get_singleton()->get_session(sid);
-
-	request->next_stage();
-}
-
 void SessionManager::migrate() {
 	drop_table();
 	create_table();
@@ -262,7 +242,7 @@ void SessionManager::create_table() {
 	tb->varchar("session_id", 100)->next_row();
 	tb->primary_key("id");
 	tb->ccreate_table();
-	//tb->print();
+	// tb->print();
 	tb->run_query();
 
 	tb->result = "";
@@ -274,7 +254,7 @@ void SessionManager::create_table() {
 	tb->foreign_key("session_db_id");
 	tb->references(_table_name, "id");
 	tb->ccreate_table();
-	//tb->print();
+	// tb->print();
 	tb->run_query();
 }
 void SessionManager::drop_table() {
@@ -311,3 +291,26 @@ SessionManager::~SessionManager() {
 SessionManager *SessionManager::_self = nullptr;
 String SessionManager::_table_name = "sessions";
 String SessionManager::_data_table_name = "session_data";
+
+bool SessionSetupMiddleware::on_before_handle_request_main(Request *request) {
+	const String sid = request->get_cookie("session_id");
+
+	if (sid == "") {
+		// You could create a session here if you want to always assign sessions to visitors.
+		// Example code:
+		// HTTPSession *session = SessionManager::get_singleton()->create_session();
+		// request->session = session;
+		// request->add_cookie(::Cookie("session_id", session->session_id));
+
+		return false;
+	}
+
+	request->session = SessionManager::get_singleton()->get_session(sid);
+
+	return false;
+}
+
+SessionSetupMiddleware::SessionSetupMiddleware() {
+}
+SessionSetupMiddleware::~SessionSetupMiddleware() {
+}

@@ -7,6 +7,7 @@
 #include "core/http/web_node.h"
 
 #include "user.h"
+#include "core/http/middleware.h"
 
 class Request;
 class FormValidator;
@@ -62,8 +63,6 @@ public:
 
 	virtual void create_validators();
 
-	static void user_session_setup_middleware(Object *instance, Request *request);
-
 	// db
 
 	virtual Ref<User> db_get_user(const int id);
@@ -103,5 +102,18 @@ protected:
 	static String _path;
 	static String _table_name;
 };
+
+// just session setup
+class UserSessionSetupMiddleware : public Middleware {
+	RCPP_OBJECT(UserSessionSetupMiddleware, Middleware);
+
+public:
+	//returnring true means handled, false means continue
+	bool on_before_handle_request_main(Request *request);
+
+	UserSessionSetupMiddleware();
+	~UserSessionSetupMiddleware();
+};
+
 
 #endif

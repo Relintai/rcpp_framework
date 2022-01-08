@@ -22,54 +22,21 @@ void WebRoot::setup_routes() {
 }
 
 void WebRoot::setup_middleware() {
-	// If you want sessions add this to your inherited class. Should probably be the first one.
-	// middlewares.push_back(HandlerInstance(::SessionManager::session_setup_middleware));
+	// Middlewares get processed in the order they are in the _middlewares array
 
-	middlewares.push_back(HandlerInstance([this](Object *instance, Request *request) { this->default_routing_middleware(instance, request); }));
-}
+	// If you want sessions add this to your inherited class. 
+	// _middlewares.push_back(Ref<SessionSetupMiddleware>(new SessionSetupMiddleware()));
 
-void WebRoot::default_routing_middleware(Object *instance, Request *request) {
-	// handle default phase 1
-	std::string path = request->get_path_full();
+	// This one looks up users based on sessions
+	// _middlewares.push_back(Ref<UserSessionSetupMiddleware>(new UserSessionSetupMiddleware()));
 
-	if (FileCache::get_singleton()->wwwroot_has_file(path)) {
-		send_file(path, request);
-
-		return;
-	}
-
-	// call parent handle default
-
-	// from this this will be handled by web router node by default
-	HandlerInstance handler_data;
-
-	// std::function<void(Object *, Request *)> func;
-
-	// if (path == "/") {
-	if (request->get_path_segment_count() == 0) {
-		// quick shortcut
-		handler_data = index_func;
-	} else {
-		const std::string main_route = request->get_current_path_segment();
-
-		handler_data = main_route_map[main_route];
-
-		request->push_path();
-	}
-
-	if (!handler_data.handler_func) {
-		send_error(404, request);
-
-		return;
-	}
-
-	request->handler_instance = handler_data;
-	request->next_stage();
+	// Same as the previous, but if you want the RBAC system to work use one of these
+	// _middlewares.push_back(Ref<RBACUserSessionSetupMiddleware>(new RBACUserSessionSetupMiddleware()));
+	// _middlewares.push_back(Ref<RBACDefaultUserSessionSetupMiddleware>(new RBACDefaultUserSessionSetupMiddleware()));
 }
 
 void WebRoot::default_fallback_error_handler(Request *request, int error_code) {
 	request->compiled_body = default_generic_error_body;
-
 	request->send();
 }
 
@@ -79,9 +46,12 @@ void WebRoot::default_404_error_handler(Request *request, int error_code) {
 }
 
 void WebRoot::handle_request_main(Request *request) {
-	// request->middleware_stack = &middlewares;
-	// note that middlewares handle the routing -> WebRoot::default_routing_middleware by default
-	// request->next_stage();
+	for (int i = 0; i < _middlewares.size(); ++i) {
+		if (_middlewares[i]->on_before_handle_request_main(request)) {
+			//handled
+			return;
+		}
+	}
 
 	// handle files first
 	if (try_send_wwwroot_file(request)) {
