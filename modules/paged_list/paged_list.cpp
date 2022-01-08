@@ -10,7 +10,7 @@
 
 #include "core/html/html_builder.h"
 
-void PagedList::index(Request *request) {
+void PagedList::handle_request_main(Request *request) {
 	const String path = request->get_current_path_segment();
 
 	if (request->get_remaining_segment_count() == 0) {
@@ -31,7 +31,7 @@ void PagedList::load() {
 }
 
 PagedList::PagedList() :
-		Object() {
+		WebNode() {
 
 	main_page = new ListPage();
 	articles = new PagedArticle();
