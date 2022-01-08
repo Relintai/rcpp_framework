@@ -3,23 +3,27 @@
 
 #include "node_tree.h"
 
+bool Node::is_in_tree() const {
+	return _in_tree;
+}
+
 Node *Node::get_parent() {
 	return _parent;
 }
 void Node::set_parent(Node *parent) {
-    if (_parent == parent) {
-        return;
-    }
+	if (_parent == parent) {
+		return;
+	}
 
-    if (_parent) {
-        notification(NOTIFICATION_UNPARENTED);
-    }
+	if (_parent) {
+		notification(NOTIFICATION_UNPARENTED);
+	}
 
 	_parent = parent;
 
-    if (_parent) {
-        notification(NOTIFICATION_PARENTED);
-    }
+	if (_parent) {
+		notification(NOTIFICATION_PARENTED);
+	}
 }
 
 int Node::get_child_count() {
@@ -35,15 +39,15 @@ void Node::add_child(Node *child) {
 	_children.push_back(child);
 	child->set_parent(this);
 
-    notification(NOTIFICATION_CHILD_ADDED);
+	notification(NOTIFICATION_CHILD_ADDED);
 }
 void Node::remove_child_index(int index) {
-    Node *c = _children[index];
+	Node *c = _children[index];
 
 	_children.remove_keep_order(index);
 	c->set_parent(nullptr);
 
-    notification(NOTIFICATION_CHILD_REMOVED);
+	notification(NOTIFICATION_CHILD_REMOVED);
 }
 void Node::remove_child(Node *child) {
 	ERR_FAIL_COND(!child);
@@ -54,7 +58,7 @@ void Node::remove_child(Node *child) {
 		if (c == child) {
 			_children.remove_keep_order(i);
 			child->set_parent(nullptr);
-            notification(NOTIFICATION_CHILD_REMOVED);
+			notification(NOTIFICATION_CHILD_REMOVED);
 			return;
 		}
 	}
@@ -76,19 +80,31 @@ void Node::set_tree(NodeTree *tree) {
 	}
 }
 
-void Node::notification(int what) {
-    _notification(what);
+void Node::notification(const int what) {
+	switch (what) {
+		case NOTIFICATION_EXIT_TREE:
+			_in_tree = false;
+			break;
+		case NOTIFICATION_ENTER_TREE:
+			_in_tree = true;
+			break;
+		default:
+			break;
+	}
+
+	_notification(what);
 
 	for (int i = 0; i < _children.size(); ++i) {
 		_children[i]->notification(what);
 	}
 }
-void Node::_notification(int what) {
+void Node::_notification(const int what) {
 }
 
 Node::Node() :
 		Object() {
 
+	_in_tree = false;
 	_parent = nullptr;
 	_tree = nullptr;
 }

@@ -17,6 +17,9 @@ class WebNode : public Node {
 	RCPP_OBJECT(WebNode, Node);
 
 public:
+	String get_uri_segment();
+	void set_uri_segment(const String &val);
+
 	Settings *get_settings();
 	void set_settings(Settings *settings);
 
@@ -39,6 +42,8 @@ public:
 	~WebNode();
 
 protected:
+	String _uri_segment;
+
 	Settings *_settings;
 
 #ifdef DATABASES_ENABLED

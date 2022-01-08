@@ -20,6 +20,8 @@ public:
 		NOTIFICATION_CHILD_MOVED = 6,
 	};
 
+	bool is_in_tree() const;
+
 	Node *get_parent();
 	void set_parent(Node *parent);
 
@@ -32,13 +34,14 @@ public:
 	NodeTree *get_tree();
 	void set_tree(NodeTree *tree);
 
-	virtual void notification(int what);
-	virtual void _notification(int what);
+	virtual void notification(const int what);
+	virtual void _notification(const int what);
 
 	Node();
 	~Node();
 
 protected:
+	bool _in_tree;
 	Node * _parent;
 	Vector<Node *> _children;
 	NodeTree *_tree;

@@ -30,7 +30,9 @@ void WebRoot::setup_middleware() {
 	middlewares.push_back(HandlerInstance([this](Object *instance, Request *request){ this->default_routing_middleware(instance, request); }));
 }
 
+
 void WebRoot::default_routing_middleware(Object *instance, Request *request) {
+	//handle default phase 1
 	std::string path = request->get_path_full();
 
 	if (FileCache::get_singleton()->wwwroot_has_file(path)) {
@@ -39,6 +41,9 @@ void WebRoot::default_routing_middleware(Object *instance, Request *request) {
 		return;
 	}
 
+	//call parent handle default
+
+	//from this this will be handled by web router node by default
 	HandlerInstance handler_data;
 
 	//std::function<void(Object *, Request *)> func;
@@ -77,10 +82,23 @@ void WebRoot::default_404_error_handler(int error_code, Request *request) {
 }
 
 void WebRoot::handle_request_main(Request *request) {
-	request->middleware_stack = &middlewares;
-
+	//request->middleware_stack = &middlewares;
 	//note that middlewares handle the routing -> WebRoot::default_routing_middleware by default
-	request->next_stage();
+	//request->next_stage();
+
+
+	//handle files first
+	//todo make this a method for easier override
+	std::string path = request->get_path_full();
+
+	if (FileCache::get_singleton()->wwwroot_has_file(path)) {
+		send_file(path, request);
+
+		return;
+	}
+
+	//normal routing
+	WebRouterNode::handle_request_main(request);
 }
 
 void WebRoot::send_error(int error_code, Request *request) {

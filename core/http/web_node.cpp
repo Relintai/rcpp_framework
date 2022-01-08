@@ -13,6 +13,13 @@
 #include "core/database/table_builder.h"
 #endif
 
+String WebNode::get_uri_segment() {
+	return _uri_segment;
+}
+void WebNode::set_uri_segment(const String &val) {
+	_uri_segment = val;
+}
+
 Settings *WebNode::get_settings() {
 	if (_settings) {
 		return _settings;
@@ -53,9 +60,9 @@ Ref<QueryBuilder> WebNode::get_query_builder() {
 }
 
 void WebNode::set_database(Database *db) {
-    _database = db;
+	_database = db;
 
-    // todo send event to children when it's implemented?
+	// todo send event to children when it's implemented?
 }
 
 #endif
