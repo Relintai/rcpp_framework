@@ -93,6 +93,10 @@ void WebRoot::handle_request_main(Request *request) {
 	// normal routing
 	WebRouterNode::handle_request_main(request);
 }
+/*
+void WebRoot::handle_error_send_request(Request *request, const int error_code) {
+
+}*/
 
 bool WebRoot::try_send_wwwroot_file(Request *request) {
 	const String &path = request->get_path_full();

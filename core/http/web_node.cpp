@@ -2,6 +2,7 @@
 #include "web_node.h"
 
 #include "request.h"
+#include "http_enums.h"
 
 #include "core/settings/settings.h"
 
@@ -68,6 +69,14 @@ void WebNode::set_database(Database *db) {
 #endif
 
 void WebNode::handle_request_main(Request *request) {
+}
+
+void WebNode::handle_error_send_request(Request *request, const int error_code) {
+	//this is a fallback error handler.
+	//Webroot implements a proper one
+	request->compiled_body = "<html><body>Internal server error!</body></html>";
+	request->set_status_code(HTTP_STATUS_CODE_503_SERVICE_UNAVAILABLE);
+	request->send();
 }
 
 void WebNode::create_validators() {

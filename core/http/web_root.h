@@ -35,6 +35,8 @@ public:
 	static std::string default_generic_error_body;
 
 	void handle_request_main(Request *request);
+	//void handle_error_send_request(Request *request, const int error_code);
+
 	bool try_send_wwwroot_file(Request *request);
 	void send_error(int error_code, Request *request);
 	void send_file(const std::string &path, Request *request);

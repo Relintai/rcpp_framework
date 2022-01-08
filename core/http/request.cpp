@@ -108,7 +108,7 @@ void Request::send_file(const String &p_file_path) {
 }
 
 void Request::send_error(int error_code) {
-	server->get_web_root()->send_error(error_code, this);
+	server->get_web_root()->handle_error_send_request(this, error_code);
 }
 
 void Request::reset() {
