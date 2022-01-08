@@ -8,7 +8,7 @@
 #include <tinydir/tinydir.h>
 #include <iostream>
 
-void ListPage::index(Request *request) {
+void ListPage::handle_request_main(Request *request) {
 	String r = "";
 
 	for (uint32_t i = 0; i < list_entries.size(); ++i) {
@@ -80,7 +80,7 @@ void ListPage::load() {
 }
 
 ListPage::ListPage() :
-		Object() {
+		WebNode() {
 }
 
 ListPage::~ListPage() {

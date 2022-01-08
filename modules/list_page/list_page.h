@@ -4,16 +4,16 @@
 #include "core/containers/vector.h"
 #include "core/string.h"
 
-#include "core/object.h"
+#include "core/http/web_node.h"
 
 #include "core/http/request.h"
 
 
-class ListPage : public Object {
-    RCPP_OBJECT(ListPage, Object);
+class ListPage : public WebNode {
+    RCPP_OBJECT(ListPage, WebNode);
 
 public:
-    void index(Request *request);
+    void handle_request_main(Request *request);
 
     void load();
     

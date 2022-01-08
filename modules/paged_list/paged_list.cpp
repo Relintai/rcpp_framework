@@ -14,7 +14,7 @@ void PagedList::index(Request *request) {
 	const String path = request->get_current_path_segment();
 
 	if (request->get_remaining_segment_count() == 0) {
-		main_page->index(request);
+		main_page->handle_request_main(request);
 		return;
 	}
 
