@@ -24,6 +24,7 @@ class Request;
 
 //Update the rest of the modules to the new systems
 
+//remove middleware stack from request
 
 class WebRoot : public WebRouterNode {
 	RCPP_OBJECT(WebRoot, WebRouterNode);
