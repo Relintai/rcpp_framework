@@ -6,7 +6,7 @@
 #include "core/database/table_builder.h"
 #include "core/database/query_result.h"
 
-void MessagePage::index(Request *request) {
+void MessagePage::handle_request_main(Request *request) {
 	Ref<QueryBuilder> b = db->get_query_builder();
 
 	b->select("text")->from("message_page")->end_command();
@@ -69,7 +69,7 @@ void MessagePage::migrate() {
 }
 
 MessagePage::MessagePage() :
-		Object() {
+		WebNode() {
 	messages.push_back("T message 1");
 	messages.push_back("T message 2");
 }
