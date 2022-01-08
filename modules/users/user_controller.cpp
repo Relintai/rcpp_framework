@@ -15,7 +15,7 @@
 
 #include "core/hash/sha256.h"
 
-void UserController::handle_request_default(Request *request) {
+void UserController::handle_request_main(Request *request) {
 	if (request->session) {
 		Ref<User> u = request->reference_data["user"];
 

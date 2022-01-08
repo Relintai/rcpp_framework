@@ -13,8 +13,7 @@
 
 class Request;
 
-// FileCache -> set up, for this webroot, don't use singleton
-// Update the rest of the modules to the new systems
+// TODO FileCache -> set up, for this webroot, don't use singleton
 
 class WebRoot : public WebRouterNode {
 	RCPP_OBJECT(WebRoot, WebRouterNode);

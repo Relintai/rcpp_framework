@@ -16,7 +16,7 @@ class UserController : public WebNode {
 	RCPP_OBJECT(UserController, WebNode);
 
 public:
-	virtual void handle_request_default(Request *request);
+	void handle_request_main(Request *request);
 
 	struct LoginRequestData {
 		String error_str;
