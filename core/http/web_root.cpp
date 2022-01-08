@@ -133,8 +133,6 @@ void WebRoot::update() {
 
 WebRoot::WebRoot() :
 		WebRouterNode() {
-
-	setup();
 }
 
 WebRoot::~WebRoot() {
