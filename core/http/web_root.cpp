@@ -91,8 +91,8 @@ bool WebRoot::try_send_wwwroot_file(Request *request) {
 	return false;
 }
 
-void WebRoot::send_file(const std::string &path, Request *request) {
-	std::string fp = FileCache::get_singleton()->wwwroot + path;
+void WebRoot::send_file(const String &path, Request *request) {
+	String fp = FileCache::get_singleton()->wwwroot + path;
 
 	request->send_file(fp);
 }
@@ -138,5 +138,5 @@ WebRoot::~WebRoot() {
 	_middlewares.clear();
 }
 
-std::string WebRoot::default_error_404_body = "<html><body>404 :(</body></html>";
-std::string WebRoot::default_generic_error_body = "<html><body>Internal server error! :(</body></html>";
+String WebRoot::default_error_404_body = "<html><body>404 :(</body></html>";
+String WebRoot::default_generic_error_body = "<html><body>Internal server error! :(</body></html>";

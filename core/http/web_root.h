@@ -5,7 +5,7 @@
 #include "mutex"
 #include <functional>
 #include <map>
-#include <string>
+#include "core/string.h"
 
 #include "web_router_node.h"
 
@@ -14,25 +14,20 @@
 class Request;
 
 // FileCache -> set up, for this webroot, don't use singleton
-
-// remove handler instances!
-
 // Update the rest of the modules to the new systems
-
-//remove std::strings
 
 class WebRoot : public WebRouterNode {
 	RCPP_OBJECT(WebRoot, WebRouterNode);
 
 public:
-	static std::string default_error_404_body;
-	static std::string default_generic_error_body;
+	static String default_error_404_body;
+	static String default_generic_error_body;
 
 	void handle_request_main(Request *request);
 	void handle_error_send_request(Request *request, const int error_code);
 
 	bool try_send_wwwroot_file(Request *request);
-	void send_file(const std::string &path, Request *request);
+	void send_file(const String &path, Request *request);
 
 	static void default_fallback_error_handler(Request *request, int error_code);
 	static void default_404_error_handler(Request *request, int error_code);
