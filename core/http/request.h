@@ -54,6 +54,9 @@ public:
 
 	virtual const String get_parameter(const String &key) const;
 
+	HTTPStatusCode get_status_code() const;
+	void set_status_code(const HTTPStatusCode status_code);
+
 	virtual void send_redirect(const String &location, const HTTPStatusCode status_code = HTTP_STATUS_CODE_302_FOUND);
 	virtual void compile_body();
 	virtual void compile_and_send_body();
@@ -93,6 +96,7 @@ public:
 	virtual ~Request();
 
 protected:
+	HTTPStatusCode _status_code;
 	String _full_path;
 	Vector<String> _path_stack;
 	uint32_t _path_stack_pointer;

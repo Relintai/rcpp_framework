@@ -47,6 +47,7 @@ void DRequest::send() {
 
 	_response_additional_setup(response);
 
+	response->setStatusCode(static_cast<const HttpStatusCode>(static_cast<const int>(_status_code)));
 	response->setBody(compiled_body);
 
 	response->setExpiredTime(0);
