@@ -18,7 +18,7 @@ void PagedList::index(Request *request) {
 		return;
 	}
 
-	articles->index(request);
+	articles->handle_request_main(request);
 }
 
 void PagedList::load() {

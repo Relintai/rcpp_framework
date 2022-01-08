@@ -8,7 +8,7 @@
 #include <tinydir/tinydir.h>
 #include <iostream>
 
-void PagedArticle::index(Request *request) {
+void PagedArticle::handle_request_main(Request *request) {
 	const String r = request->get_current_path_segment();
 
 	Article *s = pages[r];
@@ -222,7 +222,7 @@ void PagedArticle::generate_summary(Article *article) {
 }
 
 PagedArticle::PagedArticle() :
-		Object() {
+		WebNode() {
 }
 
 PagedArticle::~PagedArticle() {

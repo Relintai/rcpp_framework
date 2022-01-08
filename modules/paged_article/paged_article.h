@@ -6,7 +6,7 @@
 #include "core/string.h"
 
 #include "core/file_cache.h"
-#include "core/object.h"
+#include "core/http/web_node.h"
 
 #include "core/http/request.h"
 
@@ -30,11 +30,11 @@ struct Article {
 	}
 };
 
-class PagedArticle : public Object {
-	RCPP_OBJECT(PagedArticle, Object);
+class PagedArticle : public WebNode {
+	RCPP_OBJECT(PagedArticle, WebNode);
 
 public:
-	void index(Request *request);
+	void handle_request_main(Request *request);
 
 	void load();
 	Article *load_folder(const String &folder, const String &path);
