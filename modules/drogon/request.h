@@ -11,8 +11,6 @@
 #include "http/HttpRequestImpl.h"
 #include "http/HttpResponse.h"
 
-#include "core/http/handler_instance.h"
-
 //using namespace drogon;
 
 class DrogonWebServer;

@@ -6,8 +6,6 @@
 
 #include "core/file_cache.h"
 
-#include "core/http/handler_instance.h"
-
 #include "core/database/database_manager.h"
 
 #include "core/html/html_builder.h"

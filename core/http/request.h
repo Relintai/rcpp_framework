@@ -11,8 +11,6 @@
 #include "core/object.h"
 #include "core/reference.h"
 
-#include "handler_instance.h"
-
 #include "http_enums.h"
 
 class WebServer;

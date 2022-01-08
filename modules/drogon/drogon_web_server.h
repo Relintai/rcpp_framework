@@ -12,8 +12,6 @@
 #include <memory>
 #include <mutex>
 
-#include "core/http/handler_instance.h"
-
 #include <trantor/net/InetAddress.h>
 #include <trantor/net/Resolver.h>
 #include <trantor/utils/Logger.h>

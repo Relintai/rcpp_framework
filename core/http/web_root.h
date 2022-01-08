@@ -6,11 +6,9 @@
 #include <functional>
 #include <map>
 #include <string>
-#include <vector>
 
 #include "web_router_node.h"
 
-#include "handler_instance.h"
 #include "middleware.h"
 
 class Request;
@@ -20,6 +18,8 @@ class Request;
 // remove handler instances!
 
 // Update the rest of the modules to the new systems
+
+//remove std::strings
 
 class WebRoot : public WebRouterNode {
 	RCPP_OBJECT(WebRoot, WebRouterNode);
