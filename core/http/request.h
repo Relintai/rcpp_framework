@@ -23,10 +23,6 @@ class Request {
 public:
 	WebServer *server;
 
-	uint32_t current_middleware_index;
-	HandlerInstance handler_instance;
-	std::vector<HandlerInstance> *middleware_stack;
-
 	String head;
 	String body;
 	String footer;
@@ -60,7 +56,6 @@ public:
 	virtual void send_redirect(const String &location, const HTTPStatusCode status_code = HTTP_STATUS_CODE_302_FOUND);
 	virtual void compile_body();
 	virtual void compile_and_send_body();
-	virtual void next_stage();
 	virtual void send();
 	virtual void send_file(const String &p_file_path);
 	virtual void send_error(int error_code);

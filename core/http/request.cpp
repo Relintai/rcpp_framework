@@ -79,21 +79,6 @@ void Request::compile_and_send_body() {
 	send();
 }
 
-void Request::next_stage() {
-	// if (middleware_stack == nullptr) {
-	//	printf("Error Request::next_stage-> middleware_stack == nullptr\n");
-	// }
-
-	if (current_middleware_index == (*middleware_stack).size()) {
-		handler_instance.handler_func(handler_instance.instance, this);
-		return;
-	}
-
-	const HandlerInstance &hi = (*middleware_stack)[current_middleware_index++];
-
-	hi.handler_func(hi.instance, this);
-}
-
 void Request::send() {
 	// if (connection_closed) {
 	//	RequestPool::return_request(this);
@@ -114,8 +99,6 @@ void Request::send_error(int error_code) {
 void Request::reset() {
 	session = nullptr;
 	server = nullptr;
-	current_middleware_index = 0;
-	middleware_stack = nullptr;
 	_path_stack.clear();
 	_path_stack_pointer = 0;
 	file_size = 0;
