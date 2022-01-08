@@ -24,15 +24,14 @@ void WebRoot::setup_routes() {
 }
 
 void WebRoot::setup_middleware() {
-	//If you want sessions add this to your inherited class. Should probably be the first one.
-	//middlewares.push_back(HandlerInstance(::SessionManager::session_setup_middleware));
+	// If you want sessions add this to your inherited class. Should probably be the first one.
+	// middlewares.push_back(HandlerInstance(::SessionManager::session_setup_middleware));
 
-	middlewares.push_back(HandlerInstance([this](Object *instance, Request *request){ this->default_routing_middleware(instance, request); }));
+	middlewares.push_back(HandlerInstance([this](Object *instance, Request *request) { this->default_routing_middleware(instance, request); }));
 }
 
-
 void WebRoot::default_routing_middleware(Object *instance, Request *request) {
-	//handle default phase 1
+	// handle default phase 1
 	std::string path = request->get_path_full();
 
 	if (FileCache::get_singleton()->wwwroot_has_file(path)) {
@@ -41,16 +40,16 @@ void WebRoot::default_routing_middleware(Object *instance, Request *request) {
 		return;
 	}
 
-	//call parent handle default
+	// call parent handle default
 
-	//from this this will be handled by web router node by default
+	// from this this will be handled by web router node by default
 	HandlerInstance handler_data;
 
-	//std::function<void(Object *, Request *)> func;
+	// std::function<void(Object *, Request *)> func;
 
-	//if (path == "/") {
+	// if (path == "/") {
 	if (request->get_path_segment_count() == 0) {
-		//quick shortcut
+		// quick shortcut
 		handler_data = index_func;
 	} else {
 		const std::string main_route = request->get_current_path_segment();
@@ -72,7 +71,7 @@ void WebRoot::default_routing_middleware(Object *instance, Request *request) {
 
 void WebRoot::default_fallback_error_handler(int error_code, Request *request) {
 	request->compiled_body = default_generic_error_body;
-	
+
 	request->send();
 }
 
@@ -82,23 +81,29 @@ void WebRoot::default_404_error_handler(int error_code, Request *request) {
 }
 
 void WebRoot::handle_request_main(Request *request) {
-	//request->middleware_stack = &middlewares;
-	//note that middlewares handle the routing -> WebRoot::default_routing_middleware by default
-	//request->next_stage();
+	// request->middleware_stack = &middlewares;
+	// note that middlewares handle the routing -> WebRoot::default_routing_middleware by default
+	// request->next_stage();
 
+	// handle files first
+	if (try_send_wwwroot_file(request)) {
+		return;
+	}
 
-	//handle files first
-	//todo make this a method for easier override
-	std::string path = request->get_path_full();
+	// normal routing
+	WebRouterNode::handle_request_main(request);
+}
+
+bool WebRoot::try_send_wwwroot_file(Request *request) {
+	const String &path = request->get_path_full();
 
 	if (FileCache::get_singleton()->wwwroot_has_file(path)) {
 		send_file(path, request);
 
-		return;
+		return true;
 	}
 
-	//normal routing
-	WebRouterNode::handle_request_main(request);
+	return false;
 }
 
 void WebRoot::send_error(int error_code, Request *request) {
@@ -152,11 +157,12 @@ void WebRoot::update() {
 }
 
 WebServer *WebRoot::get_server() {
-	//todo this shoult probably be cached
+	// todo this shoult probably be cached
 	return Object::cast_to<WebServer>(get_tree());
 }
 
-WebRoot::WebRoot() : WebRouterNode() {
+WebRoot::WebRoot() :
+		WebRouterNode() {
 }
 
 WebRoot::~WebRoot() {
