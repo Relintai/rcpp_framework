@@ -8,9 +8,9 @@ Node *NodeTree::get_root() {
 }
 
 void NodeTree::set_root(Node *root) {
-    if (_root_node) {
-        _root_node->set_tree(nullptr);
-    }
+	if (_root_node) {
+		_root_node->set_tree(nullptr);
+	}
 
 	_root_node = root;
 
@@ -20,11 +20,16 @@ void NodeTree::set_root(Node *root) {
 }
 
 void NodeTree::send_update(float delta) {
-    //todo
+	// todo
 }
 
-NodeTree::NodeTree() : Object() {
+NodeTree::NodeTree() :
+		Object() {
 }
 
 NodeTree::~NodeTree() {
+	if (_root_node) {
+		delete _root_node;
+		_root_node == nullptr;
+	}
 }

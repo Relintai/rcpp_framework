@@ -110,4 +110,9 @@ Node::Node() :
 }
 
 Node::~Node() {
+	for (int i = 0; i < _children.size(); ++i) {
+		delete _children[i];
+	}
+
+	_children.clear();
 }
