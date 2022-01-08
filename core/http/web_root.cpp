@@ -69,13 +69,13 @@ void WebRoot::default_routing_middleware(Object *instance, Request *request) {
 	request->next_stage();
 }
 
-void WebRoot::default_fallback_error_handler(int error_code, Request *request) {
+void WebRoot::default_fallback_error_handler(Request *request, int error_code) {
 	request->compiled_body = default_generic_error_body;
 
 	request->send();
 }
 
-void WebRoot::default_404_error_handler(int error_code, Request *request) {
+void WebRoot::default_404_error_handler(Request *request, int error_code) {
 	request->compiled_body = default_error_404_body;
 	request->send();
 }
@@ -93,10 +93,22 @@ void WebRoot::handle_request_main(Request *request) {
 	// normal routing
 	WebRouterNode::handle_request_main(request);
 }
-/*
-void WebRoot::handle_error_send_request(Request *request, const int error_code) {
 
-}*/
+void WebRoot::handle_error_send_request(Request *request, const int error_code) {
+	std::function<void(Request *, int)> func = error_handler_map[error_code];
+
+	if (!func) {
+		if (!default_error_handler_func) {
+			WebNode::handle_error_send_request(request, error_code);
+			return;
+		}
+
+		default_error_handler_func(request, error_code);
+		return;
+	}
+
+	func(request, error_code);
+}
 
 bool WebRoot::try_send_wwwroot_file(Request *request) {
 	const String &path = request->get_path_full();
@@ -111,14 +123,7 @@ bool WebRoot::try_send_wwwroot_file(Request *request) {
 }
 
 void WebRoot::send_error(int error_code, Request *request) {
-	std::function<void(int, Request *)> func = error_handler_map[error_code];
 
-	if (!func) {
-		default_error_handler_func(error_code, request);
-		return;
-	}
-
-	func(error_code, request);
 }
 
 void WebRoot::send_file(const std::string &path, Request *request) {
