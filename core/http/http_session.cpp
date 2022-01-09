@@ -16,7 +16,7 @@ void HTTPSession::remove(const String &key) {
 	_mutex.unlock();
 }
 bool HTTPSession::has(const String &key) {
-	return _data[key].is_null();
+	return !_data[key].is_null();
 }
 
 Variant HTTPSession::get(const String &key) {
