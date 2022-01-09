@@ -1510,7 +1510,7 @@ HTMLTag *HTMLBuilder::wbr() {
 	return tag.start("wbr");
 }
 
-HTMLTag *HTMLBuilder::a(const String &href, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::a(const String &href, const String &cls, const String &id) {
 	HTMLTag *t = a();
 
 	t->href(href);
@@ -1523,7 +1523,7 @@ HTMLTag *HTMLBuilder::a(const String &href, const String &cls, const String &id)
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
 HTMLBuilder *HTMLBuilder::fa(const String &href, const String &body, const String &cls, const String &id) {
@@ -1534,7 +1534,7 @@ HTMLBuilder *HTMLBuilder::fa(const String &href, const String &body, const Strin
 	return this;
 }
 
-HTMLTag *HTMLBuilder::div(const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::div(const String &cls, const String &id) {
 	HTMLTag *t = div();
 
 	if (cls != "") {
@@ -1545,7 +1545,7 @@ HTMLTag *HTMLBuilder::div(const String &cls, const String &id) {
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
 HTMLBuilder *HTMLBuilder::fdiv(const String &body, const String &cls, const String &id) {
@@ -1556,7 +1556,7 @@ HTMLBuilder *HTMLBuilder::fdiv(const String &body, const String &cls, const Stri
 	return this;
 }
 
-HTMLTag *HTMLBuilder::textarea(const String &name, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::textarea(const String &name, const String &cls, const String &id) {
 	HTMLTag *t = textarea();
 
 	t->name(name);
@@ -1569,7 +1569,7 @@ HTMLTag *HTMLBuilder::textarea(const String &name, const String &cls, const Stri
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 HTMLBuilder *HTMLBuilder::ftextarea(const String &name, const String &body, const String &cls, const String &id) {
 	textarea(name, cls, id);
@@ -1579,7 +1579,7 @@ HTMLBuilder *HTMLBuilder::ftextarea(const String &name, const String &body, cons
 	return this;
 }
 
-HTMLTag *HTMLBuilder::select(const String &name, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::select(const String &name, const String &cls, const String &id) {
 	HTMLTag *t = select();
 
 	t->name(name);
@@ -1592,7 +1592,7 @@ HTMLTag *HTMLBuilder::select(const String &name, const String &cls, const String
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
 HTMLTag *HTMLBuilder::option(const String &value) {
@@ -2462,7 +2462,7 @@ HTMLTag *HTMLBuilder::form_post() {
 
 	return tag.start("form")->method_post();
 }
-HTMLTag *HTMLBuilder::form_get(const String &action, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::form_get(const String &action, const String &cls, const String &id) {
 	HTMLTag *t = form_get();
 
 	t->fora(action);
@@ -2475,9 +2475,9 @@ HTMLTag *HTMLBuilder::form_get(const String &action, const String &cls, const St
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
-HTMLTag *HTMLBuilder::form_post(const String &action, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::form_post(const String &action, const String &cls, const String &id) {
 	HTMLTag *t = form_post();
 
 	t->fora(action);
@@ -2490,7 +2490,7 @@ HTMLTag *HTMLBuilder::form_post(const String &action, const String &cls, const S
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
 HTMLBuilder *HTMLBuilder::form_post(const String &action, Request *request, const String &cls, const String &id) {
@@ -2652,7 +2652,7 @@ HTMLBuilder *HTMLBuilder::label(const String &pfor, const String &plabel, const 
 	return this;
 }
 
-HTMLTag *HTMLBuilder::input_button(const String &name, const String &value, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::input_button(const String &name, const String &value, const String &cls, const String &id) {
 	HTMLTag *t = input_button();
 
 	t->name(name);
@@ -2669,10 +2669,10 @@ HTMLTag *HTMLBuilder::input_button(const String &name, const String &value, cons
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_checkbox(const String &name, const String &value, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::input_checkbox(const String &name, const String &value, const bool checked, const String &cls, const String &id) {
 	HTMLTag *t = input_checkbox();
 
 	t->name(name);
@@ -2689,10 +2689,12 @@ HTMLTag *HTMLBuilder::input_checkbox(const String &name, const String &value, co
 		t->id(id);
 	}
 
-	return t;
+	t->checked(checked);
+	
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_color(const String &name, const String &value, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::input_color(const String &name, const String &value, const String &cls, const String &id) {
 	HTMLTag *t = input_color();
 
 	t->name(name);
@@ -2709,10 +2711,10 @@ HTMLTag *HTMLBuilder::input_color(const String &name, const String &value, const
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_date(const String &name, const String &value, const String &cls, const String &id, const String &date_min, const String &date_max, const String &date_step) {
+HTMLBuilder *HTMLBuilder::input_date(const String &name, const String &value, const String &cls, const String &id, const String &date_min, const String &date_max, const String &date_step) {
 	HTMLTag *t = input_date();
 
 	t->name(name);
@@ -2741,10 +2743,10 @@ HTMLTag *HTMLBuilder::input_date(const String &name, const String &value, const 
 		t->step(date_step);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_datetime_local(const String &name, const String &value, const String &cls, const String &id, const String &date_min, const String &date_max, const String &date_step) {
+HTMLBuilder *HTMLBuilder::input_datetime_local(const String &name, const String &value, const String &cls, const String &id, const String &date_min, const String &date_max, const String &date_step) {
 	HTMLTag *t = input_datetime_local();
 
 	t->name(name);
@@ -2773,10 +2775,10 @@ HTMLTag *HTMLBuilder::input_datetime_local(const String &name, const String &val
 		t->step(date_step);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_email(const String &name, const String &value, const String &placeholder, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::input_email(const String &name, const String &value, const String &placeholder, const String &cls, const String &id) {
 	HTMLTag *t = input_email();
 
 	t->name(name);
@@ -2797,10 +2799,10 @@ HTMLTag *HTMLBuilder::input_email(const String &name, const String &value, const
 		t->placeholder(placeholder);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_file(const String &name, const String &accept, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::input_file(const String &name, const String &accept, const String &cls, const String &id) {
 	HTMLTag *t = input_email();
 
 	t->name(name);
@@ -2817,10 +2819,10 @@ HTMLTag *HTMLBuilder::input_file(const String &name, const String &accept, const
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_image(const String &name, const String &src, const String &alt, const String &cls, const String &id, const int width, const int height) {
+HTMLBuilder *HTMLBuilder::input_image(const String &name, const String &src, const String &alt, const String &cls, const String &id, const int width, const int height) {
 	HTMLTag *t = input_image();
 
 	t->name(name);
@@ -2849,10 +2851,10 @@ HTMLTag *HTMLBuilder::input_image(const String &name, const String &src, const S
 		t->height(height);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_month(const String &name, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::input_month(const String &name, const String &cls, const String &id) {
 	HTMLTag *t = input_month();
 
 	t->name(name);
@@ -2865,10 +2867,10 @@ HTMLTag *HTMLBuilder::input_month(const String &name, const String &cls, const S
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_number(const String &name, const String &vmin, const String &vmax, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::input_number(const String &name, const String &vmin, const String &vmax, const String &cls, const String &id) {
 	HTMLTag *t = input_number();
 
 	t->name(name);
@@ -2889,10 +2891,10 @@ HTMLTag *HTMLBuilder::input_number(const String &name, const String &vmin, const
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_password(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size) {
+HTMLBuilder *HTMLBuilder::input_password(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size) {
 	HTMLTag *t = input_password();
 
 	t->name(name);
@@ -2925,10 +2927,10 @@ HTMLTag *HTMLBuilder::input_password(const String &name, const String &value, co
 		t->size(size);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_radio(const String &name, const String &value, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::input_radio(const String &name, const String &value, const String &cls, const String &id) {
 	HTMLTag *t = input_password();
 
 	t->name(name);
@@ -2945,10 +2947,10 @@ HTMLTag *HTMLBuilder::input_radio(const String &name, const String &value, const
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_range(const String &name, const String &value, const String &vmin, const String &vmax, const String &vstep, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::input_range(const String &name, const String &value, const String &vmin, const String &vmax, const String &vstep, const String &cls, const String &id) {
 	HTMLTag *t = input_range();
 
 	t->name(name);
@@ -2977,10 +2979,10 @@ HTMLTag *HTMLBuilder::input_range(const String &name, const String &value, const
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_reset(const String &name, const String &value, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::input_reset(const String &name, const String &value, const String &cls, const String &id) {
 	HTMLTag *t = input_reset();
 
 	t->name(name);
@@ -2997,10 +2999,10 @@ HTMLTag *HTMLBuilder::input_reset(const String &name, const String &value, const
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_search(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size, const String &pattern) {
+HTMLBuilder *HTMLBuilder::input_search(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size, const String &pattern) {
 	HTMLTag *t = input_search();
 
 	t->name(name);
@@ -3037,10 +3039,10 @@ HTMLTag *HTMLBuilder::input_search(const String &name, const String &value, cons
 		t->pattern(pattern);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_submit(const String &value, const String &cls, const String &id) {
+HTMLBuilder *HTMLBuilder::input_submit(const String &value, const String &cls, const String &id) {
 	HTMLTag *t = input_submit();
 
 	t->value(value);
@@ -3053,10 +3055,10 @@ HTMLTag *HTMLBuilder::input_submit(const String &value, const String &cls, const
 		t->id(id);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_tel(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size, const String &pattern) {
+HTMLBuilder *HTMLBuilder::input_tel(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size, const String &pattern) {
 	HTMLTag *t = input_tel();
 
 	t->name(name);
@@ -3093,10 +3095,10 @@ HTMLTag *HTMLBuilder::input_tel(const String &name, const String &value, const S
 		t->pattern(pattern);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_text(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size) {
+HTMLBuilder *HTMLBuilder::input_text(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size) {
 	HTMLTag *t = input_text();
 
 	t->name(name);
@@ -3129,10 +3131,10 @@ HTMLTag *HTMLBuilder::input_text(const String &name, const String &value, const 
 		t->size(size);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_time(const String &name, const String &cls, const String &id, const String &vmin, const String &vmax, const String &vstep) {
+HTMLBuilder *HTMLBuilder::input_time(const String &name, const String &cls, const String &id, const String &vmin, const String &vmax, const String &vstep) {
 	HTMLTag *t = input_time();
 
 	t->name(name);
@@ -3157,10 +3159,10 @@ HTMLTag *HTMLBuilder::input_time(const String &name, const String &cls, const St
 		t->step(vstep);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_url(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size) {
+HTMLBuilder *HTMLBuilder::input_url(const String &name, const String &value, const String &placeholder, const String &cls, const String &id, const String &minlength, const String &maxlength, const String &size) {
 	HTMLTag *t = input_url();
 
 	t->name(name);
@@ -3193,10 +3195,10 @@ HTMLTag *HTMLBuilder::input_url(const String &name, const String &value, const S
 		t->size(size);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_week(const String &name, const String &cls, const String &id, const String &vmin, const String &vmax) {
+HTMLBuilder *HTMLBuilder::input_week(const String &name, const String &cls, const String &id, const String &vmin, const String &vmax) {
 	HTMLTag *t = input_week();
 
 	t->name(name);
@@ -3217,10 +3219,10 @@ HTMLTag *HTMLBuilder::input_week(const String &name, const String &cls, const St
 		t->max(vmax);
 	}
 
-	return t;
+	return this;
 }
 
-HTMLTag *HTMLBuilder::input_hidden(const String &name, const String &value) {
+HTMLBuilder *HTMLBuilder::input_hidden(const String &name, const String &value) {
 	HTMLTag *t = input_hidden();
 
 	t->name(name);
@@ -3229,7 +3231,7 @@ HTMLTag *HTMLBuilder::input_hidden(const String &name, const String &value) {
 		t->value(value);
 	}
 
-	return t;
+	return this;
 }
 
 HTMLBuilder *HTMLBuilder::csrf_token(const String &token) {

@@ -305,16 +305,16 @@ public:
 	HTMLTag *video();
 	HTMLTag *wbr();
 
-	HTMLTag *a(const String &href, const String &cls = "", const String &id = "");
+	HTMLBuilder *a(const String &href, const String &cls = "", const String &id = "");
 	HTMLBuilder *fa(const String &href, const String &body, const String &cls = "", const String &id = "");
 
-	HTMLTag *div(const String &cls, const String &id = "");
+	HTMLBuilder *div(const String &cls, const String &id = "");
 	HTMLBuilder *fdiv(const String &body, const String &cls = "", const String &id = "");
 
-	HTMLTag *textarea(const String &name, const String &cls = "", const String &id = "");
+	HTMLBuilder *textarea(const String &name, const String &cls = "", const String &id = "");
 	HTMLBuilder *ftextarea(const String &name, const String &body, const String &cls = "", const String &id = "");
 
-	HTMLTag *select(const String &name, const String &cls = "", const String &id = "");
+	HTMLBuilder *select(const String &name, const String &cls = "", const String &id = "");
 
 	HTMLTag *option(const String &value);
 	HTMLBuilder *foption(const String &value, const String &body, const bool selected = false);
@@ -451,8 +451,8 @@ public:
 
 	HTMLTag *form_get();
 	HTMLTag *form_post();
-	HTMLTag *form_get(const String &action, const String &cls = "", const String &id = "");
-	HTMLTag *form_post(const String &action, const String &cls = "", const String &id = "");
+	HTMLBuilder *form_get(const String &action, const String &cls = "", const String &id = "");
+	HTMLBuilder *form_post(const String &action, const String &cls = "", const String &id = "");
 	//will add a csrf token from request
 	HTMLBuilder *form_post(const String &action, Request *request, const String &cls = "", const String &id = "");
 
@@ -481,28 +481,28 @@ public:
 
 	HTMLBuilder *label(const String &pfor, const String &plabel, const String &cls = "", const String &id = "");
 
-	HTMLTag *input_button(const String &name, const String &value = "", const String &cls = "", const String &id = "");
-	HTMLTag *input_checkbox(const String &name, const String &value = "", const String &cls = "", const String &id = "");
-	HTMLTag *input_color(const String &name, const String &value = "", const String &cls = "", const String &id = "");
-	HTMLTag *input_date(const String &name, const String &value = "", const String &cls = "", const String &id = "", const String &date_min = "", const String &date_max = "", const String &date_step = "");
-	HTMLTag *input_datetime_local(const String &name, const String &value = "", const String &cls = "", const String &id = "", const String &date_min = "", const String &date_max = "", const String &date_step = "");
-	HTMLTag *input_email(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "");
-	HTMLTag *input_file(const String &name, const String &accept = "", const String &cls = "", const String &id = "");
-	HTMLTag *input_image(const String &name, const String &src = "", const String &alt = "", const String &cls = "", const String &id = "", const int width = 0, const int height = 0);
-	HTMLTag *input_month(const String &name, const String &cls = "", const String &id = "");
-	HTMLTag *input_number(const String &name, const String & = "", const String & = "", const String &cls = "", const String &id = "");
-	HTMLTag *input_password(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "");
-	HTMLTag *input_radio(const String &name, const String &value = "", const String &cls = "", const String &id = "");
-	HTMLTag *input_range(const String &name, const String &value = "", const String &vmin = "", const String &vmax = "", const String &vstep = "", const String &cls = "", const String &id = "");
-	HTMLTag *input_reset(const String &name, const String &value = "", const String &cls = "", const String &id = "");
-	HTMLTag *input_search(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "", const String &pattern = "");
-	HTMLTag *input_submit(const String &value, const String &cls = "", const String &id = "");
-	HTMLTag *input_tel(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "", const String &pattern = "");
-	HTMLTag *input_text(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "");
-	HTMLTag *input_time(const String &name, const String &cls = "", const String &id = "", const String &vmin = "", const String &vmax = "", const String &vstep = "");
-	HTMLTag *input_url(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "");
-	HTMLTag *input_week(const String &name, const String &cls = "", const String &id = "", const String &vmin = "", const String &vmax = "");
-	HTMLTag *input_hidden(const String &name, const String &value);
+	HTMLBuilder *input_button(const String &name, const String &value = "", const String &cls = "", const String &id = "");
+	HTMLBuilder *input_checkbox(const String &name, const String &value = "", const bool checked = false, const String &cls = "", const String &id = "");
+	HTMLBuilder *input_color(const String &name, const String &value = "", const String &cls = "", const String &id = "");
+	HTMLBuilder *input_date(const String &name, const String &value = "", const String &cls = "", const String &id = "", const String &date_min = "", const String &date_max = "", const String &date_step = "");
+	HTMLBuilder *input_datetime_local(const String &name, const String &value = "", const String &cls = "", const String &id = "", const String &date_min = "", const String &date_max = "", const String &date_step = "");
+	HTMLBuilder *input_email(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "");
+	HTMLBuilder *input_file(const String &name, const String &accept = "", const String &cls = "", const String &id = "");
+	HTMLBuilder *input_image(const String &name, const String &src = "", const String &alt = "", const String &cls = "", const String &id = "", const int width = 0, const int height = 0);
+	HTMLBuilder *input_month(const String &name, const String &cls = "", const String &id = "");
+	HTMLBuilder *input_number(const String &name, const String & = "", const String & = "", const String &cls = "", const String &id = "");
+	HTMLBuilder *input_password(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "");
+	HTMLBuilder *input_radio(const String &name, const String &value = "", const String &cls = "", const String &id = "");
+	HTMLBuilder *input_range(const String &name, const String &value = "", const String &vmin = "", const String &vmax = "", const String &vstep = "", const String &cls = "", const String &id = "");
+	HTMLBuilder *input_reset(const String &name, const String &value = "", const String &cls = "", const String &id = "");
+	HTMLBuilder *input_search(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "", const String &pattern = "");
+	HTMLBuilder *input_submit(const String &value, const String &cls = "", const String &id = "");
+	HTMLBuilder *input_tel(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "", const String &pattern = "");
+	HTMLBuilder *input_text(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "");
+	HTMLBuilder *input_time(const String &name, const String &cls = "", const String &id = "", const String &vmin = "", const String &vmax = "", const String &vstep = "");
+	HTMLBuilder *input_url(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "");
+	HTMLBuilder *input_week(const String &name, const String &cls = "", const String &id = "", const String &vmin = "", const String &vmax = "");
+	HTMLBuilder *input_hidden(const String &name, const String &value);
 
 	HTMLBuilder *csrf_token(const String &token);
 	HTMLBuilder *csrf_token(Request *request);
