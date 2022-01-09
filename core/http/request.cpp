@@ -43,6 +43,8 @@ String Request::get_csrf_token() {
 void Request::set_csrf_token(const String &value) {
 	if (session.is_valid()) {
 		session->add("csrf_token", value);
+
+		SessionManager::get_singleton()->save_session(session);
 	}
 }
 
