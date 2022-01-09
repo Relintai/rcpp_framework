@@ -39,6 +39,7 @@ public:
 	std::map<String, Ref<Reference> > reference_data;
 
 	Ref<HTTPSession> get_or_create_session();
+	String get_csrf_token();
 
 	virtual const String get_cookie(const String &key);
 	virtual void add_cookie(const ::Cookie &cookie);

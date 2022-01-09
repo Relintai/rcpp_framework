@@ -118,7 +118,7 @@ public:
 	HTMLTag *action(const String &val);
 	HTMLTag *type(const String &val);
 	HTMLTag *placeholder(const String &val);
-	HTMLTag *fora(const String &val); //for attrib -> for is reserved keyword
+	HTMLTag *fora(const String &val); // for attrib -> for is reserved keyword
 	HTMLTag *rel(const String &val);
 	HTMLTag *rel_stylesheet();
 	HTMLTag *charset(const String &val);
@@ -181,25 +181,25 @@ public:
 
 	HTMLTag *a();
 	HTMLTag *abbr();
-	HTMLTag *acronym(); //Not supported in HTML5.
+	HTMLTag *acronym(); // Not supported in HTML5.
 	HTMLTag *address();
-	HTMLTag *applet(); //Not supported in HTML5.
+	HTMLTag *applet(); // Not supported in HTML5.
 	HTMLTag *area();
 	HTMLTag *article();
 	HTMLTag *aside();
 	HTMLTag *audio();
 	HTMLTag *b();
-	HTMLTag *basefont(); //Not supported in HTML5.
+	HTMLTag *basefont(); // Not supported in HTML5.
 	HTMLTag *bdi();
 	HTMLTag *bdo();
-	HTMLTag *big(); //Not supported in HTML5.
+	HTMLTag *big(); // Not supported in HTML5.
 	HTMLTag *blockquote();
 	HTMLTag *body();
 	HTMLTag *br();
 	HTMLTag *button();
 	HTMLTag *canvas();
 	HTMLTag *caption();
-	HTMLTag *center(); //Not supported in HTML5.
+	HTMLTag *center(); // Not supported in HTML5.
 	HTMLTag *cite();
 	HTMLTag *code();
 	HTMLTag *col();
@@ -220,11 +220,11 @@ public:
 	HTMLTag *fieldset();
 	HTMLTag *figcaption();
 	HTMLTag *figure();
-	HTMLTag *font(); //Not supported in HTML5.
+	HTMLTag *font(); // Not supported in HTML5.
 	HTMLTag *footer();
 	HTMLTag *form();
-	HTMLTag *frame(); //Not supported in HTML5.
-	HTMLTag *frameset(); //Not supported in HTML5.
+	HTMLTag *frame(); // Not supported in HTML5.
+	HTMLTag *frameset(); // Not supported in HTML5.
 	HTMLTag *h1();
 	HTMLTag *h2();
 	HTMLTag *h3();
@@ -253,7 +253,7 @@ public:
 	HTMLTag *meter();
 
 	HTMLTag *nav();
-	HTMLTag *noframes(); //Not supported in HTML5.
+	HTMLTag *noframes(); // Not supported in HTML5.
 	HTMLTag *noscript();
 	HTMLTag *object();
 	HTMLTag *ol();
@@ -278,7 +278,7 @@ public:
 	HTMLTag *small();
 	HTMLTag *source();
 	HTMLTag *span();
-	HTMLTag *strike(); //Not supported in HTML5
+	HTMLTag *strike(); // Not supported in HTML5
 	HTMLTag *strong();
 	HTMLTag *style();
 	HTMLTag *sub();
@@ -298,30 +298,30 @@ public:
 	HTMLTag *title();
 	HTMLTag *tr();
 	HTMLTag *track();
-	HTMLTag *tt(); //Not supported in HTML5.
+	HTMLTag *tt(); // Not supported in HTML5.
 	HTMLTag *u();
 	HTMLTag *ul();
 	HTMLTag *var();
 	HTMLTag *video();
 	HTMLTag *wbr();
 
-	HTMLTag *a(const String& href, const String& cls = "", const String& id = "");
-	HTMLBuilder *fa(const String& href, const String& body, const String& cls = "", const String& id = "");
+	HTMLTag *a(const String &href, const String &cls = "", const String &id = "");
+	HTMLBuilder *fa(const String &href, const String &body, const String &cls = "", const String &id = "");
 
-	HTMLTag *div(const String& cls, const String& id = "");
-	HTMLBuilder *fdiv(const String& body, const String& cls = "", const String& id = "");
+	HTMLTag *div(const String &cls, const String &id = "");
+	HTMLBuilder *fdiv(const String &body, const String &cls = "", const String &id = "");
 
-	HTMLTag *textarea(const String& name, const String& cls = "", const String& id = "");
-	HTMLBuilder *ftextarea(const String& name, const String& body, const String& cls = "", const String& id = "");
+	HTMLTag *textarea(const String &name, const String &cls = "", const String &id = "");
+	HTMLBuilder *ftextarea(const String &name, const String &body, const String &cls = "", const String &id = "");
 
-	HTMLTag *select(const String& name, const String& cls = "", const String& id = "");
+	HTMLTag *select(const String &name, const String &cls = "", const String &id = "");
 
-	HTMLTag *option(const String& value);
-	HTMLBuilder *foption(const String& value, const String& body, const bool selected = false);
+	HTMLTag *option(const String &value);
+	HTMLBuilder *foption(const String &value, const String &body, const bool selected = false);
 
-	//closing tags c prefix means close
-	//Note simple tags should not have these like <br>
-	//Note that I might have a few that shouldn't be here, those will be removed as I find them
+	// closing tags c prefix means close
+	// Note simple tags should not have these like <br>
+	// Note that I might have a few that shouldn't be here, those will be removed as I find them
 	HTMLBuilder *ca();
 	HTMLBuilder *cabbr();
 	HTMLBuilder *cacronym();
@@ -451,8 +451,10 @@ public:
 
 	HTMLTag *form_get();
 	HTMLTag *form_post();
-	HTMLTag *form_get(const String& action, const String& cls = "", const String& id = "");
-	HTMLTag *form_post(const String& action, const String& cls = "", const String& id = "");
+	HTMLTag *form_get(const String &action, const String &cls = "", const String &id = "");
+	HTMLTag *form_post(const String &action, const String &cls = "", const String &id = "");
+	//will add a csrf token from request
+	HTMLBuilder *form_post(const String &action, Request *request, const String &cls = "", const String &id = "");
 
 	HTMLTag *input_button();
 	HTMLTag *input_checkbox();
@@ -477,34 +479,37 @@ public:
 	HTMLTag *input_url();
 	HTMLTag *input_week();
 
-	HTMLBuilder *label(const String& pfor, const String& plabel, const String& cls = "", const String& id = "");
+	HTMLBuilder *label(const String &pfor, const String &plabel, const String &cls = "", const String &id = "");
 
-	HTMLTag *input_button(const String& name, const String& value = "", const String& cls = "", const String& id = "");
-	HTMLTag *input_checkbox(const String& name, const String& value = "", const String& cls = "", const String& id = "");
-	HTMLTag *input_color(const String& name, const String& value = "", const String& cls = "", const String& id = "");
-	HTMLTag *input_date(const String& name, const String& value = "", const String& cls = "", const String& id = "", const String& date_min = "", const String& date_max = "", const String& date_step = "");
-	HTMLTag *input_datetime_local(const String& name, const String& value = "", const String& cls = "", const String& id = "", const String& date_min = "", const String& date_max = "", const String& date_step = "");
-	HTMLTag *input_email(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "");
-	HTMLTag *input_file(const String& name, const String& accept = "", const String& cls = "", const String& id = "");
-	HTMLTag *input_image(const String& name, const String& src = "", const String& alt = "", const String& cls = "", const String& id = "", const int width = 0, const int height = 0);
-	HTMLTag *input_month(const String& name, const String& cls = "", const String& id = "");
-	HTMLTag *input_number(const String& name, const String& = "", const String& = "", const String& cls = "", const String& id = "");
-	HTMLTag *input_password(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "", const String& minlength = "", const String& maxlength = "", const String& size = "");
-	HTMLTag *input_radio(const String& name, const String& value = "", const String& cls = "", const String& id = "");
-	HTMLTag *input_range(const String& name, const String& value = "", const String& vmin = "", const String& vmax = "", const String& vstep = "", const String& cls = "", const String& id = "");
-	HTMLTag *input_reset(const String& name, const String& value = "", const String& cls = "", const String& id = "");
-	HTMLTag *input_search(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "", const String& minlength = "", const String& maxlength = "", const String& size = "", const String& pattern = "");
-	HTMLTag *input_submit(const String& value, const String& cls = "", const String& id = "");
-	HTMLTag *input_tel(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "", const String& minlength = "", const String& maxlength = "", const String& size = "", const String& pattern = "");
-	HTMLTag *input_text(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "", const String& minlength = "", const String& maxlength = "", const String& size = "");
-	HTMLTag *input_time(const String& name, const String& cls = "", const String& id = "", const String& vmin = "", const String& vmax = "", const String& vstep = "");
-	HTMLTag *input_url(const String& name, const String& value = "", const String& placeholder = "", const String& cls = "", const String& id = "", const String& minlength = "", const String& maxlength = "", const String& size = "");
-	HTMLTag *input_week(const String& name, const String& cls = "", const String& id = "", const String& vmin = "", const String& vmax = "");
-	HTMLTag *input_hidden(const String& name, const String& value);
+	HTMLTag *input_button(const String &name, const String &value = "", const String &cls = "", const String &id = "");
+	HTMLTag *input_checkbox(const String &name, const String &value = "", const String &cls = "", const String &id = "");
+	HTMLTag *input_color(const String &name, const String &value = "", const String &cls = "", const String &id = "");
+	HTMLTag *input_date(const String &name, const String &value = "", const String &cls = "", const String &id = "", const String &date_min = "", const String &date_max = "", const String &date_step = "");
+	HTMLTag *input_datetime_local(const String &name, const String &value = "", const String &cls = "", const String &id = "", const String &date_min = "", const String &date_max = "", const String &date_step = "");
+	HTMLTag *input_email(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "");
+	HTMLTag *input_file(const String &name, const String &accept = "", const String &cls = "", const String &id = "");
+	HTMLTag *input_image(const String &name, const String &src = "", const String &alt = "", const String &cls = "", const String &id = "", const int width = 0, const int height = 0);
+	HTMLTag *input_month(const String &name, const String &cls = "", const String &id = "");
+	HTMLTag *input_number(const String &name, const String & = "", const String & = "", const String &cls = "", const String &id = "");
+	HTMLTag *input_password(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "");
+	HTMLTag *input_radio(const String &name, const String &value = "", const String &cls = "", const String &id = "");
+	HTMLTag *input_range(const String &name, const String &value = "", const String &vmin = "", const String &vmax = "", const String &vstep = "", const String &cls = "", const String &id = "");
+	HTMLTag *input_reset(const String &name, const String &value = "", const String &cls = "", const String &id = "");
+	HTMLTag *input_search(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "", const String &pattern = "");
+	HTMLTag *input_submit(const String &value, const String &cls = "", const String &id = "");
+	HTMLTag *input_tel(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "", const String &pattern = "");
+	HTMLTag *input_text(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "");
+	HTMLTag *input_time(const String &name, const String &cls = "", const String &id = "", const String &vmin = "", const String &vmax = "", const String &vstep = "");
+	HTMLTag *input_url(const String &name, const String &value = "", const String &placeholder = "", const String &cls = "", const String &id = "", const String &minlength = "", const String &maxlength = "", const String &size = "");
+	HTMLTag *input_week(const String &name, const String &cls = "", const String &id = "", const String &vmin = "", const String &vmax = "");
+	HTMLTag *input_hidden(const String &name, const String &value);
+
+	HTMLBuilder *csrf_token(const String &token);
+	HTMLBuilder *csrf_token(Request *request);
 
 	void f();
 
-	//write
+	// write
 	HTMLBuilder *w(const String &val);
 
 	HTMLBuilder *wn(const double val, int p_decimals = -1);
@@ -515,7 +520,7 @@ public:
 	HTMLBuilder *wbn(const bool val);
 	HTMLBuilder *wbs(const bool val);
 
-	//write_escaped
+	// write_escaped
 	HTMLBuilder *we(const String &val);
 
 	HTMLBuilder *write_tag();

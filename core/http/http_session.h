@@ -19,6 +19,7 @@ public:
 	bool has(const String &key);
 
 	Variant get(const String &key);
+	const Variant &get_const(const String &key);
 	Object *get_object(const String &key);
 	Ref<Reference> get_reference(const String &key);
 	int get_int(const String &key);

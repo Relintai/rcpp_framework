@@ -1,6 +1,8 @@
 #include "html_builder.h"
 #include "core/string.h"
 
+#include "core/http/request.h"
+
 HTMLTag *HTMLTag::str(const String &str) {
 	result += " " + str;
 
@@ -796,7 +798,7 @@ HTMLTag *HTMLBuilder::abbr() {
 	return tag.start("abbr");
 }
 
-HTMLTag *HTMLBuilder::acronym() { //Not supported in HTML5. Use <abbr> instead. Defines an acronym
+HTMLTag *HTMLBuilder::acronym() { // Not supported in HTML5. Use <abbr> instead. Defines an acronym
 	write_tag();
 
 	return tag.start("acronym");
@@ -808,7 +810,7 @@ HTMLTag *HTMLBuilder::address() {
 	return tag.start("address");
 }
 
-HTMLTag *HTMLBuilder::applet() { //Not supported in HTML5. Use <embed> or <object> instead. Defines an embedded applet
+HTMLTag *HTMLBuilder::applet() { // Not supported in HTML5. Use <embed> or <object> instead. Defines an embedded applet
 	write_tag();
 
 	return tag.start("applet");
@@ -844,7 +846,7 @@ HTMLTag *HTMLBuilder::b() {
 	return tag.start("b");
 }
 
-HTMLTag *HTMLBuilder::basefont() { //Not supported in HTML5. Use CSS instead. Specifies a default color, size, and font for all text in a document
+HTMLTag *HTMLBuilder::basefont() { // Not supported in HTML5. Use CSS instead. Specifies a default color, size, and font for all text in a document
 	write_tag();
 
 	return tag.start("basefont");
@@ -862,7 +864,7 @@ HTMLTag *HTMLBuilder::bdo() {
 	return tag.start("bdo");
 }
 
-HTMLTag *HTMLBuilder::big() { //Not supported in HTML5. Use CSS instead. Defines big text
+HTMLTag *HTMLBuilder::big() { // Not supported in HTML5. Use CSS instead. Defines big text
 	write_tag();
 
 	return tag.start("big");
@@ -904,7 +906,7 @@ HTMLTag *HTMLBuilder::caption() {
 	return tag.start("caption");
 }
 
-HTMLTag *HTMLBuilder::center() { //Not supported in HTML5. Use CSS instead. Defines centered text
+HTMLTag *HTMLBuilder::center() { // Not supported in HTML5. Use CSS instead. Defines centered text
 	write_tag();
 
 	return tag.start("center");
@@ -1029,7 +1031,7 @@ HTMLTag *HTMLBuilder::figure() {
 	return tag.start("figure");
 }
 
-HTMLTag *HTMLBuilder::font() { //Not supported in HTML5.
+HTMLTag *HTMLBuilder::font() { // Not supported in HTML5.
 	write_tag();
 
 	return tag.start("font");
@@ -1047,13 +1049,13 @@ HTMLTag *HTMLBuilder::form() {
 	return tag.start("form");
 }
 
-HTMLTag *HTMLBuilder::frame() { //Not supported in HTML5.
+HTMLTag *HTMLBuilder::frame() { // Not supported in HTML5.
 	write_tag();
 
 	return tag.start("frame");
 }
 
-HTMLTag *HTMLBuilder::frameset() { //Not supported in HTML5.
+HTMLTag *HTMLBuilder::frameset() { // Not supported in HTML5.
 	write_tag();
 
 	return tag.start("frameset");
@@ -1214,7 +1216,7 @@ HTMLTag *HTMLBuilder::nav() {
 	return tag.start("nav");
 }
 
-HTMLTag *HTMLBuilder::noframes() { //Not supported in HTML5.
+HTMLTag *HTMLBuilder::noframes() { // Not supported in HTML5.
 	write_tag();
 
 	return tag.start("noframes");
@@ -1358,7 +1360,7 @@ HTMLTag *HTMLBuilder::span() {
 	return tag.start("span");
 }
 
-HTMLTag *HTMLBuilder::strike() { //Not supported in HTML5
+HTMLTag *HTMLBuilder::strike() { // Not supported in HTML5
 	write_tag();
 
 	return tag.start("strike");
@@ -1472,7 +1474,7 @@ HTMLTag *HTMLBuilder::track() {
 	return tag.start("track");
 }
 
-HTMLTag *HTMLBuilder::tt() { //Not supported in HTML5.
+HTMLTag *HTMLBuilder::tt() { // Not supported in HTML5.
 	write_tag();
 
 	return tag.start("tt");
@@ -1608,7 +1610,7 @@ HTMLBuilder *HTMLBuilder::foption(const String &value, const String &body, const
 	return this;
 }
 
-//Closing tags
+// Closing tags
 
 HTMLBuilder *HTMLBuilder::ca() {
 	write_tag();
@@ -2491,6 +2493,13 @@ HTMLTag *HTMLBuilder::form_post(const String &action, const String &cls, const S
 	return t;
 }
 
+HTMLBuilder *HTMLBuilder::form_post(const String &action, Request *request, const String &cls, const String &id) {
+	form_post(action, cls, id);
+	csrf_token(request);
+
+	return this;
+}
+
 HTMLTag *HTMLBuilder::input_button() {
 	write_tag();
 
@@ -3211,7 +3220,7 @@ HTMLTag *HTMLBuilder::input_week(const String &name, const String &cls, const St
 	return t;
 }
 
-HTMLTag *HTMLBuilder::input_hidden(const String& name, const String& value) {
+HTMLTag *HTMLBuilder::input_hidden(const String &name, const String &value) {
 	HTMLTag *t = input_hidden();
 
 	t->name(name);
@@ -3221,6 +3230,20 @@ HTMLTag *HTMLBuilder::input_hidden(const String& name, const String& value) {
 	}
 
 	return t;
+}
+
+HTMLBuilder *HTMLBuilder::csrf_token(const String &token) {
+	if (token == "") {
+		//don't waste html characters if it's an empty string anyway
+		return this;
+	}
+
+	input_hidden("csrf_token", token);
+
+	return this;
+}
+HTMLBuilder *HTMLBuilder::csrf_token(Request *request) {
+	return csrf_token(request->get_csrf_token());
 }
 
 void HTMLBuilder::f() {
@@ -3286,7 +3309,7 @@ HTMLBuilder *HTMLBuilder::wbs(const bool val) {
 	return this;
 }
 
-//TODO!
+// TODO!
 HTMLBuilder *HTMLBuilder::we(const String &val) {
 	printf("HTMLBuilder::write_excaped NYI!");
 

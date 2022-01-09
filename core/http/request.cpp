@@ -18,6 +18,20 @@ Ref<HTTPSession> Request::get_or_create_session() {
 	return session;
 }
 
+String Request::get_csrf_token() {
+	if (!session.is_valid()) {
+		return "";
+	}
+
+	const Variant &val = session->get_const("csrf_token");
+
+	if (val.is_simple_type()) {
+		return val.to_string();
+	}
+
+	return "";
+}
+
 const String Request::get_cookie(const String &key) {
 	static String str(0);
 	return str;

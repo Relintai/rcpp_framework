@@ -22,6 +22,9 @@ bool HTTPSession::has(const String &key) {
 Variant HTTPSession::get(const String &key) {
 	return _data[key];
 }
+const Variant &HTTPSession::get_const(const String &key) {
+	return _data[key];
+}
 
 Object *HTTPSession::get_object(const String &key) {
 	// don't lock here
