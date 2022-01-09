@@ -216,7 +216,7 @@ void SessionManager::clear() {
 String SessionManager::generate_session_id(const String &base) {
 	// todo make something simpler / better
 
-	SHA256 *h = SHA256::get();
+	Ref<SHA256> h = SHA256::get();
 	String sid = base;
 
 	sid += rand();
@@ -224,8 +224,6 @@ String SessionManager::generate_session_id(const String &base) {
 
 	sid = h->get_hash();
 	sid.resize(20);
-
-	delete h;
 
 	return sid;
 }

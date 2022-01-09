@@ -49,6 +49,6 @@ HashLibSHA256::HashLibSHA256() {
 HashLibSHA256::~HashLibSHA256() {
 }
 
-SHA256 *HashLibSHA256::_creation_func() {
+Ref<SHA256> HashLibSHA256::_creation_func() {
 	return new HashLibSHA256();
 }

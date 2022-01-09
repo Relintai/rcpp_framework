@@ -23,7 +23,7 @@ public:
 	~HashLibSHA256();
 
 protected:
-	static SHA256 *_creation_func();
+	static Ref<SHA256> _creation_func();
 
 	_SHA256 hasher;
 };

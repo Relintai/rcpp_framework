@@ -18,13 +18,13 @@ public:
 
 	virtual void reset() = 0;
 
-	static SHA256 *get();
+	static Ref<SHA256> get();
 
 	SHA256();
 	virtual ~SHA256();
 
 protected:
-	static SHA256 *(*_sha_256_creation_func)(void);
+	static Ref<SHA256> (*_sha_256_creation_func)(void);
 };
 
 #endif
