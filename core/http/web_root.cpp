@@ -68,7 +68,9 @@ void WebRoot::default_404_error_handler(Request *request, int error_code) {
 }
 
 void WebRoot::handle_request_main(Request *request) {
-	process_middlewares(request);
+	if (process_middlewares(request)) {
+		return;
+	}
 
 	// handle files first
 	if (try_send_wwwroot_file(request)) {
@@ -95,13 +97,15 @@ void WebRoot::handle_error_send_request(Request *request, const int error_code) 
 	func(request, error_code);
 }
 
-void WebRoot::process_middlewares(Request *request) {
+bool WebRoot::process_middlewares(Request *request) {
 	for (int i = 0; i < _middlewares.size(); ++i) {
 		if (_middlewares[i]->on_before_handle_request_main(request)) {
 			// handled
-			return;
+			return true;
 		}
 	}
+
+	return false;
 }
 
 bool WebRoot::try_send_wwwroot_file(Request *request) {

@@ -25,7 +25,7 @@ public:
 	void handle_request_main(Request *request);
 	void handle_error_send_request(Request *request, const int error_code);
 
-	void process_middlewares(Request *request);
+	bool process_middlewares(Request *request);
 	bool try_send_wwwroot_file(Request *request);
 	void send_file(const String &path, Request *request);
 
