@@ -3,7 +3,7 @@
 #include "core/math/math.h"
 #include "core/reference.h"
 
-Variant::Type Variant::get_type() {
+Variant::Type Variant::get_type() const {
 	return _type;
 }
 
@@ -79,11 +79,6 @@ void Variant::zero() {
 }
 
 void Variant::parse(const String &str) {
-	if (str.is_bool()) {
-		set_bool(str.to_bool());
-		return;
-	}
-
 	if (str.is_int()) {
 		set_int(str.to_int());
 		return;
@@ -96,6 +91,11 @@ void Variant::parse(const String &str) {
 
 	if (str.is_numeric()) {
 		set_float(str.to_float());
+		return;
+	}
+
+	if (str.is_bool()) {
+		set_bool(str.to_bool());
 		return;
 	}
 
@@ -142,6 +142,14 @@ bool Variant::is_reference() const {
 	}
 
 	return false;
+}
+
+bool Variant::is_primitive_type() const {
+	return _type == TYPE_BOOL || _type == TYPE_INT || _type == TYPE_UINT || _type == TYPE_FLOAT;
+}
+
+bool Variant::is_simple_type() const {
+	return _type == TYPE_BOOL || _type == TYPE_INT || _type == TYPE_UINT || _type == TYPE_FLOAT || _type == TYPE_STRING;
 }
 
 bool Variant::to_bool() const {
@@ -430,7 +438,7 @@ void Variant::set_pointer(void *value) {
 void Variant::set_variant(const Variant &value) {
 	clear();
 
-	switch (_type) {
+	switch (value._type) {
 		case TYPE_NULL:
 			break;
 		case TYPE_BOOL:

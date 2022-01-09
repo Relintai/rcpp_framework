@@ -19,7 +19,7 @@ public:
 		TYPE_POINTER,
 	};
 
-	Type get_type();
+	Type get_type() const;
 
 	void clear();
 	void zero();
@@ -37,6 +37,9 @@ public:
 	bool is_object() const;
 	bool is_pointer() const;
 	bool is_reference() const;
+
+	bool is_primitive_type() const;
+	bool is_simple_type() const;
 
 	bool to_bool() const;
 	int to_int() const;
