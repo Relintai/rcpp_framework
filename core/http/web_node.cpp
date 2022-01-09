@@ -70,6 +70,11 @@ void WebNode::set_database(Database *db) {
 #endif
 
 void WebNode::handle_request_main(Request *request) {
+	_handle_request_main(request);
+}
+
+void WebNode::_handle_request_main(Request *request) {
+	request->send_error(HTTP_STATUS_CODE_404_NOT_FOUND);
 }
 
 void WebNode::handle_error_send_request(Request *request, const int error_code) {

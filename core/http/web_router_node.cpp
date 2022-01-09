@@ -5,7 +5,7 @@
 
 void WebRouterNode::handle_request_main(Request *request) {
 	if (!try_route_request_to_children(request)) {
-		request->send_error(404);
+		_handle_request_main(request);
 	}
 }
 

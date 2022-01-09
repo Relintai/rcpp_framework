@@ -33,6 +33,7 @@ public:
 #endif
 
 	virtual void handle_request_main(Request *request);
+	virtual void _handle_request_main(Request *request);
 	virtual void handle_error_send_request(Request *request, const int error_code);
 
 	virtual void create_validators();
