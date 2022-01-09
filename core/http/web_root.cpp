@@ -25,15 +25,36 @@ void WebRoot::setup_error_handlers() {
 void WebRoot::setup_middleware() {
 	// Middlewares get processed in the order they are in the _middlewares array
 
+	// -------        Built in middleware selection        -------
+
+	// ---   SessionSetupMiddleware   ---
 	// If you want sessions add this to your inherited class.
+	// (#include "core/http/session_manager.h")
+
 	// _middlewares.push_back(Ref<SessionSetupMiddleware>(new SessionSetupMiddleware()));
 
+	// ---   UserSessionSetupMiddleware   ---
 	// This one looks up users based on sessions
+	// (#include "modules/users/user_controller.h")
+
 	// _middlewares.push_back(Ref<UserSessionSetupMiddleware>(new UserSessionSetupMiddleware()));
 
+	// ---   RBACUserSessionSetupMiddleware / RBACDefaultUserSessionSetupMiddleware   ---
 	// Same as the previous, but if you want the RBAC system to work use one of these
+	// UserSessionSetupMiddleware is not needed if you need these
+	// (#include "modules/rbac_users/rbac_user_controller.h")
+
 	// _middlewares.push_back(Ref<RBACUserSessionSetupMiddleware>(new RBACUserSessionSetupMiddleware()));
 	// _middlewares.push_back(Ref<RBACDefaultUserSessionSetupMiddleware>(new RBACDefaultUserSessionSetupMiddleware()));
+
+	// ---   CSRF Token Middlweare    ---
+	// (#include "core/http/csrf_token.h")
+
+	// Ref<CSRFTokenMiddleware> csrf_middleware;
+	// csrf_middleware.instance();
+	// csrf_middleware->ignored_urls.push_back("/user/login");
+	// csrf_middleware->ignored_urls.push_back("/user/register");
+	// _middlewares.push_back(csrf_middleware);
 }
 
 void WebRoot::default_fallback_error_handler(Request *request, int error_code) {
