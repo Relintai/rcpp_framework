@@ -40,6 +40,29 @@ String Request::get_csrf_token() {
 	return "";
 }
 
+void Request::set_csrf_token(const String &value) {
+	if (session.is_valid()) {
+		session->add("csrf_token", value);
+	}
+}
+
+bool Request::validate_csrf_token() {
+	String param_token = get_parameter("csrf_token");
+	param_token.trim();
+
+	if (param_token == "") {
+		return false;
+	}
+
+	String token = get_csrf_token();
+
+	if (token == "") {
+		return false;
+	}
+
+	return param_token == token;
+}
+
 const String Request::get_cookie(const String &key) {
 	static String str(0);
 	return str;

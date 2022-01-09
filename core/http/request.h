@@ -42,6 +42,8 @@ public:
 	
 	bool has_csrf_token();
 	String get_csrf_token();
+	void set_csrf_token(const String &value);
+	bool validate_csrf_token();
 
 	virtual const String get_cookie(const String &key);
 	virtual void add_cookie(const ::Cookie &cookie);
