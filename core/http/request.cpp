@@ -18,6 +18,14 @@ Ref<HTTPSession> Request::get_or_create_session() {
 	return session;
 }
 
+bool Request::has_csrf_token() {
+	if (!session.is_valid()) {
+		return false;
+	}
+
+	return session->has("csrf_token");
+}
+
 String Request::get_csrf_token() {
 	if (!session.is_valid()) {
 		return "";
