@@ -1,27 +1,26 @@
 #ifndef HTTP_SESSION_H
 #define HTTP_SESSION_H
 
-#include "core/string.h"
-
-#include "core/object.h"
-#include "core/reference.h"
 #include <map>
-#include <mutex>
 
-class HTTPSession : public Object {
-	RCPP_OBJECT(HTTPSession, Object);
+#include "core/reference.h"
+
+#include "core/string.h"
+#include "core/variant.h"
+#include "core/threading/mutex.h"
+
+
+class HTTPSession : public Reference {
+	RCPP_OBJECT(HTTPSession, Reference);
 
 public:
-	void add_object(const String &key, Object *obj);
-	void remove_object(const String &key);
+	void add(const String &key, const Variant &value);
+	void remove(const String &key);
+	bool has(const String &key);
+
+	Variant get(const String &key);
 	Object *get_object(const String &key);
-
-	void add_reference(const String &key, const Ref<Reference> &ref);
-	void remove_reference(const String &key);
 	Ref<Reference> get_reference(const String &key);
-
-	void add_int(const String &key, const int val);
-	void remove_int(const String &key);
 	int get_int(const String &key);
 
 	String session_id;
@@ -30,18 +29,15 @@ public:
 	void clear();
 	void reset();
 
-	std::map<String, int> get_int_data();
+	std::map<String, Variant> *get_data();
 
 	HTTPSession();
 	~HTTPSession();
 
 protected:
-	std::mutex _mutex;
+	Mutex _mutex;
 
-	//todo make something similar to godot's variant. (Or get godot's variant lol)
-	std::map<String, Object *> _data;
-	std::map<String, Ref<Reference> > _reference_data;
-	std::map<String, int> _int_data;
+	std::map<String, Variant> _data;
 };
 
 #endif

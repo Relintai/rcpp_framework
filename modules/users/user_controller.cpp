@@ -16,7 +16,7 @@
 #include "core/hash/sha256.h"
 
 void UserController::handle_request_main(Request *request) {
-	if (request->session) {
+	if (request->session.is_valid()) {
 		Ref<User> u = request->reference_data["user"];
 
 		if (u.is_valid()) {
@@ -68,9 +68,9 @@ void UserController::handle_login_request_default(Request *request) {
 			if (!check_password(user, data.pass_val)) {
 				data.error_str += "Invalid username or password!";
 			} else {
-				HTTPSession *session = request->get_or_create_session();
+				Ref<HTTPSession> session = request->get_or_create_session();
 
-				session->add_int("user_id", user->id);
+				session->add("user_id", user->id);
 				SessionManager::get_singleton()->save_session(session);
 
 				::Cookie c = ::Cookie("session_id", session->session_id);
@@ -794,7 +794,7 @@ String UserController::_table_name = "users";
 
 // returnring true means handled, false means continue
 bool UserSessionSetupMiddleware::on_before_handle_request_main(Request *request) {
-	if (request->session) {
+	if (request->session.is_valid()) {
 		int user_id = request->session->get_int("user_id");
 
 		if (user_id != 0) {
@@ -805,7 +805,7 @@ bool UserSessionSetupMiddleware::on_before_handle_request_main(Request *request)
 				request->reference_data["user"] = u;
 			} else {
 				// log
-				request->session->remove_int("user_id");
+				request->session->remove("user_id");
 			}
 		}
 	}

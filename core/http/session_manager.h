@@ -3,7 +3,7 @@
 
 #include "core/string.h"
 #include "core/containers/vector.h"
-#include <mutex>
+#include "core/threading/mutex.h"
 #include <map>
 
 #include "core/object.h"
@@ -17,12 +17,12 @@ class SessionManager : public Object {
 	RCPP_OBJECT(SessionManager, Object);
 
 public:
-	void add_session(HTTPSession *session);
-	void remove_session(HTTPSession *session);
+	void add_session(Ref<HTTPSession> &session);
+	void remove_session(Ref<HTTPSession> &session);
 	void delete_session(const String &session_id);
-	void save_session(HTTPSession *session);
-	HTTPSession *get_session(const String &session_id);
-	HTTPSession *create_session();
+	void save_session(Ref<HTTPSession> &session);
+	Ref<HTTPSession> get_session(const String &session_id);
+	Ref<HTTPSession> create_session();
 
 	void load_sessions();
 
@@ -39,9 +39,9 @@ public:
 	SessionManager();
 	~SessionManager();
 
-	std::map<String, HTTPSession *> _sessions;
-	Vector<HTTPSession *> _sessions_vec;
-	std::mutex _mutex;
+	std::map<String, Ref<HTTPSession>> _sessions;
+	Vector<Ref<HTTPSession>> _sessions_vec;
+	Mutex _mutex;
 
 protected:
 	static SessionManager *_self;

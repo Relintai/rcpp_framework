@@ -8,8 +8,8 @@
 #include "core/http/web_root.h"
 #include "session_manager.h"
 
-HTTPSession *Request::get_or_create_session() {
-	if (session) {
+Ref<HTTPSession> Request::get_or_create_session() {
+	if (session.is_valid()) {
 		return session;
 	}
 

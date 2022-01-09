@@ -1,58 +1,48 @@
 
 #include "http_session.h"
 
-void HTTPSession::add_object(const String &key, Object *obj) {
-	std::lock_guard<std::mutex> lock(_mutex);
+void HTTPSession::add(const String &key, const Variant &value) {
+	_mutex.lock();
 
-	_data[key] = obj;
+	_data[key] = value;
+
+	_mutex.unlock();
 }
-void HTTPSession::remove_object(const String &key) {
-	std::lock_guard<std::mutex> lock(_mutex);
+void HTTPSession::remove(const String &key) {
+	_mutex.lock();
 
-	_data.erase(key);
+	_data[key] = Variant();
+
+	_mutex.unlock();
 }
-Object *HTTPSession::get_object(const String &key) {
-	//don't lock here
+bool HTTPSession::has(const String &key) {
+	return _data[key].is_null();
+}
 
+Variant HTTPSession::get(const String &key) {
 	return _data[key];
 }
 
-void HTTPSession::add_reference(const String &key, const Ref<Reference> &ref) {
-	std::lock_guard<std::mutex> lock(_mutex);
+Object *HTTPSession::get_object(const String &key) {
+	// don't lock here
 
-	_reference_data[key] = ref;
+	return _data[key].to_object();
 }
-void HTTPSession::remove_reference(const String &key) {
-	std::lock_guard<std::mutex> lock(_mutex);
 
-	_reference_data.erase(key);
-}
 Ref<Reference> HTTPSession::get_reference(const String &key) {
-	//don't lock here
+	// don't lock here
 
-	return _reference_data[key];
+	return _data[key].to_reference();
 }
 
-void HTTPSession::add_int(const String &key, const int val) {
-	std::lock_guard<std::mutex> lock(_mutex);
-
-	_int_data[key] = val;
-}
-void HTTPSession::remove_int(const String &key) {
-	std::lock_guard<std::mutex> lock(_mutex);
-
-	_int_data.erase(key);
-}
 int HTTPSession::get_int(const String &key) {
-	//don't lock here
+	// don't lock here
 
-	return _int_data[key];
+	return _data[key].to_int();
 }
 
 void HTTPSession::clear() {
 	_data.clear();
-	_int_data.clear();
-	_reference_data.clear();
 }
 
 void HTTPSession::reset() {
@@ -60,8 +50,8 @@ void HTTPSession::reset() {
 	session_id = "";
 }
 
-std::map<String, int> HTTPSession::get_int_data() {
-	return _int_data;
+std::map<String, Variant> *HTTPSession::get_data() {
+	return &_data;
 }
 
 HTTPSession::HTTPSession() {

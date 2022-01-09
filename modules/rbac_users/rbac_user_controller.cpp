@@ -59,7 +59,7 @@ RBACUserController::~RBACUserController() {
 
 // returnring true means handled, false means continue
 bool RBACUserSessionSetupMiddleware::on_before_handle_request_main(Request *request) {
-	if (request->session) {
+	if (request->session.is_valid()) {
 		int user_id = request->session->get_int("user_id");
 
 		if (user_id != 0) {
@@ -70,7 +70,7 @@ bool RBACUserSessionSetupMiddleware::on_before_handle_request_main(Request *requ
 				request->reference_data["user"] = u;
 			} else {
 				// log
-				request->session->remove_int("user_id");
+				request->session->remove("user_id");
 			}
 		}
 	}
@@ -89,7 +89,7 @@ bool RBACDefaultUserSessionSetupMiddleware::on_before_handle_request_main(Reques
 
 	Ref<RBACRank> rank;
 
-	if (request->session) {
+	if (request->session.is_valid()) {
 		int user_id = request->session->get_int("user_id");
 
 		if (user_id != 0) {
@@ -102,7 +102,7 @@ bool RBACDefaultUserSessionSetupMiddleware::on_before_handle_request_main(Reques
 				request->reference_data["user"] = u;
 			} else {
 				// log
-				request->session->remove_int("user_id");
+				request->session->remove("user_id");
 			}
 		}
 	}

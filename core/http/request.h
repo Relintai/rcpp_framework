@@ -34,11 +34,11 @@ public:
 
 	bool connection_closed;
 
-	HTTPSession *session;
+	Ref<HTTPSession> session;
 	std::map<String, Object *> data;
 	std::map<String, Ref<Reference> > reference_data;
 
-	HTTPSession *get_or_create_session();
+	Ref<HTTPSession> get_or_create_session();
 
 	virtual const String get_cookie(const String &key);
 	virtual void add_cookie(const ::Cookie &cookie);
