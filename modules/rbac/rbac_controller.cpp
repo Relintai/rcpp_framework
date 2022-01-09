@@ -182,6 +182,8 @@ void RBACController::render_rank_view(Request *request, RBACAdminRankViewData *d
 
 	b.form()->method("POST")->action(request->get_url_root() + String::num(id));
 	{
+		b.csrf_token(request);
+
 		//b.input()->type("hidden")->name("id")->value(String::num(id))->f()->cinput();
 		b.w("Name:")->br();
 		b.input()->type("text")->name("name")->value(name)->f()->br();
@@ -401,6 +403,8 @@ void RBACController::admin_render_permission_editor_entry_edit_create_view(Reque
 
 	b.form()->method("POST")->action(request->get_url_root());
 	{
+		b.csrf_token(request);
+
 		b.w("Name:")->br();
 		b.input()->type("text")->name("name")->value(name)->f()->br();
 		b.w("URL:")->br();

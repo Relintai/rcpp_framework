@@ -112,6 +112,8 @@ void UserController::render_login_request_default(Request *request, LoginRequest
 		// todo href path helper
 		b.form()->method("POST")->href("/user/login");
 		{
+			b.csrf_token(request);
+
 			b.w("Username");
 			b.br();
 			b.input()->type("text")->name("username")->value(data->uname_val);
@@ -226,6 +228,8 @@ void UserController::render_register_request_default(Request *request, RegisterR
 		// todo href path helper
 		b.form()->method("POST")->href("/user/register");
 		{
+			b.csrf_token(request);
+
 			b.w("Username");
 			b.br();
 			b.input()->type("text")->name("username")->value(data->uname_val);
@@ -396,6 +400,8 @@ void UserController::render_settings_request(Ref<User> &user, Request *request, 
 		// todo href path helper
 		b.form()->method("POST")->href("/user/settings");
 		{
+			b.csrf_token(request);
+			
 			b.w("Username");
 			b.br();
 			b.input()->type("text")->name("username")->placeholder(user->name_user_input)->value(data->uname_val);
