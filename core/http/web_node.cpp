@@ -4,8 +4,8 @@
 #include "http_enums.h"
 #include "request.h"
 
-#include "core/settings/settings.h"
 #include "core/http/web_server.h"
+#include "core/settings/settings.h"
 
 #ifdef DATABASES_ENABLED
 #include "core/database/database.h"
@@ -85,6 +85,16 @@ void WebNode::handle_error_send_request(Request *request, const int error_code) 
 	request->send();
 }
 
+void WebNode::render_menu(Request *request) {
+	WebNode *root = get_root();
+
+	if (root) {
+		root->_render_menu(request);
+	}
+}
+void WebNode::_render_menu(Request *request) {
+}
+
 void WebNode::create_validators() {
 }
 
@@ -103,6 +113,16 @@ void WebNode::create_default_entries() {
 WebServer *WebNode::get_server() {
 	// todo this shoult probably be cached
 	return Object::cast_to<WebServer>(get_tree());
+}
+
+WebNode *WebNode::get_root() {
+	WebServer *s = get_server();
+
+	if (!s) {
+		return nullptr;
+	}
+
+	return s->get_web_root();
 }
 
 WebNode::WebNode() :

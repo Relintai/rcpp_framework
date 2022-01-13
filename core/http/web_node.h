@@ -35,6 +35,8 @@ public:
 	virtual void handle_request_main(Request *request);
 	virtual void _handle_request_main(Request *request);
 	virtual void handle_error_send_request(Request *request, const int error_code);
+	virtual void render_menu(Request *request);
+	virtual void _render_menu(Request *request);
 
 	virtual void create_validators();
 
@@ -44,6 +46,7 @@ public:
 	virtual void create_default_entries();
 
 	WebServer *get_server();
+	WebNode *get_root();
 
 	WebNode();
 	~WebNode();

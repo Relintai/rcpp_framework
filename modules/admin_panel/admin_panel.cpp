@@ -32,6 +32,7 @@ void AdminPanel::handle_request_main(Request *request) {
 				return;
 			}
 
+			//render_menu(request);
 			render_headers(request);
 			render_segment_body_top(request);
 			render_controller_panel(request, c);
