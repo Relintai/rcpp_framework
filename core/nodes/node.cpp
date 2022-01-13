@@ -65,33 +65,31 @@ void Node::remove_child(Node *child) {
 }
 
 NodeTree *Node::get_tree() {
+	if (!_tree) {
+	}
+
 	return _tree;
 }
 
 void Node::set_tree(NodeTree *tree) {
 	if (_tree) {
-		notification(NOTIFICATION_EXIT_TREE);
+		_in_tree = false;
+		_notification(NOTIFICATION_EXIT_TREE);
 	}
 
 	_tree = tree;
 
 	if (_tree) {
-		notification(NOTIFICATION_ENTER_TREE);
+		_in_tree = true;
+		_notification(NOTIFICATION_ENTER_TREE);
+	}
+
+	for (int i = 0; i < _children.size(); ++i) {
+		_children[i]->set_tree(tree);
 	}
 }
 
 void Node::notification(const int what) {
-	switch (what) {
-		case NOTIFICATION_EXIT_TREE:
-			_in_tree = false;
-			break;
-		case NOTIFICATION_ENTER_TREE:
-			_in_tree = true;
-			break;
-		default:
-			break;
-	}
-
 	_notification(what);
 
 	for (int i = 0; i < _children.size(); ++i) {
