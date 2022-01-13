@@ -36,7 +36,7 @@ void MessagePage::handle_request_main(Request *request) {
 	request->compile_and_send_body();
 }
 
-void MessagePage::migrate() {
+void MessagePage::_migrate(const bool clear, const bool seed_db) {
 	Ref<TableBuilder> t = db->get_table_builder();
 
 	t->drop_table("message_page");

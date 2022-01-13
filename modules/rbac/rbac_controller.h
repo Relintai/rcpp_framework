@@ -89,7 +89,6 @@ public:
 
 	void create_table();
 	void drop_table();
-	void migrate();
 	void create_default_entries();
 
 	static RBACController *get_singleton();

@@ -740,12 +740,8 @@ void UserController::drop_table() {
 
 	tb->drop_table_if_exists(_table_name)->run_query();
 }
-void UserController::migrate() {
-	drop_table();
-	create_table();
-}
 
-void UserController::create_test_users() {
+void UserController::create_default_entries() {
 	Ref<User> user;
 	user = create_user();
 

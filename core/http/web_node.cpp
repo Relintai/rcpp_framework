@@ -104,10 +104,32 @@ void WebNode::create_table() {
 void WebNode::drop_table() {
 }
 
-void WebNode::migrate() {
+void WebNode::udpate_table() {
 }
 
 void WebNode::create_default_entries() {
+}
+
+void WebNode::migrate(const bool clear, const bool seed_db) {
+	_migrate(clear, seed_db);
+
+	for (int i = 0; i < _children.size(); ++i) {
+		WebNode *c = Object::cast_to<WebNode>(_children[i]);
+		c->migrate(clear, seed_db);
+	}
+}
+
+void WebNode::_migrate(const bool clear, const bool seed_db) {
+	if (clear) {
+		drop_table();
+		create_table();
+	} else {
+		udpate_table();
+	}
+
+	if (seed_db) {
+		create_default_entries();
+	}
 }
 
 WebServer *WebNode::get_server() {

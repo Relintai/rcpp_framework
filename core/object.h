@@ -66,12 +66,6 @@ public:
 	static void get_valid_parents_static(Vector<String> *p_parents) {}
 	static void _get_valid_parents_static(Vector<String> *p_parents) {}
 
-	//dbconnection
-	//setting object?
-	//FileCache? -> set it to the global singleton by default?
-
-	virtual void migrate();
-
 	Object();
 	virtual ~Object();
 

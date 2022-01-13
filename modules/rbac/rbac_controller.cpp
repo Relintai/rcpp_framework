@@ -808,11 +808,6 @@ void RBACController::drop_table() {
 	tb->drop_table_if_exists(_rbac_permissions_table)->drop_table_if_exists(_rbac_ranks_table)->run_query();
 	//tb->print();
 }
-void RBACController::migrate() {
-	drop_table();
-	create_table();
-	create_default_entries();
-}
 
 void RBACController::create_default_entries() {
 	Ref<RBACRank> admin;

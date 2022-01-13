@@ -42,8 +42,11 @@ public:
 
 	virtual void create_table();
 	virtual void drop_table();
-	virtual void migrate();
+	virtual void udpate_table();
 	virtual void create_default_entries();
+
+	virtual void migrate(const bool clear, const bool seed);
+	virtual void _migrate(const bool clear, const bool seed);
 
 	WebServer *get_server();
 	WebNode *get_root();

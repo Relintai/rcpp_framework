@@ -15,7 +15,7 @@ class MessagePage : public WebNode {
 public:
     void handle_request_main(Request *request);
 
-    void migrate();
+    void _migrate(const bool clear, const bool seed_db);
 
     MessagePage();
     ~MessagePage();
