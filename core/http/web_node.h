@@ -29,8 +29,8 @@ public:
 	Settings *get_settings();
 	void set_settings(Settings *settings);
 
-	bool get_routing_enabled();
-	void set_routing_enabled(const bool value);
+	virtual bool get_routing_enabled();
+	virtual void set_routing_enabled(const bool value);
 
 #ifdef DATABASES_ENABLED
 	Database *get_database();
