@@ -207,10 +207,10 @@ Vector2 Vector2::operator-() const {
 }
 
 bool Vector2::operator==(const Vector2 &b) const {
-	return x == b.x && y == y;
+	return x == b.x && y == b.y;
 }
 bool Vector2::operator!=(const Vector2 &b) const {
-	return x != b.x || y == b.y;
+	return x != b.x || y != b.y;
 }
 
 const float &Vector2::operator[](int axis) const {
