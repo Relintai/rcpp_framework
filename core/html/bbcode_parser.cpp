@@ -139,47 +139,14 @@ void BBCodeParserTag::process() {
 		return;
 	}
 
-	ERR_FAIL_COND(data[0] != '<');
-	ERR_FAIL_COND(data[data.size() - 1] != '>');
+	ERR_FAIL_COND(data[0] != '[');
+	ERR_FAIL_COND(data[data.size() - 1] != ']');
 
 	int start_index = 1;
 	if (data[1] == '/') {
 		++start_index;
 
 		type = BBCodeParserTag::BBCODE_PARSER_TAG_TYPE_CLOSING_TAG;
-	} else if (data[1] == '!') {
-		if (data.size() < 8) {
-			return;
-		}
-
-		// test for comment. <!-- -->
-		++start_index;
-		if (data[2] == '-' && data[3] == '-') {
-			type = BBCodeParserTag::BBCODE_PARSER_TAG_TYPE_COMMENT;
-
-			int comment_start_index = data.find(' ', 3);
-
-			if (comment_start_index == -1) {
-				comment_start_index = 4;
-			}
-
-			tag = data.substr(comment_start_index, data.size() - comment_start_index - 3);
-		}
-
-		if (data.size() < 11) {
-			return;
-		}
-
-		// test for doctype. <!doctype >
-		int doctype_start_index = data.find("doctype ", 2);
-
-		if (doctype_start_index == -1) {
-			return;
-		}
-
-		type = BBCodeParserTag::BBCODE_PARSER_TAG_TYPE_DOCTYPE;
-
-		tag = data.substr(doctype_start_index + 8, data.size() - doctype_start_index - 8 - 1);
 	} else {
 		String tag_text;
 
@@ -317,13 +284,13 @@ String BBCodeParserTag::to_string(const int level) {
 	} else if (type == BBCODE_PARSER_TAG_TYPE_OPENING_TAG) {
 		int ln = level + 1;
 
-		s += "<" + tag;
+		s += "[" + tag;
 
 		for (int i = 0; i < attributes.size(); ++i) {
 			s += " " + attributes[i]->to_string();
 		}
 
-		s += ">\n";
+		s += "]\n";
 
 		for (int i = 0; i < tags.size(); ++i) {
 			s += tags[i]->to_string(ln);
@@ -331,11 +298,11 @@ String BBCodeParserTag::to_string(const int level) {
 
 		s.append_repeat(" ", level);
 
-		s += "</" + tag + ">\n";
+		s += "[/" + tag + "]\n";
 	} else if (type == BBCODE_PARSER_TAG_TYPE_CLOSING_TAG) {
 		// BBCodeParserTag should handle this automatically
 		// it's here for debugging purposes though
-		s += "</" + tag + "(!)>";
+		s += "[/" + tag + "(!)]";
 
 		if (tags.size() != 0) {
 			s.append_repeat(" ", level);
@@ -346,39 +313,17 @@ String BBCodeParserTag::to_string(const int level) {
 			}
 		}
 	} else if (type == BBCODE_PARSER_TAG_TYPE_SELF_CLOSING_TAG) {
-		s += "<" + tag;
+		s += "[" + tag;
 
 		for (int i = 0; i < attributes.size(); ++i) {
 			s += " " + attributes[i]->to_string();
 		}
 
-		s += "/>\n";
+		s += "/]\n";
 
 		if (tags.size() != 0) {
 			s.append_repeat(" ", level);
 			s += "(!SELF CLOSING TAG HAS TAGS!)\n";
-
-			for (int i = 0; i < tags.size(); ++i) {
-				s += tags[i]->to_string(level + 1) + "\n";
-			}
-		}
-	} else if (type == BBCODE_PARSER_TAG_TYPE_COMMENT) {
-		s += "<!-- " + data + " -->\n";
-
-		if (tags.size() != 0) {
-			s.append_repeat(" ", level);
-			s += "(!COMMENT TAG HAS TAGS!)\n";
-
-			for (int i = 0; i < tags.size(); ++i) {
-				s += tags[i]->to_string(level + 1) + "\n";
-			}
-		}
-	} else if (type == BBCODE_PARSER_TAG_TYPE_DOCTYPE) {
-		s += data + "\n";
-
-		if (tags.size() != 0) {
-			s.append_repeat(" ", level);
-			s += "(!DOCTYPE TAG HAS TAGS!)\n";
 
 			for (int i = 0; i < tags.size(); ++i) {
 				s += tags[i]->to_string(level + 1) + "\n";
@@ -416,10 +361,10 @@ void BBCodeParser::parse(const String &data) {
 
 	// split into tags
 	for (int i = 0; i < data.size(); ++i) {
-		if (data[i] == '<') {
+		if (data[i] == '[') {
 			// tag
 			for (int j = i + 1; j < data.size(); ++j) {
-				if (data[j] == '>') {
+				if (data[j] == ']') {
 					BBCodeParserTag *t = new BBCodeParserTag();
 
 					t->data = data.substr(i, j - i + 1);
@@ -435,7 +380,7 @@ void BBCodeParser::parse(const String &data) {
 			// content
 
 			for (int j = i + 1; j < data.size(); ++j) {
-				if (data[j] == '<') {
+				if (data[j] == '[') {
 					BBCodeParserTag *t = new BBCodeParserTag();
 
 					t->data = data.substr(i, j - i);
@@ -486,24 +431,6 @@ void BBCodeParser::parse(const String &data) {
 			tags[i] = nullptr;
 			continue;
 		} else if (t->type == BBCodeParserTag::BBCODE_PARSER_TAG_TYPE_CONTENT) {
-			if (tag_stack.size() == 0) {
-				root->tags.push_back(t);
-			} else {
-				tag_stack[tag_stack.size() - 1]->tags.push_back(t);
-			}
-
-			tags[i] = nullptr;
-			continue;
-		} else if (t->type == BBCodeParserTag::BBCODE_PARSER_TAG_TYPE_COMMENT) {
-			if (tag_stack.size() == 0) {
-				root->tags.push_back(t);
-			} else {
-				tag_stack[tag_stack.size() - 1]->tags.push_back(t);
-			}
-
-			tags[i] = nullptr;
-			continue;
-		} else if (t->type == BBCodeParserTag::BBCODE_PARSER_TAG_TYPE_DOCTYPE) {
 			if (tag_stack.size() == 0) {
 				root->tags.push_back(t);
 			} else {
