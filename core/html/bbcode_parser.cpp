@@ -167,7 +167,20 @@ void BBCodeParserTag::process() {
 
 		if (fspc_index == -1) {
 			// no args
-			tag = tag_text;
+			
+			int feq_ind = tag_text.find('=');
+			if (feq_ind == -1) {
+				tag = tag_text;
+				return;
+			} 
+
+			//Tag is like: [color=white]
+			//tag will be like color
+			tag = tag_text.substr(0, feq_ind);
+
+			//Add color=white as argument 
+			parse_args(tag_text);
+
 			return;
 		}
 
@@ -253,7 +266,7 @@ void BBCodeParserTag::parse_args(const String &args) {
 			// missing closing ' or " if c is ' or "
 			// else missing parameter
 
-			a->data = args.substr(next_char_index, args.size() - next_char_index - 1);
+			a->data = args.substr(next_char_index, args.size() - next_char_index);
 			attributes.push_back(a);
 			return;
 		}
@@ -323,7 +336,7 @@ String BBCodeParserTag::to_string(const int level) {
 
 		if (tags.size() != 0) {
 			s.append_repeat(" ", level);
-			
+
 			for (int i = 0; i < tags.size(); ++i) {
 				s += tags[i]->to_string(level + 1) + "\n";
 			}
