@@ -136,6 +136,16 @@ public:
 	bool parse_utf8(const char *p_utf8, int p_len = -1); //return true on error
 	static String utf8(const char *p_utf8, int p_len = -1);
 
+	//Taken from the Godot Engine (MIT License)
+	//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+	//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	static uint32_t hash(const wchar_t *p_cstr, int p_len); /* hash the string */
+	static uint32_t hash(const wchar_t *p_cstr); /* hash the string */
+	static uint32_t hash(const char *p_cstr, int p_len); /* hash the string */
+	static uint32_t hash(const char *p_cstr); /* hash the string */
+	uint32_t hash() const; /* hash the string */
+	uint64_t hash64() const; /* hash the string */
+
 	char *c_str();
 	const char *c_str() const;
 
@@ -163,6 +173,12 @@ public:
 
 	friend bool operator==(const char *b, const String &a);
 	friend bool operator!=(const char *b, const String &a);
+
+	friend bool operator==(const String &a, const wchar_t *b);
+	friend bool operator!=(const String &a, const wchar_t *b);
+
+	friend bool operator==(const wchar_t *b, const String &a);
+	friend bool operator!=(const wchar_t *b, const String &a);
 
 	friend bool operator==(const String &a, std::string &b);
 	friend bool operator!=(const String &a, std::string &b);
@@ -198,5 +214,28 @@ private:
 	int _size;
 	int _grow_by;
 };
+
+//Taken from the Godot Engine (MIT License)
+//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+template <typename L, typename R>
+bool is_str_less(const L *l_ptr, const R *r_ptr) {
+	while (true) {
+		if (*l_ptr == 0 && *r_ptr == 0) {
+			return false;
+		} else if (*l_ptr == 0) {
+			return true;
+		} else if (*r_ptr == 0) {
+			return false;
+		} else if (*l_ptr < *r_ptr) {
+			return true;
+		} else if (*l_ptr > *r_ptr) {
+			return false;
+		}
+
+		l_ptr++;
+		r_ptr++;
+	}
+}
 
 #endif

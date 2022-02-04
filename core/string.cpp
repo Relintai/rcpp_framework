@@ -1633,6 +1633,9 @@ bool String::parse_utf8(const char *p_utf8, int p_len) {
 	return false;
 }
 
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 String String::utf8() const {
 	int l = size();
 	if (!l) {
@@ -1711,6 +1714,92 @@ String String::utf8() const {
 	*cdst = 0; // trailing zero
 
 	return utf8s;
+}
+
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+uint32_t String::hash(const wchar_t *p_cstr, int p_len) {
+	uint32_t hashv = 5381;
+	for (int i = 0; i < p_len; i++) {
+		hashv = ((hashv << 5) + hashv) + p_cstr[i]; /* hash * 33 + c */
+	}
+
+	return hashv;
+}
+
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+uint32_t String::hash(const wchar_t *p_cstr) {
+	uint32_t hashv = 5381;
+	uint32_t c;
+
+	while ((c = *p_cstr++)) {
+		hashv = ((hashv << 5) + hashv) + c; /* hash * 33 + c */
+	}
+
+	return hashv;
+}
+
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+uint32_t String::hash(const char *p_cstr) {
+	uint32_t hashv = 5381;
+	uint32_t c;
+
+	while ((c = *p_cstr++)) {
+		hashv = ((hashv << 5) + hashv) + c; /* hash * 33 + c */
+	}
+
+	return hashv;
+}
+
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+uint32_t String::hash(const char *p_cstr, int p_len) {
+	uint32_t hashv = 5381;
+	for (int i = 0; i < p_len; i++) {
+		hashv = ((hashv << 5) + hashv) + p_cstr[i]; /* hash * 33 + c */
+	}
+
+	return hashv;
+}
+
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+uint32_t String::hash() const {
+	/* simple djb2 hashing */
+
+	const char *chr = c_str();
+	uint32_t hashv = 5381;
+	uint32_t c;
+
+	while ((c = *chr++)) {
+		hashv = ((hashv << 5) + hashv) + c; /* hash * 33 + c */
+	}
+
+	return hashv;
+}
+
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+uint64_t String::hash64() const {
+	/* simple djb2 hashing */
+
+	const char *chr = c_str();
+	uint64_t hashv = 5381;
+	uint64_t c;
+
+	while ((c = *chr++)) {
+		hashv = ((hashv << 5) + hashv) + c; /* hash * 33 + c */
+	}
+
+	return hashv;
 }
 
 char *String::c_str() {
@@ -1859,6 +1948,54 @@ bool operator==(const char *b, const String &a) {
 }
 
 bool operator!=(const char *b, const String &a) {
+	return !(a == b);
+}
+
+bool operator==(const String &a, const wchar_t *b) {
+	if (a._size == 0) {
+		return b[0] == '\0';
+	}
+
+	int i = 0;
+	while (i < a._size && b[i] != '\0') {
+		if (a[i] != b[i]) {
+			return false;
+		}
+
+		++i;
+	}
+
+	if (i != a._size) {
+		return false;
+	}
+
+	return true;
+}
+bool operator!=(const String &a, const wchar_t *b) {
+	return !(a == b);
+}
+
+bool operator==(const wchar_t *b, const String &a) {
+	if (a._size == 0) {
+		return b[0] == '\0';
+	}
+
+	int i = 0;
+	while (i < a._size && b[i] != '\0') {
+		if (a[i] != b[i]) {
+			return false;
+		}
+
+		++i;
+	}
+
+	if (i != a._size) {
+		return false;
+	}
+
+	return true;
+}
+bool operator!=(const wchar_t *b, const String &a) {
 	return !(a == b);
 }
 
