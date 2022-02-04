@@ -168,7 +168,7 @@ ListPage::ListPage() :
 		WebNode() {
 
 	max_visible_navigation_links = 6;
-	entry_per_page = 1;
+	entry_per_page = 4;
 }
 
 ListPage::~ListPage() {
