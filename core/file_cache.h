@@ -24,6 +24,8 @@ public:
     bool get_cached_body(const String &path, String *body);
     void set_cached_body(const String &path, const String &body);
 
+    void clear();
+
     FileCache(bool singleton = false);
     virtual ~FileCache();
 
@@ -43,7 +45,6 @@ protected:
     };
 
     std::mutex cache_mutex;
-
     std::map<String, CacheEntry *> cache_map;
 
 private:

@@ -101,6 +101,24 @@ void FileCache::set_cached_body(const String &path, const String &body) {
 	cache_mutex.unlock();
 }
 
+void FileCache::clear() {
+	cache_mutex.lock();
+
+	registered_files.clear();
+
+	for (std::map<String, CacheEntry *>::iterator E = cache_map.begin(); E != cache_map.end(); E++) {
+		CacheEntry * ce = E->second;
+
+		if (ce) {
+			delete ce;
+		}
+	}
+	
+	cache_map.clear();
+
+	cache_mutex.unlock();
+}
+
 FileCache::FileCache(bool singleton) {
 	if (singleton) {
 		if (_instance) {
