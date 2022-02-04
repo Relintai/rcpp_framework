@@ -1,6 +1,6 @@
 #include "file_cache.h"
 
-#include <tinydir/tinydir.h>
+#include "core/os/directory.h"
 
 #include <iostream>
 
@@ -18,7 +18,7 @@ bool FileCache::wwwroot_has_file(const String &file_path) {
 
 void FileCache::wwwroot_refresh_cache() {
 	_lock.write_lock();
-	
+
 	registered_files.clear();
 
 	wwwroot_evaluate_dir(wwwroot.c_str());
@@ -27,40 +27,26 @@ void FileCache::wwwroot_refresh_cache() {
 }
 
 void FileCache::wwwroot_evaluate_dir(const char *path, const bool should_exist) {
-	tinydir_dir dir;
-	if (tinydir_open(&dir, path) == -1) {
+	Ref<Directory> dir;
+	dir.instance();
 
-		if (should_exist)
-			printf("Error opening wwwroot! folder: %s\n", path);
-			
-		return;
-	}
+	ERR_FAIL_COND_MSG(!dir->open(path, true), "Error opening wwwroot! folder: " + String(path));
 
-	while (dir.has_next) {
-		tinydir_file file;
-		if (tinydir_readfile(&dir, &file) == -1) {
-			tinydir_next(&dir);
-			continue;
-		}
 
-		if (!file.is_dir) {
-			String np = file.path;
+	while (dir->has_next()) {
+		dir->next();
+
+		if (dir->current_is_file()) {
+			String np = dir->current_get_path_cstr();
 			np = np.substr(wwwroot.size(), np.size() - wwwroot.size());
 
 			registered_files.insert(np);
 		} else {
-			if (file.name[0] == '.' && file.name[1] == '\0' || file.name[0] == '.' && file.name[1] == '.') {
-				tinydir_next(&dir);
-				continue;
-			}
-
-			wwwroot_evaluate_dir(file.path);
+			wwwroot_evaluate_dir(dir->current_get_path_cstr());
 		}
-
-		tinydir_next(&dir);
 	}
 
-	tinydir_close(&dir);
+	dir->close();
 }
 
 bool FileCache::get_cached_body(const String &path, String *body) {
