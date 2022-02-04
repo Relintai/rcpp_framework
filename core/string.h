@@ -7,6 +7,8 @@
 
 #include "core/containers/vector.h"
 
+//TODO move to wchar_t!
+
 class String {
 public:
 	void push_back(const char element);
