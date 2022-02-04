@@ -36,13 +36,17 @@ bool Signal::is_connected_static(void (*func)(Signal *)) {
 	return false;
 }
 
-void Signal::emit() {
+void Signal::emit(Object *p_emitter) {
+	emitter = p_emitter;
+
 	for (int i = 0; i < entries.size(); ++i) {
 		entries[i]->call(this);
 	}
 }
 
-void Signal::emit(const Variant &p1) {
+void Signal::emit(Object *p_emitter, const Variant &p1) {
+	emitter = p_emitter;
+
 	params.push_back(p1);
 
 	for (int i = 0; i < entries.size(); ++i) {
@@ -51,7 +55,9 @@ void Signal::emit(const Variant &p1) {
 
 	params.clear();
 }
-void Signal::emit(const Variant &p1, const Variant &p2) {
+void Signal::emit(Object *p_emitter, const Variant &p1, const Variant &p2) {
+	emitter = p_emitter;
+
 	params.push_back(p1);
 	params.push_back(p2);
 
@@ -61,7 +67,9 @@ void Signal::emit(const Variant &p1, const Variant &p2) {
 
 	params.clear();
 }
-void Signal::emit(const Variant &p1, const Variant &p2, const Variant &p3) {
+void Signal::emit(Object *p_emitter, const Variant &p1, const Variant &p2, const Variant &p3) {
+	emitter = p_emitter;
+
 	params.push_back(p1);
 	params.push_back(p2);
 	params.push_back(p3);
@@ -73,7 +81,9 @@ void Signal::emit(const Variant &p1, const Variant &p2, const Variant &p3) {
 	params.clear();
 }
 
-void Signal::emit(const Variant &p1, const Variant &p2, const Variant &p3, const Variant &p4) {
+void Signal::emit(Object *p_emitter, const Variant &p1, const Variant &p2, const Variant &p3, const Variant &p4) {
+	emitter = p_emitter;
+
 	params.push_back(p1);
 	params.push_back(p2);
 	params.push_back(p3);
@@ -86,7 +96,9 @@ void Signal::emit(const Variant &p1, const Variant &p2, const Variant &p3, const
 	params.clear();
 }
 
-void Signal::emit(const Variant &p1, const Variant &p2, const Variant &p3, const Variant &p4, const Variant &p5) {
+void Signal::emit(Object *p_emitter, const Variant &p1, const Variant &p2, const Variant &p3, const Variant &p4, const Variant &p5) {
+	emitter = p_emitter;
+	
 	params.push_back(p1);
 	params.push_back(p2);
 	params.push_back(p3);

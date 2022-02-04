@@ -11,7 +11,7 @@ class Signal : public Object {
 	RCPP_OBJECT(Signal, Object);
 
 public:
-	Object *owner;
+	Object *emitter;
 	Vector<Variant> params;
 	Vector<Variant> static_data;
 
@@ -26,12 +26,12 @@ public:
 	void disconnect_static(void (*func)(Signal *));
 	bool is_connected_static(void (*func)(Signal *));
 
-	void emit();
-	void emit(const Variant &p1);
-	void emit(const Variant &p1, const Variant &p2);
-	void emit(const Variant &p1, const Variant &p2, const Variant &p3);
-	void emit(const Variant &p1, const Variant &p2, const Variant &p3, const Variant &p4);
-	void emit(const Variant &p1, const Variant &p2, const Variant &p3, const Variant &p4, const Variant &p5);
+	void emit(Object *p_emitter);
+	void emit(Object *p_emitter, const Variant &p1);
+	void emit(Object *p_emitter, const Variant &p1, const Variant &p2);
+	void emit(Object *p_emitter, const Variant &p1, const Variant &p2, const Variant &p3);
+	void emit(Object *p_emitter, const Variant &p1, const Variant &p2, const Variant &p3, const Variant &p4);
+	void emit(Object *p_emitter, const Variant &p1, const Variant &p2, const Variant &p3, const Variant &p4, const Variant &p5);
 
 	Signal();
 	~Signal();
