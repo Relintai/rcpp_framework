@@ -24,6 +24,21 @@ public:
 	inline static float tan(const float x) { return ::tanf(x); }
 	inline static double tan(const double x) { return ::tan(x); }
 
+	inline static float sinh(const float x) { return ::sinhf(x); }
+	inline static double sinh(const double x) { return ::sinh(x); }
+
+	inline static float cosh(const float x) { return ::coshf(x); }
+	inline static double cosh(const double x) { return ::cosh(x); }
+
+	inline static float tanh(const float x) { return ::tanhf(x); }
+	inline static double tanh(const double x) { return ::tanh(x); }
+
+	inline static float sinc(const float x) { return x == 0 ? 1 : ::sin(x) / x; }
+	inline static double sinc(const double x) { return x == 0 ? 1 : ::sin(x) / x; }
+
+	inline static float sincn(const float x) { return sinc(MATH_PI * x); }
+	inline static double sincn(const double x) { return sinc(MATH_PI * x); }
+
 	inline static float asin(const float x) { return ::asinf(x); }
 	inline static double asin(const double x) { return ::asin(x); }
 
