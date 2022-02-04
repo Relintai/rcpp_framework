@@ -18,16 +18,19 @@ public:
 	void handle_request_main(Request *request);
 
 	void load();
-	Ref<PagedArticleEntry> load_folder(const String &folder, const String &path);
-	void generate_summaries();
-	void generate_summary(Ref<PagedArticleEntry> article);
+	void load_folder(const String &folder, const String &path);
+	void generate_summary();
 
 	PagedArticle();
 	~PagedArticle();
 
-	std::map<String, Ref<PagedArticleEntry>> pages;
-	String folder;
-	String base_path;
+	String articles_folder;
+	String serve_folder;
+
+protected:
+	String summary_page;
+	std::map<String, String *> pages;
+	FileCache *file_cache;
 };
 
 #endif

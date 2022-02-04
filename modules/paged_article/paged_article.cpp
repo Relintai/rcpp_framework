@@ -9,24 +9,13 @@
 #include <iostream>
 
 void PagedArticle::handle_request_main(Request *request) {
-	const String r = request->get_current_path_segment();
-
-	Ref<PagedArticleEntry> s = pages[r];
-
-	if (!s.is_valid()) {
-		request->send_error(404);
-		return;
-	}
-
-	request->push_path();
-
-	const String rp = request->get_current_path_segment();
+	const String &rp = request->get_current_path_segment();
 
 	if (request->get_remaining_segment_count() > 1 && rp == "files") {
 		String file_name = "/" + request->get_path_segment(request->get_current_segment_index() + 1);
 
-		if (s->file_cache->wwwroot_has_file(file_name)) {
-			String fp = s->file_cache->wwwroot + file_name;
+		if (file_cache->wwwroot_has_file(file_name)) {
+			String fp = file_cache->wwwroot + file_name;
 
 			request->send_file(fp);
 			return;
@@ -34,18 +23,18 @@ void PagedArticle::handle_request_main(Request *request) {
 	}
 
 	if (rp == "") {
-		//summary page
-		request->body += s->summary_page;
+		// summary page
+		request->body += summary_page;
 
 		request->compile_and_send_body();
 		request->pop_path();
 		return;
 	}
 
-	const String *page = s->pages[rp];
+	const String *page = pages[rp];
 
 	if (page == nullptr) {
-		//bad url
+		// bad url
 		request->send_error(404);
 		return;
 	}
@@ -56,76 +45,12 @@ void PagedArticle::handle_request_main(Request *request) {
 }
 
 void PagedArticle::load() {
-	if (folder == "") {
-		printf("Error: PagedArticle::load called, but a folder is not set!");
-		return;
-	}
-
-	if (base_path.size() > 0 && base_path[base_path.size() - 1] == '/') {
-		base_path.pop_back();
-	}
-
-	if (folder.size() > 0 && folder[folder.size() - 1] == '/') {
-		folder.pop_back();
-	}
+	ERR_FAIL_COND_MSG(articles_folder == "", "Error: PagedArticle::load called, but a articles_folder is not set!");
 
 	tinydir_dir dir;
-	if (tinydir_open(&dir, folder.c_str()) == -1) {
-		printf("Error opening PagedArticle::folder! folder: %s\n", folder.c_str());
-		return;
-	}
-
-	while (dir.has_next) {
-		tinydir_file file;
-		if (tinydir_readfile(&dir, &file) == -1) {
-			tinydir_next(&dir);
-			continue;
-		}
-
-		if (file.is_dir) {
-			if (file.name[0] == '.' || (file.name[0] == '.' && file.name[1] == '.')) {
-				tinydir_next(&dir);
-				continue;
-			}
-
-			String np = file.path;
-			String fn = file.name;
-
-			String ff = folder + "/" + fn;
-			String wp = base_path + "/" + fn;
-
-			Ref<PagedArticleEntry> a = load_folder(np, wp);
-
-			if (a.is_valid()) {
-
-				String p = file.name;
-
-				a->url = p;
-				pages[p] = a;
-			}
-
-			a->file_cache->wwwroot = (ff + "/files");
-			a->file_cache->wwwroot_refresh_cache();
-		}
-
-		tinydir_next(&dir);
-	}
-
-	tinydir_close(&dir);
-
-	generate_summaries();
-}
-
-Ref<PagedArticleEntry> PagedArticle::load_folder(const String &folder, const String &path) {
-	printf("PagedArticle: loading: %s\n", folder.c_str());
+	ERR_FAIL_COND_MSG(tinydir_open(&dir, articles_folder.c_str()) == -1, "Error opening PagedArticle::folder! folder: " + articles_folder);
 
 	Vector<String> files;
-
-	tinydir_dir dir;
-	if (tinydir_open(&dir, folder.c_str()) == -1) {
-		printf("PagedArticle::load_folder: Error opening folder %s!\n", folder.c_str());
-		return Ref<PagedArticleEntry>();
-	}
 
 	while (dir.has_next) {
 		tinydir_file file;
@@ -146,29 +71,23 @@ Ref<PagedArticleEntry> PagedArticle::load_folder(const String &folder, const Str
 	tinydir_close(&dir);
 
 	if (files.size() == 0) {
-		return Ref<PagedArticleEntry>();
+		return;
 	}
 
-	//todo
-	//std::sort(files.begin(), files.end());
-
-	Ref<PagedArticleEntry> article;
-	article.instance();
+	files.sort_inc();
 
 	for (uint32_t i = 0; i < files.size(); ++i) {
-		String file_path = folder;
+		String file_path = articles_folder;
 
-		if (file_path.size() > 0 && file_path[file_path.size() - 1] != '/')
+		if (file_path.size() > 0 && file_path[file_path.size() - 1] != '/') {
 			file_path += "/";
+		}
 
-		file_path += files[i].c_str();
+		file_path += files[i];
 
 		FILE *f = fopen(file_path.c_str(), "r");
 
-		if (!f) {
-			printf("PagedArticle::load_folder: Error opening file! %s\n", file_path.c_str());
-			continue;
-		}
+		ERR_CONTINUE_MSG(!f, "PagedArticle::load_folder: Error opening file! " + file_path);
 
 		fseek(f, 0, SEEK_END);
 		long fsize = ftell(f);
@@ -184,7 +103,7 @@ Ref<PagedArticleEntry> PagedArticle::load_folder(const String &folder, const Str
 
 		String pagination;
 
-		pagination = Utils::get_pagination_links(path, files, i);
+		pagination = Utils::get_pagination_links(get_full_uri(), files, i);
 
 		String *finals = new String();
 
@@ -192,40 +111,49 @@ Ref<PagedArticleEntry> PagedArticle::load_folder(const String &folder, const Str
 		(*finals) += fd;
 		(*finals) += pagination;
 
-		article->pages[files[i]] = finals;
+		pages[files[i]] = finals;
 
 		if (i == 0) {
-			article->summary_page = (*finals);
+			summary_page = (*finals);
 		}
 	}
 
-	return article;
-}
+	file_cache->clear();
 
-void PagedArticle::generate_summaries() {
-	for (std::map<String, Ref<PagedArticleEntry> >::iterator it = pages.begin(); it != pages.end(); ++it) {
-		generate_summary((*it).second);
+	if (serve_folder != "") {
+		file_cache->wwwroot = serve_folder;
+		file_cache->wwwroot_refresh_cache();
 	}
+
+	generate_summary();
 }
 
-void PagedArticle::generate_summary(Ref<PagedArticleEntry> article) {
-	if (article->summary_page != "") {
+void PagedArticle::generate_summary() {
+	if (summary_page != "") {
 		return;
 	}
 
-	for (std::map<String, String *>::iterator it = article->pages.begin(); it != article->pages.end(); ++it) {
+	for (std::map<String, String *>::iterator it = pages.begin(); it != pages.end(); ++it) {
 		String *s = (*it).second;
 
 		if (s != nullptr) {
-			article->summary_page = (*s);
+			summary_page = (*s);
 		}
 	}
 }
 
 PagedArticle::PagedArticle() :
 		WebNode() {
+
+	file_cache = new FileCache();
 }
 
 PagedArticle::~PagedArticle() {
+	for (std::map<String, String *>::iterator it = pages.begin(); it != pages.end(); ++it) {
+		delete ((*it).second);
+	}
+
 	pages.clear();
+
+	delete file_cache;
 }
