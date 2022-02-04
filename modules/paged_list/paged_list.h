@@ -11,6 +11,7 @@
 // inherit from StaticPage
 // (make the module a dependency)
 // Add PagedArticle as child -> rout everything to it the same way as now
+// ListPage add bool -> pagination enabled
 
 class PagedList : public WebNode {
 	RCPP_OBJECT(PagedList, WebNode);
@@ -23,10 +24,11 @@ public:
 	PagedList();
 	~PagedList();
 
-	ListPage *main_page;
-	PagedArticle *articles;
 	String folder;
 	String base_path;
+
+	ListPage *main_page;
+	PagedArticle *articles;
 };
 
 #endif
