@@ -40,6 +40,7 @@ public:
 	Rect2(const Rect2 &b);
 	Rect2(const float rx, const float ry);
 	Rect2(const float rx, const float ry, const float rw, const float rh);
+	Rect2(const Vector2 &position, const Vector2 &size);
 
 	float x;
 	float y;

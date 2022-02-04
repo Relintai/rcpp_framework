@@ -205,3 +205,10 @@ Rect2::Rect2(const float rx, const float ry, const float rw, const float rh) {
 	w = rw;
 	h = rh;
 }
+
+Rect2::Rect2(const Vector2 &position, const Vector2 &size) {
+	x = position.x;
+	y = position.y;
+	w = size.x;
+	h = size.y;
+}
