@@ -6,7 +6,7 @@
 #include <set>
 #include <map>
 #include <chrono>
-#include <mutex>
+#include "core/threading/rw_lock.h"
 
 class FileCache {
 public:
@@ -44,7 +44,7 @@ protected:
         }
     };
 
-    std::mutex cache_mutex;
+    RWLock _lock;
     std::map<String, CacheEntry *> cache_map;
 
 private:

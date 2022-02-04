@@ -17,9 +17,13 @@ bool FileCache::wwwroot_has_file(const String &file_path) {
 }
 
 void FileCache::wwwroot_refresh_cache() {
+	_lock.write_lock();
+	
 	registered_files.clear();
 
 	wwwroot_evaluate_dir(wwwroot.c_str());
+
+	_lock.write_unlock();
 }
 
 void FileCache::wwwroot_evaluate_dir(const char *path, const bool should_exist) {
@@ -62,9 +66,9 @@ void FileCache::wwwroot_evaluate_dir(const char *path, const bool should_exist) 
 bool FileCache::get_cached_body(const String &path, String *body) {
 	//TODO ERROR MACRO body == null
 
-	//this shouldn't need mutexes
-
+	_lock.read_lock();
 	CacheEntry *e = cache_map[path];
+	_lock.read_unlock();
 
 	if (!e) {
 		return false;
@@ -84,7 +88,7 @@ bool FileCache::get_cached_body(const String &path, String *body) {
 }
 
 void FileCache::set_cached_body(const String &path, const String &body) {
-	cache_mutex.lock();
+	_lock.write_lock();
 
 	CacheEntry *e = cache_map[path];
 
@@ -98,11 +102,11 @@ void FileCache::set_cached_body(const String &path, const String &body) {
 	e->timestamp = current_timestamp;
 	e->body = body;
 
-	cache_mutex.unlock();
+	_lock.write_unlock();
 }
 
 void FileCache::clear() {
-	cache_mutex.lock();
+	_lock.write_lock();
 
 	registered_files.clear();
 
@@ -116,7 +120,7 @@ void FileCache::clear() {
 	
 	cache_map.clear();
 
-	cache_mutex.unlock();
+	_lock.write_unlock();
 }
 
 FileCache::FileCache(bool singleton) {
