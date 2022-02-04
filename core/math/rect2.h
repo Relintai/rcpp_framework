@@ -22,6 +22,8 @@ public:
 	void expand_to(const Vector2 &p_vector);
 	inline Rect2 clip(const Rect2 &p_rect) const;
 
+	inline Rect2 abs() const;
+
 	Vector2 position() const;
 	Vector2 size() const;
 
@@ -51,7 +53,7 @@ public:
 // Taken from the Godot Engine (MIT License)
 // Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
 // Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
-inline Rect2 Rect2::clip(const Rect2 &p_rect) const { /// return a clipped rect
+Rect2 Rect2::clip(const Rect2 &p_rect) const { /// return a clipped rect
 	Rect2 new_rect = p_rect;
 
 	if (!intersects(new_rect)) {
@@ -68,6 +70,10 @@ inline Rect2 Rect2::clip(const Rect2 &p_rect) const { /// return a clipped rect
 	new_rect.h = MIN(p_rect_end.y, end.y) - new_rect.y;
 
 	return new_rect;
+}
+
+Rect2 Rect2::abs() const {
+	return Rect2(x + MIN(w, 0), y + MIN(h, 0), ABS(w), ABS(h));
 }
 
 #endif

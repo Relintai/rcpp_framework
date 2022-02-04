@@ -23,6 +23,8 @@ public:
 	void expand_to(const Vector2i &p_vector);
 	inline Rect2i clip(const Rect2i &p_rect) const;
 
+	inline Rect2i abs() const;
+
 	Vector2i position() const;
 	Vector2i size() const;
 
@@ -72,6 +74,10 @@ inline Rect2i Rect2i::clip(const Rect2i &p_rect) const { /// return a clipped re
 	new_rect.h = MIN(p_rect_end.y, end.y) - new_rect.y;
 
 	return new_rect;
+}
+
+Rect2i Rect2i::abs() const {
+	return Rect2i(x + MIN(w, 0), y + MIN(h, 0), ABS(w), ABS(h));
 }
 
 #endif
