@@ -22,6 +22,9 @@ public:
 	String get_uri_segment();
 	void set_uri_segment(const String &val);
 
+	virtual String get_full_uri(const bool slash_at_the_end = true);
+	virtual String get_full_uri_parent(const bool slash_at_the_end = true);
+
 	Settings *get_settings();
 	void set_settings(Settings *settings);
 
@@ -50,6 +53,7 @@ public:
 
 	WebServer *get_server();
 	WebNode *get_root();
+	WebNode *get_parent_webnode();
 
 	WebNode();
 	~WebNode();

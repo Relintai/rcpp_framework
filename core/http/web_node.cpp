@@ -22,6 +22,35 @@ void WebNode::set_uri_segment(const String &val) {
 	_uri_segment = val;
 }
 
+String WebNode::get_full_uri(const bool slash_at_the_end) {
+	if (slash_at_the_end) {
+		return get_full_uri_parent(true) + _uri_segment + '/';
+	} else {
+		return get_full_uri_parent(true) + _uri_segment;
+	}
+}
+String WebNode::get_full_uri_parent(const bool slash_at_the_end) {
+	String uri = "/";
+
+	WebNode *n = get_parent_webnode();
+
+	while (n) {
+		if (n->_uri_segment == "" || n->_uri_segment == '/') {
+			break;
+		}
+
+		uri = "/" + n->_uri_segment + uri;
+
+		n = n->get_parent_webnode();
+	}
+
+	if (!slash_at_the_end) {
+		uri.pop_back();
+	}
+
+	return uri;
+}
+
 Settings *WebNode::get_settings() {
 	if (_settings) {
 		return _settings;
@@ -145,6 +174,10 @@ WebNode *WebNode::get_root() {
 	}
 
 	return s->get_web_root();
+}
+
+WebNode *WebNode::get_parent_webnode() {
+	return Object::cast_to<WebNode>(get_parent());
 }
 
 WebNode::WebNode() :
