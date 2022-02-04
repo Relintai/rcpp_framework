@@ -1,12 +1,12 @@
 #ifndef MATH_H
 #define MATH_H
 
+#include "core/typedefs.h"
+#include "math_defs.h"
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
 #include <cstdint>
-#include "math_defs.h"
-#include "core/typedefs.h"
 
 #define MATH_PI 3.1415926535897932384626433833
 #define EPSILON 0.00001
@@ -63,8 +63,11 @@ public:
 	inline static float ceil(const float x) { return ::ceilf(x); }
 	inline static double ceil(const double x) { return ::ceil(x); }
 
+	inline static float round(const float x) { return ::roundf(x); }
+	inline static double round(const double x) { return ::round(x); }
+
 	inline static float pow(const float x, const float y) { return ::powf(x, y); }
-	inline static double pow(const double x, const float y) { return ::pow(x, y); }
+	inline static double pow(const double x, const double y) { return ::pow(x, y); }
 
 	inline static float log(const float x) { return ::logf(x); }
 	inline static double log(const double x) { return ::log(x); }
@@ -90,9 +93,9 @@ public:
 	static float is_equal_approx(const float a, const float b);
 	static float is_zero_approx(const float a);
 
-    //Taken from the Godot Engine (MIT License)
-    //Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-    //Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	// Taken from the Godot Engine (MIT License)
+	// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+	// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 	static _ALWAYS_INLINE_ bool is_equal_approx_ratio(float a, float b, float epsilon = CMP_EPSILON, float min_epsilon = CMP_EPSILON) {
 		// this is an approximate way to check that numbers are close, as a ratio of their average size
 		// helps compare approximate numbers that may be very big or very small
@@ -103,6 +106,15 @@ public:
 		real_t avg_size = (abs(a) + abs(b)) / 2.0;
 		diff /= avg_size;
 		return diff < epsilon;
+	}
+
+	// Taken from the Godot Engine (MIT License)
+	// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+	// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	//  This function should be as fast as possible and rounding mode should not matter.
+	static _ALWAYS_INLINE_ int fast_ftoi(float a) {
+		// Assuming every supported compiler has `lrint()`.
+		return lrintf(a);
 	}
 
 	static void seed(const unsigned int s);
@@ -118,9 +130,9 @@ public:
 	static float rand(const float from, const float to);
 	static float rand(const double from, const double to);
 
-    //Taken from the Godot Engine (MIT License)
-    //Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-    //Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	// Taken from the Godot Engine (MIT License)
+	// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+	// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 	static bool is_nan(double p_val) {
 #ifdef _MSC_VER
 		return _isnan(p_val);
@@ -137,9 +149,9 @@ public:
 #endif
 	}
 
-    //Taken from the Godot Engine (MIT License)
-    //Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-    //Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	// Taken from the Godot Engine (MIT License)
+	// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+	// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 	static bool is_nan(float p_val) {
 #ifdef _MSC_VER
 		return _isnan(p_val);
@@ -163,9 +175,9 @@ public:
 #endif
 	}
 
-    //Taken from the Godot Engine (MIT License)
-    //Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-    //Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	// Taken from the Godot Engine (MIT License)
+	// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+	// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 	static bool is_inf(double p_val) {
 #ifdef _MSC_VER
 		return !_finite(p_val);
@@ -183,9 +195,9 @@ public:
 #endif
 	}
 
-    //Taken from the Godot Engine (MIT License)
-    //Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-    //Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	// Taken from the Godot Engine (MIT License)
+	// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+	// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 	static bool is_inf(float p_val) {
 #ifdef _MSC_VER
 		return !_finite(p_val);
