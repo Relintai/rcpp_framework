@@ -102,7 +102,12 @@ void PagedArticle::load() {
 	file_cache->clear();
 
 	if (serve_folder != "") {
-		file_cache->wwwroot = serve_folder;
+		if (serve_folder_relative) {
+			file_cache->wwwroot = articles_folder + "/" + serve_folder;
+		} else {
+			file_cache->wwwroot = serve_folder;
+		}
+
 		file_cache->wwwroot_refresh_cache();
 	}
 
@@ -127,6 +132,9 @@ PagedArticle::PagedArticle() :
 		WebNode() {
 
 	file_cache = new FileCache();
+
+	serve_folder_relative = true;
+	serve_folder = "files";
 }
 
 PagedArticle::~PagedArticle() {

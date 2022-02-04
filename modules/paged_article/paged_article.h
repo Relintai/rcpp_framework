@@ -24,7 +24,7 @@ public:
 	~PagedArticle();
 
 	String articles_folder;
-	//todo make this somehow  articles_folder + "/files" by default
+	bool serve_folder_relative;
 	String serve_folder;
 
 protected:
