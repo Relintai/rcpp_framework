@@ -11,7 +11,7 @@
 void PagedArticle::handle_request_main(Request *request) {
 	const String r = request->get_current_path_segment();
 
-	Article *s = pages[r];
+	PagedArticleEntry *s = pages[r];
 
 	if (s == nullptr) {
 		request->send_error(404);
@@ -94,7 +94,7 @@ void PagedArticle::load() {
 			String ff = folder + "/" + fn;
 			String wp = base_path + "/" + fn;
 
-			Article *a = load_folder(np, wp);
+			PagedArticleEntry *a = load_folder(np, wp);
 
 			if (a) {
 
@@ -116,7 +116,7 @@ void PagedArticle::load() {
 	generate_summaries();
 }
 
-Article *PagedArticle::load_folder(const String &folder, const String &path) {
+PagedArticleEntry *PagedArticle::load_folder(const String &folder, const String &path) {
 	printf("PagedArticle: loading: %s\n", folder.c_str());
 
 	Vector<String> files;
@@ -152,7 +152,7 @@ Article *PagedArticle::load_folder(const String &folder, const String &path) {
 	//todo
 	//std::sort(files.begin(), files.end());
 
-	Article *article = new Article();
+	PagedArticleEntry *article = new PagedArticleEntry();
 
 	for (uint32_t i = 0; i < files.size(); ++i) {
 		String file_path = folder;
@@ -202,12 +202,12 @@ Article *PagedArticle::load_folder(const String &folder, const String &path) {
 }
 
 void PagedArticle::generate_summaries() {
-	for (std::map<String, Article *>::iterator it = pages.begin(); it != pages.end(); ++it) {
+	for (std::map<String, PagedArticleEntry *>::iterator it = pages.begin(); it != pages.end(); ++it) {
 		generate_summary((*it).second);
 	}
 }
 
-void PagedArticle::generate_summary(Article *article) {
+void PagedArticle::generate_summary(PagedArticleEntry *article) {
 	if (article->summary_page != "") {
 		return;
 	}

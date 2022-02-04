@@ -9,26 +9,7 @@
 #include "core/http/web_node.h"
 
 #include "core/http/request.h"
-
-struct Article {
-	String url;
-	String summary_page;
-	std::map<String, String *> pages;
-	FileCache *file_cache;
-
-	Article() {
-		file_cache = new FileCache();
-	}
-	~Article() {
-		for (std::map<String, String *>::iterator it = pages.begin(); it != pages.end(); ++it) {
-			delete ((*it).second);
-		}
-
-		pages.clear();
-		
-		delete file_cache;
-	}
-};
+#include "paged_article_entry.h"
 
 class PagedArticle : public WebNode {
 	RCPP_OBJECT(PagedArticle, WebNode);
@@ -37,14 +18,14 @@ public:
 	void handle_request_main(Request *request);
 
 	void load();
-	Article *load_folder(const String &folder, const String &path);
+	PagedArticleEntry *load_folder(const String &folder, const String &path);
 	void generate_summaries();
-	void generate_summary(Article *article);
+	void generate_summary(PagedArticleEntry *article);
 
 	PagedArticle();
 	~PagedArticle();
 
-	std::map<String, Article *> pages;
+	std::map<String, PagedArticleEntry *> pages;
 	String folder;
 	String base_path;
 };
