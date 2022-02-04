@@ -10,8 +10,8 @@
 class Directory : public Reference {
 	RCPP_OBJECT(Directory, Reference);
 public:
-	Error open(const String &path, bool skip_specials = false);
-	Error open(const char *path, bool skip_specials = false);
+	Error open(const String &path, bool skip_specials = true);
+	Error open(const char *path, bool skip_specials = true);
 	void close();
 
 	bool has_next();
