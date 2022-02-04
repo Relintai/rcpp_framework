@@ -9,7 +9,6 @@
 #include "core/http/web_node.h"
 
 #include "core/http/request.h"
-#include "paged_article_entry.h"
 
 class PagedArticle : public WebNode {
 	RCPP_OBJECT(PagedArticle, WebNode);
@@ -25,6 +24,7 @@ public:
 	~PagedArticle();
 
 	String articles_folder;
+	//todo make this somehow  articles_folder + "/files" by default
 	String serve_folder;
 
 protected:

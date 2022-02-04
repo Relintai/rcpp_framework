@@ -6,11 +6,6 @@
 
 #include "core/reference.h"
 
-enum QueryErrorCode {
-	OK,
-	ERROR
-};
-
 class QueryBuilder;
 class TableBuilder;
 class QueryResult;

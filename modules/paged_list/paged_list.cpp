@@ -25,8 +25,8 @@ void PagedList::load() {
 	main_page->folder = folder;
 	main_page->load();
 
-	articles->base_path = base_path;
-	articles->folder = folder;
+	articles->articles_folder = folder;
+	articles->serve_folder = folder + "/files";
 	articles->load();
 }
 
