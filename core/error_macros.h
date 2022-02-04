@@ -95,6 +95,36 @@
     } else\
         ((void)0)\
 
+#define ERR_CONTINUE(cond) \
+    if (cond) {\
+        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, "ERR_CONTINUE: \"" #cond "\" is true!"); \
+        continue;\
+    } else\
+        ((void)0)\
+
+#define ERR_CONTINUE_MSG(cond, msg) \
+    if (cond) {\
+        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
+        continue;\
+    } else\
+        ((void)0)\
+
+#define ERR_CONTINUE_ACTION(cond, action) \
+    if (cond) {\
+        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, "ERR_CONTINUE: \"" #cond "\" is true!"); \
+        action;\
+        continue;\
+    } else\
+        ((void)0)\
+
+#define ERR_CONTINUE_ACTION_MSG(cond, action, msg) \
+    if (cond) {\
+        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
+        action;\
+        continue;\
+    } else\
+        ((void)0)\
+
 #define CRASH_INDEX(index, size) \
     if ((index < 0) || (index >= size)) {\
         Logger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, "CRASH!"); \
