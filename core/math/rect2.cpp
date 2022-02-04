@@ -110,6 +110,13 @@ void Rect2::expand_to(const Vector2 &p_vector) {
 	h = end.y - begin.y;
 }
 
+Vector2 Rect2::position() const {
+	return Vector2(x, y);
+}
+Vector2 Rect2::size() const {
+	return Vector2(w, h);
+}
+
 Rect2 &Rect2::operator+=(const Rect2 &b) {
 	x += b.x;
 	y += b.y;

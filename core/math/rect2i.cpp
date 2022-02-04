@@ -83,9 +83,9 @@ void Rect2i::shrink(const int by) {
 	w -= by;
 }
 
-//Taken from the Godot Engine (MIT License)
-//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 void Rect2i::expand_to(const Vector2i &p_vector) {
 	Vector2i begin = Vector2i(x, y);
 	Vector2i end = Vector2i(x, y) + Vector2i(w, h);
@@ -108,6 +108,13 @@ void Rect2i::expand_to(const Vector2i &p_vector) {
 	y = begin.y;
 	w = end.x - begin.x;
 	h = end.y - begin.y;
+}
+
+Vector2i Rect2i::position() const {
+	return Vector2i(x, y);
+}
+Vector2i Rect2i::size() const {
+	return Vector2i(w, h);
 }
 
 Rect2i &Rect2i::operator+=(const Rect2i &b) {

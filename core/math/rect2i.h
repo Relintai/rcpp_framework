@@ -18,6 +18,9 @@ public:
 
 	void expand_to(const Vector2i &p_vector);
 
+	Vector2i position() const;
+	Vector2i size() const;
+
 	Rect2i &operator+=(const Rect2i &b);
 	Rect2i &operator-=(const Rect2i &b);
 
