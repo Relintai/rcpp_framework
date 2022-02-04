@@ -8,6 +8,10 @@
 #include "modules/list_page/list_page.h"
 #include "modules/paged_article/paged_article.h"
 
+// inherit from StaticPage
+// (make the module a dependency)
+// Add PagedArticle as child -> rout everything to it the same way as now
+
 class PagedList : public WebNode {
 	RCPP_OBJECT(PagedList, WebNode);
 
