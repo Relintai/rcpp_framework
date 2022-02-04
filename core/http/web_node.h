@@ -4,6 +4,7 @@
 #include "core/nodes/node.h"
 #include "core/reference.h"
 #include "core/variant.h"
+#include <map>
 
 class Request;
 class Settings;
@@ -28,6 +29,9 @@ public:
 	Settings *get_settings();
 	void set_settings(Settings *settings);
 
+	bool get_routing_enabled();
+	void set_routing_enabled(const bool value);
+
 #ifdef DATABASES_ENABLED
 	Database *get_database();
 	Ref<TableBuilder> get_table_builder();
@@ -51,9 +55,16 @@ public:
 	virtual void migrate(const bool clear, const bool seed);
 	virtual void _migrate(const bool clear, const bool seed);
 
+	bool try_route_request_to_children(Request *request);
+	WebNode *get_request_handler_child(Request *request);
+	void build_handler_map();
+	void clear_handlers();
+
 	WebServer *get_server();
 	WebNode *get_root();
 	WebNode *get_parent_webnode();
+
+	void _notification(const int what);
 
 	WebNode();
 	~WebNode();
@@ -66,6 +77,10 @@ protected:
 #ifdef DATABASES_ENABLED
 	Database *_database;
 #endif
+
+	bool _routing_enabled;
+	WebNode *_index_node;
+	std::map<String, WebNode *> _node_route_map;
 };
 
 #endif

@@ -7,7 +7,7 @@
 #include <map>
 #include "core/string.h"
 
-#include "web_router_node.h"
+#include "web_node.h"
 
 #include "middleware.h"
 
@@ -15,8 +15,8 @@ class Request;
 
 // TODO FileCache -> set up, for this webroot, don't use singleton
 
-class WebRoot : public WebRouterNode {
-	RCPP_OBJECT(WebRoot, WebRouterNode);
+class WebRoot : public WebNode {
+	RCPP_OBJECT(WebRoot, WebNode);
 
 public:
 	static String default_error_404_body;

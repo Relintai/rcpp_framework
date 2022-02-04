@@ -78,7 +78,7 @@ void WebRoot::handle_request_main(Request *request) {
 	}
 
 	// normal routing
-	WebRouterNode::handle_request_main(request);
+	WebNode::handle_request_main(request);
 }
 
 void WebRoot::handle_error_send_request(Request *request, const int error_code) {
@@ -157,7 +157,7 @@ void WebRoot::update() {
 }
 
 WebRoot::WebRoot() :
-		WebRouterNode() {
+		WebNode() {
 }
 
 WebRoot::~WebRoot() {
