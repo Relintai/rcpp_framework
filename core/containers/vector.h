@@ -29,8 +29,8 @@ public:
 	void append_array(const Vector<T> &other);
 	int find(const T &val) const;
 
-	int *dataw();
-	const int *data() const;
+	T *dataw();
+	const T *data() const;
 
 	const T &operator[](const int index) const;
 	T &operator[](const int index);
@@ -202,12 +202,12 @@ int Vector<T>::find(const T &val) const {
 }
 
 template <class T>
-int *Vector<T>::dataw() {
+T *Vector<T>::dataw() {
 	return _data;
 }
 
 template <class T>
-const int *Vector<T>::data() const {
+const T *Vector<T>::data() const {
 	return _data;
 }
 
