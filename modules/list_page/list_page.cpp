@@ -1,36 +1,59 @@
 #include "list_page.h"
 
-#include "core/database/query_builder.h"
-#include "core/database/query_result.h"
-#include "core/database/table_builder.h"
+#include "core/html/html_builder.h"
 #include "core/utils.h"
+#include "core/math/math.h"
 
 #include <tinydir/tinydir.h>
 #include <iostream>
 
 void ListPage::handle_request_main(Request *request) {
-	String r = "";
-
-	for (uint32_t i = 0; i < list_entries.size(); ++i) {
-		r += "<div class=\"list_entry\">" + list_entries[i] + "</div>";
+	if (_pages.size() == 0) {
+		render_menu(request);
+		request->body += _no_entries_response;
+		request->compile_and_send_body();
+		return;
 	}
 
-	request->body += r;
+	const String &cs = request->get_current_path_segment();
 
+	if (cs == "") {
+		render_menu(request);
+		request->body += _pages[0];
+		request->compile_and_send_body();
+		return;
+	}
+
+	if (!cs.is_uint()) {
+		request->send_error(HTTP_STATUS_CODE_404_NOT_FOUND);
+		return;
+	}
+
+	int p = cs.to_int();
+
+	p = ((p == 0) ? (0) : (p - 1));
+
+	if (p < 0 || p >= _pages.size()) {
+		request->send_error(HTTP_STATUS_CODE_404_NOT_FOUND);
+		return;
+	}
+
+	render_menu(request);
+	request->body += _pages[p];
 	request->compile_and_send_body();
 }
 
 void ListPage::load() {
 	if (folder == "") {
-		printf("Error: ListPage::load called, but a folder is not set!");
+		RLOG_ERR("Error: ListPage::load called, but a folder is not set!");
 		return;
 	}
 
-	std::vector<String> files;
+	Vector<String> files;
 
 	tinydir_dir dir;
 	if (tinydir_open(&dir, folder.c_str()) == -1) {
-		printf("Error opening ListPage::folder! folder: %s\n", folder.c_str());
+		RLOG_ERR("Error opening ListPage::folder! folder: \n" + folder);
 		return;
 	}
 
@@ -52,14 +75,16 @@ void ListPage::load() {
 
 	tinydir_close(&dir);
 
-	//todo
-	//std::sort(files.begin(), files.end());
+	// todo
+	// std::sort(files.begin(), files.end());
+
+	Vector<String> list_entries;
 
 	for (uint32_t i = 0; i < files.size(); ++i) {
 		FILE *f = fopen(files[i].c_str(), "r");
 
 		if (!f) {
-			printf("Settings::parse_file: Error opening file!\n");
+			RLOG_ERR("Settings::parse_file: Error opening file!\n");
 			return;
 		}
 
@@ -77,10 +102,74 @@ void ListPage::load() {
 
 		list_entries.push_back(fd);
 	}
+
+	render_entries(list_entries);
+	render_no_entries_response();
+}
+
+void ListPage::render_entries(const Vector<String> &list_entries) {
+	if (list_entries.size() == 0) {
+		return;
+	}
+
+	int pages = Math::floorf_int(Math::divf(list_entries.size(), entry_per_page));
+	for (int i = 0; i < pages; ++i) {
+		String r = "";
+
+		int efrom = i * entry_per_page;
+		int eto = MIN((i + 1) * entry_per_page, list_entries.size());
+
+		r = render_page(i, pages, list_entries, efrom, eto);
+		_pages.push_back(r);
+	}
+}
+
+String ListPage::render_page(const int page_index, const int page_count, const Vector<String> &list_entries, const int efrom, const int eto) {
+	String r = "";
+
+	for (int i = efrom; i < eto; ++i) {
+		r += render_entry(list_entries[i]);
+	}
+
+	r += Utils::get_pagination(get_full_uri(), page_count, page_index, max_visible_navigation_links);
+
+	return r;
+}
+
+String ListPage::render_entry(const String &list_entry) {
+	HTMLBuilder b;
+
+	b.div("list_entry")->w(list_entry)->cdiv();
+
+	return b.result;
+}
+
+void ListPage::render_no_entries_response() {
+	HTMLBuilder b;
+
+	b.div("list_entry")->w("No conteny yet!")->cdiv();
+
+	_no_entries_response = b.result;
+}
+
+void ListPage::_notification(const int what) {
+	switch (what) {
+		case NOTIFICATION_ENTER_TREE:
+			load();
+			break;
+		case NOTIFICATION_EXIT_TREE:
+			_pages.clear();
+			break;
+		default:
+			break;
+	}
 }
 
 ListPage::ListPage() :
 		WebNode() {
+
+	max_visible_navigation_links = 6;
+	entry_per_page = 1;
 }
 
 ListPage::~ListPage() {
