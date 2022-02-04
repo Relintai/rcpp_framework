@@ -11,6 +11,7 @@ class Directory : public Reference {
 	RCPP_OBJECT(Directory, Reference);
 public:
 	Error open(const String &path, bool skip_specials = false);
+	Error open(const char *path, bool skip_specials = false);
 	void close();
 
 	bool has_next();
@@ -24,7 +25,7 @@ public:
 	char *current_get_path_cstr();
 	char *current_get_extension_cstr();
 	bool current_is_file();
-	bool current_is_directory();
+	bool current_is_dir();
 
 	String read_file(const String &path);
 	void read_file_into(const String &path, String *str);

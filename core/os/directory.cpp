@@ -16,6 +16,22 @@ Error Directory::open(const String &path, bool skip_specials) {
 	return OK;
 }
 
+Error Directory::open(const char *path, bool skip_specials) {
+	if (_open) {
+		return ERR_CANT_ACQUIRE_RESOURCE;
+	}
+
+	_skip_specials = skip_specials;
+
+	if (tinydir_open(&_dir, path) == -1) {
+		return FAILED;
+	}
+
+	_open = true;
+
+	return OK;
+}
+
 void Directory::close() {
 	if (!_open) {
 		return;
@@ -65,7 +81,7 @@ char *Directory::current_get_extension_cstr() {
 bool Directory::current_is_file() {
 	return !_file.is_dir;
 }
-bool Directory::current_is_directory() {
+bool Directory::current_is_dir() {
 	return _file.is_dir;
 }
 
