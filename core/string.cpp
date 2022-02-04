@@ -915,6 +915,22 @@ void String::append_repeat(const String &other, const int times) {
 	}
 }
 
+void String::to_html_special_chars() {
+	replace("&", "&amp;");
+	replace("\"", "&quot;");
+	replace("'", "&#039;");
+	replace("<", "&lt;");
+	replace(">", "&gt;");
+}
+
+void String::from_html_special_chars() {
+	replace("&amp;", "&");
+	replace("&quot;", "\"");
+	replace("&#039;", "'");
+	replace("&lt;", "<");
+	replace("&gt;", ">");
+}
+
 bool String::to_bool() const {
 	if (_size == 0) {
 		return 0;

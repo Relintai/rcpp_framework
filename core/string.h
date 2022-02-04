@@ -97,6 +97,9 @@ public:
 	void append_repeat(const char* str, const int times);
 	void append_repeat(const String &other, const int times);
 
+	void to_html_special_chars();
+	void from_html_special_chars();
+
 	bool to_bool() const;
 	float to_float() const;
 	double to_double() const;
