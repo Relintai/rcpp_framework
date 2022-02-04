@@ -47,7 +47,7 @@ void PagedArticle::load() {
 	Ref<Directory> dir;
 	dir.instance();
 
-	ERR_FAIL_COND_MSG(!dir->open(articles_folder.c_str(), false), "Error opening PagedArticle::folder! folder: " + articles_folder);
+	ERR_FAIL_COND_MSG(!dir->open_dir(articles_folder.c_str(), false), "Error opening PagedArticle::folder! folder: " + articles_folder);
 
 	Vector<String> files;
 
@@ -59,7 +59,7 @@ void PagedArticle::load() {
 		}
 	}
 
-	dir->close();
+	dir->close_dir();
 
 	if (files.size() == 0) {
 		return;

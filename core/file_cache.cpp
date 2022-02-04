@@ -30,7 +30,7 @@ void FileCache::wwwroot_evaluate_dir(const char *path, const bool should_exist) 
 	Ref<Directory> dir;
 	dir.instance();
 
-	ERR_FAIL_COND_MSG(!dir->open(path, true), "Error opening wwwroot! folder: " + String(path));
+	ERR_FAIL_COND_MSG(!dir->open_dir(path, true), "Error opening wwwroot! folder: " + String(path));
 
 
 	while (dir->has_next()) {
@@ -46,7 +46,7 @@ void FileCache::wwwroot_evaluate_dir(const char *path, const bool should_exist) 
 		}
 	}
 
-	dir->close();
+	dir->close_dir();
 }
 
 bool FileCache::get_cached_body(const String &path, String *body) {

@@ -10,9 +10,9 @@
 class Directory : public Reference {
 	RCPP_OBJECT(Directory, Reference);
 public:
-	Error open(const String &path, bool skip_specials = true);
-	Error open(const char *path, bool skip_specials = true);
-	void close();
+	Error open_dir(const String &path, bool skip_specials = true);
+	Error open_dir(const char *path, bool skip_specials = true);
+	void close_dir();
 
 	bool has_next();
 	void next();
@@ -30,8 +30,8 @@ public:
 	String read_file(const String &path);
 	Error read_file_into(const String &path, String *str);
 
-	bool is_open();
-	bool is_closed();
+	bool is_dir_open();
+	bool is_dir_closed();
 
 	Directory();
 	virtual ~Directory();
@@ -42,7 +42,7 @@ private:
 	tinydir_dir _dir;
 	tinydir_file _file;
 
-	bool _open;
+	bool _dir_open;
 };
 
 #endif

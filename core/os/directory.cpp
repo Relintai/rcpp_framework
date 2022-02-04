@@ -1,7 +1,7 @@
 #include "directory.h"
 
-Error Directory::open(const String &path, bool skip_specials) {
-	if (_open) {
+Error Directory::open_dir(const String &path, bool skip_specials) {
+	if (_dir_open) {
 		return ERR_CANT_ACQUIRE_RESOURCE;
 	}
 
@@ -11,13 +11,13 @@ Error Directory::open(const String &path, bool skip_specials) {
 		return FAILED;
 	}
 
-	_open = true;
+	_dir_open = true;
 
 	return OK;
 }
 
-Error Directory::open(const char *path, bool skip_specials) {
-	if (_open) {
+Error Directory::open_dir(const char *path, bool skip_specials) {
+	if (_dir_open) {
 		return ERR_CANT_ACQUIRE_RESOURCE;
 	}
 
@@ -27,19 +27,19 @@ Error Directory::open(const char *path, bool skip_specials) {
 		return FAILED;
 	}
 
-	_open = true;
+	_dir_open = true;
 
 	return OK;
 }
 
-void Directory::close() {
-	if (!_open) {
+void Directory::close_dir() {
+	if (!_dir_open) {
 		return;
 	}
 
 	tinydir_close(&_dir);
 
-	_open = false;
+	_dir_open = false;
 }
 
 bool Directory::has_next() {
@@ -124,20 +124,20 @@ Error Directory::read_file_into(const String &path, String *str) {
 	return OK;
 }
 
-bool Directory::is_open() {
-	return _open;
+bool Directory::is_dir_open() {
+	return _dir_open;
 }
-bool Directory::is_closed() {
-	return !_open;
+bool Directory::is_dir_closed() {
+	return !_dir_open;
 }
 
 Directory::Directory() {
 	_skip_specials = false;
 	_read_file_result = 0;
-	_open = false;
+	_dir_open = false;
 }
 Directory::~Directory() {
-	if (is_open()) {
-		close();
+	if (is_dir_open()) {
+		close_dir();
 	}
 }
