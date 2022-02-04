@@ -25,7 +25,7 @@ void Utils::markdown_to_html(String *str) {
 	(*str) = htmlOutput;
 }
 
-String Utils::get_pagination(const String base_url, const uint32_t max, const uint32_t current_index, const uint32_t max_visible_links) {
+String Utils::get_pagination(const String &base_url, const uint32_t max, const uint32_t current_index, const uint32_t max_visible_links) {
 	String s = base_url;
 	if (s.size() > 0 && s[s.size() - 1] != '/') {
 		s += '/';
@@ -103,7 +103,7 @@ String Utils::get_pagination(const String base_url, const uint32_t max, const ui
 	return b.result;
 }
 
-String Utils::get_pagination_links(const String base_url, const Vector<String> &links, const uint32_t current_index, const uint32_t max_visible_links) {
+String Utils::get_pagination_links(const String &base_url, const Vector<String> &links, const uint32_t current_index, const uint32_t max_visible_links) {
 	String s = base_url;
 	if (s.size() > 0 && s[s.size() - 1] != '/') {
 		s += '/';
