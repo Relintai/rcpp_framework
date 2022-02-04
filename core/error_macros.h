@@ -35,6 +35,10 @@
     Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
     return;
 
+#define ERR_FAIL_V_MSG(val, msg) \
+    Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
+    return val;
+
 #define ERR_FAIL_INDEX(index, size) \
     if ((index < 0) || (index >= size)) {\
         Logger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, ""); \
