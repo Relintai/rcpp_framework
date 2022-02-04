@@ -215,4 +215,24 @@ public:
 	}
 };
 
+#ifndef ABS
+#define ABS(x) ((x > 0) ? (x) : (-x))
+#endif
+
+#ifndef SGN
+#define SGN(x) ((x > 0) ? (1.0) : (-1.0))
+#endif
+
+#ifndef MAX
+#define MAX(x, y) ((x > y) ? (x) : (y))
+#endif
+
+#ifndef MIN
+#define MIN(x, y) ((x < y) ? (x) : (y))
+#endif
+
+#ifndef CLAMP
+#define CLAMP(a, cmin, cmax) ((a < cmin) ? (cmin) : ((a > cmax) ? (cmax) : (a)))
+#endif
+
 #endif
