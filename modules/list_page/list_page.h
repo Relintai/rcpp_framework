@@ -8,6 +8,25 @@
 
 #include "core/http/request.h"
 
+// This class will load and generate pages from a folder of md files. It supports pagination, 
+// it will put entry_per_page md files per page. It generates html on enter tree, and caches everything.
+// Each md file gets rendered into a div with a class of "list_entry"
+
+// HTML (If there are entries):
+// render_menu()
+// <div class="list_page">                       // Set the class via the main_div_class property
+// <div class="list_entry">md file 1</div>       // Set the class via the entry_div_class property
+// <div class="list_entry">md file 2</div>
+// ...
+// <pagination>
+// </div>
+
+// HTML (If there are no entries):
+// render_menu()
+// <div class="list_page">                               // Set the class via the main_div_class property
+// <div class="list_entry_empty">No content yet!</div>   // Set the class via the empty_div_class property, text via placeholder_text property
+// </div>
+
 class ListPage : public WebNode {
 	RCPP_OBJECT(ListPage, WebNode);
 
@@ -30,6 +49,11 @@ public:
     int max_visible_navigation_links;
 	int entry_per_page;
 	String folder;
+
+	String main_div_class;
+	String entry_div_class;
+	String empty_div_class;
+	String placeholder_text;
 
 protected:
 	Vector<String> _pages;

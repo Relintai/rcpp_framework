@@ -124,21 +124,26 @@ void ListPage::render_entries(const Vector<String> &list_entries) {
 }
 
 String ListPage::render_page(const int page_index, const int page_count, const Vector<String> &list_entries, const int efrom, const int eto) {
-	String r = "";
+	HTMLBuilder b;
+
+	b.div(main_div_class);
 
 	for (int i = efrom; i < eto; ++i) {
-		r += render_entry(list_entries[i]);
+		b.w(render_entry(list_entries[i]));
 	}
 
-	r += Utils::get_pagination(get_full_uri(), page_count, page_index, max_visible_navigation_links);
+	b.w(Utils::get_pagination(get_full_uri(), page_count, page_index, max_visible_navigation_links));
+	b.cdiv();
 
-	return r;
+	return b.result;
 }
 
 String ListPage::render_entry(const String &list_entry) {
 	HTMLBuilder b;
 
-	b.div("list_entry")->w(list_entry)->cdiv();
+	b.div(main_div_class);
+	b.div(empty_div_class)->w(list_entry)->cdiv();
+	b.cdiv();
 
 	return b.result;
 }
@@ -146,7 +151,7 @@ String ListPage::render_entry(const String &list_entry) {
 void ListPage::render_no_entries_response() {
 	HTMLBuilder b;
 
-	b.div("list_entry")->w("No conteny yet!")->cdiv();
+	b.div(empty_div_class)->w(placeholder_text)->cdiv();
 
 	_no_entries_response = b.result;
 }
@@ -169,6 +174,10 @@ ListPage::ListPage() :
 
 	max_visible_navigation_links = 6;
 	entry_per_page = 4;
+	main_div_class = "list_page";
+	entry_div_class = "list_entry";
+	empty_div_class = "list_entry_empty";
+	placeholder_text = "No content yet!";
 }
 
 ListPage::~ListPage() {
