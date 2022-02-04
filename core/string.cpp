@@ -15,6 +15,13 @@ void String::push_back(const char element) {
 	_data[_size] = '\0';
 }
 
+void String::push_back(const wchar_t element) {
+	ensure_capacity(_size + 1);
+
+	_data[_size++] = element;
+	_data[_size] = '\0';
+}
+
 void String::pop_back() {
 	if (_size == 0) {
 		return;
@@ -873,6 +880,18 @@ void String::append_double_bytes(const double val) {
 }
 
 void String::append_str(const char *str) {
+	if (str == nullptr) {
+		return;
+	}
+
+	int i = 0;
+
+	while (str[i] != '\0') {
+		push_back(str[i++]);
+	}
+}
+
+void String::append_str(const wchar_t *str) {
 	if (str == nullptr) {
 		return;
 	}
@@ -2066,6 +2085,14 @@ String &String::operator=(const char *other) {
 	return *this;
 }
 
+String &String::operator=(const wchar_t *other) {
+	clear();
+
+	append_str(other);
+
+	return *this;
+}
+
 String::String() {
 	_data = nullptr;
 	_actual_size = 0;
@@ -2125,6 +2152,15 @@ String::String(const char *p_c_str, const int grow_by) {
 	_actual_size = 0;
 	_size = 0;
 	_grow_by = grow_by;
+
+	append_str(p_c_str);
+}
+
+String::String(const wchar_t *p_c_str) {
+	_data = nullptr;
+	_actual_size = 0;
+	_size = 0;
+	_grow_by = 100;
 
 	append_str(p_c_str);
 }

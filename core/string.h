@@ -10,6 +10,7 @@
 class String {
 public:
 	void push_back(const char element);
+	void push_back(const wchar_t element);
 	void pop_back();
 	void remove(const int index);
 	void erase(const char element);
@@ -91,6 +92,7 @@ public:
     void append_double_bytes(const double val);
 
 	void append_str(const char* str);
+	void append_str(const wchar_t* str);
 	void append_str(const String &other);
 	void append_str(const std::string &str);
 
@@ -197,12 +199,14 @@ public:
 	String& operator=(const String &other);
 	String& operator=(const std::string &other);
 	String& operator=(const char* other);
+	String& operator=(const wchar_t* other);
 
 	String();
 	String(const String &other);
 	String(const String &other, const int grow_by);
 	String(const char* p_c_str);
 	String(const char* p_c_str, const int grow_by);
+	String(const wchar_t* p_c_str);
 	String(const int prealloc);
 	String(const int prealloc, const int grow_by);
 	String(const std::string &str);
