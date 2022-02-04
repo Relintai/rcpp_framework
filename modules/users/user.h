@@ -4,7 +4,7 @@
 #include "core/string.h"
 
 #include "core/resource.h"
-
+#include "rapidjson/document.h"
 #include <mutex>
 
 class Request;
