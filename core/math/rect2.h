@@ -1,10 +1,6 @@
 #ifndef RECT2_H
 #define RECT2_H
 
-#ifdef SDL_AVAILABLE
-#include <SDL.h>
-#endif
-
 #include "vector2.h"
 
 class Rect2 {
@@ -21,11 +17,6 @@ public:
 	void shrink(const float by);
 
 	void expand_to(const Vector2 &p_vector);
-
-#ifdef SDL_AVAILABLE
-	SDL_Rect as_rect() const;
-	SDL_FRect as_frect() const;
-#endif
 
 	Rect2 &operator+=(const Rect2 &b);
 	Rect2 &operator-=(const Rect2 &b);
