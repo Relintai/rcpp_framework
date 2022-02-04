@@ -20,18 +20,8 @@ public:
 	std::map<String, String *> pages;
 	FileCache *file_cache;
 
-	PagedArticleEntry() {
-		file_cache = new FileCache();
-	}
-	~PagedArticleEntry() {
-		for (std::map<String, String *>::iterator it = pages.begin(); it != pages.end(); ++it) {
-			delete ((*it).second);
-		}
-
-		pages.clear();
-		
-		delete file_cache;
-	}
+	PagedArticleEntry();
+	~PagedArticleEntry();
 };
 
 #endif
