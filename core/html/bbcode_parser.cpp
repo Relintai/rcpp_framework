@@ -323,8 +323,7 @@ String BBCodeParserTag::to_string(const int level) {
 
 		if (tags.size() != 0) {
 			s.append_repeat(" ", level);
-			s += "(!SELF CLOSING TAG HAS TAGS!)\n";
-
+			
 			for (int i = 0; i < tags.size(); ++i) {
 				s += tags[i]->to_string(level + 1) + "\n";
 			}
