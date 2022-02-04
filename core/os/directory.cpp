@@ -101,12 +101,16 @@ String Directory::read_file(const String &path) {
 
 	return fd;
 }
-void Directory::read_file_into(const String &path, String *str) {
-	ERR_FAIL_COND(!str);
+Error Directory::read_file_into(const String &path, String *str) {
+	if (!str) {
+		return ERR_PARAMETER_RANGE_ERROR;
+	}
 
 	FILE *f = fopen(path.c_str(), "r");
 
-	ERR_FAIL_COND_MSG(!f, "Error opening file! " + path);
+	if (!f) {
+		return ERR_FILE_CANT_OPEN;
+	}
 
 	fseek(f, 0, SEEK_END);
 	long fsize = ftell(f);
@@ -116,6 +120,8 @@ void Directory::read_file_into(const String &path, String *str) {
 
 	fread(str->dataw(), 1, fsize, f);
 	fclose(f);
+
+	return OK;
 }
 
 bool Directory::is_open() {

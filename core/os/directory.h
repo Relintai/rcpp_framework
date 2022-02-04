@@ -28,7 +28,7 @@ public:
 	bool current_is_dir();
 
 	String read_file(const String &path);
-	void read_file_into(const String &path, String *str);
+	Error read_file_into(const String &path, String *str);
 
 	bool is_open();
 	bool is_closed();
