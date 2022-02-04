@@ -75,8 +75,7 @@ void ListPage::load() {
 
 	tinydir_close(&dir);
 
-	// todo
-	// std::sort(files.begin(), files.end());
+	files.sort_inc();
 
 	Vector<String> list_entries;
 
