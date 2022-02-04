@@ -59,6 +59,8 @@ public:
 
 	inline static float floor(const float x) { return ::floorf(x); }
 	inline static double floor(const double x) { return ::floor(x); }
+	// x + 0.5 -> so f.e. 0.9999999 will become 1
+	inline static int floorf_int(const float x) { return static_cast<int>(x + 0.5); }
 
 	inline static float ceil(const float x) { return ::ceilf(x); }
 	inline static double ceil(const double x) { return ::ceil(x); }
@@ -92,6 +94,9 @@ public:
 
 	static float is_equal_approx(const float a, const float b);
 	static float is_zero_approx(const float a);
+
+	//can save typing static_cast<float>
+	inline static float divf(const float a, const float b) { return a / b; }
 
 	// Taken from the Godot Engine (MIT License)
 	// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
