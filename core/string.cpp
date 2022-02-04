@@ -325,19 +325,21 @@ void String::replace(const String &find_str, const String &with, const int count
 }
 
 int String::compare(const String &other) const {
+	int cmp_size = MIN(size(), other.size());
+
+	for (int i = 0; i < cmp_size; ++i) {
+		if (_data[i] < other._data[i]) {
+			return 1;
+		} else if (_data[i] > other._data[i]) {
+			return 2;
+		}
+	}
+
 	if (size() < other.size()) {
 		return 1;
 	} else if (size() > other.size()) {
 		return 2;
 	} else {
-		for (int i = 0; i < _size; ++i) {
-			if (_data[i] < other._data[i]) {
-				return 1;
-			} else if (_data[i] > other._data[i]) {
-				return 2;
-			}
-		}
-
 		return 0;
 	}
 }
