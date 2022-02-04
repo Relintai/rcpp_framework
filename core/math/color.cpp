@@ -18,26 +18,6 @@ void ColorUInt8::from_key(const uint32_t key) {
 	a = (key & 0x000000FF) >> 0;
 }
 
-#ifdef SDL_AVAILABLE
-SDL_Color ColorUInt8::to_sdl_color() const {
-    SDL_Color c;
-
-    c.r = r;
-    c.g = g;
-    c.b = b;
-    c.a = a;
-
-    return c;
-}
-
-void ColorUInt8::from_sdl_color(const SDL_Color &key) {
-    r = key.r;
-    g = key.g;
-    b = key.b;
-    a = key.a;
-}
-#endif
-
 ColorUInt8::ColorUInt8() {
 	r = 0;
 	g = 0;

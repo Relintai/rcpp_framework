@@ -4,10 +4,6 @@
 #include "core/typedefs.h"
 #include <inttypes.h>
 
-#ifdef SDL_AVAILABLE
-#include <SDL.h>
-#endif
-
 //Todo add float version
 //Not sure but probably that should be the default
 
@@ -15,11 +11,6 @@ class ColorUInt8 {
 public:
 	uint32_t to_key() const;
 	void from_key(const uint32_t key);
-
-#ifdef SDL_AVAILABLE
-	SDL_Color to_sdl_color() const;
-	void from_sdl_color(const SDL_Color &key);
-#endif
 
 	_FORCE_INLINE_ uint8_t &operator[](int idx) {
 		return components[idx];
