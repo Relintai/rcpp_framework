@@ -1,6 +1,7 @@
 #include "vector2.h"
 
 #include <cmath>
+#include "vector2i.h"
 
 #define EPSILON 0.00001
 
@@ -222,4 +223,8 @@ float &Vector2::operator[](int axis) {
 
 Vector2::operator String() const {
 	return "[" + String::num(x) + "," + String::num(y) + "]";
+}
+
+Vector2::operator Vector2i() const {
+	return Vector2i(x, y);
 }

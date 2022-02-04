@@ -3,6 +3,8 @@
 
 #include "core/string.h"
 
+class Vector2;
+
 class Vector2i {
 public:
 	Vector2i abs() const;
@@ -52,6 +54,7 @@ public:
 	int &operator[](int axis);
 
 	operator String() const;
+	operator Vector2() const;
 
 	enum Axis {
 		AXIS_X = 0,

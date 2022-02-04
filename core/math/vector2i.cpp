@@ -1,6 +1,7 @@
 #include "vector2i.h"
 
 #include <cmath>
+#include "vector2.h"
 
 Vector2i Vector2i::abs() const {
 	Vector2i b;
@@ -178,4 +179,8 @@ int &Vector2i::operator[](int axis) {
 
 Vector2i::operator String() const {
 	return "[" + String::num(x) + "," + String::num(y) + "]";
+}
+
+Vector2i::operator Vector2() const {
+	return Vector2(x, y);
 }
