@@ -2,6 +2,7 @@
 #define RECT2I_H
 
 #include "vector2i.h"
+#include "math.h"
 
 class Rect2i {
 public:
@@ -17,6 +18,7 @@ public:
 	void shrink(const int by);
 
 	void expand_to(const Vector2i &p_vector);
+	inline Rect2i clip(const Rect2i &p_rect) const;
 
 	Vector2i position() const;
 	Vector2i size() const;
@@ -41,5 +43,27 @@ public:
 	int w;
 	int h;
 };
+
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+inline Rect2i Rect2i::clip(const Rect2i &p_rect) const { /// return a clipped rect
+	Rect2i new_rect = p_rect;
+
+	if (!intersects(new_rect)) {
+		return Rect2i();
+	}
+
+	new_rect.x = MAX(p_rect.x, x);
+	new_rect.y = MAX(p_rect.y, y);
+
+	Vector2i p_rect_end = p_rect.position() + p_rect.size();
+	Vector2i end = position() + size();
+
+	new_rect.w = MIN(p_rect_end.x, end.x) - new_rect.x;
+	new_rect.h = MIN(p_rect_end.y, end.y) - new_rect.y;
+
+	return new_rect;
+}
 
 #endif
