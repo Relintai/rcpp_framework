@@ -7,6 +7,8 @@
 
 #define memnew(m_class) new m_class
 #define memdelete(instance) delete instance
+#define memnew_arr(m_class, size) new m_class[size]
+#define memdelete_arr(instance) delete[] instance
 
 #endif
 
