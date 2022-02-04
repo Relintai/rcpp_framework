@@ -98,7 +98,7 @@ void Signal::emit(Object *p_emitter, const Variant &p1, const Variant &p2, const
 
 void Signal::emit(Object *p_emitter, const Variant &p1, const Variant &p2, const Variant &p3, const Variant &p4, const Variant &p5) {
 	emitter = p_emitter;
-	
+
 	params.push_back(p1);
 	params.push_back(p2);
 	params.push_back(p3);
@@ -112,8 +112,7 @@ void Signal::emit(Object *p_emitter, const Variant &p1, const Variant &p2, const
 	params.clear();
 }
 
-Signal::Signal() :
-		Object() {
+Signal::Signal() {
 }
 Signal::~Signal() {
 }

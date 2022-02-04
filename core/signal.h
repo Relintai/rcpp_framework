@@ -7,9 +7,7 @@
 
 #include "reference.h"
 
-class Signal : public Object {
-	RCPP_OBJECT(Signal, Object);
-
+class Signal {
 public:
 	Object *emitter;
 	Vector<Variant> params;
