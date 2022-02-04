@@ -4,6 +4,8 @@
 #include "vector2.h"
 #include "math.h"
 
+class Rect2i;
+
 class Rect2 {
 public:
 	float get_area() const;
@@ -31,6 +33,8 @@ public:
 
 	friend bool operator==(const Rect2 &a, const Rect2 &b);
 	friend bool operator!=(const Rect2 &a, const Rect2 &b);
+
+	operator Rect2i() const;
 
 	Rect2();
 	Rect2(const Rect2 &b);

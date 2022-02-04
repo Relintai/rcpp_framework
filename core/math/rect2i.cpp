@@ -1,6 +1,7 @@
 #include "rect2i.h"
 
 #include "math.h"
+#include "rect2.h"
 
 float Rect2i::get_area() const {
 	return w * h;
@@ -161,6 +162,10 @@ bool operator!=(const Rect2i &a, const Rect2i &b) {
 	return !a.is_equal_approx(b);
 }
 
+Rect2i::operator Rect2() const {
+	return Rect2(x, y, w, h);
+}
+
 Rect2i::Rect2i() {
 	x = 0;
 	y = 0;
@@ -190,6 +195,27 @@ Rect2i::Rect2i(const int rx, const int ry, const int rw, const int rh) {
 }
 
 Rect2i::Rect2i(const Vector2i &position, const Vector2i &size) {
+	x = position.x;
+	y = position.y;
+	w = size.x;
+	h = size.y;
+}
+
+Rect2i::Rect2i(const Vector2 &position, const Vector2 &size) {
+	x = position.x;
+	y = position.y;
+	w = size.x;
+	h = size.y;
+}
+
+Rect2i::Rect2i(const Vector2i &position, const Vector2 &size) {
+	x = position.x;
+	y = position.y;
+	w = size.x;
+	h = size.y;
+}
+
+Rect2i::Rect2i(const Vector2 &position, const Vector2i &size) {
 	x = position.x;
 	y = position.y;
 	w = size.x;

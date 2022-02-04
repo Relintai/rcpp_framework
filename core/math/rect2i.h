@@ -2,7 +2,10 @@
 #define RECT2I_H
 
 #include "vector2i.h"
+#include "vector2.h"
 #include "math.h"
+
+class Rect2;
 
 class Rect2i {
 public:
@@ -32,11 +35,16 @@ public:
 	friend bool operator==(const Rect2i &a, const Rect2i &b);
 	friend bool operator!=(const Rect2i &a, const Rect2i &b);
 
+	operator Rect2() const;
+
 	Rect2i();
 	Rect2i(const Rect2i &b);
 	Rect2i(const int rx, const int ry);
 	Rect2i(const int rx, const int ry, const int rw, const int rh);
 	Rect2i(const Vector2i &position, const Vector2i &size);
+	Rect2i(const Vector2 &position, const Vector2 &size);
+	Rect2i(const Vector2i &position, const Vector2 &size);
+	Rect2i(const Vector2 &position, const Vector2i &size);
 
 	int x;
 	int y;
