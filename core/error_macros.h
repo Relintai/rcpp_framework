@@ -31,9 +31,20 @@
 #define RLOG_ERR(str) \
     Logger::log_error(str);
 
+#define ERR_FAIL_MSG(msg) \
+    Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
+    return;
+
 #define ERR_FAIL_INDEX(index, size) \
     if ((index < 0) || (index >= size)) {\
         Logger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, ""); \
+        return;\
+    } else\
+        ((void)0)\
+
+#define ERR_FAIL_INDEX_MSG(index, size, msg) \
+    if ((index < 0) || (index >= size)) {\
+        Logger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, msg); \
         return;\
     } else\
         ((void)0)\
@@ -45,6 +56,13 @@
     } else\
         ((void)0)\
 
+#define ERR_FAIL_INDEX_V_MSG(index, size, val, msg) \
+    if ((index < 0) || (index >= size)) {\
+        Logger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, msg); \
+        return val;\
+    } else\
+        ((void)0)\
+
 #define ERR_FAIL_COND(cond) \
     if (cond) {\
         Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, "ERR_FAIL_COND: \"" #cond "\" is true!"); \
@@ -52,9 +70,23 @@
     } else\
         ((void)0)\
 
+#define ERR_FAIL_COND_MSG(cond, msg) \
+    if (cond) {\
+        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
+        return;\
+    } else\
+        ((void)0)\
+
 #define ERR_FAIL_COND_V(cond, val) \
     if (cond) {\
         Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, "ERR_FAIL_COND: \"" #cond "\" is true!"); \
+        return val;\
+    } else\
+        ((void)0)\
+
+#define ERR_FAIL_COND_V_MSG(cond, val, msg) \
+    if (cond) {\
+        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
         return val;\
     } else\
         ((void)0)\

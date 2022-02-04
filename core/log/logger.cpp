@@ -44,6 +44,10 @@ void Logger::_log_error(const char *p_function, const char *p_file, int p_line, 
 {
     printf("!ERROR: (%s) %s:%d. %s\n", p_file, p_function, p_line, str);
 }
+void Logger::_log_error(const char *p_function, const char *p_file, int p_line, const String &str)
+{
+    printf("!ERROR: (%s) %s:%d. %s\n", p_file, p_function, p_line, str.c_str());
+}
 void Logger::_log_msg_error(const char *p_function, const char *p_file, int p_line, const char *p_msg, const char *str)
 {
     printf("!ERROR: (%s) %s:%d :: %s. %s\n", p_file, p_function, p_line, str, p_msg);

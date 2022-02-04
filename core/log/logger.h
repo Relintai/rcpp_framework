@@ -18,6 +18,7 @@ public:
     static void log_error(const char *str);
 
     static void _log_error(const char *p_function, const char *p_file, int p_line, const char *str);
+    static void _log_error(const char *p_function, const char *p_file, int p_line, const String &str);
     static void _log_msg_error(const char *p_function, const char *p_file, int p_line, const char *p_msg, const char *str);
     static void _log_index_error(const char *p_function, const char *p_file, int p_line, const int index, const int size, const char *str);
 };
