@@ -8,7 +8,6 @@
 
 #include "user.h"
 #include "core/http/middleware.h"
-#include "libs/rapidjson/rapidjson.h"
 
 class Request;
 class FormValidator;
