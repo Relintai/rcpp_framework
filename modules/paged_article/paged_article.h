@@ -18,14 +18,14 @@ public:
 	void handle_request_main(Request *request);
 
 	void load();
-	PagedArticleEntry *load_folder(const String &folder, const String &path);
+	Ref<PagedArticleEntry> load_folder(const String &folder, const String &path);
 	void generate_summaries();
-	void generate_summary(PagedArticleEntry *article);
+	void generate_summary(Ref<PagedArticleEntry> article);
 
 	PagedArticle();
 	~PagedArticle();
 
-	std::map<String, PagedArticleEntry *> pages;
+	std::map<String, Ref<PagedArticleEntry>> pages;
 	String folder;
 	String base_path;
 };

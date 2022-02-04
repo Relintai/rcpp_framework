@@ -11,9 +11,9 @@
 void PagedArticle::handle_request_main(Request *request) {
 	const String r = request->get_current_path_segment();
 
-	PagedArticleEntry *s = pages[r];
+	Ref<PagedArticleEntry> s = pages[r];
 
-	if (s == nullptr) {
+	if (!s.is_valid()) {
 		request->send_error(404);
 		return;
 	}
@@ -94,9 +94,9 @@ void PagedArticle::load() {
 			String ff = folder + "/" + fn;
 			String wp = base_path + "/" + fn;
 
-			PagedArticleEntry *a = load_folder(np, wp);
+			Ref<PagedArticleEntry> a = load_folder(np, wp);
 
-			if (a) {
+			if (a.is_valid()) {
 
 				String p = file.name;
 
@@ -116,7 +116,7 @@ void PagedArticle::load() {
 	generate_summaries();
 }
 
-PagedArticleEntry *PagedArticle::load_folder(const String &folder, const String &path) {
+Ref<PagedArticleEntry> PagedArticle::load_folder(const String &folder, const String &path) {
 	printf("PagedArticle: loading: %s\n", folder.c_str());
 
 	Vector<String> files;
@@ -124,7 +124,7 @@ PagedArticleEntry *PagedArticle::load_folder(const String &folder, const String 
 	tinydir_dir dir;
 	if (tinydir_open(&dir, folder.c_str()) == -1) {
 		printf("PagedArticle::load_folder: Error opening folder %s!\n", folder.c_str());
-		return nullptr;
+		return Ref<PagedArticleEntry>();
 	}
 
 	while (dir.has_next) {
@@ -146,13 +146,14 @@ PagedArticleEntry *PagedArticle::load_folder(const String &folder, const String 
 	tinydir_close(&dir);
 
 	if (files.size() == 0) {
-		return nullptr;
+		return Ref<PagedArticleEntry>();
 	}
 
 	//todo
 	//std::sort(files.begin(), files.end());
 
-	PagedArticleEntry *article = new PagedArticleEntry();
+	Ref<PagedArticleEntry> article;
+	article.instance();
 
 	for (uint32_t i = 0; i < files.size(); ++i) {
 		String file_path = folder;
@@ -202,12 +203,12 @@ PagedArticleEntry *PagedArticle::load_folder(const String &folder, const String 
 }
 
 void PagedArticle::generate_summaries() {
-	for (std::map<String, PagedArticleEntry *>::iterator it = pages.begin(); it != pages.end(); ++it) {
+	for (std::map<String, Ref<PagedArticleEntry> >::iterator it = pages.begin(); it != pages.end(); ++it) {
 		generate_summary((*it).second);
 	}
 }
 
-void PagedArticle::generate_summary(PagedArticleEntry *article) {
+void PagedArticle::generate_summary(Ref<PagedArticleEntry> article) {
 	if (article->summary_page != "") {
 		return;
 	}
