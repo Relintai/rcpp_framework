@@ -118,6 +118,11 @@ void WebNode::set_database(Database *db) {
 #endif
 
 void WebNode::handle_request_main(Request *request) {
+	if (!_routing_enabled) {
+		_handle_request_main(request);
+		return;
+	}
+
 	if (!try_route_request_to_children(request)) {
 		_handle_request_main(request);
 	}
