@@ -16,7 +16,7 @@ public:
 
 	bool has_next();
 	bool read();
-	void next();
+	bool next();
 
 	bool current_is_ok();
 	String current_get_name();

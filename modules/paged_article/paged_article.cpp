@@ -52,17 +52,10 @@ void PagedArticle::load() {
 
 	Vector<String> files;
 
-	while (dir->has_next()) {
-		if (!dir->read()) {
-			dir->next();
-			continue;
-		}
-
+	while (dir->next()) {
 		if (dir->current_is_file()) {
 			files.push_back(dir->current_get_name());
 		}
-
-		dir->next();
 	}
 
 	dir->close_dir();

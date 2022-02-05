@@ -50,8 +50,32 @@ bool Directory::read() {
 
 	return _read_file_result != -1;
 }
-void Directory::next() {
-	tinydir_next(&_dir);
+bool Directory::next() {
+	if (!_dir.has_next) {
+		return false;
+	}
+
+	bool rres = read();
+	while (!rres && _dir.has_next) {
+		tinydir_next(&_dir);
+		rres = read();
+	}
+
+	if (!rres) {
+		return false;
+	}
+
+	if (_dir.has_next) {
+		tinydir_next(&_dir);
+	}
+
+	// if (_skip_specials && current_is_dir() && current_is_special_dir()) {
+	//	return next();
+	// }
+
+	// tinydir_next(&_dir);
+
+	return true;
 }
 
 bool Directory::current_is_ok() {

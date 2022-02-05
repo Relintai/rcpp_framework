@@ -29,15 +29,9 @@ void PagedArticles::load() {
 
 	ERR_FAIL_COND_MSG(dir->open_dir(folder) != OK, "Error opening PagedArticles::folder! folder: " + folder);
 
-	while (dir->has_next()) {
-		if (!dir->read()) {
-			dir->next();
-			continue;
-		}
-
+	while (dir->next()) {
 		if (dir->current_is_dir()) {
 			if (dir->current_is_special_dir()) {
-				dir->next();
 				continue;
 			}
 
@@ -52,8 +46,6 @@ void PagedArticles::load() {
 			p->set_uri_segment(seg);
 			add_child(p);
 		}
-
-		dir->next();
 	}
 
 	generate_index_page();
