@@ -39,6 +39,11 @@ void Node::add_child(Node *child) {
 	_children.push_back(child);
 	child->set_parent(this);
 
+	if (_in_tree) {
+		child->set_tree(_tree);
+		child->notification(NOTIFICATION_EXIT_TREE);
+	}
+
 	notification(NOTIFICATION_CHILD_ADDED);
 }
 void Node::remove_child_index(int index) {
@@ -65,9 +70,6 @@ void Node::remove_child(Node *child) {
 }
 
 NodeTree *Node::get_tree() {
-	if (!_tree) {
-	}
-
 	return _tree;
 }
 
@@ -81,12 +83,16 @@ void Node::set_tree(NodeTree *tree) {
 
 	if (_tree) {
 		_in_tree = true;
-		_notification(NOTIFICATION_ENTER_TREE);
 	}
 
 	for (int i = 0; i < _children.size(); ++i) {
 		_children[i]->set_tree(tree);
 	}
+
+	if (_tree) {
+		_notification(NOTIFICATION_ENTER_TREE);
+	}
+
 }
 
 void Node::notification(const int what) {
