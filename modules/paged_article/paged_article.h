@@ -19,6 +19,9 @@ public:
 	void load();
 	void load_folder(const String &folder, const String &path);
 	void generate_summary();
+	String get_summary();
+
+	void _notification(const int what);
 
 	PagedArticle();
 	~PagedArticle();

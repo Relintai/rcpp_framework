@@ -45,37 +45,34 @@ void Directory::close_dir() {
 bool Directory::has_next() {
 	return _dir.has_next;
 }
-void Directory::next() {
-	tinydir_next(&_dir);
-
+bool Directory::read() {
 	_read_file_result = tinydir_readfile(&_dir, &_file);
 
-	if (_skip_specials && current_is_ok()) {
-		if ((_file.name[0] == '.' && _file.name[1] == '\0') || (_file.name[0] == '.' && _file.name[1] == '.' && _file.name[1] == '\0')) {
-			next();
-		}
-	}
+	return _read_file_result != -1;
+}
+void Directory::next() {
+	tinydir_next(&_dir);
 }
 
 bool Directory::current_is_ok() {
 	return _read_file_result == 01;
 }
 String Directory::current_get_name() {
-	return _file.name;
+	return String(_file.name);
 }
 String Directory::current_get_path() {
-	return _file.path;
+	return String(_file.path);
 }
 String Directory::current_get_extension() {
-	return _file.extension;
+	return String(_file.extension);
 }
-char *Directory::current_get_name_cstr() {
+const char *Directory::current_get_name_cstr() {
 	return _file.name;
 }
-char *Directory::current_get_path_cstr() {
+const char *Directory::current_get_path_cstr() {
 	return _file.path;
 }
-char *Directory::current_get_extension_cstr() {
+const char *Directory::current_get_extension_cstr() {
 	return _file.extension;
 }
 bool Directory::current_is_file() {
@@ -83,6 +80,13 @@ bool Directory::current_is_file() {
 }
 bool Directory::current_is_dir() {
 	return _file.is_dir;
+}
+bool Directory::current_is_special_dir() {
+	if (_file.name[0] == '.' && _file.name[1] == '\0' || _file.name[0] == '.' && _file.name[1] == '.') {
+		return true;
+	}
+
+	return false;
 }
 
 String Directory::read_file(const String &path) {
@@ -132,7 +136,7 @@ bool Directory::is_dir_closed() {
 }
 
 Directory::Directory() {
-	_skip_specials = false;
+	_skip_specials = true;
 	_read_file_result = 0;
 	_dir_open = false;
 }

@@ -47,16 +47,21 @@ void PagedArticle::load() {
 	Ref<Directory> dir;
 	dir.instance();
 
-	ERR_FAIL_COND_MSG(!dir->open_dir(articles_folder.c_str(), false), "Error opening PagedArticle::folder! folder: " + articles_folder);
+	ERR_FAIL_COND_MSG(dir->open_dir(articles_folder.c_str()) != OK, "Error opening PagedArticle::folder! folder: " + articles_folder);
 
 	Vector<String> files;
 
 	while (dir->has_next()) {
-		dir->next();
+		if (!dir->read()) {
+			dir->next();
+			continue;
+		}
 
 		if (dir->current_is_file()) {
 			files.push_back(dir->current_get_name());
 		}
+
+		dir->next();
 	}
 
 	dir->close_dir();
@@ -78,7 +83,7 @@ void PagedArticle::load() {
 
 		String fd;
 
-		ERR_CONTINUE_MSG(!dir->read_file_into(file_path, &fd), "PagedArticle::load_folder: Error opening file! " + file_path);
+		ERR_CONTINUE_MSG(dir->read_file_into(file_path, &fd) != OK, "PagedArticle::load_folder: Error opening file! " + file_path);
 
 		Utils::markdown_to_html(&fd);
 
@@ -125,6 +130,20 @@ void PagedArticle::generate_summary() {
 		if (s != nullptr) {
 			summary_page = (*s);
 		}
+	}
+}
+
+String PagedArticle::get_summary() {
+	return summary_page;
+}
+
+void PagedArticle::_notification(const int what) {
+	switch (what) {
+		case NOTIFICATION_ENTER_TREE:
+			load();
+			break;
+		default:
+			break;
 	}
 }
 

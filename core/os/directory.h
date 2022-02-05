@@ -15,17 +15,19 @@ public:
 	void close_dir();
 
 	bool has_next();
+	bool read();
 	void next();
 
 	bool current_is_ok();
 	String current_get_name();
 	String current_get_path();
 	String current_get_extension();
-	char *current_get_name_cstr();
-	char *current_get_path_cstr();
-	char *current_get_extension_cstr();
+	const char *current_get_name_cstr();
+	const char *current_get_path_cstr();
+	const char *current_get_extension_cstr();
 	bool current_is_file();
 	bool current_is_dir();
+	bool current_is_special_dir();
 
 	String read_file(const String &path);
 	Error read_file_into(const String &path, String *str);

@@ -30,20 +30,30 @@ void FileCache::wwwroot_evaluate_dir(const char *path, const bool should_exist) 
 	Ref<Directory> dir;
 	dir.instance();
 
-	ERR_FAIL_COND_MSG(!dir->open_dir(path, true), "Error opening wwwroot! folder: " + String(path));
-
+	ERR_FAIL_COND_MSG(dir->open_dir(path) != OK, "Error opening wwwroot! folder: " + String(path));
 
 	while (dir->has_next()) {
-		dir->next();
+		if (!dir->read()) {
+			dir->next();
+			continue;
+		}
 
 		if (dir->current_is_file()) {
 			String np = dir->current_get_path_cstr();
+
 			np = np.substr(wwwroot.size(), np.size() - wwwroot.size());
 
 			registered_files.insert(np);
 		} else {
+			if (dir->current_is_special_dir()) {
+				dir->next();
+				continue;
+			}
+
 			wwwroot_evaluate_dir(dir->current_get_path_cstr());
 		}
+
+		dir->next();
 	}
 
 	dir->close_dir();
