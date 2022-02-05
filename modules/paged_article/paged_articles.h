@@ -18,7 +18,7 @@ public:
 	void _handle_request_main(Request *request);
 
 	void load();
-	void generate_summary();
+	void generate_index_page();
 
 	void _notification(const int what);
 
@@ -28,7 +28,7 @@ public:
 	String folder;
 
 protected:
-	String summary_page;
+	String index_page;
 };
 
 #endif

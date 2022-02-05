@@ -12,7 +12,7 @@ void PagedArticles::_handle_request_main(Request *request) {
 	render_menu(request);
 
 	// summary page
-	request->body += summary_page;
+	request->body += index_page;
 
 	request->compile_and_send_body();
 }
@@ -56,10 +56,10 @@ void PagedArticles::load() {
 		dir->next();
 	}
 
-	generate_summary();
+	generate_index_page();
 }
 
-void PagedArticles::generate_summary() {
+void PagedArticles::generate_index_page() {
 	HTMLBuilder b;
 
 	b.div("article_list");
@@ -69,14 +69,14 @@ void PagedArticles::generate_summary() {
 
 		if (a) {
 			b.a(a->get_full_uri());
-			b.div("article_list_entry")->w(a->get_index_page())->cdiv();
+			b.div("article_list_entry")->w(a->get_summary())->cdiv();
 			b.ca();
 		}
 	}
 
 	b.cdiv();
 
-	summary_page = b.result;
+	index_page = b.result;
 }
 
 void PagedArticles::_notification(const int what) {
