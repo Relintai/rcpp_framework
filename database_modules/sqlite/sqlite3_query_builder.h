@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "core/database/query_builder.h"
+#include "database/query_builder.h"
 
 class SQLite3Database;
 

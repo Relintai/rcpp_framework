@@ -207,7 +207,7 @@ database_list = []
 if env_base["databases"]:
     env_base.Append(CPPDEFINES=["DATABASES_ENABLED"])
 
-    for x in sorted(glob.glob("database/*")):
+    for x in sorted(glob.glob("database_modules/*")):
         if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
             continue
         tmppath = "./" + x
@@ -216,8 +216,8 @@ if env_base["databases"]:
         import detect
 
         if detect.is_active() and detect.can_build():
-            x = x.replace("database/", "")  # rest of world
-            x = x.replace("database\\", "")  # win32
+            x = x.replace("database_modules/", "")  # rest of world
+            x = x.replace("database_modules\\", "")  # win32
             database_list += [x]
 
         sys.path.remove(tmppath)
@@ -278,7 +278,7 @@ SConscript("web/SCsub")
 SConscript("platform/SCsub")
 
 if env_base["databases"]:
-    #add db folder
+    SConscript("database/SCsub")
 
     for d in database_list:
         tmppath = "./database_modules/" + d

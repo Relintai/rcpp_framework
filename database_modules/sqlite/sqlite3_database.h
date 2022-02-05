@@ -1,7 +1,7 @@
 #ifndef SQLITE3_CONNECTION
 #define SQLITE3_CONNECTION
 
-#include "core/database/database.h"
+#include "database/database.h"
 
 //Brynet has it aswell, and because of using namespace it is defined here aswell
 //later this will be fixed better

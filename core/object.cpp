@@ -1,6 +1,6 @@
 #include "object.h"
 
-#include "core/database/database.h"
+#include "database/database.h"
 
 Object::Object() {
     db = nullptr;

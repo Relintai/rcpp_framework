@@ -3,7 +3,7 @@
 
 #include "core/string.h"
 
-#include "core/database/table_builder.h"
+#include "database/table_builder.h"
 
 class SQLite3Database;
 

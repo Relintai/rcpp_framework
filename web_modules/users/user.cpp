@@ -8,10 +8,10 @@
 #include <tinydir/tinydir.h>
 #include <cstdio>
 
-#include "core/database/database_manager.h"
-#include "core/database/query_builder.h"
-#include "core/database/query_result.h"
-#include "core/database/table_builder.h"
+#include "database/database_manager.h"
+#include "database/query_builder.h"
+#include "database/query_result.h"
+#include "database/table_builder.h"
 
 #include "web/html/form_validator.h"
 #include "web/html/html_builder.h"

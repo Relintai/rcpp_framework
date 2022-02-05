@@ -1,6 +1,6 @@
 #include "pgsql_database.h"
 
-#include "core/database/database_manager.h"
+#include "database/database_manager.h"
 
 Database *PGSQLDatabase::_creation_func() {
 	return new PGSQLDatabase();

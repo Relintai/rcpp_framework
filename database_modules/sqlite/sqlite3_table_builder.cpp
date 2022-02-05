@@ -1,6 +1,6 @@
 #include "sqlite3_table_builder.h"
 
-#include "core/database/query_result.h"
+#include "database/query_result.h"
 
 #include "sqlite3_database.h"
 

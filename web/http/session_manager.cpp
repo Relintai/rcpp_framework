@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "core/database/database_manager.h"
-#include "core/database/query_builder.h"
-#include "core/database/query_result.h"
-#include "core/database/table_builder.h"
+#include "database/database_manager.h"
+#include "database/query_builder.h"
+#include "database/query_result.h"
+#include "database/table_builder.h"
 
 #include "core/hash/sha256.h"
 

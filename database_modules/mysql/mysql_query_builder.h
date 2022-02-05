@@ -4,7 +4,7 @@
 #include <memory>
 #include "core/string.h"
 
-#include "core/database/query_builder.h"
+#include "database/query_builder.h"
 
 class MysqlDatabase;
 class MysqlQueryResult;

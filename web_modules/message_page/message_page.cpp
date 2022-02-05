@@ -1,10 +1,10 @@
 #include "message_page.h"
 
-#include "core/database/database.h"
+#include "database/database.h"
 
-#include "core/database/query_builder.h"
-#include "core/database/table_builder.h"
-#include "core/database/query_result.h"
+#include "database/query_builder.h"
+#include "database/table_builder.h"
+#include "database/query_result.h"
 
 void MessagePage::handle_request_main(Request *request) {
 	Ref<QueryBuilder> b = db->get_query_builder();

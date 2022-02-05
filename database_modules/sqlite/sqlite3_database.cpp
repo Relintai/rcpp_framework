@@ -1,6 +1,6 @@
 #include "sqlite3_database.h"
 
-#include "core/database/database_manager.h"
+#include "database/database_manager.h"
 
 #include "sqlite3_query_builder.h"
 #include "sqlite3_query_result.h"

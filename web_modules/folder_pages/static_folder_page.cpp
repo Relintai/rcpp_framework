@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include "core/file_cache.h"
-#include "core/database/database_manager.h"
+#include "database/database_manager.h"
 #include "web/html/html_builder.h"
 
 void StaticFolderPage::handle_request_main(Request *request) {

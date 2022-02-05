@@ -3,7 +3,7 @@
 
 #include "core/string.h"
 
-#include "core/database/database.h"
+#include "database/database.h"
 
 #include <memory>
 
