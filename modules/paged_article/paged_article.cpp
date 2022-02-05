@@ -23,7 +23,7 @@ void PagedArticle::handle_request_main(Request *request) {
 		render_menu(request);
 
 		// summary page
-		request->body += summary_page;
+		request->body += index_page;
 
 		request->compile_and_send_body();
 		return;
@@ -101,7 +101,7 @@ void PagedArticle::load() {
 		pages[files[i]] = finals;
 
 		if (i == 0) {
-			summary_page = (*finals);
+			index_page = (*finals);
 		}
 	}
 
@@ -116,26 +116,10 @@ void PagedArticle::load() {
 
 		file_cache->wwwroot_refresh_cache();
 	}
-
-	generate_summary();
 }
 
-void PagedArticle::generate_summary() {
-	if (summary_page != "") {
-		return;
-	}
-
-	for (std::map<String, String *>::iterator it = pages.begin(); it != pages.end(); ++it) {
-		String *s = (*it).second;
-
-		if (s != nullptr) {
-			summary_page = (*s);
-		}
-	}
-}
-
-String PagedArticle::get_summary() {
-	return summary_page;
+String PagedArticle::get_index_page() {
+	return index_page;
 }
 
 void PagedArticle::_notification(const int what) {

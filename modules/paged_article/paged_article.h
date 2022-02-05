@@ -18,8 +18,7 @@ public:
 
 	void load();
 	void load_folder(const String &folder, const String &path);
-	void generate_summary();
-	String get_summary();
+	String get_index_page();
 
 	void _notification(const int what);
 
@@ -31,7 +30,7 @@ public:
 	String serve_folder;
 
 protected:
-	String summary_page;
+	String index_page;
 	std::map<String, String *> pages;
 	FileCache *file_cache;
 };

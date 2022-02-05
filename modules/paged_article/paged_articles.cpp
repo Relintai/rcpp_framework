@@ -69,7 +69,7 @@ void PagedArticles::generate_summary() {
 
 		if (a) {
 			b.a(a->get_full_uri());
-			b.div("article_list_entry")->w(a->get_summary())->cdiv();
+			b.div("article_list_entry")->w(a->get_index_page())->cdiv();
 			b.ca();
 		}
 	}
