@@ -7,9 +7,13 @@
 #include <map>
 #include <functional>
 
+#include "core/object.h"
+
 #include "database.h"
 
-class DatabaseManager {
+class DatabaseManager : public Object {
+    RCPP_OBJECT(DatabaseManager, Object);
+
 public:
     std::vector<Database *> databases;
     Database *ddb;
