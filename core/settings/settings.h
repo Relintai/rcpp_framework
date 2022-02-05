@@ -5,8 +5,8 @@
 
 #include "core/object.h"
 
-#include "core/variant.h"
 #include "core/string.h"
+#include "core/variant.h"
 
 class Settings : public Object {
 	RCPP_OBJECT(Settings, Object);
@@ -29,9 +29,10 @@ public:
 	virtual ~Settings();
 
 protected:
-	static Settings *_singleton;
-
 	std::map<String, Variant> _data;
+
+private:
+	static Settings *_singleton;
 };
 
 #endif

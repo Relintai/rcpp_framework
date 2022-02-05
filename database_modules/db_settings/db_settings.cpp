@@ -70,11 +70,21 @@ void DBSettings::set_table(const String &table) {
 	_table = table;
 }
 
+DBSettings *DBSettings::get_singleton() {
+	return _db_settings_singleton;
+}
+
 DBSettings::DBSettings(const bool singleton) :
 		Settings(singleton) {
 
 	_table = "settings";
+
+	if (singleton) {
+		_db_settings_singleton = this;
+	}
 }
 
 DBSettings::~DBSettings() {
 }
+
+DBSettings *DBSettings::_db_settings_singleton = nullptr;
