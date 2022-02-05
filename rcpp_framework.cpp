@@ -25,6 +25,8 @@ void RCPPFramework::create() {
 	new RCPPFramework();
 }
 void RCPPFramework::destroy() {
+	_instance->uninitialize();
+
 	delete _instance;
 }
 
@@ -43,7 +45,7 @@ void RCPPFramework::create_and_init(int argc, char **argv, char **envp) {
 
 void RCPPFramework::initialize() {
 	if (_initialized) {
-		RLOG_ERR("RCPPFramework: has already beed initialized!");
+		RLOG_ERR("(RCPPFramework) has already beed initialized!");
 		return;
 	}
 
@@ -64,22 +66,28 @@ void RCPPFramework::setup_args(int argc, char **argv, char **envp) {
 }
 
 void RCPPFramework::uninitialize() {
-	delete _instance;
+	_do_uninitialize();
 }
 
 void RCPPFramework::load() {
 #if DATABASES_ENABLED
 	if (allocate_settings_singleton && allocate_db_settings_singleton) {
+		RLOG_MSG("(RCPPFramework) Loading DBSettings singleton!");
+
 		DBSettings::get_singleton()->load();
 	}
 #endif
 
 #if WEB_ENABLED
 	if (allocate_session_manager_singleton) {
+		RLOG_MSG("(RCPPFramework) Loading SessionManager singleton!");
+
 		::SessionManager::get_singleton()->load_sessions();
 	}
 
 	if (allocate_file_cache_singleton && www_root != "") {
+		RLOG_MSG("(RCPPFramework) Loading FileCache singleton!");
+
 		FileCache::get_singleton()->wwwroot = www_root;
 		FileCache::get_singleton()->wwwroot_refresh_cache();
 	}
@@ -89,12 +97,16 @@ void RCPPFramework::load() {
 void RCPPFramework::migrate() {
 #if DATABASES_ENABLED
 	if (allocate_settings_singleton && allocate_db_settings_singleton) {
+		RLOG_MSG("(RCPPFramework) Migrating DBSettings singleton!");
+
 		DBSettings::get_singleton()->migrate();
 	}
 #endif
 
 #if WEB_ENABLED
 	if (allocate_session_manager_singleton) {
+		RLOG_MSG("(RCPPFramework) Migrating SessionManager singleton!");
+
 		::SessionManager::get_singleton()->migrate();
 	}
 #endif
@@ -134,6 +146,8 @@ RCPPFramework::~RCPPFramework() {
 	_managed_objects.clear();
 
 	_instance = nullptr;
+
+	RLOG_MSG("(RCPPFramework) uninitialized!");
 }
 
 RCPPFramework *RCPPFramework::get_singleton() {
@@ -144,11 +158,14 @@ RCPPFramework *RCPPFramework::_instance = nullptr;
 
 void RCPPFramework::_do_initialize() {
 #if DATABASES_ENABLED
+	RLOG_MSG("(RCPPFramework) Initializing database backends!");
 	initialize_database_backends();
 #endif
 
+	RLOG_MSG("(RCPPFramework) Initializing hash providers!");
 	backend_hash_hashlib_install_providers();
 
+	RLOG_MSG("(RCPPFramework) Initializing platforms!");
 	PlatformInitializer::allocate_all();
 
 	if (allocate_settings_singleton) {
@@ -157,8 +174,10 @@ void RCPPFramework::_do_initialize() {
 
 #if DATABASES_ENABLED
 		if (allocate_db_settings_singleton) {
+			RLOG_MSG("(RCPPFramework) Allocating Settings (DBSettings) singleton!");
 			settings = new DBSettings(true);
 		} else {
+			RLOG_MSG("(RCPPFramework) Allocating Settings (Settings) singleton!");
 			settings = new Settings(true);
 		}
 #else
@@ -171,6 +190,8 @@ void RCPPFramework::_do_initialize() {
 
 #if DATABASES_ENABLED
 	if (allocate_database_manager_singleton) {
+		RLOG_MSG("(RCPPFramework) Allocating DatabaseManager singleton!");
+
 		DatabaseManager *dbm = new DatabaseManager();
 		manage_object(dbm);
 	}
@@ -178,17 +199,33 @@ void RCPPFramework::_do_initialize() {
 
 #if WEB_ENABLED
 	if (allocate_session_manager_singleton) {
+		RLOG_MSG("(RCPPFramework) Allocating SessionManager singleton!");
+
 		::SessionManager *session_manager = new ::SessionManager();
 		manage_object(session_manager);
 	}
 
 	if (allocate_file_cache_singleton) {
+		RLOG_MSG("(RCPPFramework) Allocating FileCache singleton!");
+
 		FileCache *file_cache = new FileCache(true);
 		manage_object(file_cache);
 	}
 #endif
+
+	RLOG_MSG("(RCPPFramework) Initialized!");
 }
 
 void RCPPFramework::_do_uninitialize() {
+	RLOG_MSG("(RCPPFramework) Deleting managed objects!");
+	for (int i = _managed_objects.size() - 1; i >= 0; --i) {
+		delete _managed_objects[i];
+	}
+
+	_managed_objects.clear();
+
+	RLOG_MSG("(RCPPFramework) Freeing platforms!");
 	PlatformInitializer::free_all();
+
+	RLOG_MSG("(RCPPFramework) Uninitialized!");
 }
