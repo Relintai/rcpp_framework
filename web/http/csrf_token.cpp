@@ -1,6 +1,6 @@
 #include "csrf_token.h"
 
-#include "core/hash/sha256.h"
+#include "crypto/hash/sha256.h"
 #include "http_session.h"
 #include "request.h"
 #include <time.h>

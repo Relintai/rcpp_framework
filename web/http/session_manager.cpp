@@ -9,7 +9,7 @@
 #include "database/query_result.h"
 #include "database/table_builder.h"
 
-#include "core/hash/sha256.h"
+#include "crypto/hash/sha256.h"
 
 #include "request.h"
 

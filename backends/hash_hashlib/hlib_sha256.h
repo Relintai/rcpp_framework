@@ -1,7 +1,7 @@
 #ifndef HASHLIB_SHA256_H
 #define HASHLIB_SHA256_H
 
-#include "core/hash/sha256.h"
+#include "crypto/hash/sha256.h"
 
 #include "./hash-library/sha256.h"
 
