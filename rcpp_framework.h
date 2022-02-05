@@ -6,7 +6,7 @@
 
 #include "core/object.h"
 
-class RCPPFramework : Object {
+class RCPPFramework : public Object {
 	RCPP_OBJECT(RCPPFramework, Object);
 
 public:
