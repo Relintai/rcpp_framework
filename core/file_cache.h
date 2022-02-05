@@ -8,7 +8,12 @@
 #include <chrono>
 #include "core/threading/rw_lock.h"
 
-class FileCache {
+#include "core/object.h"
+
+
+class FileCache : Object {
+    RCPP_OBJECT(FileCache, Object);
+
 public:
     String wwwroot;
     int cache_invalidation_time;
