@@ -4,7 +4,7 @@
 #include "core/containers/vector.h"
 #include "core/string.h"
 
-#include "core/file_cache.h"
+#include "web/file_cache.h"
 #include "web/http/web_node.h"
 
 #include "web/http/request.h"
