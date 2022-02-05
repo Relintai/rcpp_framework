@@ -3,6 +3,7 @@
 #include "core/error_macros.h"
 
 #if DATABASES_ENABLED
+#include "database/database_manager.h"
 #include "database_backends/db_init.h"
 #endif
 
@@ -64,6 +65,10 @@ RCPPFramework::RCPPFramework() {
 	_instance = this;
 
 	_initialized = false;
+
+#if DATABASES_ENABLED
+	allocate_database_manager_singleton = true;
+#endif
 }
 
 RCPPFramework::~RCPPFramework() {
@@ -91,6 +96,13 @@ void RCPPFramework::_do_initialize() {
 	backend_hash_hashlib_install_providers();
 
 	PlatformInitializer::allocate_all();
+
+#if DATABASES_ENABLED
+	if (allocate_database_manager_singleton) {
+		DatabaseManager *dbm = new DatabaseManager();
+		manage_object(dbm);
+	}
+#endif
 }
 
 void RCPPFramework::_do_uninitialize() {
