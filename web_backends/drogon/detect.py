@@ -75,13 +75,13 @@ def configure(env):
         env.Append(CPPDEFINES=["USE_OPENSSL"])
         
 
-    env.Append(CPPPATH=["#backends/drogon/drogon/lib/inc"])
-    env.Append(CPPPATH=["#backends/drogon"])
+    env.Append(CPPPATH=["#web_backends/drogon/drogon/lib/inc"])
+    env.Append(CPPPATH=["#web_backends/drogon"])
 
-    env.Append(CPPPATH=["#backends/drogon/trantor"])
-    env.Append(CPPPATH=["#backends/drogon/trantor/net"])
-    env.Append(CPPPATH=["#backends/drogon/trantor/net/inner"])
-    env.Append(CPPPATH=["#backends/drogon/trantor/utils"])
+    env.Append(CPPPATH=["#web_backends/drogon/trantor"])
+    env.Append(CPPPATH=["#web_backends/drogon/trantor/net"])
+    env.Append(CPPPATH=["#web_backends/drogon/trantor/net/inner"])
+    env.Append(CPPPATH=["#web_backends/drogon/trantor/utils"])
 
     env.Append(LINKFLAGS=["-ldl"])
     

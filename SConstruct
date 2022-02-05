@@ -229,6 +229,9 @@ modfol.append("modules")
 modfol.append("web_modules")
 #temporarily, these should be handled in a different pass
 modfol.append("backends")
+modfol.append("web_backends")
+modfol.append("crypto_backends")
+
 module_folders = list()
 
 for fol in modfol:
