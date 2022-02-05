@@ -24,7 +24,8 @@ void WebServer::handle_request(Request *request) {
 }
 
 
-WebServer::WebServer() {
+WebServer::WebServer() : NodeTree() {
+	_web_root = nullptr;
 }
 
 WebServer::~WebServer() {

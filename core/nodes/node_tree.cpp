@@ -25,11 +25,14 @@ void NodeTree::send_update(float delta) {
 
 NodeTree::NodeTree() :
 		Object() {
+
+	_root_node = nullptr;
+	_update_interval = 0;
 }
 
 NodeTree::~NodeTree() {
 	if (_root_node) {
 		delete _root_node;
-		_root_node == nullptr;
+		_root_node = nullptr;
 	}
 }
