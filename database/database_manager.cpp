@@ -8,16 +8,16 @@ uint32_t DatabaseManager::create_database(const String &name) {
     Database *db = _create_database(name);
 
     if (!db) {
-		printf("create_database: %s, returned db is null!", name.c_str());
+		RLOG_MSG("(DatabaseManager) create_database: " + name + ", returned db is null!");
         return -1;
 	}
 
-	printf("Database %s successfully created!\n", name.c_str());
+	RLOG_MSG("(DatabaseManager) Database " + name + " successfully created!");
 
     databases.push_back(db);
 
 	if (ddb == nullptr) {
-		printf("Database %s has been set as the default database!\n", name.c_str());
+		RLOG_MSG("(DatabaseManager) Database " + name + " has been set as the default database!");
 		ddb = db;
 	}
 
@@ -29,10 +29,7 @@ DatabaseManager *DatabaseManager::get_singleton() {
 }
 
 void DatabaseManager::_register_db_creation_func(const String &name, std::function<Database *()> func) {
-	if (!func) {
-		printf("_register_db_creation_func: %s, func is wrong!", name.c_str());
-        return;
-	}
+	ERR_FAIL_COND_MSG(!func, "_register_db_creation_func: " + name + ", func is wrong!");
 
 	_db_creation_func_map[name] = func;
 }
@@ -44,16 +41,11 @@ void DatabaseManager::_unregister_db_creation_func(const String &name) {
 Database *DatabaseManager::_create_database(const String &name) {
 	std::function<Database *()> func = _db_creation_func_map[name];
 
-	if (!func) {
-		printf("_create_database: %s, func is wrong!", name.c_str());
-        return nullptr;
-	}
+	ERR_FAIL_COND_V_MSG(!func, nullptr, "_create_database: " + name + ", func is wrong!");
 
     Database *db = func();
 
-    if (!db) {
-		printf("_create_database: %s, returned db is null!", name.c_str());
-	}
+	ERR_FAIL_COND_V_MSG(!db, nullptr, "_create_database: " + name + ", returned db is null!");
 
     return db;
 }
