@@ -1,7 +1,7 @@
 #ifndef DB_SETTINGS_H
 #define DB_SETTINGS_H
 
-#include "settings.h"
+#include "core/settings/settings.h"
 
 class DBSettings : public Settings {
 	RCPP_OBJECT(DBSettings, Settings);
