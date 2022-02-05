@@ -2,9 +2,13 @@
 
 #include "core/error_macros.h"
 
+#include "core/settings/settings.h"
+
 #if DATABASES_ENABLED
 #include "database/database_manager.h"
 #include "database_backends/db_init.h"
+
+#include "database_modules/db_settings/db_settings.h"
 #endif
 
 #if WEB_ENABLED
@@ -54,11 +58,7 @@ void RCPPFramework::initialize(int argc, char **argv, char **envp) {
 }
 
 void RCPPFramework::setup_args(int argc, char **argv, char **envp) {
-	// Don't use the error macros here, they might not work before initialization
-	if (!_initialized) {
-		printf("ERROR! RCPPFramework::set_args: You have to call initialize() first!\n");
-		return;
-	}
+	ERR_FAIL_COND(!_initialized);
 
 	PlatformInitializer::arg_setup(argc, argv, envp);
 }
@@ -68,6 +68,9 @@ void RCPPFramework::uninitialize() {
 }
 
 void RCPPFramework::manage_object(Object *obj) {
+	ERR_FAIL_COND(!_initialized);
+	ERR_FAIL_COND(obj);
+
 	_managed_objects.push_back(obj);
 }
 
@@ -76,8 +79,11 @@ RCPPFramework::RCPPFramework() {
 
 	_initialized = false;
 
+	allocate_settings_singleton = true;
+
 #if DATABASES_ENABLED
 	allocate_database_manager_singleton = true;
+	allocate_db_settings_singleton = true;
 #endif
 
 #if WEB_ENABLED
@@ -111,6 +117,24 @@ void RCPPFramework::_do_initialize() {
 	backend_hash_hashlib_install_providers();
 
 	PlatformInitializer::allocate_all();
+
+	if (allocate_settings_singleton) {
+
+		Settings *settings = nullptr;
+
+#if DATABASES_ENABLED
+		if (allocate_db_settings_singleton) {
+			settings = new DBSettings(true);
+		} else {
+			settings = new Settings(true);
+		}
+#else
+		settings = new Settings(true);
+
+#endif
+
+		manage_object(settings);
+	}
 
 #if DATABASES_ENABLED
 	if (allocate_database_manager_singleton) {

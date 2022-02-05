@@ -31,8 +31,13 @@ public:
 
 	static RCPPFramework *get_singleton();
 
+    bool allocate_settings_singleton;
+
 #if DATABASES_ENABLED
 	bool allocate_database_manager_singleton;
+
+    // TODO Need a define for this
+    bool allocate_db_settings_singleton;
 #endif
 
 #if WEB_ENABLED
