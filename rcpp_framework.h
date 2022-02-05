@@ -34,6 +34,10 @@ public:
 	bool allocate_database_manager_singleton;
 #endif
 
+#if WEB_ENABLED
+	bool allocate_session_manager_singleton;
+#endif
+
 protected:
 	virtual void _do_initialize();
 	virtual void _do_uninitialize();

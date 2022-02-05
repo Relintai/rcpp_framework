@@ -7,6 +7,10 @@
 #include "database_backends/db_init.h"
 #endif
 
+#if WEB_ENABLED
+#include "web/http/session_manager.h"
+#endif
+
 #include "platform/platform_initializer.h"
 
 // Backends
@@ -69,6 +73,10 @@ RCPPFramework::RCPPFramework() {
 #if DATABASES_ENABLED
 	allocate_database_manager_singleton = true;
 #endif
+
+#if WEB_ENABLED
+	allocate_session_manager_singleton = true;
+#endif
 }
 
 RCPPFramework::~RCPPFramework() {
@@ -101,6 +109,13 @@ void RCPPFramework::_do_initialize() {
 	if (allocate_database_manager_singleton) {
 		DatabaseManager *dbm = new DatabaseManager();
 		manage_object(dbm);
+	}
+#endif
+
+#if WEB_ENABLED
+	if (allocate_session_manager_singleton) {
+		::SessionManager *session_manager = new ::SessionManager();
+		RCPPFramework::get_singleton()->manage_object(session_manager);
 	}
 #endif
 }
