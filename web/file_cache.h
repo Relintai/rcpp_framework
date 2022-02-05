@@ -11,7 +11,7 @@
 #include "core/object.h"
 
 
-class FileCache : Object {
+class FileCache : public Object {
     RCPP_OBJECT(FileCache, Object);
 
 public:
