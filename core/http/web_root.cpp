@@ -35,14 +35,14 @@ void WebRoot::setup_middleware() {
 
 	// ---   UserSessionSetupMiddleware   ---
 	// This one looks up users based on sessions
-	// (#include "modules/users/user_controller.h")
+	// (#include "web_modules/users/user_controller.h")
 
 	// _middlewares.push_back(Ref<UserSessionSetupMiddleware>(new UserSessionSetupMiddleware()));
 
 	// ---   RBACUserSessionSetupMiddleware / RBACDefaultUserSessionSetupMiddleware   ---
 	// Same as the previous, but if you want the RBAC system to work use one of these
 	// UserSessionSetupMiddleware is not needed if you need these
-	// (#include "modules/rbac_users/rbac_user_controller.h")
+	// (#include "web_modules/rbac_users/rbac_user_controller.h")
 
 	// _middlewares.push_back(Ref<RBACUserSessionSetupMiddleware>(new RBACUserSessionSetupMiddleware()));
 	// _middlewares.push_back(Ref<RBACDefaultUserSessionSetupMiddleware>(new RBACDefaultUserSessionSetupMiddleware()));

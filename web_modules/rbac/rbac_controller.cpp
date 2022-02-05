@@ -9,7 +9,7 @@
 #include "core/http/request.h"
 #include "core/http/session_manager.h"
 #include "rbac_default_permissions.h"
-#include "modules/users/user.h"
+#include "web_modules/users/user.h"
 
 #include "core/database/database.h"
 #include "core/database/database_manager.h"

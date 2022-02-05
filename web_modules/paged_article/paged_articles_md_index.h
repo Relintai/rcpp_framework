@@ -5,8 +5,8 @@
 
 #include "core/http/web_node.h"
 
-#include "modules/list_page/list_page.h"
-#include "modules/paged_article/paged_article.h"
+#include "web_modules/list_page/list_page.h"
+#include "web_modules/paged_article/paged_article.h"
 
 // Inherit from PagedArticles and override generate_index_page -> load and process md files in the set folder
 // SHould probably be called something else. PagedArticlesMDIndex ?

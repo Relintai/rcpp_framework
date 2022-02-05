@@ -1,7 +1,7 @@
 #ifndef RBAC_USER_CONTROLLER_H
 #define RBAC_USER_CONTROLLER_H
 
-#include "modules/users/user_controller.h"
+#include "web_modules/users/user_controller.h"
 
 #include "core/http/middleware.h"
 

@@ -3,8 +3,8 @@
 
 #include "core/string.h"
 
-#include "modules/users/user.h"
-#include "modules/rbac/rbac_rank.h"
+#include "web_modules/users/user.h"
+#include "web_modules/rbac/rbac_rank.h"
 
 class Request;
 class FormValidator;

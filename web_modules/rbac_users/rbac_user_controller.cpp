@@ -3,8 +3,8 @@
 #include "core/http/http_session.h"
 #include "core/http/request.h"
 
-#include "modules/rbac/rbac_controller.h"
-#include "modules/rbac/rbac_default_permissions.h"
+#include "web_modules/rbac/rbac_controller.h"
+#include "web_modules/rbac/rbac_default_permissions.h"
 #include "rbac_user.h"
 
 Ref<User> RBACUserController::db_get_user(const int id) {

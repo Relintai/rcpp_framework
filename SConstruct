@@ -226,6 +226,7 @@ if env_base["databases"]:
 
 modfol = env_base["module_folders"].split(";")
 modfol.append("modules")
+modfol.append("web_modules")
 #temporarily, these should be handled in a different pass
 modfol.append("backends")
 module_folders = list()
