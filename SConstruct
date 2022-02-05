@@ -278,8 +278,10 @@ SConscript("web/SCsub")
 SConscript("platform/SCsub")
 
 if env_base["databases"]:
+    #add db folder
+
     for d in database_list:
-        tmppath = "./database/" + d
+        tmppath = "./database_modules/" + d
         sys.path.insert(0, tmppath)
 
         import detect
@@ -295,10 +297,12 @@ if env_base["databases"]:
 
         Export("env_db")
 
-        SConscript("database/" + d + "/SCsub")
+        SConscript("database_modules/" + d + "/SCsub")
 
         sys.path.remove(tmppath)
         sys.modules.pop("detect")
+
+        # Todo actually generate db_init
 
 for m in module_list:
     tmppath = m[1]
