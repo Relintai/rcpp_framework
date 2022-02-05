@@ -10,9 +10,18 @@ class RCPPFramework : Object {
     RCPP_OBJECT(RCPPFramework, Object);
 
 public:
-    static void initialize();
-    static void initialize(int argc, char **argv, char **envp);
-    static void uninitialize();
+    // Helper methods to allocate and destroy the singleton.
+    // Note that creating / deleting an instance manually in your app will also work.
+    static void create();
+    static void destroy();
+    //Usie these if you don't want to mess with the default settings.
+    static void create_and_init();
+    static void create_and_init(int argc, char **argv, char **envp);
+
+    void initialize();
+    void uninitialize();
+
+    void setup_args(int argc, char **argv, char **envp);
 
     void manage_object(Object* obj);
 
@@ -22,6 +31,11 @@ public:
     static RCPPFramework *get_singleton();
 
 protected:
+    virtual void _do_initialize();
+    virtual void _do_uninitialize();
+
+    bool _initialized;
+
     Vector<Object *> _managed_objects;
 
     static RCPPFramework *_instance;

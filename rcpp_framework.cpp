@@ -11,32 +11,49 @@
 // Backends
 #include "crypto_backends/hash_hashlib/setup.h"
 
-void RCPPFramework::initialize() {
-	if (get_singleton() != nullptr) {
-		RLOG_ERR("RCPPFramework: has already beed initialized!");
-	}
-
+void RCPPFramework::create() {
 	new RCPPFramework();
-
-#if DATABASES_ENABLED
-	initialize_database_backends();
-#endif
-
-	backend_hash_hashlib_install_providers();
-
-	PlatformInitializer::allocate_all();
+}
+void RCPPFramework::destroy() {
+	delete _instance;
 }
 
-void RCPPFramework::initialize(int argc, char **argv, char **envp) {
-	initialize();
+void RCPPFramework::create_and_init() {
+	new RCPPFramework();
+
+	RCPPFramework::get_singleton()->initialize();
+}
+
+void RCPPFramework::create_and_init(int argc, char **argv, char **envp) {
+	new RCPPFramework();
+
+	RCPPFramework::get_singleton()->initialize();
+	RCPPFramework::get_singleton()->setup_args(argc, argv, envp);
+}
+
+void RCPPFramework::initialize() {
+	if (_initialized) {
+		RLOG_ERR("RCPPFramework: has already beed initialized!");
+		return;
+	}
+
+	_initialized = true;
+
+	_do_initialize();
+}
+
+void RCPPFramework::setup_args(int argc, char **argv, char **envp) {
+	// Don't use the error macros here, they might not work before initialization
+	if (!_initialized) {
+		printf("ERROR! RCPPFramework::set_args: You have to call initialize() first!\n");
+		return;
+	}
 
 	PlatformInitializer::arg_setup(argc, argv, envp);
 }
 
 void RCPPFramework::uninitialize() {
 	delete _instance;
-
-	PlatformInitializer::free_all();
 }
 
 void RCPPFramework::manage_object(Object *obj) {
@@ -45,10 +62,12 @@ void RCPPFramework::manage_object(Object *obj) {
 
 RCPPFramework::RCPPFramework() {
 	_instance = this;
+
+	_initialized = false;
 }
 
 RCPPFramework::~RCPPFramework() {
-	//delete in reverse order added
+	// delete in reverse order added
 	for (int i = _managed_objects.size() - 1; i >= 0; --i) {
 		delete _managed_objects[i];
 	}
@@ -63,3 +82,17 @@ RCPPFramework *RCPPFramework::get_singleton() {
 }
 
 RCPPFramework *RCPPFramework::_instance = nullptr;
+
+void RCPPFramework::_do_initialize() {
+#if DATABASES_ENABLED
+	initialize_database_backends();
+#endif
+
+	backend_hash_hashlib_install_providers();
+
+	PlatformInitializer::allocate_all();
+}
+
+void RCPPFramework::_do_uninitialize() {
+	PlatformInitializer::free_all();
+}
