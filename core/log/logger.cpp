@@ -10,7 +10,7 @@ void Logger::log_trace(const String &str)
 }
 void Logger::log_trace(const char *str)
 {
-    printf("TRACE: %s\n", str);
+    printf("T %s\n", str);
 }
 
 void Logger::log_message(const String &str)
@@ -19,7 +19,7 @@ void Logger::log_message(const String &str)
 }
 void Logger::log_message(const char *str)
 {
-    printf("MESSAGE: %s\n", str);
+    printf("M %s\n", str);
 }
 
 void Logger::log_warning(const String &str)
@@ -28,7 +28,7 @@ void Logger::log_warning(const String &str)
 }
 void Logger::log_warning(const char *str)
 {
-    printf("WARNING: %s\n", str);
+    printf("W %s\n", str);
 }
 
 void Logger::log_error(const String &str)
@@ -37,7 +37,7 @@ void Logger::log_error(const String &str)
 }
 void Logger::log_error(const char *str)
 {
-    printf("ERROR: %s\n", str);
+    printf("E %s\n", str);
 }
 
 void Logger::_log_error(const char *p_function, const char *p_file, int p_line, const char *str)
