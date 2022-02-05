@@ -1059,6 +1059,11 @@ void String::from_html_special_chars() {
 	replace("&gt;", ">");
 }
 
+void String::newline_to_br() {
+	replace("\r\n", "<br>");
+	replace("\n", "<br>");
+}
+
 bool String::to_bool() const {
 	if (_size == 0) {
 		return 0;

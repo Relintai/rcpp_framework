@@ -6,11 +6,6 @@
 #include <sstream>
 #include <string>
 
-void Utils::newline_to_br(String *str) {
-	str->replace("\r\n", "<br>");
-	str->replace("\n", "<br>");
-}
-
 void Utils::markdown_to_html(String *str) {
 	std::shared_ptr<maddy::ParserConfig> config = std::make_shared<maddy::ParserConfig>();
 	config->isEmphasizedParserEnabled = false;

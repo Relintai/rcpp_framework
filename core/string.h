@@ -112,6 +112,7 @@ public:
 
 	void to_html_special_chars();
 	void from_html_special_chars();
+	void newline_to_br();
 
 	bool to_bool() const;
 	float to_float() const;

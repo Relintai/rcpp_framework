@@ -6,9 +6,6 @@
 
 class Utils {
 public:
-	static void newline_to_br(String *str);
-	//htmlspecialchars
-
 	static void markdown_to_html(String *str);
 
 	static String get_pagination(const String &base_url, const uint32_t max, const uint32_t current_index, const uint32_t max_visible_links = 10);
