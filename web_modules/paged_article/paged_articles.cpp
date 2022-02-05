@@ -3,7 +3,7 @@
 #include "core/html/html_builder.h"
 
 #include "core/os/directory.h"
-#include "core/utils.h"
+#include "core/html/utils.h"
 #include "paged_article.h"
 
 #include <iostream>
