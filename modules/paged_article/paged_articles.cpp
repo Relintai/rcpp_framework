@@ -49,7 +49,6 @@ void PagedArticles::load() {
 			PagedArticle *p = new PagedArticle();
 			String seg = dir->current_get_name();
 			p->articles_folder = ff;
-			seg.print();
 			p->set_uri_segment(seg);
 			add_child(p);
 		}
@@ -88,6 +87,8 @@ void PagedArticles::_notification(const int what) {
 		default:
 			break;
 	}
+
+	WebNode::_notification(what);
 }
 
 PagedArticles::PagedArticles() :
