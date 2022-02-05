@@ -341,6 +341,8 @@ folders = env_base["folders"].split(";")
 
 files = []
 
+files.append("rcpp_framework.cpp")
+
 for fol in folders:
     folt = fol.strip()
 
