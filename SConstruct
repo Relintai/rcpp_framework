@@ -269,6 +269,8 @@ for mf in module_folders:
 # Sort modules dependencies
 sort_modules_dependencies(module_list)
 
+# TODO defines like this should be generated into a header file, to keep the compile commands shorter
+# Also generate a define for each module
 #Todo ability to turn this on or off
 env_base.Append(CPPDEFINES=["WEB_ENABLED"])
 
