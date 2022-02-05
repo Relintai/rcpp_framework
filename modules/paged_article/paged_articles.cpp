@@ -31,10 +31,6 @@ void PagedArticles::load() {
 
 	while (dir->next()) {
 		if (dir->current_is_dir()) {
-			if (dir->current_is_special_dir()) {
-				continue;
-			}
-
 			String np = dir->current_get_path();
 			String fn = dir->current_get_name();
 

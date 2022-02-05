@@ -69,11 +69,9 @@ bool Directory::next() {
 		tinydir_next(&_dir);
 	}
 
-	// if (_skip_specials && current_is_dir() && current_is_special_dir()) {
-	//	return next();
-	// }
-
-	// tinydir_next(&_dir);
+	if (_skip_specials && current_is_dir() && current_is_special_dir()) {
+		return next();
+	}
 
 	return true;
 }
