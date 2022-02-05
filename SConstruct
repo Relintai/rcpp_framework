@@ -207,7 +207,7 @@ database_list = []
 if env_base["databases"]:
     env_base.Append(CPPDEFINES=["DATABASES_ENABLED"])
 
-    for x in sorted(glob.glob("database_modules/*")):
+    for x in sorted(glob.glob("database_backends/*")):
         if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
             continue
         tmppath = "./" + x
@@ -216,8 +216,8 @@ if env_base["databases"]:
         import detect
 
         if detect.is_active() and detect.can_build():
-            x = x.replace("database_modules/", "")  # rest of world
-            x = x.replace("database_modules\\", "")  # win32
+            x = x.replace("database_backends/", "")  # rest of world
+            x = x.replace("database_backends\\", "")  # win32
             database_list += [x]
 
         sys.path.remove(tmppath)
@@ -285,7 +285,7 @@ if env_base["databases"]:
     SConscript("database/SCsub")
 
     for d in database_list:
-        tmppath = "./database_modules/" + d
+        tmppath = "./database_backends/" + d
         sys.path.insert(0, tmppath)
 
         import detect
@@ -301,7 +301,7 @@ if env_base["databases"]:
 
         Export("env_db")
 
-        SConscript("database_modules/" + d + "/SCsub")
+        SConscript("database_backends/" + d + "/SCsub")
 
         sys.path.remove(tmppath)
         sys.modules.pop("detect")
