@@ -20,11 +20,12 @@ void PagedArticle::handle_request_main(Request *request) {
 	}
 
 	if (rp == "") {
+		render_menu(request);
+
 		// summary page
 		request->body += summary_page;
 
 		request->compile_and_send_body();
-		request->pop_path();
 		return;
 	}
 
@@ -36,9 +37,9 @@ void PagedArticle::handle_request_main(Request *request) {
 		return;
 	}
 
+	render_menu(request);
 	request->body += (*page);
 	request->compile_and_send_body();
-	request->pop_path();
 }
 
 void PagedArticle::load() {
