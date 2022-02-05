@@ -8,6 +8,7 @@
 #endif
 
 #if WEB_ENABLED
+#include "web/file_cache.h"
 #include "web/http/session_manager.h"
 #endif
 
@@ -76,6 +77,7 @@ RCPPFramework::RCPPFramework() {
 
 #if WEB_ENABLED
 	allocate_session_manager_singleton = true;
+	allocate_file_cache_singleton = true;
 #endif
 }
 
@@ -115,7 +117,17 @@ void RCPPFramework::_do_initialize() {
 #if WEB_ENABLED
 	if (allocate_session_manager_singleton) {
 		::SessionManager *session_manager = new ::SessionManager();
-		RCPPFramework::get_singleton()->manage_object(session_manager);
+		manage_object(session_manager);
+	}
+
+	if (allocate_file_cache_singleton) {
+		FileCache *file_cache = new FileCache(true);
+		manage_object(file_cache);
+
+		if (www_root != "") {
+			file_cache->wwwroot = www_root;
+			file_cache->wwwroot_refresh_cache();
+		}
 	}
 #endif
 }

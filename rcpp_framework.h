@@ -36,6 +36,11 @@ public:
 
 #if WEB_ENABLED
 	bool allocate_session_manager_singleton;
+    bool allocate_file_cache_singleton;
+
+    // By default it's set to "".
+    // It will be ignored if you leave it.
+    String www_root;
 #endif
 
 protected:
