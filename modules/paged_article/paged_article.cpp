@@ -68,12 +68,7 @@ void PagedArticle::load() {
 
 	for (uint32_t i = 0; i < files.size(); ++i) {
 		String file_path = articles_folder;
-
-		if (file_path.size() > 0 && file_path[file_path.size() - 1] != '/') {
-			file_path += "/";
-		}
-
-		file_path += files[i];
+		file_path.append_path(files[i]);
 
 		String fd;
 
@@ -108,7 +103,8 @@ void PagedArticle::load() {
 
 	if (serve_folder != "") {
 		if (serve_folder_relative) {
-			file_cache->wwwroot = articles_folder + "/" + serve_folder;
+			file_cache->wwwroot = articles_folder;
+			file_cache->wwwroot.append_path(serve_folder);
 		} else {
 			file_cache->wwwroot = serve_folder;
 		}

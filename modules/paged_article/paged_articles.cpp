@@ -34,7 +34,8 @@ void PagedArticles::load() {
 			String np = dir->current_get_path();
 			String fn = dir->current_get_name();
 
-			String ff = folder + "/" + fn;
+			String ff = folder;
+			ff.append_path(fn);
 
 			PagedArticle *p = new PagedArticle();
 			String seg = dir->current_get_name();
