@@ -269,6 +269,9 @@ for mf in module_folders:
 # Sort modules dependencies
 sort_modules_dependencies(module_list)
 
+#Todo ability to turn this on or off
+env_base.Append(CPPDEFINES=["WEB_ENABLED"])
+
 env = env_base.Clone()
 
 if scons_ver >= (4, 0, 0):
