@@ -19,6 +19,7 @@ public:
 	static void create_and_init(int argc, char **argv, char **envp);
 
 	void initialize();
+    void initialize(int argc, char **argv, char **envp);
 	void uninitialize();
 
 	void setup_args(int argc, char **argv, char **envp);

@@ -48,6 +48,11 @@ void RCPPFramework::initialize() {
 	_do_initialize();
 }
 
+void RCPPFramework::initialize(int argc, char **argv, char **envp) {
+	initialize();
+	setup_args(argc, argv, envp);
+}
+
 void RCPPFramework::setup_args(int argc, char **argv, char **envp) {
 	// Don't use the error macros here, they might not work before initialization
 	if (!_initialized) {
