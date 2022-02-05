@@ -1,9 +1,9 @@
 #include "paged_articles.h"
 
-#include "core/html/html_builder.h"
+#include "web/html/html_builder.h"
 
 #include "core/os/directory.h"
-#include "core/html/utils.h"
+#include "web/html/utils.h"
 #include "paged_article.h"
 
 #include <iostream>

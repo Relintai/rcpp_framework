@@ -1,7 +1,7 @@
 #ifndef ADMIN_NODE_H
 #define ADMIN_NODE_H
 
-#include "core/http/web_node.h"
+#include "web/http/web_node.h"
 
 #include "core/containers/vector.h"
 #include "core/string.h"

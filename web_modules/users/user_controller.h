@@ -4,10 +4,10 @@
 #include "core/containers/vector.h"
 #include "core/string.h"
 
-#include "core/http/web_node.h"
+#include "web/http/web_node.h"
 
 #include "user.h"
-#include "core/http/middleware.h"
+#include "web/http/middleware.h"
 
 class Request;
 class FormValidator;

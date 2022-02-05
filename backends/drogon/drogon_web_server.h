@@ -1,7 +1,7 @@
 #ifndef DROGON_WEB_SERVER_H
 #define DROGON_WEB_SERVER_H
 
-#include "core/http/web_server.h"
+#include "web/http/web_server.h"
 
 #include "core/object.h"
 #include <functional>

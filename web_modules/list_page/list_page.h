@@ -4,9 +4,9 @@
 #include "core/containers/vector.h"
 #include "core/string.h"
 
-#include "core/http/web_node.h"
+#include "web/http/web_node.h"
 
-#include "core/http/request.h"
+#include "web/http/request.h"
 
 // This class will load and generate pages from a folder of md files. It supports pagination, 
 // it will put entry_per_page md files per page. It generates html on enter tree, and caches everything.

@@ -1,7 +1,7 @@
 #include "web_server.h"
 
 #include "request.h"
-#include "core/http/web_node.h"
+#include "web/http/web_node.h"
 
 WebNode *WebServer::get_web_root() {
 	return _web_root;

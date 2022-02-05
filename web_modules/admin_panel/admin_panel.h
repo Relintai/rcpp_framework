@@ -1,7 +1,7 @@
 #ifndef ADMIN_PANEL_H
 #define ADMIN_PANEL_H
 
-#include "core/http/web_node.h"
+#include "web/http/web_node.h"
 
 #include "core/string.h"
 #include "core/containers/vector.h"

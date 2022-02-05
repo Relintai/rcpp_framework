@@ -3,7 +3,7 @@
 
 #include "web_modules/users/user_controller.h"
 
-#include "core/http/middleware.h"
+#include "web/http/middleware.h"
 
 class Request;
 

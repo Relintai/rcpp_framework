@@ -1,11 +1,11 @@
 #include "request.h"
 
-#include "core/http/cookie.h"
+#include "web/http/cookie.h"
 #include "web_server.h"
 
 #include "http_session.h"
 
-#include "core/http/web_root.h"
+#include "web/http/web_root.h"
 #include "session_manager.h"
 
 Ref<HTTPSession> Request::get_or_create_session() {

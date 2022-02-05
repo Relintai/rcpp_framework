@@ -4,7 +4,7 @@
 #include "http_enums.h"
 #include "request.h"
 
-#include "core/http/web_server.h"
+#include "web/http/web_server.h"
 #include "core/settings/settings.h"
 
 #ifdef DATABASES_ENABLED

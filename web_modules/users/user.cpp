@@ -13,13 +13,13 @@
 #include "core/database/query_result.h"
 #include "core/database/table_builder.h"
 
-#include "core/html/form_validator.h"
-#include "core/html/html_builder.h"
-#include "core/http/cookie.h"
-#include "core/http/http_session.h"
-#include "core/http/request.h"
-#include "core/http/session_manager.h"
-#include "core/html/utils.h"
+#include "web/html/form_validator.h"
+#include "web/html/html_builder.h"
+#include "web/http/cookie.h"
+#include "web/http/http_session.h"
+#include "web/http/request.h"
+#include "web/http/session_manager.h"
+#include "web/html/utils.h"
 
 String User::to_json(rapidjson::Document *into) {
 	rapidjson::Document *document;

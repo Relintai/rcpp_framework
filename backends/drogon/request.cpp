@@ -2,7 +2,7 @@
 
 #include "drogon_web_server.h"
 
-#include "core/http/cookie.h"
+#include "web/http/cookie.h"
 
 const String DRequest::get_cookie(const String &key) {
 	return request->getCookie(key);

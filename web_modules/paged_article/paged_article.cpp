@@ -1,7 +1,7 @@
 #include "paged_article.h"
 
 #include "core/os/directory.h"
-#include "core/html/utils.h"
+#include "web/html/utils.h"
 
 #include <iostream>
 

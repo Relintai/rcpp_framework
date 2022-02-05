@@ -1,7 +1,7 @@
 #include "rbac_user_controller.h"
 
-#include "core/http/http_session.h"
-#include "core/http/request.h"
+#include "web/http/http_session.h"
+#include "web/http/request.h"
 
 #include "web_modules/rbac/rbac_controller.h"
 #include "web_modules/rbac/rbac_default_permissions.h"

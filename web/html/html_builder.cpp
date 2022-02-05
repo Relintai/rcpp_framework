@@ -1,7 +1,7 @@
 #include "html_builder.h"
 #include "core/string.h"
 
-#include "core/http/request.h"
+#include "web/http/request.h"
 
 HTMLTag *HTMLTag::str(const String &str) {
 	result += " " + str;

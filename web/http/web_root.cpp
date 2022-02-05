@@ -29,7 +29,7 @@ void WebRoot::setup_middleware() {
 
 	// ---   SessionSetupMiddleware   ---
 	// If you want sessions add this to your inherited class.
-	// (#include "core/http/session_manager.h")
+	// (#include "web/http/session_manager.h")
 
 	// _middlewares.push_back(Ref<SessionSetupMiddleware>(new SessionSetupMiddleware()));
 
@@ -48,7 +48,7 @@ void WebRoot::setup_middleware() {
 	// _middlewares.push_back(Ref<RBACDefaultUserSessionSetupMiddleware>(new RBACDefaultUserSessionSetupMiddleware()));
 
 	// ---   CSRF Token Middlweare    ---
-	// (#include "core/http/csrf_token.h")
+	// (#include "web/http/csrf_token.h")
 
 	// Ref<CSRFTokenMiddleware> csrf_middleware;
 	// csrf_middleware.instance();

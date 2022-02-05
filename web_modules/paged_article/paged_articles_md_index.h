@@ -3,7 +3,7 @@
 
 #include "core/string.h"
 
-#include "core/http/web_node.h"
+#include "web/http/web_node.h"
 
 #include "web_modules/list_page/list_page.h"
 #include "web_modules/paged_article/paged_article.h"

@@ -1,8 +1,8 @@
 #include "paged_articles_md_index.h"
 
-#include "core/http/request.h"
+#include "web/http/request.h"
 
-#include "core/html/html_builder.h"
+#include "web/html/html_builder.h"
 
 void PagedArticlesMDIndex::handle_request_main(Request *request) {
 	const String path = request->get_current_path_segment();

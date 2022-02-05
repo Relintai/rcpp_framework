@@ -274,6 +274,7 @@ if scons_ver >= (4, 0, 0):
 Export("env")
 
 SConscript("core/SCsub")
+SConscript("web/SCsub")
 SConscript("platform/SCsub")
 
 if env_base["databases"]:

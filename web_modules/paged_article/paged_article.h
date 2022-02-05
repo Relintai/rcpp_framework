@@ -6,9 +6,9 @@
 #include "core/string.h"
 
 #include "core/file_cache.h"
-#include "core/http/web_node.h"
+#include "web/http/web_node.h"
 
-#include "core/http/request.h"
+#include "web/http/request.h"
 
 class PagedArticle : public WebNode {
 	RCPP_OBJECT(PagedArticle, WebNode);
