@@ -7,6 +7,10 @@
 
 #include "core/containers/vector.h"
 
+#ifndef DEFAULT_DIRECTORY_SEPARATOR
+#define DEFAULT_DIRECTORY_SEPARATOR '/'
+#endif
+
 //TODO move to wchar_t!
 
 class String {
@@ -97,9 +101,14 @@ public:
 	void append_str(const wchar_t* str);
 	void append_str(const String &other);
 	void append_str(const std::string &str);
+	void append_str(const String &other, const int from);
+	void append_str(const std::string &str, const int from);
 
 	void append_repeat(const char* str, const int times);
 	void append_repeat(const String &other, const int times);
+
+	void append_path(const char* path);
+	void append_path(const String &path);
 
 	void to_html_special_chars();
 	void from_html_special_chars();

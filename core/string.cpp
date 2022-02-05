@@ -925,6 +925,33 @@ void String::append_str(const std::string &str) {
 	_data[_size] = '\0';
 }
 
+void String::append_str(const String &other, const int from) {
+	if (other.size() <= from) {
+		return;
+	}
+
+	ensure_capacity(_size + other._size + 1 - from); // +1 for the null terminator
+
+	for (int i = from; i < other._size; ++i) {
+		_data[_size++] = other._data[i];
+	}
+
+	_data[_size] = '\0';
+}
+void String::append_str(const std::string &str, const int from) {
+	if (str.size() <= from) {
+		return;
+	}
+
+	ensure_capacity(_size + str.size() + 1 - from); // +1 for the null terminator
+
+	for (int i = from; i < str.size(); ++i) {
+		_data[_size++] = str[i];
+	}
+
+	_data[_size] = '\0';
+}
+
 void String::append_repeat(const char *str, const int times) {
 	for (int i = 0; i < times; ++i) {
 		append_str(str);
@@ -933,6 +960,86 @@ void String::append_repeat(const char *str, const int times) {
 void String::append_repeat(const String &other, const int times) {
 	for (int i = 0; i < times; ++i) {
 		append_str(other);
+	}
+}
+
+void String::append_path(const char *path) {
+	if (path[0] == '\0') {
+		return;
+	}
+
+	if (_size == 0) {
+		append_str(path);
+		return;
+	}
+
+	int sindex = 0;
+	char ch = path[sindex];
+	while (ch == '/' || ch == '\\') {
+		if (ch == '\0') {
+			return;
+		}
+
+		ch = path[++sindex];
+	}
+
+	// /////folder
+	//      ^ (sindex)
+
+	if (ends_with('/') || ends_with('\\')) {
+		append_str(&path[sindex]);
+	} else {
+		if (sindex > 0) {
+			append_str(&path[sindex - 1]);
+		} else {
+			if (_actual_size > 0) {
+				_data[_size++] = DEFAULT_DIRECTORY_SEPARATOR;
+				append_str(&path[sindex]);
+			} else {
+				push_back(DEFAULT_DIRECTORY_SEPARATOR);
+				append_str(&path[sindex]);
+			}
+		}
+	}
+}
+void String::append_path(const String &path) {
+	if (path._size == 0) {
+		return;
+	}
+
+	if (_size == 0) {
+		append_str(path);
+		return;
+	}
+
+	int sindex = 0;
+	int ts = path.size() - 1;
+	char ch = path[sindex];
+	while (ch == '/' || ch == '\\') {
+		if (sindex == ts) {
+			return;
+		}
+
+		ch = path[++sindex];
+	}
+
+	// /////folder
+	//      ^ (sindex)
+
+	if (ends_with('/') || ends_with('\\')) {
+		append_str(path, sindex);
+	} else {
+		if (sindex > 0) {
+			append_str(path, sindex - 1);
+		} else {
+			if (_actual_size > 0) {
+				_data[_size++] = DEFAULT_DIRECTORY_SEPARATOR;
+				append_str(path, sindex);
+			} else {
+				push_back(DEFAULT_DIRECTORY_SEPARATOR);
+				append_str(path, sindex);
+			}
+		}
 	}
 }
 
