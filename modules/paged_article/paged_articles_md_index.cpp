@@ -1,16 +1,10 @@
-#include "paged_list.h"
+#include "paged_articles_md_index.h"
 
 #include "core/http/request.h"
 
-#include <iostream>
-
-#include "core/file_cache.h"
-
-#include "core/database/database_manager.h"
-
 #include "core/html/html_builder.h"
 
-void PagedList::handle_request_main(Request *request) {
+void PagedArticlesMDIndex::handle_request_main(Request *request) {
 	const String path = request->get_current_path_segment();
 
 	if (request->get_remaining_segment_count() == 0) {
@@ -21,7 +15,7 @@ void PagedList::handle_request_main(Request *request) {
 	articles->handle_request_main(request);
 }
 
-void PagedList::load() {
+void PagedArticlesMDIndex::load() {
 	main_page->folder = folder;
 	main_page->load();
 
@@ -30,14 +24,14 @@ void PagedList::load() {
 	articles->load();
 }
 
-PagedList::PagedList() :
+PagedArticlesMDIndex::PagedArticlesMDIndex() :
 		WebNode() {
 
 	main_page = new ListPage();
 	articles = new PagedArticle();
 }
 
-PagedList::~PagedList() {
+PagedArticlesMDIndex::~PagedArticlesMDIndex() {
 	delete main_page;
 	delete articles;
 }
