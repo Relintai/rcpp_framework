@@ -88,6 +88,12 @@ void PagedArticle::load() {
 
 		Utils::markdown_to_html(&fd);
 
+		if (files[i] == "summary.md") {
+			summary = fd;
+
+			continue;
+		}
+
 		String pagination;
 
 		pagination = Utils::get_pagination_links(get_full_uri(), files, i);
@@ -116,10 +122,22 @@ void PagedArticle::load() {
 
 		file_cache->wwwroot_refresh_cache();
 	}
+
+	if (summary == "") {
+		generate_summary();
+	}
 }
 
 String PagedArticle::get_index_page() {
 	return index_page;
+}
+
+String PagedArticle::get_summary() {
+	return summary;
+}
+
+void PagedArticle::generate_summary() {
+	summary = get_uri_segment();
 }
 
 void PagedArticle::_notification(const int what) {
