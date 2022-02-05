@@ -19,10 +19,13 @@ public:
 	static void create_and_init(int argc, char **argv, char **envp);
 
 	void initialize();
-    void initialize(int argc, char **argv, char **envp);
+	void initialize(int argc, char **argv, char **envp);
 	void uninitialize();
 
 	void setup_args(int argc, char **argv, char **envp);
+
+	virtual void load();
+	virtual void migrate();
 
 	void manage_object(Object *obj);
 
@@ -31,22 +34,22 @@ public:
 
 	static RCPPFramework *get_singleton();
 
-    bool allocate_settings_singleton;
+	bool allocate_settings_singleton;
 
 #if DATABASES_ENABLED
 	bool allocate_database_manager_singleton;
 
-    // TODO Need a define for this
-    bool allocate_db_settings_singleton;
+	// TODO Need a define for this
+	bool allocate_db_settings_singleton;
 #endif
 
 #if WEB_ENABLED
 	bool allocate_session_manager_singleton;
-    bool allocate_file_cache_singleton;
+	bool allocate_file_cache_singleton;
 
-    // By default it's set to "".
-    // It will be ignored if you leave it.
-    String www_root;
+	// By default it's set to "".
+	// It will be ignored if you leave it.
+	String www_root;
 #endif
 
 protected:

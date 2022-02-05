@@ -67,9 +67,42 @@ void RCPPFramework::uninitialize() {
 	delete _instance;
 }
 
+void RCPPFramework::load() {
+#if DATABASES_ENABLED
+	if (allocate_settings_singleton && allocate_db_settings_singleton) {
+		DBSettings::get_singleton()->load();
+	}
+#endif
+
+#if WEB_ENABLED
+	if (allocate_session_manager_singleton) {
+		::SessionManager::get_singleton()->load_sessions();
+	}
+
+	if (allocate_file_cache_singleton && www_root != "") {
+		FileCache::get_singleton()->wwwroot = www_root;
+		FileCache::get_singleton()->wwwroot_refresh_cache();
+	}
+#endif
+}
+
+void RCPPFramework::migrate() {
+#if DATABASES_ENABLED
+	if (allocate_settings_singleton && allocate_db_settings_singleton) {
+		DBSettings::get_singleton()->migrate();
+	}
+#endif
+
+#if WEB_ENABLED
+	if (allocate_session_manager_singleton) {
+		::SessionManager::get_singleton()->migrate();
+	}
+#endif
+}
+
 void RCPPFramework::manage_object(Object *obj) {
 	ERR_FAIL_COND(!_initialized);
-	ERR_FAIL_COND(obj);
+	ERR_FAIL_COND(!obj);
 
 	_managed_objects.push_back(obj);
 }
@@ -152,11 +185,6 @@ void RCPPFramework::_do_initialize() {
 	if (allocate_file_cache_singleton) {
 		FileCache *file_cache = new FileCache(true);
 		manage_object(file_cache);
-
-		if (www_root != "") {
-			file_cache->wwwroot = www_root;
-			file_cache->wwwroot_refresh_cache();
-		}
 	}
 #endif
 }
