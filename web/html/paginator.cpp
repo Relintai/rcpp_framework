@@ -78,16 +78,16 @@ String Paginator::render_indexed(const int page_index) {
 
 	HTMLBuilder b;
 
-	b.ul()->cls("pagination");
+	b.ul()->cls(class_main_ul);
 
 	if (_page_count != 0 && page_index != 0) {
 		b.li();
 		{
-			b.a()->href(s + std::to_string(page_index - 1))->rel_prev()->f()->w("previous")->ca();
+			b.a()->href(s + std::to_string(page_index - 1))->rel_prev()->f()->w(text_prev_link)->ca();
 		}
 		b.cli();
 	} else {
-		b.li()->cls("disabled")->f()->w("previous")->cli();
+		b.li()->cls(class_disabled_li)->f()->w(text_prev_link)->cli();
 	}
 
 	if (starti != toi) {
@@ -99,21 +99,21 @@ String Paginator::render_indexed(const int page_index) {
 				}
 				b.cli();
 			} else {
-				b.li()->cls("disabled")->f()->w(std::to_string(i + 1))->cli();
+				b.li()->cls(class_disabled_li)->f()->w(std::to_string(i + 1))->cli();
 			}
 		}
 	} else {
-		b.li()->cls("disabled")->f()->w(std::to_string(1))->cli();
+		b.li()->cls(class_disabled_li)->f()->w(std::to_string(1))->cli();
 	}
 
 	if (_page_count != 0 && page_index < _page_count - 1) {
 		b.li();
 		{
-			b.a()->href(s + std::to_string(page_index + 2))->rel_next()->f()->w("next")->ca();
+			b.a()->href(s + std::to_string(page_index + 2))->rel_next()->f()->w(text_next_link)->ca();
 		}
 		b.cli();
 	} else {
-		b.li()->cls("disabled")->f()->w("next")->cli();
+		b.li()->cls(class_disabled_li)->f()->w(text_next_link)->cli();
 	}
 
 	b.cul();
@@ -153,16 +153,16 @@ String Paginator::render_links(const int page_index) {
 
 	HTMLBuilder b;
 
-	b.ul()->cls("pagination");
+	b.ul()->cls(class_main_ul);
 
 	if (max != 0 && page_index != 0) {
 		b.li();
 		{
-			b.a()->href(s + links[page_index - 1])->rel_prev()->f()->w("previous")->ca();
+			b.a()->href(s + links[page_index - 1])->rel_prev()->f()->w(text_prev_link)->ca();
 		}
 		b.cli();
 	} else {
-		b.li()->cls("disabled")->f()->w("previous")->cli();
+		b.li()->cls(class_disabled_li)->f()->w(text_prev_link)->cli();
 	}
 
 	if (starti != toi) {
@@ -174,21 +174,21 @@ String Paginator::render_links(const int page_index) {
 				}
 				b.cli();
 			} else {
-				b.li()->cls("disabled")->f()->w(std::to_string(i + 1))->cli();
+				b.li()->cls(class_disabled_li)->f()->w(std::to_string(i + 1))->cli();
 			}
 		}
 	} else {
-		b.li()->cls("disabled")->f()->w(std::to_string(1))->cli();
+		b.li()->cls(class_disabled_li)->f()->w(std::to_string(1))->cli();
 	}
 
 	if (max != 0 && page_index < max - 1) {
 		b.li();
 		{
-			b.a()->href(s + links[page_index + 1])->rel_next()->f()->w("next")->ca();
+			b.a()->href(s + links[page_index + 1])->rel_next()->f()->w(text_next_link)->ca();
 		}
 		b.cli();
 	} else {
-		b.li()->cls("disabled")->f()->w("next")->cli();
+		b.li()->cls(class_disabled_li)->f()->w(text_next_link)->cli();
 	}
 
 	b.cul();
@@ -208,8 +208,8 @@ Paginator::Paginator() {
 	class_main_ul = "pagination";
 	// class_enabled_li; -> no class by default
 	class_disabled_li = "disabled";
-	text_next_link = "Next";
-	text_prev_link = "Prev";
+	text_next_link = "next";
+	text_prev_link = "previous";
 }
 
 Paginator::~Paginator() {
