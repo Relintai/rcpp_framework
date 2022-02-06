@@ -40,10 +40,6 @@ void FileCache::wwwroot_evaluate_dir(const char *path, const bool should_exist) 
 
 			registered_files.insert(np);
 		} else {
-			if (dir->current_is_special_dir()) {
-				continue;
-			}
-
 			wwwroot_evaluate_dir(dir->current_get_path_cstr());
 		}
 	}
