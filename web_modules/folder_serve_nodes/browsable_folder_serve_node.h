@@ -15,7 +15,7 @@ public:
 	virtual void load();
 
 	void evaluate_dir(const String &path, const bool top_level = false);
-	virtual void render_dir_page(const String &dir_uri, const Vector<String> &folders, const Vector<String> &files);
+	virtual void render_dir_page(const String &dir_uri, const Vector<String> &folders, const Vector<String> &files, const bool top_level);
 
 	bool should_render_menu;
 

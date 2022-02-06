@@ -68,16 +68,24 @@ void BrowsableFolderServeNode::evaluate_dir(const String &path, const bool top_l
 	folders.sort_inc();
 	files.sort_inc();
 
-	render_dir_page(dir_uri, folders, files);
+	render_dir_page(dir_uri, folders, files, top_level);
 }
 
-void BrowsableFolderServeNode::render_dir_page(const String &dir_uri, const Vector<String> &folders, const Vector<String> &files) {
+void BrowsableFolderServeNode::render_dir_page(const String &dir_uri, const Vector<String> &folders, const Vector<String> &files, const bool top_level) {
 	HTMLBuilder b;
 
 	String uri = get_full_uri(false);
 
 	b.div("file_list");
 	{
+		if (!top_level) {
+			b.div("file_list_entry");
+			{
+				b.a(uri + dir_uri.path_get_prev_dir())->w("..")->ca();
+			}
+			b.cdiv();
+		}
+
 		for (int i = 0; i < folders.size(); ++i) {
 			b.div("file_list_entry");
 			{
@@ -109,7 +117,7 @@ BrowsableFolderServeNode::BrowsableFolderServeNode() :
 }
 
 BrowsableFolderServeNode::~BrowsableFolderServeNode() {
-	for (std::map<String, String*>::iterator E = _folder_indexes.begin(); E != _folder_indexes.end(); E++) {
+	for (std::map<String, String *>::iterator E = _folder_indexes.begin(); E != _folder_indexes.end(); E++) {
 		if (E->second) {
 			delete E->second;
 		}
