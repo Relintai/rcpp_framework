@@ -198,14 +198,13 @@ bool WebNode::try_route_request_to_children(Request *request) {
 		const String &main_route = request->get_current_path_segment();
 
 		handler = _node_route_map[main_route];
-
-		request->push_path();
 	}
 
 	if (!handler) {
 		return false;
 	}
 
+	request->push_path();
 	handler->handle_request_main(request);
 
 	return true;
@@ -221,8 +220,6 @@ WebNode *WebNode::get_request_handler_child(Request *request) {
 	} else {
 		const String &main_route = request->get_current_path_segment();
 		handler = _node_route_map[main_route];
-
-		request->push_path();
 	}
 
 	return handler;
