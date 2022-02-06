@@ -21,6 +21,8 @@ void FileCache::wwwroot_refresh_cache() {
 
 	registered_files.clear();
 
+	wwwroot.path_clean_end_slash();
+
 	wwwroot_evaluate_dir(wwwroot.c_str());
 
 	_lock.write_unlock();
