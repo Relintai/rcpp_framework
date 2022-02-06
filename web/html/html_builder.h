@@ -15,6 +15,7 @@ public:
 	HTMLTag *style(const String &val);
 	HTMLTag *href(const String &val);
 	HTMLTag *cls(const String &val);
+	HTMLTag *clsse(const String &val); //se -> skip empty
 	HTMLTag *id(const String &val);
 	HTMLTag *name(const String &val);
 	HTMLTag *content(const String &val);

@@ -27,6 +27,16 @@ HTMLTag *HTMLTag::cls(const String &val) {
 	return this;
 }
 
+HTMLTag *HTMLTag::clsse(const String &val) {
+	if (val == "") {
+		return this;
+	}
+
+	attrib("class", val);
+
+	return this;
+}
+
 HTMLTag *HTMLTag::id(const String &val) {
 	attrib("id", val);
 
