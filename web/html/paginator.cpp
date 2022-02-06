@@ -42,32 +42,44 @@ String Paginator::get_current() {
 
 String Paginator::get_pagination_for_indx(const int page_index) {
 	if (use_links_array) {
-		return render_links(page_index);
+		return render_links(renderer, page_index);
 	} else {
-		return render_indexed(page_index);
+		return render_indexed(renderer, page_index);
 	}
 }
 String Paginator::get_pagination_for_num(const int page_num) {
 	return get_pagination_for_indx(page_num - 1);
 }
 
-String Paginator::render_indexed(const int page_index) {
-	String s = base_url;
+String Paginator::render_indexed(Ref<Paginator> target, const int page_index) {
+	if (!target.is_valid()) {
+		target = Ref<Paginator>(this);
+	}
+
+	String s = target->base_url;
 	if (s.size() > 0 && s[s.size() - 1] != '/') {
 		s += '/';
 	}
 
-	int starti = page_index - _max_visible_links / 2;
-	int toi = page_index + _max_visible_links / 2;
+	int max_visible_links = target->_max_visible_links;
+	int page_count = target->_page_count;
+	const String &tclass_main_ul = target->class_main_ul;
+	const String &tclass_enabled_li = target->class_enabled_li;
+	const String &tclass_disabled_li = target->class_disabled_li;
+	const String &ttext_next_link = target->text_next_link;
+	const String &ttext_prev_link = target->text_prev_link;
+
+	int starti = page_index - max_visible_links / 2;
+	int toi = page_index + max_visible_links / 2;
 
 	if (starti < 0) {
 		toi += -starti;
 		starti = 0;
 	}
 
-	if (toi > _page_count) {
-		starti -= toi - _page_count;
-		toi = _page_count;
+	if (toi > page_count) {
+		starti -= toi - page_count;
+		toi = page_count;
 
 		if (starti < 0) {
 			starti = 0;
@@ -78,62 +90,76 @@ String Paginator::render_indexed(const int page_index) {
 
 	HTMLBuilder b;
 
-	b.ul()->clsse(class_main_ul);
+	b.ul()->clsse(tclass_main_ul);
 
-	if (_page_count != 0 && page_index != 0) {
-		b.li()->clsse(class_enabled_li);
+	if (page_count != 0 && page_index != 0) {
+		b.li()->clsse(tclass_enabled_li);
 		{
-			b.a()->href(s + std::to_string(page_index - 1))->rel_prev()->f()->w(text_prev_link)->ca();
+			b.a()->href(s + std::to_string(page_index - 1))->rel_prev()->f()->w(ttext_prev_link)->ca();
 		}
 		b.cli();
 	} else {
-		b.li()->clsse(class_disabled_li)->f()->w(text_prev_link)->cli();
+		b.li()->clsse(tclass_disabled_li)->f()->w(ttext_prev_link)->cli();
 	}
 
 	if (starti != toi) {
 		for (uint32_t i = starti; i < toi; ++i) {
 			if (i != page_index) {
-				b.li()->clsse(class_enabled_li);
+				b.li()->clsse(tclass_enabled_li);
 				{
 					b.a()->href(s + std::to_string(i + 1))->f()->w(std::to_string(i + 1))->ca();
 				}
 				b.cli();
 			} else {
-				b.li()->clsse(class_disabled_li)->f()->w(std::to_string(i + 1))->cli();
+				b.li()->clsse(tclass_disabled_li)->f()->w(std::to_string(i + 1))->cli();
 			}
 		}
 	} else {
-		b.li()->clsse(class_disabled_li)->f()->w(std::to_string(1))->cli();
+		b.li()->clsse(tclass_disabled_li)->f()->w(std::to_string(1))->cli();
 	}
 
-	if (_page_count != 0 && page_index < _page_count - 1) {
-		b.li()->clsse(class_enabled_li);
+	if (page_count != 0 && page_index < page_count - 1) {
+		b.li()->clsse(tclass_enabled_li);
 		{
-			b.a()->href(s + std::to_string(page_index + 2))->rel_next()->f()->w(text_next_link)->ca();
+			b.a()->href(s + std::to_string(page_index + 2))->rel_next()->f()->w(ttext_next_link)->ca();
 		}
 		b.cli();
 	} else {
-		b.li()->clsse(class_disabled_li)->f()->w(text_next_link)->cli();
+		b.li()->clsse(tclass_disabled_li)->f()->w(ttext_next_link)->cli();
 	}
 
 	b.cul();
 
 	return b.result;
 }
-String Paginator::render_links(const int page_index) {
+String Paginator::render_links(Ref<Paginator> target, const int page_index) {
+	if (!target.is_valid()) {
+		target = Ref<Paginator>(this);
+	}
+
 	if (page_index < 0) {
 		return "";
 	}
 
-	String s = base_url;
+
+	String s = target->base_url;
 	if (s.size() > 0 && s[s.size() - 1] != '/') {
 		s += '/';
 	}
 
-	uint32_t max = links.size();
+	uint32_t max = target->links.size();
 
-	int starti = page_index - _max_visible_links / 2;
-	int toi = page_index + _max_visible_links / 2;
+
+	int max_visible_links = target->_max_visible_links;
+	int page_count = target->_page_count;
+	const String &tclass_main_ul = target->class_main_ul;
+	const String &tclass_enabled_li = target->class_enabled_li;
+	const String &tclass_disabled_li = target->class_disabled_li;
+	const String &ttext_next_link = target->text_next_link;
+	const String &ttext_prev_link = target->text_prev_link;
+
+	int starti = page_index - max_visible_links / 2;
+	int toi = page_index + max_visible_links / 2;
 
 	if (starti < 0) {
 		toi += -starti;
@@ -153,42 +179,42 @@ String Paginator::render_links(const int page_index) {
 
 	HTMLBuilder b;
 
-	b.ul()->clsse(class_main_ul);
+	b.ul()->clsse(tclass_main_ul);
 
 	if (max != 0 && page_index != 0) {
-		b.li()->clsse(class_enabled_li);
+		b.li()->clsse(tclass_enabled_li);
 		{
-			b.a()->href(s + links[page_index - 1])->rel_prev()->f()->w(text_prev_link)->ca();
+			b.a()->href(s + target->links[page_index - 1])->rel_prev()->f()->w(ttext_prev_link)->ca();
 		}
 		b.cli();
 	} else {
-		b.li()->clsse(class_disabled_li)->f()->w(text_prev_link)->cli();
+		b.li()->clsse(tclass_disabled_li)->f()->w(ttext_prev_link)->cli();
 	}
 
 	if (starti != toi) {
 		for (uint32_t i = starti; i < toi; ++i) {
 			if (i != page_index) {
-				b.li()->clsse(class_enabled_li);
+				b.li()->clsse(tclass_enabled_li);
 				{
-					b.a()->href(s + links[i])->f()->w(std::to_string(i + 1))->ca();
+					b.a()->href(s + target->links[i])->f()->w(std::to_string(i + 1))->ca();
 				}
 				b.cli();
 			} else {
-				b.li()->clsse(class_disabled_li)->f()->w(std::to_string(i + 1))->cli();
+				b.li()->clsse(tclass_disabled_li)->f()->w(std::to_string(i + 1))->cli();
 			}
 		}
 	} else {
-		b.li()->clsse(class_disabled_li)->f()->w(std::to_string(1))->cli();
+		b.li()->clsse(tclass_disabled_li)->f()->w(std::to_string(1))->cli();
 	}
 
 	if (max != 0 && page_index < max - 1) {
-		b.li()->clsse(class_enabled_li);
+		b.li()->clsse(tclass_enabled_li);
 		{
-			b.a()->href(s + links[page_index + 1])->rel_next()->f()->w(text_next_link)->ca();
+			b.a()->href(s + target->links[page_index + 1])->rel_next()->f()->w(ttext_next_link)->ca();
 		}
 		b.cli();
 	} else {
-		b.li()->clsse(class_disabled_li)->f()->w(text_next_link)->cli();
+		b.li()->clsse(tclass_disabled_li)->f()->w(ttext_next_link)->cli();
 	}
 
 	b.cul();
@@ -213,4 +239,5 @@ Paginator::Paginator() {
 }
 
 Paginator::~Paginator() {
+	renderer.unref();
 }

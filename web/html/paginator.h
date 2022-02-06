@@ -39,8 +39,11 @@ public:
 	String get_pagination_for_indx(const int page_index);
 	String get_pagination_for_num(const int page_num);
 
-	virtual String render_indexed(const int page_index);
-	virtual String render_links(const int page_index);
+	virtual String render_indexed(Ref<Paginator> target, const int page_index);
+	virtual String render_links(Ref<Paginator> target, const int page_index);
+
+	//If this is set, render_indexed and render_links will be called on this
+	Ref<Paginator> renderer;
 
 	Paginator();
 	~Paginator();
