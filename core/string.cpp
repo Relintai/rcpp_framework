@@ -1271,6 +1271,11 @@ std::string String::to_string() const {
 }
 
 void String::print() const {
+	if (_size == 0) {
+		::printf("\n");
+		return;
+	}
+
 	::printf("%s\n", c_str());
 }
 
