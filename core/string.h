@@ -109,6 +109,8 @@ public:
 
 	void append_path(const char* path);
 	void append_path(const String &path);
+	void path_clean_end_slash();
+	void path_ensure_end_slash();
 
 	void to_html_special_chars();
 	void from_html_special_chars();

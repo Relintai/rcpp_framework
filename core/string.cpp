@@ -1043,6 +1043,17 @@ void String::append_path(const String &path) {
 	}
 }
 
+void String::path_clean_end_slash() {
+	while (ends_with('/') || ends_with('\\')) {
+		pop_back();
+	}
+}
+void String::path_ensure_end_slash() {
+	if (!(ends_with('/') || ends_with('\\'))) {
+		push_back(DEFAULT_DIRECTORY_SEPARATOR);
+	}
+}
+
 void String::to_html_special_chars() {
 	replace("&", "&amp;");
 	replace("\"", "&quot;");
