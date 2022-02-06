@@ -188,12 +188,20 @@ void Request::setup_url_stack() {
 	}
 }
 
-String Request::get_path() const {
-	String path = "";
+String Request::get_path(const bool beginning_slash, const bool end_slash) const {
+	String path;
+
+	if (beginning_slash) {
+		path += '/';
+	}
 
 	for (uint32_t i = _path_stack_pointer; i < _path_stack.size(); ++i) {
 		path += _path_stack[i];
-		path += "/";
+		path += '/';
+	}
+
+	if (!end_slash && path.size() > 1) {
+		path.pop_back();
 	}
 
 	return path;

@@ -67,7 +67,7 @@ public:
 	virtual String get_host() const;
 
 	void setup_url_stack();
-	String get_path() const;
+	String get_path(const bool beginning_slash = false, const bool end_slash = true) const;
 	virtual const String &get_path_full() const;
 	const String &get_path_segment(const uint32_t i) const;
 	const String &get_current_path_segment() const;
