@@ -42,7 +42,6 @@ public:
 	virtual String render_indexed(Ref<Paginator> target, const int page_index);
 	virtual String render_links(Ref<Paginator> target, const int page_index);
 
-	//If this is set, render_indexed and render_links will be called on this
 	Ref<Paginator> renderer;
 
 	Paginator();
