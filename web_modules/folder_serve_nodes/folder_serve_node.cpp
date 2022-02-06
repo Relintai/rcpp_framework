@@ -32,6 +32,8 @@ void FolderServeNode::load() {
 		return;
 	}
 
+	serve_folder.path_clean_end_slash();
+
 	file_cache->wwwroot = serve_folder;
 	file_cache->wwwroot_refresh_cache();
 }
