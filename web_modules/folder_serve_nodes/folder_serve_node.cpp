@@ -6,7 +6,9 @@ void FolderServeNode::handle_request_main(Request *request) {
 	const String &rp = request->get_current_path_segment();
 
 	if (rp == "") {
-		request->send_error(HTTP_STATUS_CODE_404_NOT_FOUND);
+		if (!try_route_request_to_children(request)) {
+			_handle_request_main(request);
+		}
 		return;
 	}
 
