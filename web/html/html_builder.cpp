@@ -559,6 +559,78 @@ HTMLTag *HTMLTag::rel_stylesheet() {
 	return this;
 }
 
+HTMLTag *HTMLTag::rel_alternate() {
+	attrib("rel", "alternate");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::rel_author() {
+	attrib("rel", "author");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::rel_bookmark() {
+	attrib("rel", "bookmark");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::rel_external() {
+	attrib("rel", "external");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::rel_help() {
+	attrib("rel", "help");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::rel_next() {
+	attrib("rel", "next");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::rel_nofollow() {
+	attrib("rel", "nofollow");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::rel_noopener() {
+	attrib("rel", "noopener");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::rel_noreferrer() {
+	attrib("rel", "noreferrer");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::rel_prev() {
+	attrib("rel", "prev");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::rel_search() {
+	attrib("rel", "search");
+
+	return this;
+}
+
+HTMLTag *HTMLTag::rel_tag() {
+	attrib("rel", "tag");
+
+	return this;
+}
+
 HTMLTag *HTMLTag::charset(const String &val) {
 	attrib("charset", val);
 
@@ -2690,7 +2762,7 @@ HTMLBuilder *HTMLBuilder::input_checkbox(const String &name, const String &value
 	}
 
 	t->checked(checked);
-	
+
 	return this;
 }
 
@@ -3236,7 +3308,7 @@ HTMLBuilder *HTMLBuilder::input_hidden(const String &name, const String &value) 
 
 HTMLBuilder *HTMLBuilder::csrf_token(const String &token) {
 	if (token == "") {
-		//don't waste html characters if it's an empty string anyway
+		// don't waste html characters if it's an empty string anyway
 		return this;
 	}
 

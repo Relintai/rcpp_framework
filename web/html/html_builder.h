@@ -119,8 +119,23 @@ public:
 	HTMLTag *type(const String &val);
 	HTMLTag *placeholder(const String &val);
 	HTMLTag *fora(const String &val); // for attrib -> for is reserved keyword
+
 	HTMLTag *rel(const String &val);
 	HTMLTag *rel_stylesheet();
+	HTMLTag *rel_alternate();
+	HTMLTag *rel_author();
+	HTMLTag *rel_bookmark();
+	HTMLTag *rel_external();
+	HTMLTag *rel_help();
+	HTMLTag *rel_license();
+	HTMLTag *rel_next();
+	HTMLTag *rel_nofollow();
+	HTMLTag *rel_noopener();
+	HTMLTag *rel_noreferrer();
+	HTMLTag *rel_prev();
+	HTMLTag *rel_search();
+	HTMLTag *rel_tag();
+
 	HTMLTag *charset(const String &val);
 	HTMLTag *charset_utf_8();
 
@@ -453,7 +468,7 @@ public:
 	HTMLTag *form_post();
 	HTMLBuilder *form_get(const String &action, const String &cls = "", const String &id = "");
 	HTMLBuilder *form_post(const String &action, const String &cls = "", const String &id = "");
-	//will add a csrf token from request
+	// will add a csrf token from request
 	HTMLBuilder *form_post(const String &action, Request *request, const String &cls = "", const String &id = "");
 
 	HTMLTag *input_button();
