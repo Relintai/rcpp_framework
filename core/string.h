@@ -111,6 +111,8 @@ public:
 	void append_path(const String &path);
 	void path_clean_end_slash();
 	void path_ensure_end_slash();
+	String path_get_basename() const;
+	String path_get_last_segment() const;
 
 	void to_html_special_chars();
 	void from_html_special_chars();

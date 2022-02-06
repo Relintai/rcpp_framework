@@ -196,6 +196,10 @@ String String::substr(const int start_index, const int len) const {
 }
 
 String String::substr_index(const int start_index, const int end_index) const {
+	if (start_index == end_index) {
+		return String();
+	}
+
 	ERR_FAIL_INDEX_V(start_index, _size, String());
 	ERR_FAIL_INDEX_V(end_index, _size, String());
 	ERR_FAIL_COND_V(start_index > end_index, String());
@@ -1055,7 +1059,7 @@ void String::path_clean_end_slash() {
 	}
 }
 void String::path_ensure_end_slash() {
-	//Don't add if empty string, as it would make it root on linux, which can easily become a serious bug
+	// Don't add if empty string, as it would make it root on linux, which can easily become a serious bug
 	if (_size == 0) {
 		return;
 	}
@@ -1063,6 +1067,49 @@ void String::path_ensure_end_slash() {
 	if (!(ends_with('/') || ends_with('\\'))) {
 		push_back(DEFAULT_DIRECTORY_SEPARATOR);
 	}
+}
+
+String String::path_get_basename() const {
+	if (_size == 0) {
+		return String();
+	}
+
+	int ssind = _size - 1;
+	while (ssind > 0 && (_data[ssind] != '/' || _data[ssind] != '\\')) {
+		--ssind;
+	}
+
+	if (ssind == _size - 1) {
+		return String();
+	}
+
+	++ssind;
+
+	return substr_index(ssind, _size - 1);
+}
+
+String String::path_get_last_segment() const {
+	if (_size == 0) {
+		return String();
+	}
+
+	int seind = _size - 1;
+	while (seind > 0 && (_data[seind] == '/' || _data[seind] == '\\')) {
+		--seind;
+	}
+
+	if (seind == 0) {
+		return _data[0];
+	}
+
+	int ssind = seind - 1;
+	while (ssind > 0 && (_data[ssind] != '/' || _data[ssind] != '\\')) {
+		--ssind;
+	}
+
+	++ssind;
+
+	return substr_index(ssind, seind);
 }
 
 void String::to_html_special_chars() {
