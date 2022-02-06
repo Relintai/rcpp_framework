@@ -1210,7 +1210,7 @@ String String::file_get_extension() const {
 	int dind = find_reversed('.');
 
 	if (dind == -1) {
-		return Stirng();
+		return String();
 	}
 
 	return substr_index(dind + 1, _size - 1);
