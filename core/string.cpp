@@ -153,6 +153,62 @@ int String::find(const String &val, const int from) const {
 	return -1;
 }
 
+int String::find_reversed(const char val, const int from) const {
+	if (_size == 0) {
+		return -1;
+	}
+
+	int f;
+
+	if (from < 0) {
+		f = _size - 1;
+	} else {
+		f = from - 1;
+	}
+
+	for (int i = f; i >= 0; --i) {
+		if (_data[i] == val) {
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+int String::find_reversed(const String &val, const int from) const {
+	if (_size == 0) {
+		return -1;
+	}
+
+	if (_size < val.size()) {
+		return -1;
+	}
+
+	int ve;
+
+	if (from < 0) {
+		ve = _size - val.size() - 1;
+	} else {
+		ve = from - 1;
+	}
+
+	for (int i = ve; i >= 0; --i) {
+		bool found = true;
+		for (int j = 0; j < val.size(); ++j) {
+			if (_data[i + j] != val[j]) {
+				found = false;
+				break;
+			}
+		}
+
+		if (found) {
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 void String::get_substr(char *into_buf, const int start_index, const int len) {
 	ERR_FAIL_INDEX(start_index + len - 1, _size);
 
@@ -1148,6 +1204,16 @@ String String::path_get_prev_dir() const {
 	}
 
 	return substr_index(0, seind);
+}
+
+String String::file_get_extension() const {
+	int dind = find_reversed('.');
+
+	if (dind == -1) {
+		return Stirng();
+	}
+
+	return substr_index(dind + 1, _size - 1);
 }
 
 void String::to_html_special_chars() {

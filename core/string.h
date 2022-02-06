@@ -33,6 +33,8 @@ public:
 	void resize(const int s);
 	int find(const char val, const int from = 0) const;
 	int find(const String &val, const int from = 0) const;
+	int find_reversed(const char val, const int from = -1) const;
+	int find_reversed(const String &val, const int from = -1) const;
 	void get_substr(char *into_buf, const int start_index, const int len);
 	void get_substr_nt(char *into_buf, const int start_index, const int len);
 	String substr(const int start_index, const int len) const;
@@ -114,6 +116,7 @@ public:
 	String path_get_basename() const;
 	String path_get_last_segment() const;
 	String path_get_prev_dir() const;
+	String file_get_extension() const;
 
 	void to_html_special_chars();
 	void from_html_special_chars();
