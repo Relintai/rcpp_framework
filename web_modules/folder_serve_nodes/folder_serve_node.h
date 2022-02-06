@@ -4,6 +4,7 @@
 #include "core/string.h"
 
 #include "web/http/web_node.h"
+#include "web/file_cache.h"
 
 class FolderServeNode : public WebNode {
 	RCPP_OBJECT(FolderServeNode, WebNode);

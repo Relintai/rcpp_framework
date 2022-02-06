@@ -1,7 +1,5 @@
 #include "folder_serve_node.h"
 
-#include "web/file_cache.h"
-#include "web/html/html_builder.h"
 #include "web/http/request.h"
 
 void FolderServeNode::handle_request_main(Request *request) {
