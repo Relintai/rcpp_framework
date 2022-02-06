@@ -78,42 +78,42 @@ String Paginator::render_indexed(const int page_index) {
 
 	HTMLBuilder b;
 
-	b.ul()->cls(class_main_ul);
+	b.ul()->clsse(class_main_ul);
 
 	if (_page_count != 0 && page_index != 0) {
-		b.li();
+		b.li()->clsse(class_enabled_li);
 		{
 			b.a()->href(s + std::to_string(page_index - 1))->rel_prev()->f()->w(text_prev_link)->ca();
 		}
 		b.cli();
 	} else {
-		b.li()->cls(class_disabled_li)->f()->w(text_prev_link)->cli();
+		b.li()->clsse(class_disabled_li)->f()->w(text_prev_link)->cli();
 	}
 
 	if (starti != toi) {
 		for (uint32_t i = starti; i < toi; ++i) {
 			if (i != page_index) {
-				b.li();
+				b.li()->clsse(class_enabled_li);
 				{
 					b.a()->href(s + std::to_string(i + 1))->f()->w(std::to_string(i + 1))->ca();
 				}
 				b.cli();
 			} else {
-				b.li()->cls(class_disabled_li)->f()->w(std::to_string(i + 1))->cli();
+				b.li()->clsse(class_disabled_li)->f()->w(std::to_string(i + 1))->cli();
 			}
 		}
 	} else {
-		b.li()->cls(class_disabled_li)->f()->w(std::to_string(1))->cli();
+		b.li()->clsse(class_disabled_li)->f()->w(std::to_string(1))->cli();
 	}
 
 	if (_page_count != 0 && page_index < _page_count - 1) {
-		b.li();
+		b.li()->clsse(class_enabled_li);
 		{
 			b.a()->href(s + std::to_string(page_index + 2))->rel_next()->f()->w(text_next_link)->ca();
 		}
 		b.cli();
 	} else {
-		b.li()->cls(class_disabled_li)->f()->w(text_next_link)->cli();
+		b.li()->clsse(class_disabled_li)->f()->w(text_next_link)->cli();
 	}
 
 	b.cul();
@@ -153,42 +153,42 @@ String Paginator::render_links(const int page_index) {
 
 	HTMLBuilder b;
 
-	b.ul()->cls(class_main_ul);
+	b.ul()->clsse(class_main_ul);
 
 	if (max != 0 && page_index != 0) {
-		b.li();
+		b.li()->clsse(class_enabled_li);
 		{
 			b.a()->href(s + links[page_index - 1])->rel_prev()->f()->w(text_prev_link)->ca();
 		}
 		b.cli();
 	} else {
-		b.li()->cls(class_disabled_li)->f()->w(text_prev_link)->cli();
+		b.li()->clsse(class_disabled_li)->f()->w(text_prev_link)->cli();
 	}
 
 	if (starti != toi) {
 		for (uint32_t i = starti; i < toi; ++i) {
 			if (i != page_index) {
-				b.li();
+				b.li()->clsse(class_enabled_li);
 				{
 					b.a()->href(s + links[i])->f()->w(std::to_string(i + 1))->ca();
 				}
 				b.cli();
 			} else {
-				b.li()->cls(class_disabled_li)->f()->w(std::to_string(i + 1))->cli();
+				b.li()->clsse(class_disabled_li)->f()->w(std::to_string(i + 1))->cli();
 			}
 		}
 	} else {
-		b.li()->cls(class_disabled_li)->f()->w(std::to_string(1))->cli();
+		b.li()->clsse(class_disabled_li)->f()->w(std::to_string(1))->cli();
 	}
 
 	if (max != 0 && page_index < max - 1) {
-		b.li();
+		b.li()->clsse(class_enabled_li);
 		{
 			b.a()->href(s + links[page_index + 1])->rel_next()->f()->w(text_next_link)->ca();
 		}
 		b.cli();
 	} else {
-		b.li()->cls(class_disabled_li)->f()->w(text_next_link)->cli();
+		b.li()->clsse(class_disabled_li)->f()->w(text_next_link)->cli();
 	}
 
 	b.cul();
