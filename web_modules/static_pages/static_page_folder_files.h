@@ -3,15 +3,19 @@
 
 #include "core/string.h"
 
-#include "web/http/web_node.h"
+#include "static_page.h"
 
-class StaticPageFolderFiles : public WebNode {
-	RCPP_OBJECT(StaticPageFolderFiles, WebNode);
+class StaticPageFolderFiles : public StaticPage {
+	RCPP_OBJECT(StaticPageFolderFiles, StaticPage);
 
 public:
-	void handle_request_main(Request *request);
-
 	void load();
+	virtual void append_data(const String &d);
+
+	void _notification(const int what);
+
+	String dir_path;
+	bool process_if_can;
 
 	StaticPageFolderFiles();
 	~StaticPageFolderFiles();
