@@ -1044,11 +1044,18 @@ void String::append_path(const String &path) {
 }
 
 void String::path_clean_end_slash() {
-	while (ends_with('/') || ends_with('\\')) {
+	// _size > 1, so if root is given ("/"), it will not be removed
+
+	while (_size > 1 && (ends_with('/') || ends_with('\\'))) {
 		pop_back();
 	}
 }
 void String::path_ensure_end_slash() {
+	//Don't add if empty string, as it would make it root on linux, which can easily become a serious bug
+	if (_size == 0) {
+		return;
+	}
+
 	if (!(ends_with('/') || ends_with('\\'))) {
 		push_back(DEFAULT_DIRECTORY_SEPARATOR);
 	}
