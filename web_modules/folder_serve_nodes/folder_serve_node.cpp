@@ -12,7 +12,7 @@ void FolderServeNode::handle_request_main(Request *request) {
 		return;
 	}
 
-	String file_name = "/" + request->get_path();
+	String file_name = request->get_path(true, false);
 
 	if (file_cache->wwwroot_has_file(file_name)) {
 		String fp = file_cache->wwwroot;
