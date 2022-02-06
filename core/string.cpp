@@ -1075,7 +1075,7 @@ String String::path_get_basename() const {
 	}
 
 	int ssind = _size - 1;
-	while (ssind > 0 && (_data[ssind] != '/' || _data[ssind] != '\\')) {
+	while (ssind > 0 && (_data[ssind] != '/' && _data[ssind] != '\\')) {
 		--ssind;
 	}
 
@@ -1103,7 +1103,7 @@ String String::path_get_last_segment() const {
 	}
 
 	int ssind = seind - 1;
-	while (ssind > 0 && (_data[ssind] != '/' || _data[ssind] != '\\')) {
+	while (ssind > 0 && (_data[ssind] != '/' && _data[ssind] != '\\')) {
 		--ssind;
 	}
 
