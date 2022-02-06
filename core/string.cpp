@@ -174,6 +174,10 @@ void String::get_substr_nt(char *into_buf, const int start_index, const int len)
 }
 
 String String::substr(const int start_index, const int len) const {
+	if (len == 0) {
+		return String();
+	}
+
 	ERR_FAIL_INDEX_V(start_index, _size, String());
 
 	int sil = start_index + len;
