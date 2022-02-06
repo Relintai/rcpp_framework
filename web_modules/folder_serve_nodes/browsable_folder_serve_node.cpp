@@ -8,9 +8,6 @@
 void BrowsableFolderServeNode::_handle_request_main(Request *request) {
 	String file_name = request->get_path(true, false);
 
-	file_name.print();
-	request->get_path().print();
-
 	String *s = _folder_indexes[file_name];
 
 	if (!s) {
