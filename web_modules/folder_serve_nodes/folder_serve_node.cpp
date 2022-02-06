@@ -48,6 +48,8 @@ void FolderServeNode::_notification(const int what) {
 
 FolderServeNode::FolderServeNode() :
 		WebNode() {
+
+	file_cache = new FileCache();
 }
 
 FolderServeNode::~FolderServeNode() {
