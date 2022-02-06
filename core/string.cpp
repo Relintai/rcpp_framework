@@ -1112,6 +1112,44 @@ String String::path_get_last_segment() const {
 	return substr_index(ssind, seind);
 }
 
+String String::path_get_prev_dir() const {
+	if (_size == 0) {
+		return String();
+	}
+
+	int seind = _size - 1;
+	while (seind > 0 && (_data[seind] == '/' || _data[seind] == '\\')) {
+		--seind;
+	}
+
+	if (seind == 0) {
+		// /////////
+		// or
+		// a///////
+		// no prev dir
+
+		return String("/");
+	}
+
+	// fol/fol2/fol3//
+	//             ^  (seind)
+
+	while (seind > 0 && (_data[seind] != '/' || _data[seind] != '\\')) {
+		--seind;
+	}
+
+	// fol/fol2/fol3//
+	//         ^  (seind)
+
+	--seind;
+
+	if (seind <= 0) {
+		return String("/");
+	}
+
+	return substr_index(0, seind);
+}
+
 void String::to_html_special_chars() {
 	replace("&", "&amp;");
 	replace("\"", "&quot;");
