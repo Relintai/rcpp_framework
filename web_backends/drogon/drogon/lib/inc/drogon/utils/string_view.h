@@ -20,7 +20,7 @@
 #include <boost/utility/string_view.hpp>
 #endif
 
-#include <trantor/utils/LogStream.h>
+#include "core/log/log_stream.h"
 
 namespace drogon {
 #if __cplusplus >= 201703L || (defined _MSC_VER && _MSC_VER > 1900)

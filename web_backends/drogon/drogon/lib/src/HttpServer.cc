@@ -21,7 +21,7 @@
 #include <http/HttpRequest.h>
 #include <http/HttpResponse.h>
 #include <drogon/utils/Utilities.h>
-#include <trantor/utils/Logger.h>
+#include "core/log/logger.h"
 #include <functional>
 
 #if COZ_PROFILING

@@ -17,7 +17,7 @@
 #include <trantor/net/EventLoop.h>
 #include "core/net/inet_address.h"
 #include "core/math/date.h"
-#include <trantor/utils/Logger.h>
+#include "core/log/logger.h"
 
 #include <http/CacheMap.h>
 #include <http/Cookie.h>

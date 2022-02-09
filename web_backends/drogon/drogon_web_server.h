@@ -14,7 +14,7 @@
 
 #include "core/net/inet_address.h"
 #include <trantor/net/Resolver.h>
-#include <trantor/utils/Logger.h>
+#include "core/log/logger.h"
 
 #include "http/HttpRequestImpl.h"
 #include "http/HttpResponse.h"

@@ -18,7 +18,7 @@
 #include "HttpResponseImpl.h"
 #include "HttpUtils.h"
 #include <http/HttpTypes.h>
-#include <trantor/utils/Logger.h>
+#include "core/log/logger.h"
 #include "core/containers/msg_buffer.h"
 #include <iostream>
 

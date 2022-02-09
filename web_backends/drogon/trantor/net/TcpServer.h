@@ -15,7 +15,7 @@
 #pragma once
 #include <trantor/net/callbacks.h>
 #include <trantor/utils/NonCopyable.h>
-#include <trantor/utils/Logger.h>
+#include "core/log/logger.h"
 #include <trantor/net/EventLoopThreadPool.h>
 #include "core/net/inet_address.h"
 #include <trantor/net/TcpConnection.h>

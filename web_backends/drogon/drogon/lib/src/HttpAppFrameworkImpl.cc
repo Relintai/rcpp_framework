@@ -33,7 +33,7 @@
 
 #include <drogon/utils/Utilities.h>
 #include <json/json.h>
-#include <trantor/utils/AsyncFileLogger.h>
+#include "core/log/async_file_logger.h"
 #include <algorithm>
 
 #include <fstream>

@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <trantor/utils/Logger.h>
+#include "core/log/logger.h"
 #include <trantor/utils/NonCopyable.h>
 #include <trantor/exports.h>
 #include <functional>

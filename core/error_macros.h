@@ -20,98 +20,98 @@
 #endif
 
 #define RLOG_TRACE(str) \
-    Logger::log_trace(str);
+    RLogger::log_trace(str);
 
 #define RLOG_MSG(str) \
-    Logger::log_message(str);
+    RLogger::log_message(str);
 
 #define RLOG_WARN(str) \
-    Logger::log_warning(str);
+    RLogger::log_warning(str);
 
 #define RLOG_ERR(str) \
-    Logger::log_error(str);
+    RLogger::log_error(str);
 
 #define ERR_FAIL_MSG(msg) \
-    Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
+    RLogger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
     return;
 
 #define ERR_FAIL_V_MSG(val, msg) \
-    Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
+    RLogger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
     return val;
 
 #define ERR_FAIL_INDEX(index, size) \
     if ((index < 0) || (index >= size)) {\
-        Logger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, ""); \
+        RLogger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, ""); \
         return;\
     } else\
         ((void)0)\
 
 #define ERR_FAIL_INDEX_MSG(index, size, msg) \
     if ((index < 0) || (index >= size)) {\
-        Logger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, msg); \
+        RLogger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, msg); \
         return;\
     } else\
         ((void)0)\
 
 #define ERR_FAIL_INDEX_V(index, size, val) \
     if ((index < 0) || (index >= size)) {\
-        Logger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, ""); \
+        RLogger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, ""); \
         return val;\
     } else\
         ((void)0)\
 
 #define ERR_FAIL_INDEX_V_MSG(index, size, val, msg) \
     if ((index < 0) || (index >= size)) {\
-        Logger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, msg); \
+        RLogger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, msg); \
         return val;\
     } else\
         ((void)0)\
 
 #define ERR_FAIL_COND(cond) \
     if (cond) {\
-        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, "ERR_FAIL_COND: \"" #cond "\" is true!"); \
+        RLogger::_log_error(__FUNCTION__, __FILE__, __LINE__, "ERR_FAIL_COND: \"" #cond "\" is true!"); \
         return;\
     } else\
         ((void)0)\
 
 #define ERR_FAIL_COND_MSG(cond, msg) \
     if (cond) {\
-        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
+        RLogger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
         return;\
     } else\
         ((void)0)\
 
 #define ERR_FAIL_COND_V(cond, val) \
     if (cond) {\
-        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, "ERR_FAIL_COND: \"" #cond "\" is true!"); \
+        RLogger::_log_error(__FUNCTION__, __FILE__, __LINE__, "ERR_FAIL_COND: \"" #cond "\" is true!"); \
         return val;\
     } else\
         ((void)0)\
 
 #define ERR_FAIL_COND_V_MSG(cond, val, msg) \
     if (cond) {\
-        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
+        RLogger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
         return val;\
     } else\
         ((void)0)\
 
 #define ERR_CONTINUE(cond) \
     if (cond) {\
-        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, "ERR_CONTINUE: \"" #cond "\" is true!"); \
+        RLogger::_log_error(__FUNCTION__, __FILE__, __LINE__, "ERR_CONTINUE: \"" #cond "\" is true!"); \
         continue;\
     } else\
         ((void)0)\
 
 #define ERR_CONTINUE_MSG(cond, msg) \
     if (cond) {\
-        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
+        RLogger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
         continue;\
     } else\
         ((void)0)\
 
 #define ERR_CONTINUE_ACTION(cond, action) \
     if (cond) {\
-        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, "ERR_CONTINUE: \"" #cond "\" is true!"); \
+        RLogger::_log_error(__FUNCTION__, __FILE__, __LINE__, "ERR_CONTINUE: \"" #cond "\" is true!"); \
         action;\
         continue;\
     } else\
@@ -119,7 +119,7 @@
 
 #define ERR_CONTINUE_ACTION_MSG(cond, action, msg) \
     if (cond) {\
-        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
+        RLogger::_log_error(__FUNCTION__, __FILE__, __LINE__, msg); \
         action;\
         continue;\
     } else\
@@ -127,14 +127,14 @@
 
 #define CRASH_INDEX(index, size) \
     if ((index < 0) || (index >= size)) {\
-        Logger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, "CRASH!"); \
+        RLogger::_log_index_error(__FUNCTION__, __FILE__, __LINE__, index, size, "CRASH!"); \
         GENERATE_TRAP \
     } else\
         ((void)0)\
 
 #define CRASH_COND(cond) \
     if (cond) {\
-        Logger::_log_error(__FUNCTION__, __FILE__, __LINE__, "CRASH_COND: \"" #cond "\" is true!"); \
+        RLogger::_log_error(__FUNCTION__, __FILE__, __LINE__, "CRASH_COND: \"" #cond "\" is true!"); \
         GENERATE_TRAP \
     } else\
         ((void)0)\

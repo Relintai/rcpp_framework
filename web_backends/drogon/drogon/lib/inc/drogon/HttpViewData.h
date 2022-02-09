@@ -19,7 +19,7 @@
 #include <drogon/utils/string_view.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include <trantor/utils/Logger.h>
+#include "core/log/logger.h"
 #include "core/containers/msg_buffer.h"
 #include <sstream>
 #include <string>

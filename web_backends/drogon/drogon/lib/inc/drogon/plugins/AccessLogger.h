@@ -9,7 +9,7 @@
 #include <http/HttpRequest.h>
 #include <http/HttpResponse.h>
 #include <drogon/plugins/Plugin.h>
-#include <trantor/utils/AsyncFileLogger.h>
+#include "core/log/async_file_logger.h"
 #include <vector>
 
 namespace drogon {

@@ -12,7 +12,7 @@
  *
  */
 
-#include <trantor/utils/AsyncFileLogger.h>
+#include "async_file_logger.h"
 #ifndef _WIN32
 #include <unistd.h>
 #ifdef __linux__

@@ -14,7 +14,7 @@
 
 
 #include <drogon/utils/Utilities.h>
-#include <trantor/utils/Logger.h>
+#include "core/log/logger.h"
 #ifdef OPENSSL_FOUND
 #include <openssl/md5.h>
 #include <openssl/rand.h>

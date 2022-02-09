@@ -1,5 +1,5 @@
-#include <trantor/utils/Logger.h>
-#include <trantor/utils/AsyncFileLogger.h>
+#include "core/log/logger.h"
+#include "core/log/async_file_logger.h"
 #include <stdlib.h>
 #include <thread>
 int main()

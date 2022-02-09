@@ -1,4 +1,4 @@
-#include <trantor/utils/Logger.h>
+#include "core/log/logger.h"
 #include <stdlib.h>
 #include <thread>
 int main()

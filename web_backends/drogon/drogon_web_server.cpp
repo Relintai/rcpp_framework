@@ -13,7 +13,7 @@
 #include <stdlib.h>
 
 #include <trantor/net/TcpConnection.h>
-#include <trantor/utils/AsyncFileLogger.h>
+#include "core/log/async_file_logger.h"
 
 #include <fcntl.h>
 #include <sys/stat.h>

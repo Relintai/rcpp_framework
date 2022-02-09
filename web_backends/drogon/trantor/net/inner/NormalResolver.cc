@@ -1,5 +1,5 @@
 #include "NormalResolver.h"
-#include <trantor/utils/Logger.h>
+#include "core/log/logger.h"
 #ifdef _WIN32
 #include <ws2tcpip.h>
 #else

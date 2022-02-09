@@ -14,7 +14,6 @@
 
 #pragma once
 
-#include <trantor/exports.h>
 #include <stdint.h>
 #include <string>
 
@@ -26,7 +25,7 @@ namespace trantor
  * @brief This class represents a time point.
  *
  */
-class TRANTOR_EXPORT Date
+class Date
 {
   public:
     Date() : microSecondsSinceEpoch_(0){};

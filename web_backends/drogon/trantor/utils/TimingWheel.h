@@ -15,7 +15,7 @@
 #pragma once
 
 #include <trantor/net/EventLoop.h>
-#include <trantor/utils/Logger.h>
+#include "core/log/logger.h"
 #include <trantor/exports.h>
 #include <map>
 #include <mutex>

@@ -16,7 +16,7 @@
 
 #include <assert.h>
 #include <trantor/net/EventLoop.h>
-#include <trantor/utils/Logger.h>
+#include "core/log/logger.h"
 #include <atomic>
 #include <deque>
 #include <future>
@@ -134,7 +134,7 @@ public:
 		for (auto iter = wheels_.rbegin(); iter != wheels_.rend(); ++iter) {
 			iter->clear();
 		}
-		LOG_TRACE << "CacheMap destruct!";
+		//LOG_TRACE << "CacheMap destruct!";
 	}
 	struct MapValue {
 		MapValue(const T2 &value,
