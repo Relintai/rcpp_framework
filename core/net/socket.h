@@ -12,6 +12,8 @@
  *
  */
 
+// TODO Re enable logging
+
 #pragma once
 
 #include <trantor/utils/NonCopyable.h>

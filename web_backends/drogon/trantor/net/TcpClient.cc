@@ -19,7 +19,7 @@
 #include <algorithm>
 #include <functional>
 
-#include "Socket.h"
+#include "core/net/socket.h"
 
 #include <stdio.h> // snprintf
 

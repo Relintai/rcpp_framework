@@ -14,7 +14,7 @@
 
 #include "TcpConnectionImpl.h"
 #include "Channel.h"
-#include "Socket.h"
+#include "core/net/socket.h"
 #ifdef __linux__
 #include <sys/sendfile.h>
 #endif

@@ -12,10 +12,9 @@
  *
  */
 
-#include "Socket.h"
+#include "socket.h"
 #include <assert.h>
 #include <sys/types.h>
-#include <trantor/utils/Logger.h>
 #ifdef _WIN32
 #include <ws2tcpip.h>
 #else
@@ -56,7 +55,7 @@ void Socket::bindAddress(const InetAddress &localaddr) {
 	if (ret == 0)
 		return;
 	else {
-		LOG_SYSERR << ", Bind address failed at " << localaddr.toIpPort();
+		//LOG_SYSERR << ", Bind address failed at " << localaddr.toIpPort();
 		exit(1);
 	}
 }
@@ -64,7 +63,7 @@ void Socket::listen() {
 	assert(sockFd_ > 0);
 	int ret = ::listen(sockFd_, SOMAXCONN);
 	if (ret < 0) {
-		LOG_SYSERR << "listen failed";
+		//LOG_SYSERR << "listen failed";
 		exit(1);
 	}
 }
@@ -94,7 +93,7 @@ void Socket::closeWrite() {
 	if (::shutdown(sockFd_, SD_SEND) < 0)
 #endif
 	{
-		LOG_SYSERR << "sockets::shutdownWrite";
+		//LOG_SYSERR << "sockets::shutdownWrite";
 	}
 }
 int Socket::read(char *buffer, uint64_t len) {
@@ -112,7 +111,7 @@ struct sockaddr_in6 Socket::getLocalAddr(int sockfd) {
 	if (::getsockname(sockfd,
 				static_cast<struct sockaddr *>((void *)(&localaddr)),
 				&addrlen) < 0) {
-		LOG_SYSERR << "sockets::getLocalAddr";
+		//LOG_SYSERR << "sockets::getLocalAddr";
 	}
 	return localaddr;
 }
@@ -124,7 +123,7 @@ struct sockaddr_in6 Socket::getPeerAddr(int sockfd) {
 	if (::getpeername(sockfd,
 				static_cast<struct sockaddr *>((void *)(&peeraddr)),
 				&addrlen) < 0) {
-		LOG_SYSERR << "sockets::getPeerAddr";
+		//LOG_SYSERR << "sockets::getPeerAddr";
 	}
 	return peeraddr;
 }
@@ -170,7 +169,7 @@ void Socket::setReusePort(bool on) {
 			&optval,
 			static_cast<socklen_t>(sizeof optval));
 	if (ret < 0 && on) {
-		LOG_SYSERR << "SO_REUSEPORT failed.";
+		//LOG_SYSERR << "SO_REUSEPORT failed.";
 	}
 #else
 	if (on) {
