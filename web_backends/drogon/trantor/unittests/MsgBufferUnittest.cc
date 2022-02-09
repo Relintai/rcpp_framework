@@ -1,4 +1,4 @@
-#include <trantor/utils/MsgBuffer.h>
+#include "core/containers/msg_buffer.h"
 #include <gtest/gtest.h>
 #include <string>
 #include <iostream>

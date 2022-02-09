@@ -21,7 +21,7 @@
 #include <drogon/utils/Utilities.h>
 #include "core/net/inet_address.h"
 #include "core/math/date.h"
-#include <trantor/utils/MsgBuffer.h>
+#include "core/containers/msg_buffer.h"
 #include <atomic>
 #include <memory>
 #include <mutex>

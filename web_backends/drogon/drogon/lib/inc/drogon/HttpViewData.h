@@ -20,7 +20,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <trantor/utils/Logger.h>
-#include <trantor/utils/MsgBuffer.h>
+#include "core/containers/msg_buffer.h"
 #include <sstream>
 #include <string>
 #include <type_traits>

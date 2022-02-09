@@ -16,7 +16,7 @@
 
 #include "../src/impl_forwards.h"
 #include <trantor/net/TcpConnection.h>
-#include <trantor/utils/MsgBuffer.h>
+#include "core/containers/msg_buffer.h"
 #include <trantor/utils/NonCopyable.h>
 #include <list>
 #include <mutex>

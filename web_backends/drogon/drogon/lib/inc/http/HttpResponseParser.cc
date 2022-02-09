@@ -15,7 +15,7 @@
 #include "HttpResponseParser.h"
 #include "HttpResponseImpl.h"
 #include <trantor/utils/Logger.h>
-#include <trantor/utils/MsgBuffer.h>
+#include "core/containers/msg_buffer.h"
 #include <iostream>
 using namespace trantor;
 using namespace drogon;

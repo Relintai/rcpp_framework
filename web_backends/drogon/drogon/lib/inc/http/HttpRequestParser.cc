@@ -19,7 +19,7 @@
 #include "HttpUtils.h"
 #include <http/HttpTypes.h>
 #include <trantor/utils/Logger.h>
-#include <trantor/utils/MsgBuffer.h>
+#include "core/containers/msg_buffer.h"
 #include <iostream>
 
 using namespace trantor;
