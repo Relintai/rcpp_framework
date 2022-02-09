@@ -17,7 +17,7 @@
 #include <trantor/utils/NonCopyable.h>
 #include <trantor/utils/Logger.h>
 #include <trantor/net/EventLoopThreadPool.h>
-#include <trantor/net/InetAddress.h>
+#include "core/net/inet_address.h"
 #include <trantor/net/TcpConnection.h>
 #include <trantor/utils/TimingWheel.h>
 #include <trantor/exports.h>

@@ -15,7 +15,7 @@
 #pragma once
 
 #include <trantor/utils/NonCopyable.h>
-#include <trantor/net/InetAddress.h>
+#include "core/net/inet_address.h"
 #include <trantor/utils/Logger.h>
 #include <string>
 #ifndef _WIN32

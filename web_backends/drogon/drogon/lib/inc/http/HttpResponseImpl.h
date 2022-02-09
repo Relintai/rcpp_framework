@@ -19,7 +19,7 @@
 #include <http/HttpResponse.h>
 
 #include <drogon/utils/Utilities.h>
-#include <trantor/net/InetAddress.h>
+#include "core/net/inet_address.h"
 #include "core/math/date.h"
 #include <trantor/utils/MsgBuffer.h>
 #include <atomic>

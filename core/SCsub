@@ -6,6 +6,7 @@ env.core_sources = []
 
 env.add_source_files(env.core_sources, "*.cpp")
 env.add_source_files(env.core_sources, "./math/*.cpp")
+env.add_source_files(env.core_sources, "./net/*.cpp")
 env.add_source_files(env.core_sources, "./containers/*.cpp")
 env.add_source_files(env.core_sources, "./log/*.cpp")
 env.add_source_files(env.core_sources, "./os/*.cpp")

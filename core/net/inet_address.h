@@ -20,8 +20,6 @@
 #ifndef MUDUO_NET_INETADDRESS_H
 #define MUDUO_NET_INETADDRESS_H
 
-#include <trantor/exports.h>
-
 #ifdef _WIN32
 #include <ws2tcpip.h>
 using sa_family_t = unsigned short;
@@ -35,13 +33,14 @@ using uint16_t = unsigned short;
 #include <string>
 #include <unordered_map>
 #include <mutex>
+
 namespace trantor
 {
 /**
  * @brief Wrapper of sockaddr_in. This is an POD interface class.
  *
  */
-class TRANTOR_EXPORT InetAddress
+class InetAddress
 {
   public:
     /**

@@ -21,7 +21,7 @@
 #include <drogon/utils/Utilities.h>
 #include <stdio.h>
 #include <trantor/net/EventLoop.h>
-#include <trantor/net/InetAddress.h>
+#include "core/net/inet_address.h"
 #include <trantor/utils/Logger.h>
 #include <trantor/utils/MsgBuffer.h>
 #include <trantor/utils/NonCopyable.h>

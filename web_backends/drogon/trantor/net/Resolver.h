@@ -9,7 +9,7 @@
 #include <trantor/exports.h>
 #include <memory>
 #include <trantor/net/EventLoop.h>
-#include <trantor/net/InetAddress.h>
+#include "core/net/inet_address.h"
 
 namespace trantor
 {

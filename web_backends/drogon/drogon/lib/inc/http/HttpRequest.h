@@ -21,7 +21,7 @@
 
 #include <drogon/utils/string_view.h>
 #include <json/json.h>
-#include <trantor/net/InetAddress.h>
+#include "core/net/inet_address.h"
 #include "core/math/date.h"
 #include <memory>
 #include <string>

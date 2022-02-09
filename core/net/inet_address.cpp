@@ -6,10 +6,7 @@
 
 // Author: Shuo Chen (chenshuo at chenshuo dot com)
 
-#include <trantor/net/InetAddress.h>
-
-#include <trantor/utils/Logger.h>
-//#include <muduo/net/Endian.h>
+#include "inet_address.h"
 
 #ifdef _WIN32
 struct in6_addr_uint {
@@ -23,6 +20,7 @@ struct in6_addr_uint {
 #include <netdb.h>
 #include <netinet/tcp.h>
 #include <strings.h> // memset
+#include <cstring>
 #endif
 
 // INADDR_ANY use (type)value casting.

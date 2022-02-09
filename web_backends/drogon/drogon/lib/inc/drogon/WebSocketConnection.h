@@ -15,7 +15,7 @@
 #pragma once
 
 #include <http/HttpTypes.h>
-#include <trantor/net/InetAddress.h>
+#include "core/net/inet_address.h"
 #include <trantor/utils/NonCopyable.h>
 #include <memory>
 #include <string>

@@ -12,7 +12,7 @@
 #include <memory>
 #include <mutex>
 
-#include <trantor/net/InetAddress.h>
+#include "core/net/inet_address.h"
 #include <trantor/net/Resolver.h>
 #include <trantor/utils/Logger.h>
 

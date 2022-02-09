@@ -21,7 +21,7 @@
 #include "WebSocketConnectionImpl.h"
 
 #include <drogon/utils/Utilities.h>
-#include <trantor/net/InetAddress.h>
+#include "core/net/inet_address.h"
 #ifdef OPENSSL_FOUND
 #include <openssl/sha.h>
 #else

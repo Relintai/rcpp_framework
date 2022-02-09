@@ -18,7 +18,7 @@
 
 #pragma once
 #include <trantor/net/EventLoop.h>
-#include <trantor/net/InetAddress.h>
+#include "core/net/inet_address.h"
 #include <trantor/net/TcpConnection.h>
 #include <trantor/exports.h>
 #include <functional>

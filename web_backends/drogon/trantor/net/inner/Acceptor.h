@@ -17,7 +17,7 @@
 #include <trantor/net/EventLoop.h>
 #include <trantor/utils/NonCopyable.h>
 #include "Socket.h"
-#include <trantor/net/InetAddress.h>
+#include "core/net/inet_address.h"
 #include "Channel.h"
 #include <functional>
 
