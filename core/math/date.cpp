@@ -12,8 +12,8 @@
  *
  */
 
-#include "Date.h"
-#include "Funcs.h"
+#include "date.h"
+#include "core/utilities.h"
 #ifndef _WIN32
 #include <sys/time.h>
 #endif
@@ -253,19 +253,19 @@ std::string Date::toDbStringLocal() const {
 Date Date::fromDbStringLocal(const std::string &datetime) {
 	unsigned int year = { 0 }, month = { 0 }, day = { 0 }, hour = { 0 }, minute = { 0 },
 				 second = { 0 }, microSecond = { 0 };
-	std::vector<std::string> &&v = splitString(datetime, " ");
+	std::vector<std::string> &&v = Utilities::splitString(datetime, " ");
 	if (2 == v.size()) {
 		// date
-		std::vector<std::string> date = splitString(v[0], "-");
+		std::vector<std::string> date = Utilities::splitString(v[0], "-");
 		if (3 == date.size()) {
 			year = std::stol(date[0]);
 			month = std::stol(date[1]);
 			day = std::stol(date[2]);
-			std::vector<std::string> time = splitString(v[1], ":");
+			std::vector<std::string> time = Utilities::splitString(v[1], ":");
 			if (2 < time.size()) {
 				hour = std::stol(time[0]);
 				minute = std::stol(time[1]);
-				auto seconds = splitString(time[2], ".");
+				auto seconds = Utilities::splitString(time[2], ".");
 				second = std::stol(seconds[0]);
 				if (1 < seconds.size()) {
 					if (seconds[1].length() > 6) {

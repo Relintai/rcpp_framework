@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
+#include <algorithm>
 #include <cstdint>
 
 #define MATH_PI 3.1415926535897932384626433833
@@ -95,7 +96,7 @@ public:
 	static float is_equal_approx(const float a, const float b);
 	static float is_zero_approx(const float a);
 
-	//can save typing static_cast<float>
+	// can save typing static_cast<float>
 	inline static float divf(const float a, const float b) { return a / b; }
 
 	// Taken from the Godot Engine (MIT License)
@@ -321,6 +322,24 @@ public:
 		}
 
 		return hf;
+	}
+
+	// Taken from trantor (MIT License) - Funcs.h
+	// Copyright (c) 2018 An Tao
+	static _ALWAYS_INLINE_ uint64_t hton64(uint64_t n) {
+		static const int one = 1;
+		static const char sig = *(char *)&one;
+		if (sig == 0)
+			return n; // for big endian machine just return the input
+		char *ptr = reinterpret_cast<char *>(&n);
+		std::reverse(ptr, ptr + sizeof(uint64_t));
+		return n;
+	}
+
+	// Taken from trantor (MIT License) - Funcs.h
+	// Copyright (c) 2018 An Tao
+	static _ALWAYS_INLINE_ uint64_t ntoh64(uint64_t n) {
+		return hton64(n);
 	}
 };
 

@@ -13,8 +13,8 @@
  */
 
 #include <string.h>
-#include <trantor/utils/Funcs.h>
 #include <trantor/utils/MsgBuffer.h>
+#include "core/math/math.h"
 #ifndef _WIN32
 #include <netinet/in.h>
 #include <sys/uio.h>
@@ -80,7 +80,7 @@ void MsgBuffer::appendInt32(const uint32_t i) {
 	append(static_cast<const char *>((void *)&ii), 4);
 }
 void MsgBuffer::appendInt64(const uint64_t l) {
-	uint64_t ll = hton64(l);
+	uint64_t ll = Math::hton64(l);
 	append(static_cast<const char *>((void *)&ll), 8);
 }
 
@@ -93,7 +93,7 @@ void MsgBuffer::addInFrontInt32(const uint32_t i) {
 	addInFront(static_cast<const char *>((void *)&ii), 4);
 }
 void MsgBuffer::addInFrontInt64(const uint64_t l) {
-	uint64_t ll = hton64(l);
+	uint64_t ll = Math::hton64(l);
 	addInFront(static_cast<const char *>((void *)&ll), 8);
 }
 
@@ -110,7 +110,7 @@ uint32_t MsgBuffer::peekInt32() const {
 uint64_t MsgBuffer::peekInt64() const {
 	assert(readableBytes() >= 8);
 	uint64_t rll = *(static_cast<const uint64_t *>((void *)peek()));
-	return ntoh64(rll);
+	return Math::ntoh64(rll);
 }
 
 void MsgBuffer::retrieve(size_t len) {

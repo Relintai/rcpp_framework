@@ -16,8 +16,8 @@
 
 
 #include <drogon/utils/string_view.h>
-#include <trantor/utils/Date.h>
-#include <trantor/utils/Funcs.h>
+#include "core/math/date.h"
+#include "core/utilities.h"
 #include <limits>
 #include <memory>
 #include <set>
@@ -60,7 +60,7 @@ std::vector<char> hexToBinaryVector(const char *ptr,
 inline std::vector<std::string> splitString(const std::string &str,
 		const std::string &separator,
 		bool acceptEmptyString = false) {
-	return trantor::splitString(str, separator, acceptEmptyString);
+	return Utilities::splitString(str, separator, acceptEmptyString);
 }
 
 std::set<std::string> splitStringToSet(

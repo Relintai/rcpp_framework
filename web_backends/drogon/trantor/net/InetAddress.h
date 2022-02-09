@@ -20,7 +20,6 @@
 #ifndef MUDUO_NET_INETADDRESS_H
 #define MUDUO_NET_INETADDRESS_H
 
-#include <trantor/utils/Date.h>
 #include <trantor/exports.h>
 
 #ifdef _WIN32
