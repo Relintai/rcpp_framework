@@ -18,7 +18,7 @@
 #pragma once
 #include <trantor/utils/NonCopyable.h>
 #include "core/math/date.h"
-#include <trantor/utils/LockFreeQueue.h>
+#include "core/containers/lock_free_queue.h"
 #include <trantor/exports.h>
 #include <thread>
 #include <memory>
