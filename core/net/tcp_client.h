@@ -44,8 +44,8 @@ using ConnectorPtr = std::shared_ptr<Connector>;
 class SSLContext;
 
 //maybe:
-//Reference -> Socket -> ConnectionListener (Channel?) -> Connector (ClientSocket) -> TcpClient
-//                                                     -> Acceptor (ServerSocket) -> TcpServer
+//Reference -> Socket -> ConnectionListener (Channel?) -> Connector (ClientSocket) -> TcpClient -> HTTP...
+//                                                     -> Acceptor (ServerSocket) -> TcpServer -> HTTPServer
 //Reference -> TcpConnection (with a connectionlistener member) -> TcpConnectionDefault 
 //Also todo move around the core net classes a bit more
 
