@@ -12,8 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "core/net/tcp_connection.h"
 #include "core/log/async_file_logger.h"
+#include "core/net/tcp_connection.h"
 
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -192,11 +192,11 @@ void DrogonWebServer::run() {
 				});
 	}*/
 
-	//httpCtrlsRouterPtr_->init(ioLoops);
-	//httpSimpleCtrlsRouterPtr_->init(ioLoops);
+	// httpCtrlsRouterPtr_->init(ioLoops);
+	// httpSimpleCtrlsRouterPtr_->init(ioLoops);
 
-	//staticFileRouterPtr_->init(ioLoops);
-	//websockCtrlsRouterPtr_->init();
+	// staticFileRouterPtr_->init(ioLoops);
+	// websockCtrlsRouterPtr_->init();
 
 	get_loop()->queueInLoop([this]() {
 		// Let listener event loops run when everything is ready.
@@ -208,6 +208,14 @@ void DrogonWebServer::run() {
 
 		_beginning_advices.clear();
 	});
+
+	if (_update_interval > 0) {
+		get_loop()->runEvery(_update_interval, [this]() {
+			this->update();
+		});
+	}
+
+	//
 
 	get_loop()->loop();
 }
@@ -224,7 +232,7 @@ void DrogonWebServer::disable_session() {
 	_use_session = false;
 }
 
-//todo think about it
+// todo think about it
 const std::string &DrogonWebServer::get_document_root() const {
 	return _root_path;
 }
@@ -249,8 +257,8 @@ void DrogonWebServer::set_upload_path(const std::string &uploadPath) {
 	_upload_path = uploadPath;
 }
 void DrogonWebServer::set_file_types(const std::vector<std::string> &types) {
-	//staticFileRouterPtr_->setFileTypes(types);
-	//return *this;
+	// staticFileRouterPtr_->setFileTypes(types);
+	// return *this;
 }
 
 void DrogonWebServer::set_max_connection_num(size_t maxConnections) {
@@ -311,11 +319,11 @@ bool DrogonWebServer::is_brotli_enabled() const {
 }
 
 void DrogonWebServer::set_static_files_cache_time(int cacheTime) {
-	//staticFileRouterPtr_->setStaticFilesCacheTime(cacheTime);
+	// staticFileRouterPtr_->setStaticFilesCacheTime(cacheTime);
 }
 
 int DrogonWebServer::static_files_cache_time() const {
-	//return staticFileRouterPtr_->staticFilesCacheTime();
+	// return staticFileRouterPtr_->staticFilesCacheTime();
 	return 0;
 }
 
@@ -330,10 +338,10 @@ void DrogonWebServer::set_pipelining_requests_number(const size_t number) {
 }
 
 void DrogonWebServer::set_gzip_static(bool useGzipStatic) {
-	//staticFileRouterPtr_->setGzipStatic(useGzipStatic);
+	// staticFileRouterPtr_->setGzipStatic(useGzipStatic);
 }
 void DrogonWebServer::set_br_static(bool useGzipStatic) {
-	//staticFileRouterPtr_->setBrStatic(useGzipStatic);
+	// staticFileRouterPtr_->setBrStatic(useGzipStatic);
 }
 
 void DrogonWebServer::set_client_max_body_size(size_t maxSize) {
@@ -354,18 +362,18 @@ const std::string &DrogonWebServer::get_home_page() const {
 }
 
 void DrogonWebServer::set_implicit_page_enable(bool useImplicitPage) {
-	//staticFileRouterPtr_->setImplicitPageEnable(useImplicitPage);
+	// staticFileRouterPtr_->setImplicitPageEnable(useImplicitPage);
 }
 bool DrogonWebServer::is_implicit_page_enabled() const {
-	//return staticFileRouterPtr_->isImplicitPageEnabled();
+	// return staticFileRouterPtr_->isImplicitPageEnabled();
 	return false;
 }
 void DrogonWebServer::set_implicit_page(const std::string &implicitPageFile) {
-	//staticFileRouterPtr_->setImplicitPage(implicitPageFile);
+	// staticFileRouterPtr_->setImplicitPage(implicitPageFile);
 }
 
 const std::string &DrogonWebServer::get_implicit_page() const {
-	//return staticFileRouterPtr_->getImplicitPage();
+	// return staticFileRouterPtr_->getImplicitPage();
 	static std::string s = "";
 	return s;
 }
@@ -516,17 +524,17 @@ void DrogonWebServer::on_async_request(const HttpRequestImplPtr &req, std::funct
 	}
 	*/
 
-	//void HttpSimpleControllersRouter::route(const HttpRequestImplPtr &req,std::function<void(const HttpResponsePtr &)> &&callback)
+	// void HttpSimpleControllersRouter::route(const HttpRequestImplPtr &req,std::function<void(const HttpResponsePtr &)> &&callback)
 
-	//auto resp = HttpResponse::newHttpResponse();
-	//resp->setBody("<p>Hello, world!</p>");
-	//resp->setExpiredTime(0);
-	//callback(resp);
+	// auto resp = HttpResponse::newHttpResponse();
+	// resp->setBody("<p>Hello, world!</p>");
+	// resp->setExpiredTime(0);
+	// callback(resp);
 
 	DRequest *request = DRequest::get();
 	request->server = this;
 	request->request = std::shared_ptr<drogon::HttpRequestImpl>(req);
-	request->callback = callback; //std::move(callback);
+	request->callback = callback; // std::move(callback);
 
 	request->setup_url_stack();
 
@@ -636,13 +644,13 @@ void DrogonWebServer::find_session_for_request(const HttpRequestImplPtr &req) {
 	}
 }
 
-//to request
-//void forward(const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout);
-//void forward(const HttpRequestImplPtr &req,std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout = 0);
+// to request
+// void forward(const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout);
+// void forward(const HttpRequestImplPtr &req,std::function<void(const HttpResponsePtr &)> &&callback,const std::string &hostString,double timeout = 0);
 
-DrogonWebServer::DrogonWebServer() : 
+DrogonWebServer::DrogonWebServer() :
 		_listener_manager(new ListenerManager()), WebServer() {
-	//staticFileRouterPtr_(new StaticFileRouter{}),
+	// staticFileRouterPtr_(new StaticFileRouter{}),
 	/*
 		httpCtrlsRouterPtr_(new HttpControllersRouter(*staticFileRouterPtr_,
 				postRoutingAdvices_,
@@ -657,12 +665,12 @@ DrogonWebServer::DrogonWebServer() :
 						preHandlingAdvices_,
 						preHandlingObservers_,
 						postHandlingAdvices_)),*/
-	//websockCtrlsRouterPtr_(
+	// websockCtrlsRouterPtr_(
 	//		new WebsocketControllersRouter(postRoutingAdvices_,
 	//				postRoutingObservers_)),
-	//listenerManagerPtr_(new ListenerManager),
-	//pluginsManagerPtr_(new PluginsManager),
-	//uploadPath_(rootPath_ + "uploads") {
+	// listenerManagerPtr_(new ListenerManager),
+	// pluginsManagerPtr_(new PluginsManager),
+	// uploadPath_(rootPath_ + "uploads") {
 
 	_loop = new EventLoop();
 

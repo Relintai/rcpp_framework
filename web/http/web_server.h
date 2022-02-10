@@ -21,7 +21,7 @@ public:
 
 protected:
 	WebNode *_web_root;
-
+	float _update_interval;
 };
 
 #endif

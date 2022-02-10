@@ -28,6 +28,7 @@ void WebServer::handle_request(Request *request) {
 
 WebServer::WebServer() : NodeTree() {
 	_web_root = nullptr;
+	_update_interval = 0.5;
 }
 
 WebServer::~WebServer() {
