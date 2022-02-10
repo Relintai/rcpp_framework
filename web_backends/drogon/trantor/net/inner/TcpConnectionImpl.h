@@ -15,7 +15,7 @@
 #pragma once
 
 #include <trantor/net/TcpConnection.h>
-#include <trantor/utils/TimingWheel.h>
+#include "core/loops/timing_wheel.h"
 #include <list>
 #include <mutex>
 #ifndef _WIN32

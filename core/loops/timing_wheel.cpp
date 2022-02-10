@@ -12,7 +12,7 @@
  *
  */
 
-#include <trantor/utils/TimingWheel.h>
+#include "core/loops/timing_wheel.h"
 
 using namespace trantor;
 
