@@ -38,6 +38,10 @@
 #include <memory>
 #include <string>
 
+// add new class TcpConnectionListener or ConnectionListener
+//set_listener(ConnectionListener)
+// instead of callbacks
+
 class SSLContext;
 std::shared_ptr<SSLContext> newSSLServerContext(const std::string &certPath, const std::string &keyPath, bool useOldTLS = false, const std::vector<std::pair<std::string, std::string> > &sslConfCmds = {});
 

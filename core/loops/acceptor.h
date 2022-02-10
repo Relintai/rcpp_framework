@@ -36,6 +36,10 @@
 #include "event_loop.h"
 #include <functional>
 
+// Inherit from socket?
+// Could be called ServerSocket
+// New connection callback -> make it a virtual func?
+
 using NewConnectionCallback = std::function<void(int fd, const InetAddress &)>;
 class Acceptor {
 protected:

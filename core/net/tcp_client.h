@@ -43,6 +43,16 @@ class Connector;
 using ConnectorPtr = std::shared_ptr<Connector>;
 class SSLContext;
 
+//maybe:
+//Reference -> Socket -> ConnectionListener (Channel?) -> Connector (ClientSocket) -> TcpClient
+//                                                     -> Acceptor (ServerSocket) -> TcpServer
+//Reference -> TcpConnection (with a connectionlistener member) -> TcpConnectionDefault 
+//Also todo move around the core net classes a bit more
+
+
+//should be ConnectionListener derived
+//Inherit from Connector (which Could be called ClientSocket)? 
+
 class TcpClient {
 protected:
 	TcpClient(const TcpClient &) = delete;

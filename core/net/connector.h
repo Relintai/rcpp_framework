@@ -35,6 +35,10 @@
 #include <atomic>
 #include <memory>
 
+// inherit from socket?
+// Could be called ClientSocket
+// New connection callback -> make it a virtual func?
+
 class Connector : public std::enable_shared_from_this<Connector> {
 protected:
 	Connector(const Connector &) = delete;

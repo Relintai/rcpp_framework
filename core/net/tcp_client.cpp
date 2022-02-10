@@ -99,8 +99,7 @@ TcpClient::~TcpClient() {
 		loop_->runInLoop([conn, loop]() {
 			conn->setCloseCallback([loop](const TcpConnectionPtr &connPtr) {
 				loop->queueInLoop([connPtr]() {
-					static_cast<TcpConnectionImpl *>(connPtr.get())
-							->connectDestroyed();
+					static_cast<TcpConnectionImpl *>(connPtr.get())->connectDestroyed();
 				});
 			});
 		});

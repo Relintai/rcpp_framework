@@ -44,6 +44,8 @@
 class Acceptor;
 class SSLContext;
 
+//Inherit from Acceptor (-> Could be called ServerSocket)? 
+
 class TcpServer {
 protected:
 	TcpServer(const TcpServer &) = delete;
@@ -125,7 +127,9 @@ public:
 private:
 	EventLoop *loop_;
 	std::unique_ptr<Acceptor> acceptorPtr_;
+
 	void newConnection(int fd, const InetAddress &peer);
+
 	std::string serverName_;
 	std::set<TcpConnectionPtr> connSet_;
 
