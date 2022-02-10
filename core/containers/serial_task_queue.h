@@ -16,7 +16,6 @@
 
 #include "task_queue.h"
 #include "core/loops/event_loop_thread.h"
-#include <trantor/exports.h>
 #include <string>
 #include <queue>
 #include <mutex>
@@ -28,7 +27,7 @@ namespace trantor
  * by one.
  *
  */
-class TRANTOR_EXPORT SerialTaskQueue : public TaskQueue
+class SerialTaskQueue : public TaskQueue
 {
   public:
     /**

@@ -17,14 +17,15 @@
 // Author: Tao An
 
 #pragma once
+
 #include "core/loops/event_loop.h"
 #include "core/net/inet_address.h"
 #include "tcp_connection.h"
-#include <trantor/exports.h>
 #include <functional>
 #include <thread>
 #include <atomic>
 #include <signal.h>
+
 namespace trantor
 {
 class Connector;
@@ -34,7 +35,7 @@ class SSLContext;
  * @brief This class represents a TCP client.
  *
  */
-class TRANTOR_EXPORT TcpClient : NonCopyable
+class TcpClient : NonCopyable
 {
   public:
     /**
