@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <trantor/utils/TaskQueue.h>
+#include "core/containers/task_queue.h"
 #include <trantor/exports.h>
 #include <list>
 #include <memory>

@@ -8,7 +8,7 @@
 #pragma once
 #include <trantor/net/Resolver.h>
 #include <trantor/utils/NonCopyable.h>
-#include <trantor/utils/ConcurrentTaskQueue.h>
+#include "core/containers/concurrent_task_queue.h"
 #include <memory>
 #include <vector>
 #include <thread>
