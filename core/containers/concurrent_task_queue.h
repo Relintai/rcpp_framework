@@ -17,72 +17,71 @@
 #include "core/containers/task_queue.h"
 #include <list>
 #include <memory>
-#include <vector>
 #include <queue>
 #include <string>
+#include <vector>
 
-namespace trantor
-{
+namespace trantor {
 /**
  * @brief This class implements a task queue running in parallel. Basically this
  * can be called a threads pool.
  *
  */
-class ConcurrentTaskQueue : public TaskQueue
-{
-  public:
-    /**
-     * @brief Construct a new concurrent task queue instance.
-     *
-     * @param threadNum The number of threads in the queue.
-     * @param name The name of the queue.
-     */
-    ConcurrentTaskQueue(size_t threadNum, const std::string &name);
+class ConcurrentTaskQueue : public TaskQueue {
+public:
+	ConcurrentTaskQueue() {}
 
-    /**
-     * @brief Run a task in the queue.
-     *
-     * @param task
-     */
-    virtual void runTaskInQueue(const std::function<void()> &task);
-    virtual void runTaskInQueue(std::function<void()> &&task);
+	/**
+	 * @brief Construct a new concurrent task queue instance.
+	 *
+	 * @param threadNum The number of threads in the queue.
+	 * @param name The name of the queue.
+	 */
+	ConcurrentTaskQueue(size_t threadNum, const std::string &name);
 
-    /**
-     * @brief Get the name of the queue.
-     *
-     * @return std::string
-     */
-    virtual std::string getName() const
-    {
-        return queueName_;
-    };
+	/**
+	 * @brief Run a task in the queue.
+	 *
+	 * @param task
+	 */
+	virtual void runTaskInQueue(const std::function<void()> &task);
+	virtual void runTaskInQueue(std::function<void()> &&task);
 
-    /**
-     * @brief Get the number of tasks to be executed in the queue.
-     *
-     * @return size_t
-     */
-    size_t getTaskCount();
+	/**
+	 * @brief Get the name of the queue.
+	 *
+	 * @return std::string
+	 */
+	virtual std::string getName() const {
+		return queueName_;
+	};
 
-    /**
-     * @brief Stop all threads in the queue.
-     *
-     */
-    void stop();
+	/**
+	 * @brief Get the number of tasks to be executed in the queue.
+	 *
+	 * @return size_t
+	 */
+	size_t getTaskCount();
 
-    ~ConcurrentTaskQueue();
+	/**
+	 * @brief Stop all threads in the queue.
+	 *
+	 */
+	void stop();
 
-  private:
-    size_t queueCount_;
-    std::string queueName_;
+	~ConcurrentTaskQueue();
 
-    std::queue<std::function<void()>> taskQueue_;
-    std::vector<std::thread> threads_;
+private:
+	size_t queueCount_;
+	std::string queueName_;
 
-    std::mutex taskMutex_;
-    std::condition_variable taskCond_;
-    std::atomic_bool stop_;
-    void queueFunc(int queueNum);
+	std::queue<std::function<void()> > taskQueue_;
+	std::vector<std::thread> threads_;
+
+	std::mutex taskMutex_;
+	std::condition_variable taskCond_;
+	std::atomic_bool stop_;
+	void queueFunc(int queueNum);
 };
 
-}  // namespace trantor
+} // namespace trantor

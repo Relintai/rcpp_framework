@@ -6,57 +6,53 @@
 // Author: Tao An
 
 #pragma once
-#include "core/net/resolver.h"
-#include <trantor/utils/NonCopyable.h>
 #include "core/containers/concurrent_task_queue.h"
+#include "core/net/resolver.h"
 #include <memory>
-#include <vector>
 #include <thread>
+#include <vector>
 
-namespace trantor
-{
-constexpr size_t kResolveBufferLength{16 * 1024};
+namespace trantor {
+constexpr size_t kResolveBufferLength{ 16 * 1024 };
 class NormalResolver : public Resolver,
-                       public NonCopyable,
-                       public std::enable_shared_from_this<NormalResolver>
-{
-  public:
-    virtual void resolve(const std::string& hostname,
-                         const Callback& callback) override;
-    explicit NormalResolver(size_t timeout)
-        : timeout_(timeout), resolveBuffer_(kResolveBufferLength)
-    {
-    }
-    virtual ~NormalResolver()
-    {
-    }
+					   public std::enable_shared_from_this<NormalResolver> {
+protected:
+	NormalResolver(const NormalResolver &) = delete;
+	NormalResolver &operator=(const NormalResolver &) = delete;
+	// some uncopyable classes maybe support move constructor....
+	NormalResolver(NormalResolver &&) noexcept(true) = default;
+	NormalResolver &operator=(NormalResolver &&) noexcept(true) = default;
 
-  private:
-    static std::unordered_map<std::string,
-                              std::pair<trantor::InetAddress, trantor::Date>>&
-    globalCache()
-    {
-        static std::unordered_map<
-            std::string,
-            std::pair<trantor::InetAddress, trantor::Date>>
-            dnsCache_;
-        return dnsCache_;
-    }
-    static std::mutex& globalMutex()
-    {
-        static std::mutex mutex_;
-        return mutex_;
-    }
-    static trantor::ConcurrentTaskQueue& concurrentTaskQueue()
-    {
-        static trantor::ConcurrentTaskQueue queue(
-            std::thread::hardware_concurrency() < 8
-                ? 8
-                : std::thread::hardware_concurrency(),
-            "Dns Queue");
-        return queue;
-    }
-    const size_t timeout_;
-    std::vector<char> resolveBuffer_;
+public:
+	virtual void resolve(const std::string &hostname,
+			const Callback &callback) override;
+	explicit NormalResolver(size_t timeout) :
+			timeout_(timeout), resolveBuffer_(kResolveBufferLength) {
+	}
+	virtual ~NormalResolver() {
+	}
+
+private:
+	static std::unordered_map<std::string,
+			std::pair<trantor::InetAddress, trantor::Date> > &
+	globalCache() {
+		static std::unordered_map<
+				std::string,
+				std::pair<trantor::InetAddress, trantor::Date> >
+				dnsCache_;
+		return dnsCache_;
+	}
+	static std::mutex &globalMutex() {
+		static std::mutex mutex_;
+		return mutex_;
+	}
+	static trantor::ConcurrentTaskQueue &concurrentTaskQueue() {
+		static trantor::ConcurrentTaskQueue queue(
+				std::thread::hardware_concurrency() < 8 ? 8 : std::thread::hardware_concurrency(),
+				"Dns Queue");
+		return queue;
+	}
+	const size_t timeout_;
+	std::vector<char> resolveBuffer_;
 };
-}  // namespace trantor
+} // namespace trantor

@@ -18,7 +18,6 @@
 #include "core/loops/callbacks.h"
 #include "core/loops/event_loop.h"
 #include "core/net/inet_address.h"
-#include <trantor/utils/NonCopyable.h>
 #include <functional>
 #include <memory>
 #include <string>

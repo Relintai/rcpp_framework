@@ -55,14 +55,21 @@ class Channel;
 class Socket;
 class TcpServer;
 void removeConnection(EventLoop *loop, const TcpConnectionPtr &conn);
+
 class TcpConnectionImpl : public TcpConnection,
-                          public NonCopyable,
                           public std::enable_shared_from_this<TcpConnectionImpl>
 {
     friend class TcpServer;
     friend class TcpClient;
     friend void trantor::removeConnection(EventLoop *loop,
                                           const TcpConnectionPtr &conn);
+
+protected:
+	TcpConnectionImpl(const TcpConnectionImpl &) = delete;
+	TcpConnectionImpl &operator=(const TcpConnectionImpl &) = delete;
+	// some uncopyable classes maybe support move constructor....
+	TcpConnectionImpl(TcpConnectionImpl &&) noexcept(true) = default;
+	TcpConnectionImpl &operator=(TcpConnectionImpl &&) noexcept(true) = default;
 
   public:
     class KickoffEntry

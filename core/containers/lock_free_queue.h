@@ -14,10 +14,10 @@
 
 #pragma once
 #include <assert.h>
-#include <trantor/utils/NonCopyable.h>
 #include <atomic>
 #include <memory>
 #include <type_traits>
+
 namespace trantor {
 /**
  * @brief This class template represents a lock-free multiple producers single

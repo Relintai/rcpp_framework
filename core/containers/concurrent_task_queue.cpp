@@ -18,6 +18,7 @@
 #ifdef __linux__
 #include <sys/prctl.h>
 #endif
+
 using namespace trantor;
 ConcurrentTaskQueue::ConcurrentTaskQueue(size_t threadNum,
 		const std::string &name) :

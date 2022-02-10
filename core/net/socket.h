@@ -28,7 +28,6 @@ namespace trantor {
 class Socket {
 
 protected:
-	// NonCopyable
 	Socket(const Socket &) = delete;
 	Socket &operator=(const Socket &) = delete;
 	// some uncopyable classes maybe support move constructor....
