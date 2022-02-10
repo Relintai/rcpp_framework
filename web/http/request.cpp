@@ -170,6 +170,7 @@ void Request::reset() {
 	_status_code = HTTP_STATUS_CODE_200_OK;
 	// Maybe set NONE or only VIEW as default?
 	permissions = WebPermission::WEB_PERMISSION_ALL;
+	active_permission.unref();
 
 	head.clear();
 	body.clear();
