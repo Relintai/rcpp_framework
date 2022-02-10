@@ -32,8 +32,8 @@
 
 #pragma once
 
-#include "core/net/inet_address.h"
 #include "core/log/logger.h"
+#include "core/net/inet_address.h"
 #include <string>
 #ifndef _WIN32
 #include <unistd.h>
@@ -41,7 +41,6 @@
 #include <fcntl.h>
 
 class Socket {
-
 protected:
 	Socket(const Socket &) = delete;
 	Socket &operator=(const Socket &) = delete;
@@ -63,6 +62,7 @@ public:
 			LOG_SYSERR << "sockets::createNonblockingOrDie";
 			exit(1);
 		}
+		
 		LOG_TRACE << "sock=" << sock;
 		return sock;
 	}
@@ -85,15 +85,9 @@ public:
 
 	static int connect(int sockfd, const InetAddress &addr) {
 		if (addr.isIpV6())
-			return ::connect(sockfd,
-					addr.getSockAddr(),
-					static_cast<socklen_t>(
-							sizeof(struct sockaddr_in6)));
+			return ::connect(sockfd, addr.getSockAddr(), static_cast<socklen_t>(sizeof(struct sockaddr_in6)));
 		else
-			return ::connect(sockfd,
-					addr.getSockAddr(),
-					static_cast<socklen_t>(
-							sizeof(struct sockaddr_in)));
+			return ::connect(sockfd, addr.getSockAddr(), static_cast<socklen_t>(sizeof(struct sockaddr_in)));
 	}
 
 	static bool isSelfConnect(int sockfd);
@@ -101,7 +95,9 @@ public:
 	explicit Socket(int sockfd) :
 			sockFd_(sockfd) {
 	}
+
 	~Socket();
+
 	/// abort if address in use
 	void bindAddress(const InetAddress &localaddr);
 	/// abort if address in use
@@ -109,9 +105,11 @@ public:
 	int accept(InetAddress *peeraddr);
 	void closeWrite();
 	int read(char *buffer, uint64_t len);
+
 	int fd() {
 		return sockFd_;
 	}
+
 	static struct sockaddr_in6 getLocalAddr(int sockfd);
 	static struct sockaddr_in6 getPeerAddr(int sockfd);
 

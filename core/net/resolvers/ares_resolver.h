@@ -36,14 +36,15 @@
 #include <map>
 #include <memory>
 
+// Resolver will be a ref
+
 extern "C" {
 struct hostent;
 struct ares_channeldata;
 using ares_channel = struct ares_channeldata *;
 }
 
-class AresResolver : public Resolver,
-					 public std::enable_shared_from_this<AresResolver> {
+class AresResolver : public Resolver, public std::enable_shared_from_this<AresResolver> {
 protected:
 	AresResolver(const AresResolver &) = delete;
 	AresResolver &operator=(const AresResolver &) = delete;
@@ -55,9 +56,9 @@ public:
 	AresResolver(EventLoop *loop, size_t timeout);
 	~AresResolver();
 
-	virtual void resolve(const std::string &hostname,
-			const Callback &cb) override {
+	virtual void resolve(const std::string &hostname, const Callback &cb) override {
 		bool cached = false;
+
 		InetAddress inet;
 		{
 			std::lock_guard<std::mutex> lock(globalMutex());
@@ -76,10 +77,12 @@ public:
 				}
 			}
 		}
+
 		if (cached) {
 			cb(inet);
 			return;
 		}
+
 		if (loop_->isInLoopThread()) {
 			resolveInLoop(hostname, cb);
 		} else {
@@ -94,14 +97,15 @@ private:
 		AresResolver *owner_;
 		Callback callback_;
 		std::string hostname_;
-		QueryData(AresResolver *o,
-				const Callback &cb,
-				const std::string &hostname) :
+
+		QueryData(AresResolver *o, const Callback &cb, const std::string &hostname) :
 				owner_(o), callback_(cb), hostname_(hostname) {
 		}
 	};
+
 	void resolveInLoop(const std::string &hostname, const Callback &cb);
 	void init();
+
 	EventLoop *loop_;
 	ares_channel ctx_{ nullptr };
 	bool timerActive_{ false };
@@ -109,36 +113,33 @@ private:
 	ChannelList channels_;
 	static std::unordered_map<std::string,
 			std::pair<struct in_addr, Date> > &
+
 	globalCache() {
-		static std::unordered_map<std::string,
-				std::pair<struct in_addr, Date> >
-				dnsCache;
+		static std::unordered_map<std::string, std::pair<struct in_addr, Date> > dnsCache;
 		return dnsCache;
 	}
+
 	static std::mutex &globalMutex() {
 		static std::mutex mutex_;
 		return mutex_;
 	}
+
 	static EventLoop *getLoop() {
 		static EventLoopThread loopThread;
 		loopThread.run();
 		return loopThread.getLoop();
 	}
+
 	const size_t timeout_{ 60 };
 
 	void onRead(int sockfd);
 	void onTimer();
-	void onQueryResult(int status,
-			struct hostent *result,
-			const std::string &hostname,
-			const Callback &callback);
+	void onQueryResult(int status, struct hostent *result, const std::string &hostname, const Callback &callback);
 	void onSockCreate(int sockfd, int type);
 	void onSockStateChange(int sockfd, bool read, bool write);
 
-	static void ares_hostcallback_(void *data,
-			int status,
-			int timeouts,
-			struct hostent *hostent);
+	static void ares_hostcallback_(void *data, int status, int timeouts, struct hostent *hostent);
+
 #ifdef _WIN32
 	static int ares_sock_createcallback_(SOCKET sockfd, int type, void *data);
 #else
@@ -152,9 +153,11 @@ private:
 #endif
 			int read,
 			int write);
+
 	struct LibraryInitializer {
 		LibraryInitializer();
 		~LibraryInitializer();
 	};
+
 	static LibraryInitializer libraryInitializer_;
 };

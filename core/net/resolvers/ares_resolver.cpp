@@ -29,8 +29,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ares_resolver.h"
-#include <ares.h>
 #include "core/loops/channel.h"
+#include <ares.h>
 #ifdef _WIN32
 #include <winsock2.h>
 #else
@@ -67,14 +67,14 @@ bool Resolver::isCAresUsed() {
 AresResolver::LibraryInitializer::LibraryInitializer() {
 	ares_library_init(ARES_LIB_INIT_ALL);
 }
+
 AresResolver::LibraryInitializer::~LibraryInitializer() {
 	ares_library_cleanup();
 }
 
 AresResolver::LibraryInitializer AresResolver::libraryInitializer_;
 
-std::shared_ptr<Resolver> Resolver::newResolver(EventLoop *loop,
-		size_t timeout) {
+std::shared_ptr<Resolver> Resolver::newResolver(EventLoop *loop, size_t timeout) {
 	return std::make_shared<AresResolver>(loop, timeout);
 }
 
@@ -84,6 +84,7 @@ AresResolver::AresResolver(EventLoop *loop, size_t timeout) :
 		loop_ = getLoop();
 	}
 }
+
 void AresResolver::init() {
 	if (!ctx_) {
 		struct ares_options options;
@@ -108,14 +109,16 @@ void AresResolver::init() {
 				this);
 	}
 }
+
 AresResolver::~AresResolver() {
 	if (ctx_)
 		ares_destroy(ctx_);
 }
 
-void AresResolver::resolveInLoop(const std::string &hostname,
-		const Callback &cb) {
+void AresResolver::resolveInLoop(const std::string &hostname, const Callback &cb) {
+
 	loop_->assertInLoopThread();
+
 #ifdef _WIN32
 	if (hostname == "localhost") {
 		const static InetAddress localhost_{ "127.0.0.1", 0 };
@@ -123,20 +126,17 @@ void AresResolver::resolveInLoop(const std::string &hostname,
 		return;
 	}
 #endif
+
 	init();
 	QueryData *queryData = new QueryData(this, cb, hostname);
-	ares_gethostbyname(ctx_,
-			hostname.c_str(),
-			AF_INET,
-			&AresResolver::ares_hostcallback_,
-			queryData);
+	ares_gethostbyname(ctx_, hostname.c_str(), AF_INET, &AresResolver::ares_hostcallback_, queryData);
 	struct timeval tv;
 	struct timeval *tvp = ares_timeout(ctx_, NULL, &tv);
 	double timeout = getSeconds(tvp);
+
 	// LOG_DEBUG << "timeout " << timeout << " active " << timerActive_;
 	if (!timerActive_ && timeout >= 0.0) {
-		loop_->runAfter(timeout,
-				std::bind(&AresResolver::onTimer, shared_from_this()));
+		loop_->runAfter(timeout, std::bind(&AresResolver::onTimer, shared_from_this()));
 		timerActive_ = true;
 	}
 	return;
@@ -161,18 +161,18 @@ void AresResolver::onTimer() {
 	}
 }
 
-void AresResolver::onQueryResult(int status,
-		struct hostent *result,
-		const std::string &hostname,
-		const Callback &callback) {
+void AresResolver::onQueryResult(int status, struct hostent *result, const std::string &hostname, const Callback &callback) {
+
 	LOG_TRACE << "onQueryResult " << status;
 	struct sockaddr_in addr;
 	memset(&addr, 0, sizeof addr);
 	addr.sin_family = AF_INET;
 	addr.sin_port = 0;
+
 	if (result) {
 		addr.sin_addr = *reinterpret_cast<in_addr *>(result->h_addr);
 	}
+
 	InetAddress inet(addr);
 	{
 		std::lock_guard<std::mutex> lock(globalMutex());
@@ -180,6 +180,7 @@ void AresResolver::onQueryResult(int status,
 		addrItem.first = addr.sin_addr;
 		addrItem.second = Date::date();
 	}
+
 	callback(inet);
 }
 
@@ -198,6 +199,7 @@ void AresResolver::onSockStateChange(int sockfd, bool read, bool write) {
 	loop_->assertInLoopThread();
 	ChannelList::iterator it = channels_.find(sockfd);
 	assert(it != channels_.end());
+
 	if (read) {
 		// update
 		// if (write) { } else { }
@@ -209,17 +211,12 @@ void AresResolver::onSockStateChange(int sockfd, bool read, bool write) {
 	}
 }
 
-void AresResolver::ares_hostcallback_(void *data,
-		int status,
-		int timeouts,
-		struct hostent *hostent) {
+void AresResolver::ares_hostcallback_(void *data, int status, int timeouts, struct hostent *hostent) {
 	(void)timeouts;
 	QueryData *query = static_cast<QueryData *>(data);
 
-	query->owner_->onQueryResult(status,
-			hostent,
-			query->hostname_,
-			query->callback_);
+	query->owner_->onQueryResult(status, hostent, query->hostname_, query->callback_);
+
 	delete query;
 }
 
@@ -242,6 +239,7 @@ void AresResolver::ares_sock_statecallback_(void *data,
 #endif
 		int read,
 		int write) {
+
 	LOG_TRACE << "sockfd=" << sockfd << " read=" << read << " write=" << write;
 	static_cast<AresResolver *>(data)->onSockStateChange(sockfd, read, write);
 }

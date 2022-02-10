@@ -35,10 +35,12 @@
 #include <thread>
 #include <vector>
 
+//Resolver will be a ref
+
 constexpr size_t kResolveBufferLength{ 16 * 1024 };
 
-class NormalResolver : public Resolver,
-					   public std::enable_shared_from_this<NormalResolver> {
+class NormalResolver : public Resolver, public std::enable_shared_from_this<NormalResolver> {
+
 protected:
 	NormalResolver(const NormalResolver &) = delete;
 	NormalResolver &operator=(const NormalResolver &) = delete;
@@ -56,25 +58,23 @@ public:
 	}
 
 private:
-	static std::unordered_map<std::string,
-			std::pair<InetAddress, Date> > &
-	globalCache() {
-		static std::unordered_map<
-				std::string,
-				std::pair<InetAddress, Date> >
-				dnsCache_;
+	static std::unordered_map<std::string, std::pair<InetAddress, Date> > &globalCache() {
+		static std::unordered_map<std::string, std::pair<InetAddress, Date> > dnsCache_;
 		return dnsCache_;
 	}
+
 	static std::mutex &globalMutex() {
 		static std::mutex mutex_;
 		return mutex_;
 	}
+
 	static ConcurrentTaskQueue &concurrentTaskQueue() {
 		static ConcurrentTaskQueue queue(
 				std::thread::hardware_concurrency() < 8 ? 8 : std::thread::hardware_concurrency(),
 				"Dns Queue");
 		return queue;
 	}
+
 	const size_t timeout_;
 	std::vector<char> resolveBuffer_;
 };

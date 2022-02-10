@@ -35,6 +35,7 @@
 Connector::Connector(EventLoop *loop, const InetAddress &addr, bool retry) :
 		loop_(loop), serverAddr_(addr), retry_(retry) {
 }
+
 Connector::Connector(EventLoop *loop, InetAddress &&addr, bool retry) :
 		loop_(loop), serverAddr_(std::move(addr)), retry_(retry) {
 }
@@ -43,8 +44,10 @@ void Connector::start() {
 	connect_ = true;
 	loop_->runInLoop([this]() { startInLoop(); });
 }
+
 void Connector::restart() {
 }
+
 void Connector::stop() {
 }
 
@@ -57,6 +60,7 @@ void Connector::startInLoop() {
 		LOG_DEBUG << "do not connect";
 	}
 }
+
 void Connector::connect() {
 	int sockfd = Socket::createNonblockingSocketOrDie(serverAddr_.family());
 	errno = 0;

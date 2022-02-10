@@ -98,8 +98,7 @@ InetAddress::InetAddress(uint16_t port, bool loopbackOnly, bool ipv6) :
 	isUnspecified_ = false;
 }
 
-InetAddress::InetAddress(const std::string &ip, uint16_t port, bool ipv6) :
-		isIpV6_(ipv6) {
+InetAddress::InetAddress(const std::string &ip, uint16_t port, bool ipv6) : isIpV6_(ipv6) {
 	if (ipv6) {
 		memset(&addr6_, 0, sizeof(addr6_));
 		addr6_.sin6_family = AF_INET6;

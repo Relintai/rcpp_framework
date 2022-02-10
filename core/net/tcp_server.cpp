@@ -28,20 +28,16 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "core/loops/acceptor.h"
-#include "core/net/connections/tcp_connection_impl.h"
 #include "core/net/tcp_server.h"
 #include "core/log/logger.h"
+#include "core/loops/acceptor.h"
+#include "core/net/connections/tcp_connection_impl.h"
 #include <functional>
 #include <vector>
 
 using namespace std::placeholders;
 
-TcpServer::TcpServer(EventLoop *loop,
-		const InetAddress &address,
-		const std::string &name,
-		bool reUseAddr,
-		bool reUsePort) :
+TcpServer::TcpServer(EventLoop *loop, const InetAddress &address, const std::string &name, bool reUseAddr, bool reUsePort) :
 		loop_(loop),
 		acceptorPtr_(new Acceptor(loop, address, reUseAddr, reUsePort)),
 		serverName_(name),
@@ -50,8 +46,8 @@ TcpServer::TcpServer(EventLoop *loop,
 					  << " bytes]";
 			buffer->retrieveAll();
 		}) {
-	acceptorPtr_->setNewConnectionCallback(
-			std::bind(&TcpServer::newConnection, this, _1, _2));
+
+	acceptorPtr_->setNewConnectionCallback(std::bind(&TcpServer::newConnection, this, _1, _2));
 }
 
 TcpServer::~TcpServer() {
@@ -69,14 +65,20 @@ void TcpServer::newConnection(int sockfd, const InetAddress &peer) {
 	//    LOG_TRACE<<"vector size:"<<str.size();
 	//    size_t n=write(sockfd,&str[0],str.size());
 	//    LOG_TRACE<<"write "<<n<<" bytes";
+
 	loop_->assertInLoopThread();
+
 	EventLoop *ioLoop = NULL;
 	if (loopPoolPtr_ && loopPoolPtr_->size() > 0) {
 		ioLoop = loopPoolPtr_->getNextLoop();
 	}
-	if (ioLoop == NULL)
+
+	if (ioLoop == NULL) {
 		ioLoop = loop_;
+	}
+
 	std::shared_ptr<TcpConnectionImpl> newPtr;
+
 	if (sslCtxPtr_) {
 #ifdef USE_OPENSSL
 		newPtr = std::make_shared<TcpConnectionImpl>(
@@ -90,14 +92,14 @@ void TcpServer::newConnection(int sockfd, const InetAddress &peer) {
 		abort();
 #endif
 	} else {
-		newPtr = std::make_shared<TcpConnectionImpl>(
-				ioLoop, sockfd, InetAddress(Socket::getLocalAddr(sockfd)), peer);
+		newPtr = std::make_shared<TcpConnectionImpl>(ioLoop, sockfd, InetAddress(Socket::getLocalAddr(sockfd)), peer);
 	}
 
 	if (idleTimeout_ > 0) {
 		assert(timingWheelMap_[ioLoop]);
 		newPtr->enableKickingOff(idleTimeout_, timingWheelMap_[ioLoop]);
 	}
+
 	newPtr->setRecvMsgCallback(recvMessageCallback_);
 
 	newPtr->setConnectionCallback(
@@ -105,11 +107,13 @@ void TcpServer::newConnection(int sockfd, const InetAddress &peer) {
 				if (connectionCallback_)
 					connectionCallback_(connectionPtr);
 			});
+
 	newPtr->setWriteCompleteCallback(
 			[this](const TcpConnectionPtr &connectionPtr) {
 				if (writeCompleteCallback_)
 					writeCompleteCallback_(connectionPtr);
 			});
+
 	newPtr->setCloseCallback(std::bind(&TcpServer::connectionClosed, this, _1));
 	connSet_.insert(newPtr);
 	newPtr->connectEstablished();
@@ -143,6 +147,7 @@ void TcpServer::start() {
 		acceptorPtr_->listen();
 	});
 }
+
 void TcpServer::stop() {
 	loop_->runInLoop([this]() { acceptorPtr_.reset(); });
 	for (auto connection : connSet_) {
@@ -159,6 +164,7 @@ void TcpServer::stop() {
 		f.get();
 	}
 }
+
 void TcpServer::connectionClosed(const TcpConnectionPtr &connectionPtr) {
 	LOG_TRACE << "connectionClosed";
 	// loop_->assertInLoopThread();
@@ -179,11 +185,7 @@ const InetAddress &TcpServer::address() const {
 	return acceptorPtr_->addr();
 }
 
-void TcpServer::enableSSL(
-		const std::string &certPath,
-		const std::string &keyPath,
-		bool useOldTLS,
-		const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
+void TcpServer::enableSSL(const std::string &certPath, const std::string &keyPath, bool useOldTLS, const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
 #ifdef USE_OPENSSL
 	/* Create a new OpenSSL context */
 	sslCtxPtr_ = newSSLServerContext(certPath, keyPath, useOldTLS, sslConfCmds);

@@ -29,16 +29,15 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "socket.h"
+#include "core/log/logger.h"
 #include <assert.h>
 #include <sys/types.h>
-#include "core/log/logger.h"
 #ifdef _WIN32
 #include <ws2tcpip.h>
 #else
 #include <netinet/tcp.h>
 #include <sys/socket.h>
 #endif
-
 
 bool Socket::isSelfConnect(int sockfd) {
 	struct sockaddr_in6 localaddr = getLocalAddr(sockfd);
@@ -75,6 +74,7 @@ void Socket::bindAddress(const InetAddress &localaddr) {
 		exit(1);
 	}
 }
+
 void Socket::listen() {
 	assert(sockFd_ > 0);
 	int ret = ::listen(sockFd_, SOMAXCONN);
@@ -83,6 +83,7 @@ void Socket::listen() {
 		exit(1);
 	}
 }
+
 int Socket::accept(InetAddress *peeraddr) {
 	struct sockaddr_in6 addr6;
 	memset(&addr6, 0, sizeof(addr6));
@@ -102,6 +103,7 @@ int Socket::accept(InetAddress *peeraddr) {
 	}
 	return connfd;
 }
+
 void Socket::closeWrite() {
 #ifndef _WIN32
 	if (::shutdown(sockFd_, SHUT_WR) < 0)
@@ -112,6 +114,7 @@ void Socket::closeWrite() {
 		LOG_SYSERR << "sockets::shutdownWrite";
 	}
 }
+
 int Socket::read(char *buffer, uint64_t len) {
 #ifndef _WIN32
 	return ::read(sockFd_, buffer, len);

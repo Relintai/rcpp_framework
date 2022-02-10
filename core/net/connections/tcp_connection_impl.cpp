@@ -67,12 +67,11 @@ inline bool loadWindowsSystemCert(X509_STORE *store) {
 	}
 
 	PCCERT_CONTEXT pContext = NULL;
-	while ((pContext = CertEnumCertificatesInStore(hStore, pContext)) !=
-			nullptr) {
-		auto encoded_cert =
-				static_cast<const unsigned char *>(pContext->pbCertEncoded);
+	while ((pContext = CertEnumCertificatesInStore(hStore, pContext)) != nullptr) {
+		auto encoded_cert = static_cast<const unsigned char *>(pContext->pbCertEncoded);
 
 		auto x509 = d2i_X509(NULL, &encoded_cert, pContext->cbCertEncoded);
+		
 		if (x509) {
 			X509_STORE_add_cert(store, x509);
 			X509_free(x509);
@@ -125,15 +124,12 @@ inline bool verifyCommonName(X509 *cert, const std::string &hostname) {
 
 	if (subjectName != nullptr) {
 		std::array<char, BUFSIZ> name;
-		auto length = X509_NAME_get_text_by_NID(subjectName,
-				NID_commonName,
-				name.data(),
-				(int)name.size());
+		auto length = X509_NAME_get_text_by_NID(subjectName, NID_commonName, name.data(), (int)name.size());
+
 		if (length == -1)
 			return false;
 
-		return verifyName(std::string(name.begin(), name.begin() + length),
-				hostname);
+		return verifyName(std::string(name.begin(), name.begin() + length), hostname);
 	}
 
 	return false;
@@ -141,8 +137,7 @@ inline bool verifyCommonName(X509 *cert, const std::string &hostname) {
 
 inline bool verifyAltName(X509 *cert, const std::string &hostname) {
 	bool good = false;
-	auto altNames = static_cast<const struct stack_st_GENERAL_NAME *>(
-			X509_get_ext_d2i(cert, NID_subject_alt_name, nullptr, nullptr));
+	auto altNames = static_cast<const struct stack_st_GENERAL_NAME *>(X509_get_ext_d2i(cert, NID_subject_alt_name, nullptr, nullptr));
 
 	if (altNames) {
 		int numNames = sk_GENERAL_NAME_num(altNames);
@@ -154,6 +149,7 @@ inline bool verifyAltName(X509 *cert, const std::string &hostname) {
 							"an issue if you need that feature";
 				continue;
 			}
+
 #if (OPENSSL_VERSION_NUMBER >= 0x10100000L)
 			auto name = (const char *)ASN1_STRING_get0_data(val->d.ia5);
 #else
@@ -171,11 +167,10 @@ inline bool verifyAltName(X509 *cert, const std::string &hostname) {
 } // namespace internal
 
 void initOpenSSL() {
-#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
-		(defined(LIBRESSL_VERSION_NUMBER) &&  \
-				LIBRESSL_VERSION_NUMBER < 0x20700000L)
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
 	// Initialize OpenSSL once;
 	static std::once_flag once;
+
 	std::call_once(once, []() {
 		SSL_library_init();
 		ERR_load_crypto_strings();
@@ -187,10 +182,7 @@ void initOpenSSL() {
 
 class SSLContext {
 public:
-	explicit SSLContext(
-			bool useOldTLS,
-			bool enableValidtion,
-			const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
+	explicit SSLContext(bool useOldTLS, bool enableValidtion, const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
 #if (OPENSSL_VERSION_NUMBER >= 0x10100000L)
 		ctxPtr_ = SSL_CTX_new(TLS_method());
 		SSL_CONF_CTX *cctx = SSL_CONF_CTX_new();
@@ -199,9 +191,11 @@ public:
 		SSL_CONF_CTX_set_flags(cctx, SSL_CONF_FLAG_CERTIFICATE);
 		SSL_CONF_CTX_set_flags(cctx, SSL_CONF_FLAG_FILE);
 		SSL_CONF_CTX_set_ssl_ctx(cctx, ctxPtr_);
+
 		for (const auto &cmd : sslConfCmds) {
 			SSL_CONF_cmd(cctx, cmd.first.data(), cmd.second.data());
 		}
+
 		SSL_CONF_CTX_finish(cctx);
 		if (!useOldTLS) {
 			SSL_CTX_set_min_proto_version(ctxPtr_, TLS1_2_VERSION);
@@ -210,6 +204,7 @@ public:
 						"obsolete, insecure standards and should only be "
 						"used for legacy purpose.";
 		}
+
 #else
 		ctxPtr_ = SSL_CTX_new(SSLv23_method());
 		SSL_CONF_CTX *cctx = SSL_CONF_CTX_new();
@@ -218,10 +213,13 @@ public:
 		SSL_CONF_CTX_set_flags(cctx, SSL_CONF_FLAG_CERTIFICATE);
 		SSL_CONF_CTX_set_flags(cctx, SSL_CONF_FLAG_FILE);
 		SSL_CONF_CTX_set_ssl_ctx(cctx, ctxPtr_);
+
 		for (const auto &cmd : sslConfCmds) {
 			SSL_CONF_cmd(cctx, cmd.first.data(), cmd.second.data());
 		}
+
 		SSL_CONF_CTX_finish(cctx);
+
 		if (!useOldTLS) {
 			SSL_CTX_set_options(ctxPtr_, SSL_OP_NO_TLSv1 | SSL_OP_NO_TLSv1_1);
 		} else {
@@ -238,6 +236,7 @@ public:
 			SSL_CTX_set_default_verify_paths(ctxPtr_);
 #endif
 	}
+
 	~SSLContext() {
 		if (ctxPtr_) {
 			SSL_CTX_free(ctxPtr_);
@@ -251,6 +250,7 @@ public:
 private:
 	SSL_CTX *ctxPtr_;
 };
+
 class SSLConn {
 public:
 	explicit SSLConn(SSL_CTX *ctx) {
@@ -269,20 +269,17 @@ private:
 	SSL *SSL_;
 };
 
-std::shared_ptr<SSLContext> newSSLContext(
-		bool useOldTLS,
-		bool validateCert,
-		const std::vector<std::pair<std::string, std::string> > &sslConfCmds) { // init OpenSSL
+std::shared_ptr<SSLContext> newSSLContext(bool useOldTLS, bool validateCert, const std::vector<std::pair<std::string, std::string> > &sslConfCmds) { // init OpenSSL
 	initOpenSSL();
 	return std::make_shared<SSLContext>(useOldTLS, validateCert, sslConfCmds);
 }
-std::shared_ptr<SSLContext> newSSLServerContext(
-		const std::string &certPath,
-		const std::string &keyPath,
-		bool useOldTLS,
-		const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
+
+std::shared_ptr<SSLContext> newSSLServerContext(const std::string &certPath, const std::string &keyPath, bool useOldTLS, const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
+
 	auto ctx = newSSLContext(useOldTLS, false, sslConfCmds);
+
 	auto r = SSL_CTX_use_certificate_chain_file(ctx->get(), certPath.c_str());
+
 	if (!r) {
 #ifndef _MSC_VER
 		LOG_FATAL << strerror(errno);
@@ -291,9 +288,9 @@ std::shared_ptr<SSLContext> newSSLServerContext(
 #endif
 		abort();
 	}
-	r = SSL_CTX_use_PrivateKey_file(ctx->get(),
-			keyPath.c_str(),
-			SSL_FILETYPE_PEM);
+
+	r = SSL_CTX_use_PrivateKey_file(ctx->get(), keyPath.c_str(), SSL_FILETYPE_PEM);
+
 	if (!r) {
 #ifndef _MSC_VER
 		LOG_FATAL << strerror(errno);
@@ -302,7 +299,9 @@ std::shared_ptr<SSLContext> newSSLServerContext(
 #endif
 		abort();
 	}
+
 	r = SSL_CTX_check_private_key(ctx->get());
+
 	if (!r) {
 #ifndef _MSC_VER
 		LOG_FATAL << strerror(errno);
@@ -311,113 +310,100 @@ std::shared_ptr<SSLContext> newSSLServerContext(
 #endif
 		abort();
 	}
+
 	return ctx;
 }
 
 #else
 
-std::shared_ptr<SSLContext> newSSLServerContext(
-		const std::string &certPath,
-		const std::string &keyPath,
-		bool useOldTLS,
-		const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
+std::shared_ptr<SSLContext> newSSLServerContext(const std::string &certPath, const std::string &keyPath, bool useOldTLS, const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
 	LOG_FATAL << "OpenSSL is not found in your system!";
 	abort();
 }
 
 #endif
 
-TcpConnectionImpl::TcpConnectionImpl(EventLoop *loop,
-		int socketfd,
-		const InetAddress &localAddr,
-		const InetAddress &peerAddr) :
-		loop_(loop),
-		ioChannelPtr_(new Channel(loop, socketfd)),
-		socketPtr_(new Socket(socketfd)),
-		localAddr_(localAddr),
-		peerAddr_(peerAddr) {
-	LOG_TRACE << "new connection:" << peerAddr.toIpPort() << "->"
-			  << localAddr.toIpPort();
-	ioChannelPtr_->setReadCallback(
-			std::bind(&TcpConnectionImpl::readCallback, this));
-	ioChannelPtr_->setWriteCallback(
-			std::bind(&TcpConnectionImpl::writeCallback, this));
-	ioChannelPtr_->setCloseCallback(
-			std::bind(&TcpConnectionImpl::handleClose, this));
-	ioChannelPtr_->setErrorCallback(
-			std::bind(&TcpConnectionImpl::handleError, this));
+TcpConnectionImpl::TcpConnectionImpl(EventLoop *loop, int socketfd, const InetAddress &localAddr, const InetAddress &peerAddr) :
+		loop_(loop), ioChannelPtr_(new Channel(loop, socketfd)), socketPtr_(new Socket(socketfd)), localAddr_(localAddr), peerAddr_(peerAddr) {
+	LOG_TRACE << "new connection:" << peerAddr.toIpPort() << "->" << localAddr.toIpPort();
+
+	ioChannelPtr_->setReadCallback(std::bind(&TcpConnectionImpl::readCallback, this));
+	ioChannelPtr_->setWriteCallback(std::bind(&TcpConnectionImpl::writeCallback, this));
+	ioChannelPtr_->setCloseCallback(std::bind(&TcpConnectionImpl::handleClose, this));
+	ioChannelPtr_->setErrorCallback(std::bind(&TcpConnectionImpl::handleError, this));
 	socketPtr_->setKeepAlive(true);
+
 	name_ = localAddr.toIpPort() + "--" + peerAddr.toIpPort();
 }
+
 TcpConnectionImpl::~TcpConnectionImpl() {
 }
+
 #ifdef USE_OPENSSL
-void TcpConnectionImpl::startClientEncryptionInLoop(
-		std::function<void()> &&callback,
-		bool useOldTLS,
-		bool validateCert,
-		const std::string &hostname,
-		const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
+void TcpConnectionImpl::startClientEncryptionInLoop(std::function<void()> &&callback, bool useOldTLS, bool validateCert, const std::string &hostname, const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
 	validateCert_ = validateCert;
 	loop_->assertInLoopThread();
+
 	if (isEncrypted_) {
 		LOG_WARN << "This connection is already encrypted";
 		return;
 	}
+
 	sslEncryptionPtr_ = std::make_unique<SSLEncryption>();
 	sslEncryptionPtr_->upgradeCallback_ = std::move(callback);
-	sslEncryptionPtr_->sslCtxPtr_ =
-			newSSLContext(useOldTLS, validateCert_, sslConfCmds);
-	sslEncryptionPtr_->sslPtr_ =
-			std::make_unique<SSLConn>(sslEncryptionPtr_->sslCtxPtr_->get());
+	sslEncryptionPtr_->sslCtxPtr_ = newSSLContext(useOldTLS, validateCert_, sslConfCmds);
+	sslEncryptionPtr_->sslPtr_ = std::make_unique<SSLConn>(sslEncryptionPtr_->sslCtxPtr_->get());
+
 	if (validateCert) {
-		SSL_set_verify(sslEncryptionPtr_->sslPtr_->get(),
-				SSL_VERIFY_NONE,
-				nullptr);
+		SSL_set_verify(sslEncryptionPtr_->sslPtr_->get(), SSL_VERIFY_NONE, nullptr);
 		validateCert_ = validateCert;
 	}
+
 	if (!hostname.empty()) {
 		SSL_set_tlsext_host_name(sslEncryptionPtr_->sslPtr_->get(),
 				hostname.data());
 		sslEncryptionPtr_->hostname_ = hostname;
 	}
+
 	isEncrypted_ = true;
 	sslEncryptionPtr_->isUpgrade_ = true;
 	auto r = SSL_set_fd(sslEncryptionPtr_->sslPtr_->get(), socketPtr_->fd());
 	(void)r;
 	assert(r);
-	sslEncryptionPtr_->sendBufferPtr_ =
-			std::make_unique<std::array<char, 8192> >();
+
+	sslEncryptionPtr_->sendBufferPtr_ = std::make_unique<std::array<char, 8192> >();
 	LOG_TRACE << "connectEstablished";
 	ioChannelPtr_->enableWriting();
 	SSL_set_connect_state(sslEncryptionPtr_->sslPtr_->get());
 }
-void TcpConnectionImpl::startServerEncryptionInLoop(
-		const std::shared_ptr<SSLContext> &ctx,
-		std::function<void()> &&callback) {
+
+void TcpConnectionImpl::startServerEncryptionInLoop(const std::shared_ptr<SSLContext> &ctx, std::function<void()> &&callback) {
 	loop_->assertInLoopThread();
+
 	if (isEncrypted_) {
 		LOG_WARN << "This connection is already encrypted";
 		return;
 	}
+
 	sslEncryptionPtr_ = std::make_unique<SSLEncryption>();
 	sslEncryptionPtr_->upgradeCallback_ = std::move(callback);
 	sslEncryptionPtr_->sslCtxPtr_ = ctx;
 	sslEncryptionPtr_->isServer_ = true;
-	sslEncryptionPtr_->sslPtr_ =
-			std::make_unique<SSLConn>(sslEncryptionPtr_->sslCtxPtr_->get());
+	sslEncryptionPtr_->sslPtr_ = std::make_unique<SSLConn>(sslEncryptionPtr_->sslCtxPtr_->get());
 	isEncrypted_ = true;
 	sslEncryptionPtr_->isUpgrade_ = true;
-	if (sslEncryptionPtr_->isServer_ == false)
-		SSL_set_verify(sslEncryptionPtr_->sslPtr_->get(),
-				SSL_VERIFY_NONE,
-				nullptr);
+
+	if (sslEncryptionPtr_->isServer_ == false) {
+		SSL_set_verify(sslEncryptionPtr_->sslPtr_->get(), SSL_VERIFY_NONE, nullptr);
+	}
+
 	auto r = SSL_set_fd(sslEncryptionPtr_->sslPtr_->get(), socketPtr_->fd());
 	(void)r;
 	assert(r);
-	sslEncryptionPtr_->sendBufferPtr_ =
-			std::make_unique<std::array<char, 8192> >();
+
+	sslEncryptionPtr_->sendBufferPtr_ = std::make_unique<std::array<char, 8192> >();
 	LOG_TRACE << "upgrade to ssl";
+
 	SSL_set_accept_state(sslEncryptionPtr_->sslPtr_->get());
 }
 #endif
@@ -440,16 +426,13 @@ void TcpConnectionImpl::startServerEncryption(
 
 #endif
 }
-void TcpConnectionImpl::startClientEncryption(
-		std::function<void()> callback,
-		bool useOldTLS,
-		bool validateCert,
-		std::string hostname,
-		const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
+
+void TcpConnectionImpl::startClientEncryption(std::function<void()> callback, bool useOldTLS, bool validateCert, std::string hostname, const std::vector<std::pair<std::string, std::string> > &sslConfCmds) {
 #ifndef USE_OPENSSL
 	LOG_FATAL << "OpenSSL is not found in your system!";
 	abort();
 #else
+
 	if (!hostname.empty()) {
 		std::transform(hostname.begin(),
 				hostname.end(),
@@ -458,28 +441,17 @@ void TcpConnectionImpl::startClientEncryption(
 		assert(sslEncryptionPtr_ != nullptr);
 		sslEncryptionPtr_->hostname_ = hostname;
 	}
+
 	if (loop_->isInLoopThread()) {
-		startClientEncryptionInLoop(std::move(callback),
-				useOldTLS,
-				validateCert,
-				hostname,
-				sslConfCmds);
+		startClientEncryptionInLoop(std::move(callback), useOldTLS, validateCert, hostname, sslConfCmds);
 	} else {
-		loop_->queueInLoop([thisPtr = shared_from_this(),
-								   callback = std::move(callback),
-								   useOldTLS,
-								   hostname = std::move(hostname),
-								   validateCert,
-								   &sslConfCmds]() mutable {
-			thisPtr->startClientEncryptionInLoop(std::move(callback),
-					useOldTLS,
-					validateCert,
-					hostname,
-					sslConfCmds);
+		loop_->queueInLoop([thisPtr = shared_from_this(), callback = std::move(callback), useOldTLS, hostname = std::move(hostname), validateCert, &sslConfCmds]() mutable {
+			thisPtr->startClientEncryptionInLoop(std::move(callback), useOldTLS, validateCert, hostname, sslConfCmds);
 		});
 	}
 #endif
 }
+
 void TcpConnectionImpl::readCallback() {
 // LOG_TRACE<<"read Callback";
 #ifdef USE_OPENSSL
@@ -510,17 +482,21 @@ void TcpConnectionImpl::readCallback() {
 			handleClose();
 			return;
 		}
+
 		extendLife();
+
 		if (n > 0) {
 			bytesReceived_ += n;
 			if (recvMsgCallback_) {
 				recvMsgCallback_(shared_from_this(), &readBuffer_);
 			}
 		}
+
 #ifdef USE_OPENSSL
 	} else {
 		LOG_TRACE << "read Callback";
 		loop_->assertInLoopThread();
+
 		if (sslEncryptionPtr_->statusOfSSL_ == SSLStatus::Handshaking) {
 			doHandshaking();
 			return;
@@ -564,8 +540,10 @@ void TcpConnectionImpl::extendLife() {
 		auto now = Date::date();
 		if (now < lastTimingWheelUpdateTime_.after(1.0))
 			return;
+
 		lastTimingWheelUpdateTime_ = now;
 		auto entry = kickoffEntry_.lock();
+
 		if (entry) {
 			auto timingWheelPtr = timingWheelWeakPtr_.lock();
 			if (timingWheelPtr)
@@ -575,12 +553,11 @@ void TcpConnectionImpl::extendLife() {
 }
 void TcpConnectionImpl::writeCallback() {
 #ifdef USE_OPENSSL
-	if (!isEncrypted_ ||
-			(sslEncryptionPtr_ &&
-					sslEncryptionPtr_->statusOfSSL_ == SSLStatus::Connected)) {
+	if (!isEncrypted_ || (sslEncryptionPtr_ && sslEncryptionPtr_->statusOfSSL_ == SSLStatus::Connected)) {
 #endif
 		loop_->assertInLoopThread();
 		extendLife();
+
 		if (ioChannelPtr_->isWriting()) {
 			assert(!writeBufferList_.empty());
 			auto writeBuffer_ = writeBufferList_.front();
@@ -591,6 +568,7 @@ void TcpConnectionImpl::writeCallback() {
 #endif
 			{
 				if (writeBuffer_->msgBuffer_->readableBytes() <= 0) {
+
 					writeBufferList_.pop_front();
 					if (writeBufferList_.empty()) {
 						ioChannelPtr_->disableWriting();
@@ -600,6 +578,7 @@ void TcpConnectionImpl::writeCallback() {
 						if (status_ == ConnStatus::Disconnecting) {
 							socketPtr_->closeWrite();
 						}
+
 					} else {
 						auto fileNode = writeBufferList_.front();
 #ifndef _WIN32
@@ -611,8 +590,7 @@ void TcpConnectionImpl::writeCallback() {
 					}
 				} else {
 					auto n =
-							writeInLoop(writeBuffer_->msgBuffer_->peek(),
-									writeBuffer_->msgBuffer_->readableBytes());
+							writeInLoop(writeBuffer_->msgBuffer_->peek(), writeBuffer_->msgBuffer_->readableBytes());
 					if (n >= 0) {
 						writeBuffer_->msgBuffer_->retrieve(n);
 					} else {
@@ -636,6 +614,7 @@ void TcpConnectionImpl::writeCallback() {
 			} else {
 				// file
 				if (writeBuffer_->fileBytesToSend_ <= 0) {
+
 					writeBufferList_.pop_front();
 					if (writeBufferList_.empty()) {
 						ioChannelPtr_->disableWriting();
@@ -644,6 +623,7 @@ void TcpConnectionImpl::writeCallback() {
 						if (status_ == ConnStatus::Disconnecting) {
 							socketPtr_->closeWrite();
 						}
+
 					} else {
 #ifndef _WIN32
 						if (writeBufferList_.front()->sendFd_ < 0)
@@ -652,13 +632,10 @@ void TcpConnectionImpl::writeCallback() {
 #endif
 						{
 							// There is data to be sent in the buffer.
-							auto n = writeInLoop(
-									writeBufferList_.front()->msgBuffer_->peek(),
-									writeBufferList_.front()
-											->msgBuffer_->readableBytes());
+							auto n = writeInLoop(writeBufferList_.front()->msgBuffer_->peek(), writeBufferList_.front()->msgBuffer_->readableBytes());
+
 							if (n >= 0) {
-								writeBufferList_.front()->msgBuffer_->retrieve(
-										n);
+								writeBufferList_.front()->msgBuffer_->retrieve(n);
 							} else {
 #ifdef _WIN32
 								if (errno != 0 && errno != EWOULDBLOCK)
@@ -701,6 +678,7 @@ void TcpConnectionImpl::writeCallback() {
 	}
 #endif
 }
+
 void TcpConnectionImpl::connectEstablished() {
 // loop_->assertInLoopThread();
 #ifdef USE_OPENSSL
@@ -713,8 +691,9 @@ void TcpConnectionImpl::connectEstablished() {
 			thisPtr->ioChannelPtr_->tie(thisPtr);
 			thisPtr->ioChannelPtr_->enableReading();
 			thisPtr->status_ = ConnStatus::Connected;
-			if (thisPtr->connectionCallback_)
+			if (thisPtr->connectionCallback_) {
 				thisPtr->connectionCallback_(thisPtr);
+			}
 		});
 #ifdef USE_OPENSSL
 	} else {
@@ -724,27 +703,31 @@ void TcpConnectionImpl::connectEstablished() {
 			thisPtr->ioChannelPtr_->tie(thisPtr);
 			thisPtr->ioChannelPtr_->enableReading();
 			thisPtr->status_ = ConnStatus::Connected;
+
 			if (thisPtr->sslEncryptionPtr_->isServer_) {
-				SSL_set_accept_state(
-						thisPtr->sslEncryptionPtr_->sslPtr_->get());
+				SSL_set_accept_state(thisPtr->sslEncryptionPtr_->sslPtr_->get());
 			} else {
 				thisPtr->ioChannelPtr_->enableWriting();
-				SSL_set_connect_state(
-						thisPtr->sslEncryptionPtr_->sslPtr_->get());
+				SSL_set_connect_state(thisPtr->sslEncryptionPtr_->sslPtr_->get());
 			}
 		});
 	}
 #endif
 }
+
 void TcpConnectionImpl::handleClose() {
 	LOG_TRACE << "connection closed, fd=" << socketPtr_->fd();
 	loop_->assertInLoopThread();
 	status_ = ConnStatus::Disconnected;
 	ioChannelPtr_->disableAll();
+
 	//  ioChannelPtr_->remove();
 	auto guardThis = shared_from_this();
-	if (connectionCallback_)
+
+	if (connectionCallback_) {
 		connectionCallback_(guardThis);
+	}
+
 	if (closeCallback_) {
 		LOG_TRACE << "to call close callback";
 		closeCallback_(guardThis);
@@ -752,8 +735,10 @@ void TcpConnectionImpl::handleClose() {
 }
 void TcpConnectionImpl::handleError() {
 	int err = socketPtr_->getSocketError();
+
 	if (err == 0)
 		return;
+
 	if (err == EPIPE || err == ECONNRESET || err == 104) {
 		LOG_DEBUG << "[" << name_ << "] - SO_ERROR = " << err << " "
 				  << strerror_tl(err);
@@ -762,11 +747,14 @@ void TcpConnectionImpl::handleError() {
 				  << strerror_tl(err);
 	}
 }
+
 void TcpConnectionImpl::setTcpNoDelay(bool on) {
 	socketPtr_->setTcpNoDelay(on);
 }
+
 void TcpConnectionImpl::connectDestroyed() {
 	loop_->assertInLoopThread();
+
 	if (status_ == ConnStatus::Connected) {
 		status_ = ConnStatus::Disconnected;
 		ioChannelPtr_->disableAll();
@@ -777,6 +765,7 @@ void TcpConnectionImpl::connectDestroyed() {
 }
 void TcpConnectionImpl::shutdown() {
 	auto thisPtr = shared_from_this();
+
 	loop_->runInLoop([thisPtr]() {
 		if (thisPtr->status_ == ConnStatus::Connected) {
 			thisPtr->status_ = ConnStatus::Disconnecting;
@@ -789,6 +778,7 @@ void TcpConnectionImpl::shutdown() {
 
 void TcpConnectionImpl::forceClose() {
 	auto thisPtr = shared_from_this();
+
 	loop_->runInLoop([thisPtr]() {
 		if (thisPtr->status_ == ConnStatus::Connected ||
 				thisPtr->status_ == ConnStatus::Disconnecting) {
@@ -797,6 +787,7 @@ void TcpConnectionImpl::forceClose() {
 		}
 	});
 }
+
 #ifndef _WIN32
 void TcpConnectionImpl::sendInLoop(const void *buffer, size_t length)
 #else
@@ -804,16 +795,20 @@ void TcpConnectionImpl::sendInLoop(const char *buffer, size_t length)
 #endif
 {
 	loop_->assertInLoopThread();
+
 	if (status_ != ConnStatus::Connected) {
 		LOG_WARN << "Connection is not connected,give up sending";
 		return;
 	}
+
 	extendLife();
 	size_t remainLen = length;
 	ssize_t sendLen = 0;
+
 	if (!ioChannelPtr_->isWriting() && writeBufferList_.empty()) {
 		// send directly
 		sendLen = writeInLoop(buffer, length);
+
 		if (sendLen < 0) {
 			// error
 #ifdef _WIN32
@@ -827,6 +822,7 @@ void TcpConnectionImpl::sendInLoop(const char *buffer, size_t length)
 					LOG_DEBUG << "EPIPE or ECONNRESET, erron=" << errno;
 					return;
 				}
+
 				LOG_SYSERR << "Unexpected error(" << errno << ")";
 				return;
 			}
@@ -834,12 +830,15 @@ void TcpConnectionImpl::sendInLoop(const char *buffer, size_t length)
 		}
 		remainLen -= sendLen;
 	}
+
 	if (remainLen > 0 && status_ == ConnStatus::Connected) {
+
 		if (writeBufferList_.empty()) {
 			BufferNodePtr node(new BufferNode);
 			node->msgBuffer_ = std::make_shared<MsgBuffer>();
 			writeBufferList_.push_back(std::move(node));
 		}
+
 #ifndef _WIN32
 		else if (writeBufferList_.back()->sendFd_ >= 0)
 #else
@@ -850,16 +849,15 @@ void TcpConnectionImpl::sendInLoop(const char *buffer, size_t length)
 			node->msgBuffer_ = std::make_shared<MsgBuffer>();
 			writeBufferList_.push_back(std::move(node));
 		}
-		writeBufferList_.back()->msgBuffer_->append(
-				static_cast<const char *>(buffer) + sendLen, remainLen);
-		if (!ioChannelPtr_->isWriting())
+
+		writeBufferList_.back()->msgBuffer_->append(static_cast<const char *>(buffer) + sendLen, remainLen);
+
+		if (!ioChannelPtr_->isWriting()) {
 			ioChannelPtr_->enableWriting();
-		if (highWaterMarkCallback_ &&
-				writeBufferList_.back()->msgBuffer_->readableBytes() >
-						highWaterMarkLen_) {
-			highWaterMarkCallback_(
-					shared_from_this(),
-					writeBufferList_.back()->msgBuffer_->readableBytes());
+		}
+
+		if (highWaterMarkCallback_ && writeBufferList_.back()->msgBuffer_->readableBytes() > highWaterMarkLen_) {
+			highWaterMarkCallback_(shared_from_this(), writeBufferList_.back()->msgBuffer_->readableBytes());
 		}
 	}
 }
@@ -872,6 +870,7 @@ void TcpConnectionImpl::send(const std::shared_ptr<std::string> &msgPtr) {
 		} else {
 			++sendNum_;
 			auto thisPtr = shared_from_this();
+
 			loop_->queueInLoop([thisPtr, msgPtr]() {
 				thisPtr->sendInLoop(msgPtr->data(), msgPtr->length());
 				std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -882,6 +881,7 @@ void TcpConnectionImpl::send(const std::shared_ptr<std::string> &msgPtr) {
 		auto thisPtr = shared_from_this();
 		std::lock_guard<std::mutex> guard(sendNumMutex_);
 		++sendNum_;
+
 		loop_->queueInLoop([thisPtr, msgPtr]() {
 			thisPtr->sendInLoop(msgPtr->data(), msgPtr->length());
 			std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -898,6 +898,7 @@ void TcpConnectionImpl::send(const std::shared_ptr<MsgBuffer> &msgPtr) {
 		} else {
 			++sendNum_;
 			auto thisPtr = shared_from_this();
+
 			loop_->queueInLoop([thisPtr, msgPtr]() {
 				thisPtr->sendInLoop(msgPtr->peek(), msgPtr->readableBytes());
 				std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -908,6 +909,7 @@ void TcpConnectionImpl::send(const std::shared_ptr<MsgBuffer> &msgPtr) {
 		auto thisPtr = shared_from_this();
 		std::lock_guard<std::mutex> guard(sendNumMutex_);
 		++sendNum_;
+
 		loop_->queueInLoop([thisPtr, msgPtr]() {
 			thisPtr->sendInLoop(msgPtr->peek(), msgPtr->readableBytes());
 			std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -924,6 +926,7 @@ void TcpConnectionImpl::send(const char *msg, size_t len) {
 			++sendNum_;
 			auto buffer = std::make_shared<std::string>(msg, len);
 			auto thisPtr = shared_from_this();
+
 			loop_->queueInLoop([thisPtr, buffer]() {
 				thisPtr->sendInLoop(buffer->data(), buffer->length());
 				std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -935,6 +938,7 @@ void TcpConnectionImpl::send(const char *msg, size_t len) {
 		auto thisPtr = shared_from_this();
 		std::lock_guard<std::mutex> guard(sendNumMutex_);
 		++sendNum_;
+
 		loop_->queueInLoop([thisPtr, buffer]() {
 			thisPtr->sendInLoop(buffer->data(), buffer->length());
 			std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -957,6 +961,7 @@ void TcpConnectionImpl::send(const void *msg, size_t len) {
 					std::make_shared<std::string>(static_cast<const char *>(msg),
 							len);
 			auto thisPtr = shared_from_this();
+
 			loop_->queueInLoop([thisPtr, buffer]() {
 				thisPtr->sendInLoop(buffer->data(), buffer->length());
 				std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -969,6 +974,7 @@ void TcpConnectionImpl::send(const void *msg, size_t len) {
 		auto thisPtr = shared_from_this();
 		std::lock_guard<std::mutex> guard(sendNumMutex_);
 		++sendNum_;
+
 		loop_->queueInLoop([thisPtr, buffer]() {
 			thisPtr->sendInLoop(buffer->data(), buffer->length());
 			std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -984,6 +990,7 @@ void TcpConnectionImpl::send(const std::string &msg) {
 		} else {
 			++sendNum_;
 			auto thisPtr = shared_from_this();
+
 			loop_->queueInLoop([thisPtr, msg]() {
 				thisPtr->sendInLoop(msg.data(), msg.length());
 				std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -994,6 +1001,7 @@ void TcpConnectionImpl::send(const std::string &msg) {
 		auto thisPtr = shared_from_this();
 		std::lock_guard<std::mutex> guard(sendNumMutex_);
 		++sendNum_;
+
 		loop_->queueInLoop([thisPtr, msg]() {
 			thisPtr->sendInLoop(msg.data(), msg.length());
 			std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -1009,6 +1017,7 @@ void TcpConnectionImpl::send(std::string &&msg) {
 		} else {
 			auto thisPtr = shared_from_this();
 			++sendNum_;
+
 			loop_->queueInLoop([thisPtr, msg = std::move(msg)]() {
 				thisPtr->sendInLoop(msg.data(), msg.length());
 				std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -1019,6 +1028,7 @@ void TcpConnectionImpl::send(std::string &&msg) {
 		auto thisPtr = shared_from_this();
 		std::lock_guard<std::mutex> guard(sendNumMutex_);
 		++sendNum_;
+
 		loop_->queueInLoop([thisPtr, msg = std::move(msg)]() {
 			thisPtr->sendInLoop(msg.data(), msg.length());
 			std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -1035,6 +1045,7 @@ void TcpConnectionImpl::send(const MsgBuffer &buffer) {
 		} else {
 			++sendNum_;
 			auto thisPtr = shared_from_this();
+
 			loop_->queueInLoop([thisPtr, buffer]() {
 				thisPtr->sendInLoop(buffer.peek(), buffer.readableBytes());
 				std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -1045,6 +1056,7 @@ void TcpConnectionImpl::send(const MsgBuffer &buffer) {
 		auto thisPtr = shared_from_this();
 		std::lock_guard<std::mutex> guard(sendNumMutex_);
 		++sendNum_;
+
 		loop_->queueInLoop([thisPtr, buffer]() {
 			thisPtr->sendInLoop(buffer.peek(), buffer.readableBytes());
 			std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -1054,23 +1066,28 @@ void TcpConnectionImpl::send(const MsgBuffer &buffer) {
 }
 
 void TcpConnectionImpl::send(MsgBuffer &&buffer) {
+
 	if (loop_->isInLoopThread()) {
 		std::lock_guard<std::mutex> guard(sendNumMutex_);
+
 		if (sendNum_ == 0) {
 			sendInLoop(buffer.peek(), buffer.readableBytes());
 		} else {
 			++sendNum_;
 			auto thisPtr = shared_from_this();
+
 			loop_->queueInLoop([thisPtr, buffer = std::move(buffer)]() {
 				thisPtr->sendInLoop(buffer.peek(), buffer.readableBytes());
 				std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
 				--thisPtr->sendNum_;
 			});
 		}
+
 	} else {
 		auto thisPtr = shared_from_this();
 		std::lock_guard<std::mutex> guard(sendNumMutex_);
 		++sendNum_;
+
 		loop_->queueInLoop([thisPtr, buffer = std::move(buffer)]() {
 			thisPtr->sendInLoop(buffer.peek(), buffer.readableBytes());
 			std::lock_guard<std::mutex> guard1(thisPtr->sendNumMutex_);
@@ -1078,10 +1095,11 @@ void TcpConnectionImpl::send(MsgBuffer &&buffer) {
 		});
 	}
 }
-void TcpConnectionImpl::sendFile(const char *fileName,
-		size_t offset,
-		size_t length) {
+
+void TcpConnectionImpl::sendFile(const char *fileName, size_t offset, size_t length) {
+
 	assert(fileName);
+
 #ifndef _WIN32
 	int fd = open(fileName, O_RDONLY);
 
@@ -1097,6 +1115,7 @@ void TcpConnectionImpl::sendFile(const char *fileName,
 			close(fd);
 			return;
 		}
+
 		length = filestat.st_size;
 	}
 
@@ -1122,6 +1141,7 @@ void TcpConnectionImpl::sendFile(const char *fileName,
 			fclose(fp);
 			return;
 		}
+
 		length = filestat.st_size;
 	}
 
@@ -1136,6 +1156,7 @@ void TcpConnectionImpl::sendFile(FILE *fp, size_t offset, size_t length)
 #endif
 {
 	assert(length > 0);
+
 #ifndef _WIN32
 	assert(sfd >= 0);
 	BufferNodePtr node(new BufferNode);
@@ -1145,19 +1166,25 @@ void TcpConnectionImpl::sendFile(FILE *fp, size_t offset, size_t length)
 	BufferNodePtr node(new BufferNode);
 	node->sendFp_ = fp;
 #endif
+
 	node->offset_ = static_cast<off_t>(offset);
 	node->fileBytesToSend_ = length;
+
 	if (loop_->isInLoopThread()) {
 		std::lock_guard<std::mutex> guard(sendNumMutex_);
 		if (sendNum_ == 0) {
+
 			writeBufferList_.push_back(node);
 			if (writeBufferList_.size() == 1) {
 				sendFileInLoop(writeBufferList_.front());
 				return;
 			}
+
 		} else {
+
 			++sendNum_;
 			auto thisPtr = shared_from_this();
+
 			loop_->queueInLoop([thisPtr, node]() {
 				thisPtr->writeBufferList_.push_back(node);
 				{
@@ -1171,9 +1198,11 @@ void TcpConnectionImpl::sendFile(FILE *fp, size_t offset, size_t length)
 			});
 		}
 	} else {
+
 		auto thisPtr = shared_from_this();
 		std::lock_guard<std::mutex> guard(sendNumMutex_);
 		++sendNum_;
+
 		loop_->queueInLoop([thisPtr, node]() {
 			LOG_TRACE << "Push sendfile to list";
 			thisPtr->writeBufferList_.push_back(node);
@@ -1191,49 +1220,56 @@ void TcpConnectionImpl::sendFile(FILE *fp, size_t offset, size_t length)
 }
 
 void TcpConnectionImpl::sendFileInLoop(const BufferNodePtr &filePtr) {
+
 	loop_->assertInLoopThread();
+
 #ifndef _WIN32
 	assert(filePtr->sendFd_ >= 0);
 #else
 	assert(filePtr->sendFp_);
 #endif
+
 #ifdef __linux__
 	if (!isEncrypted_) {
-		auto bytesSent = sendfile(socketPtr_->fd(),
-				filePtr->sendFd_,
-				&filePtr->offset_,
-				filePtr->fileBytesToSend_);
+		auto bytesSent = sendfile(socketPtr_->fd(), filePtr->sendFd_, &filePtr->offset_, filePtr->fileBytesToSend_);
+
 		if (bytesSent < 0) {
 			if (errno != EAGAIN) {
 				LOG_SYSERR << "TcpConnectionImpl::sendFileInLoop";
-				if (ioChannelPtr_->isWriting())
+				if (ioChannelPtr_->isWriting()) {
 					ioChannelPtr_->disableWriting();
+				}
 			}
 			return;
 		}
+
 		if (bytesSent < filePtr->fileBytesToSend_) {
 			if (bytesSent == 0) {
 				LOG_SYSERR << "TcpConnectionImpl::sendFileInLoop";
 				return;
 			}
 		}
+
 		LOG_TRACE << "sendfile() " << bytesSent << " bytes sent";
 		filePtr->fileBytesToSend_ -= bytesSent;
 		if (!ioChannelPtr_->isWriting()) {
 			ioChannelPtr_->enableWriting();
 		}
+
 		return;
 	}
 #endif
+
 #ifndef _WIN32
 	lseek(filePtr->sendFd_, filePtr->offset_, SEEK_SET);
+
 	if (!fileBufferPtr_) {
 		fileBufferPtr_ = std::make_unique<std::vector<char> >(16 * 1024);
 	}
+
 	while (filePtr->fileBytesToSend_ > 0) {
-		auto n = read(filePtr->sendFd_,
-				&(*fileBufferPtr_)[0],
-				fileBufferPtr_->size());
+		auto n = read(filePtr->sendFd_, &(*fileBufferPtr_)[0], fileBufferPtr_->size());
+
 #else
 	_fseeki64(filePtr->sendFp_, filePtr->offset_, SEEK_SET);
 	if (!fileBufferPtr_) {
@@ -1245,6 +1281,7 @@ void TcpConnectionImpl::sendFileInLoop(const BufferNodePtr &filePtr) {
 				fileBufferPtr_->size(),
 				filePtr->sendFp_);
 #endif
+
 		if (n > 0) {
 			auto nSend = writeInLoop(&(*fileBufferPtr_)[0], n);
 			if (nSend >= 0) {
@@ -1270,9 +1307,11 @@ void TcpConnectionImpl::sendFileInLoop(const BufferNodePtr &filePtr) {
 						LOG_DEBUG << "EPIPE or ECONNRESET, erron=" << errno;
 						return;
 					}
+
 					LOG_SYSERR << "Unexpected error(" << errno << ")";
 					return;
 				}
+
 				break;
 			}
 		}
@@ -1282,15 +1321,18 @@ void TcpConnectionImpl::sendFileInLoop(const BufferNodePtr &filePtr) {
 				ioChannelPtr_->disableWriting();
 			return;
 		}
+
 		if (n == 0) {
 			LOG_SYSERR << "read";
 			return;
 		}
 	}
+
 	if (!ioChannelPtr_->isWriting()) {
 		ioChannelPtr_->enableWriting();
 	}
 }
+
 #ifndef _WIN32
 ssize_t TcpConnectionImpl::writeInLoop(const void *buffer, size_t length)
 #else
@@ -1320,33 +1362,37 @@ ssize_t TcpConnectionImpl::writeInLoop(const char *buffer, size_t length)
 			LOG_WARN << "SSL is not connected,give up sending";
 			return -1;
 		}
+
 		// send directly
 		size_t sendTotalLen = 0;
 		while (sendTotalLen < length) {
+
 			auto len = length - sendTotalLen;
+
 			if (len > sslEncryptionPtr_->sendBufferPtr_->size()) {
 				len = sslEncryptionPtr_->sendBufferPtr_->size();
 			}
-			memcpy(sslEncryptionPtr_->sendBufferPtr_->data(),
-					static_cast<const char *>(buffer) + sendTotalLen,
-					len);
+
+			memcpy(sslEncryptionPtr_->sendBufferPtr_->data(), static_cast<const char *>(buffer) + sendTotalLen, len);
+
 			ERR_clear_error();
-			auto sendLen = SSL_write(sslEncryptionPtr_->sslPtr_->get(),
-					sslEncryptionPtr_->sendBufferPtr_->data(),
-					static_cast<int>(len));
+
+			auto sendLen = SSL_write(sslEncryptionPtr_->sslPtr_->get(), sslEncryptionPtr_->sendBufferPtr_->data(), static_cast<int>(len));
+
 			if (sendLen <= 0) {
-				int sslerr =
-						SSL_get_error(sslEncryptionPtr_->sslPtr_->get(), sendLen);
-				if (sslerr != SSL_ERROR_WANT_WRITE &&
-						sslerr != SSL_ERROR_WANT_READ) {
+				int sslerr = SSL_get_error(sslEncryptionPtr_->sslPtr_->get(), sendLen);
+
+				if (sslerr != SSL_ERROR_WANT_WRITE && sslerr != SSL_ERROR_WANT_READ) {
 					// LOG_ERROR << "ssl write error:" << sslerr;
 					forceClose();
 					return -1;
 				}
+
 				return sendTotalLen;
 			}
 			sendTotalLen += sendLen;
 		}
+
 		return sendTotalLen;
 	}
 #endif
@@ -1354,52 +1400,45 @@ ssize_t TcpConnectionImpl::writeInLoop(const char *buffer, size_t length)
 
 #ifdef USE_OPENSSL
 
-TcpConnectionImpl::TcpConnectionImpl(EventLoop *loop,
-		int socketfd,
-		const InetAddress &localAddr,
-		const InetAddress &peerAddr,
-		const std::shared_ptr<SSLContext> &ctxPtr,
-		bool isServer,
-		bool validateCert,
-		const std::string &hostname) :
+TcpConnectionImpl::TcpConnectionImpl(EventLoop *loop, int socketfd, const InetAddress &localAddr, const InetAddress &peerAddr, const std::shared_ptr<SSLContext> &ctxPtr, bool isServer, bool validateCert, const std::string &hostname) :
 		isEncrypted_(true),
 		loop_(loop),
 		ioChannelPtr_(new Channel(loop, socketfd)),
 		socketPtr_(new Socket(socketfd)),
 		localAddr_(localAddr),
 		peerAddr_(peerAddr) {
-	LOG_TRACE << "new connection:" << peerAddr.toIpPort() << "->"
-			  << localAddr.toIpPort();
-	ioChannelPtr_->setReadCallback(
-			std::bind(&TcpConnectionImpl::readCallback, this));
-	ioChannelPtr_->setWriteCallback(
-			std::bind(&TcpConnectionImpl::writeCallback, this));
-	ioChannelPtr_->setCloseCallback(
-			std::bind(&TcpConnectionImpl::handleClose, this));
-	ioChannelPtr_->setErrorCallback(
-			std::bind(&TcpConnectionImpl::handleError, this));
+
+	LOG_TRACE << "new connection:" << peerAddr.toIpPort() << "->" << localAddr.toIpPort();
+
+	ioChannelPtr_->setReadCallback(std::bind(&TcpConnectionImpl::readCallback, this));
+	ioChannelPtr_->setWriteCallback(std::bind(&TcpConnectionImpl::writeCallback, this));
+	ioChannelPtr_->setCloseCallback(std::bind(&TcpConnectionImpl::handleClose, this));
+	ioChannelPtr_->setErrorCallback(std::bind(&TcpConnectionImpl::handleError, this));
+
 	socketPtr_->setKeepAlive(true);
 	name_ = localAddr.toIpPort() + "--" + peerAddr.toIpPort();
 	sslEncryptionPtr_ = std::make_unique<SSLEncryption>();
 	sslEncryptionPtr_->sslPtr_ = std::make_unique<SSLConn>(ctxPtr->get());
 	sslEncryptionPtr_->isServer_ = isServer;
 	validateCert_ = validateCert;
-	if (isServer == false)
-		SSL_set_verify(sslEncryptionPtr_->sslPtr_->get(),
-				SSL_VERIFY_NONE,
-				nullptr);
+
+	if (isServer == false) {
+		SSL_set_verify(sslEncryptionPtr_->sslPtr_->get(), SSL_VERIFY_NONE, nullptr);
+	}
+
 	if (!isServer && !hostname.empty()) {
-		SSL_set_tlsext_host_name(sslEncryptionPtr_->sslPtr_->get(),
-				hostname.data());
+		SSL_set_tlsext_host_name(sslEncryptionPtr_->sslPtr_->get(), hostname.data());
 		sslEncryptionPtr_->hostname_ = hostname;
 	}
+
 	assert(sslEncryptionPtr_->sslPtr_);
 	auto r = SSL_set_fd(sslEncryptionPtr_->sslPtr_->get(), socketfd);
+
 	(void)r;
 	assert(r);
+
 	isEncrypted_ = true;
-	sslEncryptionPtr_->sendBufferPtr_ =
-			std::make_unique<std::array<char, 8192> >();
+	sslEncryptionPtr_->sendBufferPtr_ = std::make_unique<std::array<char, 8192> >();
 }
 
 bool TcpConnectionImpl::validatePeerCertificate() {
@@ -1409,6 +1448,7 @@ bool TcpConnectionImpl::validatePeerCertificate() {
 	SSL *ssl = sslEncryptionPtr_->sslPtr_->get();
 
 	auto result = SSL_get_verify_result(ssl);
+
 	if (result != X509_V_OK) {
 		LOG_DEBUG << "cert error code: " << result;
 		LOG_ERROR << "Server certificate is not valid";
@@ -1416,14 +1456,13 @@ bool TcpConnectionImpl::validatePeerCertificate() {
 	}
 
 	X509 *cert = SSL_get_peer_certificate(ssl);
+
 	if (cert == nullptr) {
 		LOG_ERROR << "Unable to obtain peer certificate";
 		return false;
 	}
 
-	bool domainIsValid =
-			internal::verifyCommonName(cert, sslEncryptionPtr_->hostname_) ||
-			internal::verifyAltName(cert, sslEncryptionPtr_->hostname_);
+	bool domainIsValid = internal::verifyCommonName(cert, sslEncryptionPtr_->hostname_) || internal::verifyAltName(cert, sslEncryptionPtr_->hostname_);
 	X509_free(cert);
 
 	if (domainIsValid) {
@@ -1439,10 +1478,12 @@ void TcpConnectionImpl::doHandshaking() {
 
 	int r = SSL_do_handshake(sslEncryptionPtr_->sslPtr_->get());
 	LOG_TRACE << "hand shaking: " << r;
+
 	if (r == 1) {
 		// Clients don't commonly have certificates. Let's not validate
 		// that
 		if (validateCert_ && sslEncryptionPtr_->isServer_ == false) {
+
 			if (validatePeerCertificate() == false) {
 				LOG_ERROR << "SSL certificate validation failed.";
 				ioChannelPtr_->disableReading();
@@ -1454,7 +1495,9 @@ void TcpConnectionImpl::doHandshaking() {
 				return;
 			}
 		}
+
 		sslEncryptionPtr_->statusOfSSL_ = SSLStatus::Connected;
+
 		if (sslEncryptionPtr_->isUpgrade_) {
 			sslEncryptionPtr_->upgradeCallback_();
 		} else {
@@ -1462,25 +1505,33 @@ void TcpConnectionImpl::doHandshaking() {
 		}
 		return;
 	}
+
 	int err = SSL_get_error(sslEncryptionPtr_->sslPtr_->get(), r);
 	LOG_TRACE << "hand shaking: " << err;
+
 	if (err == SSL_ERROR_WANT_WRITE) { // SSL want writable;
-		if (!ioChannelPtr_->isWriting())
+		if (!ioChannelPtr_->isWriting()) {
 			ioChannelPtr_->enableWriting();
+		}
 		// ioChannelPtr_->disableReading();
 	} else if (err == SSL_ERROR_WANT_READ) { // SSL want readable;
-		if (!ioChannelPtr_->isReading())
+		if (!ioChannelPtr_->isReading()) {
 			ioChannelPtr_->enableReading();
-		if (ioChannelPtr_->isWriting())
+		}
+
+		if (ioChannelPtr_->isWriting()) {
 			ioChannelPtr_->disableWriting();
+		}
 	} else {
 		// ERR_print_errors(err);
 		LOG_TRACE << "SSL handshake err: " << err;
 		ioChannelPtr_->disableReading();
+
 		sslEncryptionPtr_->statusOfSSL_ = SSLStatus::DisConnected;
 		if (sslErrorCallback_) {
 			sslErrorCallback_(SSLError::kSSLHandshakeError);
 		}
+
 		forceClose();
 	}
 }

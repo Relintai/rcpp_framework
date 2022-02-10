@@ -46,23 +46,30 @@ protected:
 public:
 	using NewConnectionCallback = std::function<void(int sockfd)>;
 	using ConnectionErrorCallback = std::function<void()>;
+
 	Connector(EventLoop *loop, const InetAddress &addr, bool retry = true);
 	Connector(EventLoop *loop, InetAddress &&addr, bool retry = true);
+
 	void setNewConnectionCallback(const NewConnectionCallback &cb) {
 		newConnectionCallback_ = cb;
 	}
+
 	void setNewConnectionCallback(NewConnectionCallback &&cb) {
 		newConnectionCallback_ = std::move(cb);
 	}
+
 	void setErrorCallback(const ConnectionErrorCallback &cb) {
 		errorCallback_ = cb;
 	}
+
 	void setErrorCallback(ConnectionErrorCallback &&cb) {
 		errorCallback_ = std::move(cb);
 	}
+
 	const InetAddress &serverAddress() const {
 		return serverAddr_;
 	}
+
 	void start();
 	void restart();
 	void stop();
@@ -70,11 +77,13 @@ public:
 private:
 	NewConnectionCallback newConnectionCallback_;
 	ConnectionErrorCallback errorCallback_;
+
 	enum class Status {
 		Disconnected,
 		Connecting,
 		Connected
 	};
+	
 	static constexpr int kMaxRetryDelayMs = 30 * 1000;
 	static constexpr int kInitRetryDelayMs = 500;
 	std::shared_ptr<Channel> channelPtr_;
