@@ -79,8 +79,6 @@ def configure(env):
     env.Append(CPPPATH=["#web_backends/drogon"])
 
     env.Append(CPPPATH=["#web_backends/drogon/trantor"])
-    env.Append(CPPPATH=["#web_backends/drogon/trantor/net"])
-    env.Append(CPPPATH=["#web_backends/drogon/trantor/net/inner"])
     env.Append(CPPPATH=["#web_backends/drogon/trantor/utils"])
 
     env.Append(LINKFLAGS=["-ldl"])
