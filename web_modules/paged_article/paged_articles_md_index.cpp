@@ -1,10 +1,16 @@
 #include "paged_articles_md_index.h"
 
 #include "web/http/request.h"
-
+#include "web/http/web_permission.h"
 #include "web/html/html_builder.h"
 
 void PagedArticlesMDIndex::handle_request_main(Request *request) {
+	if (_web_permission.is_valid()) {
+		if (_web_permission->activate(request)) {
+			return;
+		}
+	}
+
 	const String path = request->get_current_path_segment();
 
 	if (request->get_remaining_segment_count() == 0) {

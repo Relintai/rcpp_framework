@@ -6,11 +6,16 @@
 #include "web/http/http_session.h"
 #include "web/http/request.h"
 #include "web/http/session_manager.h"
+#include "web/http/web_permission.h"
 
 #include "admin_node.h"
 
 void AdminPanel::handle_request_main(Request *request) {
-	//todo check permissions
+	if (_web_permission.is_valid()) {
+		if (_web_permission->activate(request)) {
+			return;
+		}
+	}
 
 	String seg = request->get_current_path_segment();
 
@@ -32,13 +37,13 @@ void AdminPanel::handle_request_main(Request *request) {
 				return;
 			}
 
-			//render_menu(request);
+			// render_menu(request);
 			render_headers(request);
 			render_segment_body_top(request);
 			render_controller_panel(request, c);
 			render_footer(request);
 
-			//request->pop_path();
+			// request->pop_path();
 
 			return;
 		}
@@ -94,9 +99,9 @@ void AdminPanel::render_admin_panel_list(Request *request) {
 }
 
 void AdminPanel::render_controller_panel(Request *request, AdminNode *controller) {
-	//set up headers
+	// set up headers
 	controller->admin_handle_request_main(request);
-	//set up footers
+	// set up footers
 	request->compile_and_send_body();
 }
 

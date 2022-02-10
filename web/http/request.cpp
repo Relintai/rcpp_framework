@@ -5,8 +5,10 @@
 
 #include "http_session.h"
 
-#include "web/http/web_root.h"
 #include "session_manager.h"
+#include "web/http/web_root.h"
+
+#include "web_permission.h"
 
 Ref<HTTPSession> Request::get_or_create_session() {
 	if (session.is_valid()) {
@@ -16,6 +18,19 @@ Ref<HTTPSession> Request::get_or_create_session() {
 	session = SessionManager::get_singleton()->create_session();
 
 	return session;
+}
+
+bool Request::can_view() const {
+	return (permissions & WebPermission::WEB_PERMISSION_VIEW) != 0;
+}
+bool Request::can_create() const {
+	return (permissions & WebPermission::WEB_PERMISSION_CREATE) != 0;
+}
+bool Request::can_edit() const {
+	return (permissions & WebPermission::WEB_PERMISSION_EDIT) != 0;
+}
+bool Request::can_delete() const {
+	return (permissions & WebPermission::WEB_PERMISSION_DELETE) != 0;
 }
 
 bool Request::has_csrf_token() {
@@ -153,6 +168,8 @@ void Request::reset() {
 	connection_closed = false;
 	_full_path = "";
 	_status_code = HTTP_STATUS_CODE_200_OK;
+	// Maybe set NONE or only VIEW as default?
+	permissions = WebPermission::WEB_PERMISSION_ALL;
 
 	head.clear();
 	body.clear();

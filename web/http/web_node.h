@@ -9,6 +9,7 @@
 class Request;
 class Settings;
 class WebServer;
+class WebPermission;
 
 #ifdef DATABASES_ENABLED
 class DataBase;
@@ -28,6 +29,9 @@ public:
 
 	Settings *get_settings();
 	void set_settings(Settings *settings);
+
+	Ref<WebPermission> get_web_permission();
+	void set_web_permission(const Ref<WebPermission> &wp);
 
 	virtual bool get_routing_enabled();
 	virtual void set_routing_enabled(const bool value);
@@ -81,6 +85,8 @@ protected:
 	bool _routing_enabled;
 	WebNode *_index_node;
 	std::map<String, WebNode *> _node_route_map;
+
+	Ref<WebPermission> _web_permission;
 };
 
 #endif

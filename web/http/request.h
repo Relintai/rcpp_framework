@@ -4,9 +4,9 @@
 #include "core/containers/vector.h"
 #include "core/string.h"
 
-#include <vector>
 #include <map>
 #include <mutex>
+#include <vector>
 
 #include "core/object.h"
 #include "core/reference.h"
@@ -16,6 +16,7 @@
 class WebServer;
 class Cookie;
 class HTTPSession;
+class WebPermission;
 
 class Request {
 public:
@@ -39,7 +40,15 @@ public:
 	std::map<String, Ref<Reference> > reference_data;
 
 	Ref<HTTPSession> get_or_create_session();
-	
+
+	Ref<WebPermission> active_permission;
+	int permissions;
+
+	bool can_view() const;
+	bool can_create() const;
+	bool can_edit() const;
+	bool can_delete() const;
+
 	bool has_csrf_token();
 	String get_csrf_token();
 	void set_csrf_token(const String &value);
@@ -86,7 +95,7 @@ public:
 	String get_url_root_parent(const String &add) const;
 	String get_url_root(const String &add) const;
 	String get_url_site(const String &add) const;
-	
+
 	virtual void update();
 	virtual void pool();
 

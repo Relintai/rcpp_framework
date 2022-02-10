@@ -6,6 +6,7 @@
 #include "web/http/http_session.h"
 #include "web/http/request.h"
 #include "web/http/session_manager.h"
+#include "web/http/web_permission.h"
 
 #include "database/database.h"
 #include "database/database_manager.h"
@@ -16,6 +17,12 @@
 #include "crypto/hash/sha256.h"
 
 void UserController::handle_request_main(Request *request) {
+	if (_web_permission.is_valid()) {
+		if (_web_permission->activate(request)) {
+			return;
+		}
+	}
+
 	if (request->session.is_valid()) {
 		Ref<User> u = request->reference_data["user"];
 

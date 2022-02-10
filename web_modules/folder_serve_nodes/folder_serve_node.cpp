@@ -1,8 +1,15 @@
 #include "folder_serve_node.h"
 
 #include "web/http/request.h"
+#include "web/http/web_permission.h"
 
 void FolderServeNode::handle_request_main(Request *request) {
+	if (_web_permission.is_valid()) {
+		if (_web_permission->activate(request)) {
+			return;
+		}
+	}
+
 	const String &rp = request->get_current_path_segment();
 
 	if (rp == "") {

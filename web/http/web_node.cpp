@@ -4,8 +4,9 @@
 #include "http_enums.h"
 #include "request.h"
 
-#include "web/http/web_server.h"
 #include "core/settings/settings.h"
+#include "web/http/web_server.h"
+#include "web_permission.h"
 
 #ifdef DATABASES_ENABLED
 #include "database/database.h"
@@ -64,6 +65,13 @@ void WebNode::set_settings(Settings *settings) {
 	// todo send event to children when it's implemented?
 }
 
+Ref<WebPermission> WebNode::get_web_permission() {
+	return _web_permission;
+}
+void WebNode::set_web_permission(const Ref<WebPermission> &wp) {
+	_web_permission = wp;
+}
+
 bool WebNode::get_routing_enabled() {
 	return _routing_enabled;
 }
@@ -118,6 +126,12 @@ void WebNode::set_database(Database *db) {
 #endif
 
 void WebNode::handle_request_main(Request *request) {
+	if (_web_permission.is_valid()) {
+		if (_web_permission->activate(request)) {
+			return;
+		}
+	}
+
 	if (!_routing_enabled) {
 		_handle_request_main(request);
 		return;

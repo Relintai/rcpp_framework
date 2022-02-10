@@ -2,10 +2,17 @@
 
 #include "core/os/directory.h"
 #include "web/html/utils.h"
+#include "web/http/web_permission.h"
 
 #include <iostream>
 
 void PagedArticle::handle_request_main(Request *request) {
+	if (_web_permission.is_valid()) {
+		if (_web_permission->activate(request)) {
+			return;
+		}
+	}
+
 	const String &rp = request->get_current_path_segment();
 
 	if (request->get_remaining_segment_count() > 1 && rp == "files") {

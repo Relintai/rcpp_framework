@@ -9,6 +9,7 @@
 
 #include <iostream>
 
+#include "web_permission.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -72,13 +73,26 @@ void WebRoot::handle_request_main(Request *request) {
 		return;
 	}
 
+	if (_web_permission.is_valid()) {
+		if (_web_permission->activate(request)) {
+			return;
+		}
+	}
+
 	// handle files first
 	if (try_send_wwwroot_file(request)) {
 		return;
 	}
 
 	// normal routing
-	WebNode::handle_request_main(request);
+	if (!_routing_enabled) {
+		_handle_request_main(request);
+		return;
+	}
+
+	if (!try_route_request_to_children(request)) {
+		_handle_request_main(request);
+	}
 }
 
 void WebRoot::handle_error_send_request(Request *request, const int error_code) {

@@ -1,13 +1,20 @@
 #include "list_page.h"
 
+#include "core/math/math.h"
 #include "web/html/html_builder.h"
 #include "web/html/utils.h"
-#include "core/math/math.h"
+#include "web/http/web_permission.h"
 
 #include <tinydir/tinydir.h>
 #include <iostream>
 
 void ListPage::handle_request_main(Request *request) {
+	if (_web_permission.is_valid()) {
+		if (_web_permission->activate(request)) {
+			return;
+		}
+	}
+
 	if (_pages.size() == 0) {
 		render_menu(request);
 		request->body += _no_entries_response;

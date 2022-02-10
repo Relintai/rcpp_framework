@@ -5,8 +5,15 @@
 #include "database/query_builder.h"
 #include "database/table_builder.h"
 #include "database/query_result.h"
+#include "web/http/web_permission.h"
 
 void MessagePage::handle_request_main(Request *request) {
+	if (_web_permission.is_valid()) {
+		if (_web_permission->activate(request)) {
+			return;
+		}
+	}
+
 	Ref<QueryBuilder> b = db->get_query_builder();
 
 	b->select("text")->from("message_page")->end_command();
