@@ -30,6 +30,8 @@ void NodeTree::update() {
 		_rw_lock.write_lock();
 		_root_node->notification(Node::NOTIFICATION_TREE_WRITE_LOCKED);
 		_rw_lock.write_unlock();
+
+		_write_lock_requested = false;
 	}
 }
 
