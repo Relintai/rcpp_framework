@@ -131,13 +131,13 @@ std::string brotliDecompress(const char *data,
    @endcode
  */
 char *getHttpFullDate(
-		const trantor::Date &date = trantor::Date::now());
+		const Date &date = Date::now());
 
-/// Get the trantor::Date object according to the http full date string
+/// Get the Date object according to the http full date string
 /**
- * Returns trantor::Date(std::numeric_limits<int64_t>::max()) upon failure.
+ * Returns Date(std::numeric_limits<int64_t>::max()) upon failure.
  */
-trantor::Date getHttpDate(const std::string &httpFullDateString);
+Date getHttpDate(const std::string &httpFullDateString);
 
 /// Get a formatted string
 std::string formattedString(const char *format, ...);

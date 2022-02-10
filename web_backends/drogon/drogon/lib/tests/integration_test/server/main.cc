@@ -240,8 +240,8 @@ int main() {
 	// AOP example
 	app().registerBeginningAdvice(
 			[]() { LOG_DEBUG << "Event loop is running!"; });
-	app().registerNewConnectionAdvice([](const trantor::InetAddress &peer,
-											  const trantor::InetAddress &local) {
+	app().registerNewConnectionAdvice([](const InetAddress &peer,
+											  const InetAddress &local) {
 		LOG_DEBUG << "New connection: " << peer.toIpPort() << "-->"
 				  << local.toIpPort();
 		return true;
@@ -336,7 +336,7 @@ int main() {
 	});
 	std::cout << "Date: "
 			  << std::string{ drogon::utils::getHttpFullDate(
-						 trantor::Date::now()) }
+						 Date::now()) }
 			  << std::endl;
 	app().run();
 }

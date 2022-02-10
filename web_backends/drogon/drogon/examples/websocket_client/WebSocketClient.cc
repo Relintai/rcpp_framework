@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
 	// Quit the application after 15 seconds
 	app().getLoop()->runAfter(15, []() { app().quit(); });
 
-	app().setLogLevel(trantor::Logger::kDebug);
+	app().setLogLevel(Logger::kDebug);
 	app().run();
 	LOG_INFO << "bye!";
 	return 0;

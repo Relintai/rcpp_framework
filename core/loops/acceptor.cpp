@@ -29,7 +29,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "acceptor.h"
-using namespace trantor;
 
 #ifndef O_CLOEXEC
 #define O_CLOEXEC O_NOINHERIT

@@ -28,14 +28,13 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <assert.h>
 #include "concurrent_task_queue.h"
 #include "core/log/logger.h"
+#include <assert.h>
 #ifdef __linux__
 #include <sys/prctl.h>
 #endif
 
-using namespace trantor;
 ConcurrentTaskQueue::ConcurrentTaskQueue(size_t threadNum,
 		const std::string &name) :
 		queueCount_(threadNum), queueName_(name), stop_(false) {

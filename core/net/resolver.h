@@ -34,8 +34,6 @@
 #include "core/loops/event_loop.h"
 #include "core/net/inet_address.h"
 
-namespace trantor
-{
 /**
  * @brief This class represents an asynchronous DNS resolver.
  * @note Although the c-ares library is not essential, it is recommended to
@@ -44,7 +42,7 @@ namespace trantor
 class Resolver
 {
   public:
-    using Callback = std::function<void(const trantor::InetAddress&)>;
+    using Callback = std::function<void(const InetAddress&)>;
 
     /**
      * @brief Create a new DNS resolver.
@@ -77,4 +75,3 @@ class Resolver
      */
     static bool isCAresUsed();
 };
-}  // namespace trantor

@@ -1,38 +1,38 @@
 #include "core/net/resolver.h"
 #include <iostream>
-void dns(const std::shared_ptr<trantor::Resolver> &resolver)
+void dns(const std::shared_ptr<Resolver> &resolver)
 {
-    auto now = trantor::Date::now();
-    resolver->resolve("www.baidu.com", [now](const trantor::InetAddress &addr) {
-        auto interval = trantor::Date::now().microSecondsSinceEpoch() -
+    auto now = Date::now();
+    resolver->resolve("www.baidu.com", [now](const InetAddress &addr) {
+        auto interval = Date::now().microSecondsSinceEpoch() -
                         now.microSecondsSinceEpoch();
         std::cout << "baidu:" << addr.toIp() << " " << interval / 1000 << "ms"
                   << std::endl;
     });
     resolver->resolve("www.google.com",
-                      [now](const trantor::InetAddress &addr) {
+                      [now](const InetAddress &addr) {
                           auto interval =
-                              trantor::Date::now().microSecondsSinceEpoch() -
+                              Date::now().microSecondsSinceEpoch() -
                               now.microSecondsSinceEpoch();
                           std::cout << "google:" << addr.toIp() << " "
                                     << interval / 1000 << "ms" << std::endl;
                       });
-    resolver->resolve("www.sina.com", [now](const trantor::InetAddress &addr) {
-        auto interval = trantor::Date::now().microSecondsSinceEpoch() -
+    resolver->resolve("www.sina.com", [now](const InetAddress &addr) {
+        auto interval = Date::now().microSecondsSinceEpoch() -
                         now.microSecondsSinceEpoch();
         std::cout << "sina:" << addr.toIp() << " " << interval / 1000 << "ms"
                   << std::endl;
     });
     resolver->resolve("www.xjfisfjaskfeiakdjfg.com",
-                      [now](const trantor::InetAddress &addr) {
+                      [now](const InetAddress &addr) {
                           auto interval =
-                              trantor::Date::now().microSecondsSinceEpoch() -
+                              Date::now().microSecondsSinceEpoch() -
                               now.microSecondsSinceEpoch();
                           std::cout << "bad address:" << addr.toIp() << " "
                                     << interval / 1000 << "ms" << std::endl;
                       });
-    resolver->resolve("localhost", [now](const trantor::InetAddress &addr) {
-        auto interval = trantor::Date::now().microSecondsSinceEpoch() -
+    resolver->resolve("localhost", [now](const InetAddress &addr) {
+        auto interval = Date::now().microSecondsSinceEpoch() -
                         now.microSecondsSinceEpoch();
         std::cout << "localhost:" << addr.toIp() << " " << interval / 1000
                   << "ms" << std::endl;
@@ -40,8 +40,8 @@ void dns(const std::shared_ptr<trantor::Resolver> &resolver)
 }
 int main()
 {
-    trantor::EventLoop loop;
-    auto resolver = trantor::Resolver::newResolver(&loop);
+    EventLoop loop;
+    auto resolver = Resolver::newResolver(&loop);
     dns(resolver);
     loop.runAfter(1.0, [resolver]() { dns(resolver); });
     loop.loop();

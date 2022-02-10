@@ -40,8 +40,7 @@
 #include <thread>
 #include <array>
 
-namespace trantor
-{
+
 #ifdef USE_OPENSSL
 enum class SSLStatus
 {
@@ -77,7 +76,7 @@ class TcpConnectionImpl : public TcpConnection,
 {
     friend class TcpServer;
     friend class TcpClient;
-    friend void trantor::removeConnection(EventLoop *loop,
+    friend void removeConnection(EventLoop *loop,
                                           const TcpConnectionPtr &conn);
 
 protected:
@@ -363,5 +362,3 @@ protected:
 };
 
 using TcpConnectionImplPtr = std::shared_ptr<TcpConnectionImpl>;
-
-}  // namespace trantor

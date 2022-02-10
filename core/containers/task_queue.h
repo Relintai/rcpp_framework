@@ -34,7 +34,6 @@
 #include <future>
 #include <string>
 
-namespace trantor {
 /**
  * @brief This class is a pure virtual class that can be implemented as a
  * SerialTaskQueue or a ConcurrentTaskQueue.
@@ -74,4 +73,4 @@ public:
 	virtual ~TaskQueue() {
 	}
 };
-} // namespace trantor
+

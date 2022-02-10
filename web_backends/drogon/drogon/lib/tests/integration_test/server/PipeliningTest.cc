@@ -27,7 +27,7 @@ void PipeliningTest::asyncHandleHttpRequest(
 		});
 		return;
 	}
-	trantor::EventLoop::getEventLoopOfCurrentThread()->runAfter(
+	EventLoop::getEventLoopOfCurrentThread()->runAfter(
 			delay, [c, callback]() {
 				auto resp = HttpResponse::newHttpResponse();
 				auto str = utils::formattedString("<P>the %dth response</P>", c);

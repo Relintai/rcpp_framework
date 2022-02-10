@@ -39,7 +39,6 @@
 #include <functional>
 #include <thread>
 
-namespace trantor {
 class Connector;
 using ConnectorPtr = std::shared_ptr<Connector>;
 class SSLContext;
@@ -246,5 +245,3 @@ private:
 	static IgnoreSigPipe initObj;
 #endif
 };
-
-} // namespace trantor

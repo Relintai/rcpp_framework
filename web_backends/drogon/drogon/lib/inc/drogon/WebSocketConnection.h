@@ -111,10 +111,10 @@ public:
 			const WebSocketMessageType type = WebSocketMessageType::Text) = 0;
 
 	/// Return the local IP address and port number of the connection
-	virtual const trantor::InetAddress &localAddr() const = 0;
+	virtual const InetAddress &localAddr() const = 0;
 
 	/// Return the remote IP address and port number of the connection
-	virtual const trantor::InetAddress &peerAddr() const = 0;
+	virtual const InetAddress &peerAddr() const = 0;
 
 	/// Return true if the connection is open
 	virtual bool connected() const = 0;

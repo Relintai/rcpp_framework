@@ -39,7 +39,6 @@
 using EventList = std::vector<struct epoll_event>;
 #endif
 
-namespace trantor {
 class Channel;
 
 class EpollPoller : public Poller {
@@ -74,4 +73,3 @@ private:
 	void fillActiveChannels(int numEvents, ChannelList *activeChannels) const;
 #endif
 };
-} // namespace trantor

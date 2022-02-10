@@ -41,7 +41,6 @@
 #include <unistd.h>
 #endif
 
-namespace trantor {
 #ifdef USE_KQUEUE
 namespace {
 const int kNew = -1;
@@ -232,4 +231,3 @@ void KQueue::removeChannel(Channel *) {
 void KQueue::resetAfterFork() {
 }
 #endif
-} // namespace trantor

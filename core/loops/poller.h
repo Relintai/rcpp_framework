@@ -35,7 +35,6 @@
 #include <map>
 #include <memory>
 
-namespace trantor {
 class Channel;
 #ifdef _WIN32
 using EventCallback = std::function<void(uint64_t)>;
@@ -70,4 +69,3 @@ public:
 private:
 	EventLoop *ownerLoop_;
 };
-} // namespace trantor

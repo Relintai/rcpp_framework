@@ -35,8 +35,6 @@
 
 #define MICRO_SECONDS_PRE_SEC 1000000
 
-namespace trantor
-{
 /**
  * @brief This class represents a time point.
  *
@@ -293,4 +291,3 @@ class Date
   private:
     int64_t microSecondsSinceEpoch_{0};
 };
-}  // namespace trantor

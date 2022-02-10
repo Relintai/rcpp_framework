@@ -7,8 +7,8 @@ using namespace std::literals;
 
 int main()
 {
-    trantor::Logger::setLogLevel(trantor::Logger::kTrace);
-    trantor::EventLoop loop;
+    Logger::setLogLevel(Logger::kTrace);
+    EventLoop loop;
     auto id1 = loop.runAfter(1s, []() {
         LOG_ERROR << "This info shouldn't be displayed!";
     });
@@ -22,7 +22,7 @@ int main()
     });
     thread.detach();
     loop.runEvery(3, []() { LOG_DEBUG << " runEvery 3s"; });
-    loop.runAt(trantor::Date::date().after(10),
+    loop.runAt(Date::date().after(10),
                []() { LOG_DEBUG << "runAt 10s later"; });
     loop.runAfter(5, []() { std::cout << "runAt 5s later" << std::endl; });
     loop.runEvery(1, []() { std::cout << "runEvery 1s" << std::endl; });

@@ -34,12 +34,12 @@ class HttpResponseImpl : public HttpResponse {
 
 public:
 	HttpResponseImpl() :
-			creationDate_(trantor::Date::now()) {
+			creationDate_(Date::now()) {
 	}
 	HttpResponseImpl(HttpStatusCode code, ContentType type) :
 			statusCode_(code),
 			statusMessage_(statusCodeToString(code)),
-			creationDate_(trantor::Date::now()),
+			creationDate_(Date::now()),
 			contentType_(type),
 			flagForParsingContentType_(true),
 			contentTypeString_(webContentTypeToString(type)) {
@@ -51,7 +51,7 @@ public:
 		return statusCode_;
 	}
 
-	const trantor::Date &creationDate() const override {
+	const Date &creationDate() const override {
 		return creationDate_;
 	}
 
@@ -199,9 +199,9 @@ public:
 	void redirect(const std::string &url) {
 		headers_["location"] = url;
 	}
-	std::shared_ptr<trantor::MsgBuffer> renderToBuffer();
-	void renderToBuffer(trantor::MsgBuffer &buffer);
-	std::shared_ptr<trantor::MsgBuffer> renderHeaderForHeadMethod();
+	std::shared_ptr<MsgBuffer> renderToBuffer();
+	void renderToBuffer(MsgBuffer &buffer);
+	std::shared_ptr<MsgBuffer> renderHeaderForHeadMethod();
 	void clear() override;
 
 	void setExpiredTime(ssize_t expiredTime) override {
@@ -266,7 +266,7 @@ public:
 		sendfileName_ = filename;
 	}
 	void makeHeaderString() {
-		fullHeaderString_ = std::make_shared<trantor::MsgBuffer>(128);
+		fullHeaderString_ = std::make_shared<MsgBuffer>(128);
 		makeHeaderString(*fullHeaderString_);
 	}
 
@@ -295,7 +295,7 @@ public:
 	~HttpResponseImpl() override = default;
 
 protected:
-	void makeHeaderString(trantor::MsgBuffer &headerString);
+	void makeHeaderString(MsgBuffer &headerString);
 
 private:
 	void setBody(const char *body, size_t len) override {
@@ -327,7 +327,7 @@ private:
 	HttpStatusCode statusCode_{ kUnknown };
 	string_view statusMessage_;
 
-	trantor::Date creationDate_;
+	Date creationDate_;
 	Version version_{ Version::kHttp11 };
 	bool closeConnection_{ false };
 	mutable std::shared_ptr<HttpMessageBody> bodyPtr_;
@@ -335,8 +335,8 @@ private:
 	std::string sendfileName_;
 	mutable std::shared_ptr<Json::Value> jsonPtr_;
 
-	std::shared_ptr<trantor::MsgBuffer> fullHeaderString_;
-	mutable std::shared_ptr<trantor::MsgBuffer> httpString_;
+	std::shared_ptr<MsgBuffer> fullHeaderString_;
+	mutable std::shared_ptr<MsgBuffer> httpString_;
 	mutable size_t datePos_{ static_cast<size_t>(-1) };
 	mutable int64_t httpStringDate_{ -1 };
 	mutable bool flagForParsingJson_{ false };

@@ -7,7 +7,7 @@ using namespace drogon;
 int nth_resp = 0;
 
 int main() {
-	trantor::Logger::setLogLevel(trantor::Logger::kTrace);
+	Logger::setLogLevel(Logger::kTrace);
 	{
 		auto client = HttpClient::newHttpClient("http://www.baidu.com");
 		auto req = HttpRequest::newHttpRequest();

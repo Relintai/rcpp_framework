@@ -42,10 +42,7 @@
 #include <assert.h>
 #include <errno.h>
 
-using namespace trantor;
-namespace trantor {
 static constexpr size_t kBufferOffset{ 8 };
-}
 
 MsgBuffer::MsgBuffer(size_t len) :
 		head_(kBufferOffset), initCap_(len), buffer_(len + head_), tail_(head_) {

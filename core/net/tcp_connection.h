@@ -38,7 +38,6 @@
 #include <memory>
 #include <string>
 
-namespace trantor {
 class SSLContext;
 std::shared_ptr<SSLContext> newSSLServerContext(
 		const std::string &certPath,
@@ -265,4 +264,3 @@ private:
 	std::shared_ptr<void> contextPtr_;
 };
 
-} // namespace trantor

@@ -35,7 +35,6 @@
 #include <functional>
 #include <memory>
 
-namespace trantor {
 class EventLoop;
 /**
  * @brief This class is used to implement reactor pattern. A Channel object
@@ -304,4 +303,3 @@ private:
 	std::weak_ptr<void> tie_;
 	bool tied_;
 };
-} // namespace trantor

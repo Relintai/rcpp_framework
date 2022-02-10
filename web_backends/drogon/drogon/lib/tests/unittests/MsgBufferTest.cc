@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-using namespace trantor;
+
 DROGON_TEST(MsgBufferTest) {
 	SUBSECTION(readableTest) {
 		MsgBuffer buffer;

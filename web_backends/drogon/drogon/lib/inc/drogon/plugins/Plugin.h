@@ -29,7 +29,7 @@ enum class PluginStatus {
  * @brief The abstract base class for plugins.
  *
  */
-class PluginBase : public trantor::NonCopyable {
+class PluginBase : public NonCopyable {
 public:
 	/// This method must be called by drogon.
 	void initialize() {

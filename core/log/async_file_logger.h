@@ -39,7 +39,6 @@
 #include <string>
 #include <thread>
 
-namespace trantor {
 using StringPtr = std::shared_ptr<std::string>;
 using StringPtrQueue = std::queue<StringPtr>;
 
@@ -159,5 +158,3 @@ protected:
 	uint64_t lostCounter_{ 0 };
 	void swapBuffer();
 };
-
-} // namespace trantor

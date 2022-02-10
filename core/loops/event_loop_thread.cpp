@@ -34,7 +34,6 @@
 #include <sys/prctl.h>
 #endif
 
-using namespace trantor;
 EventLoopThread::EventLoopThread(const std::string &threadName) :
 		loop_(nullptr),
 		loopThreadName_(threadName),

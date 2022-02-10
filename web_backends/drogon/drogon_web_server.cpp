@@ -59,7 +59,7 @@ void DrogonWebServer::run() {
 
 	LOG_TRACE << "Start to run...";
 
-	trantor::AsyncFileLogger asyncFileLogger;
+	AsyncFileLogger asyncFileLogger;
 
 	// Create dirs for cache files
 	for (int i = 0; i < 256; ++i) {
@@ -127,7 +127,7 @@ void DrogonWebServer::run() {
 			asyncFileLogger.setFileName(baseName, ".log", _log_path);
 			asyncFileLogger.startLogging();
 
-			trantor::Logger::setOutputFunction(
+			Logger::setOutputFunction(
 					[&](const char *msg, const uint64_t len) {
 						asyncFileLogger.output(msg, len);
 					},
@@ -240,8 +240,8 @@ const std::string &DrogonWebServer::get_upload_path() const {
 	return _upload_path;
 }
 
-const std::shared_ptr<trantor::Resolver> &DrogonWebServer::get_resolver() const {
-	static std::shared_ptr<trantor::Resolver> resolver = trantor::Resolver::newResolver(get_loop());
+const std::shared_ptr<Resolver> &DrogonWebServer::get_resolver() const {
+	static std::shared_ptr<Resolver> resolver = Resolver::newResolver(get_loop());
 	return resolver;
 }
 
@@ -286,8 +286,8 @@ void DrogonWebServer::set_log_path(const std::string &logPath, const std::string
 	_logfile_base_name = logfileBaseName;
 	_logfile_size = logfileSize;
 }
-void DrogonWebServer::set_log_level(trantor::Logger::LogLevel level) {
-	trantor::Logger::setLogLevel(level);
+void DrogonWebServer::set_log_level(Logger::LogLevel level) {
+	Logger::setLogLevel(level);
 }
 
 void DrogonWebServer::enable_sendfile(bool sendFile) {
@@ -405,10 +405,10 @@ const std::pair<unsigned int, std::string> &DrogonWebServer::get_float_precision
 	return _float_precision_in_json;
 }
 
-trantor::EventLoop *DrogonWebServer::get_loop() const {
+EventLoop *DrogonWebServer::get_loop() const {
 	return _loop;
 }
-trantor::EventLoop *DrogonWebServer::get_io_loop(size_t id) const {
+EventLoop *DrogonWebServer::get_io_loop(size_t id) const {
 	assert(_listener_manager);
 
 	return _listener_manager->getIOLoop(id);
@@ -438,7 +438,7 @@ const std::string &DrogonWebServer::get_server_header_string() const {
 	return _server_header;
 }
 
-std::vector<trantor::InetAddress> DrogonWebServer::get_listeners() const {
+std::vector<InetAddress> DrogonWebServer::get_listeners() const {
 	return _listener_manager->getListeners();
 }
 
@@ -454,7 +454,7 @@ bool DrogonWebServer::support_ssl() const {
 }
 
 size_t DrogonWebServer::get_current_thread_index() const {
-	trantor::EventLoop *loop = trantor::EventLoop::getEventLoopOfCurrentThread();
+	EventLoop *loop = EventLoop::getEventLoopOfCurrentThread();
 
 	if (loop) {
 		return loop->index();
@@ -565,7 +565,7 @@ void DrogonWebServer::on_new_websock_request(const HttpRequestImplPtr &req, std:
 				});
 	}*/
 }
-void DrogonWebServer::on_connection(const trantor::TcpConnectionPtr &conn) {
+void DrogonWebServer::on_connection(const TcpConnectionPtr &conn) {
 	static std::mutex mtx;
 	LOG_TRACE << "connect!!!" << _max_connection_num
 			  << " num=" << _connection_num.load();
@@ -664,7 +664,7 @@ DrogonWebServer::DrogonWebServer() :
 	//pluginsManagerPtr_(new PluginsManager),
 	//uploadPath_(rootPath_ + "uploads") {
 
-	_loop = new trantor::EventLoop();
+	_loop = new EventLoop();
 
 	//_listener_manager = new ListenerManager();
 	_upload_path = _root_path + "uploads";

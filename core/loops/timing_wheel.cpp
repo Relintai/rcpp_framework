@@ -30,9 +30,8 @@
 
 #include "core/loops/timing_wheel.h"
 
-using namespace trantor;
 
-TimingWheel::TimingWheel(trantor::EventLoop *loop,
+TimingWheel::TimingWheel(EventLoop *loop,
 		size_t maxTimeout,
 		float ticksInterval,
 		size_t bucketsNumPerWheel) :

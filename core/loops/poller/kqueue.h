@@ -41,7 +41,6 @@
 using EventList = std::vector<struct kevent>;
 #endif
 
-namespace trantor {
 class Channel;
 
 class KQueue : public Poller {
@@ -65,5 +64,3 @@ private:
 	void update(Channel *channel);
 #endif
 };
-
-} // namespace trantor

@@ -42,7 +42,6 @@
 #include <thread>
 #include <vector>
 
-namespace trantor {
 class Poller;
 class TimerQueue;
 class Channel;
@@ -323,5 +322,3 @@ private:
 #endif
 	EventLoop **threadLocalLoopPtr_;
 };
-
-} // namespace trantor

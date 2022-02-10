@@ -37,7 +37,6 @@
 #include <string>
 #include <vector>
 
-namespace trantor {
 /**
  * @brief This class implements a task queue running in parallel. Basically this
  * can be called a threads pool.
@@ -99,5 +98,3 @@ private:
 	std::atomic_bool stop_;
 	void queueFunc(int queueNum);
 };
-
-} // namespace trantor

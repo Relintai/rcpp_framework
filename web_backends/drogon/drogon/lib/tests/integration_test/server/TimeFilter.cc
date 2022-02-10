@@ -7,18 +7,18 @@
 void TimeFilter::doFilter(const HttpRequestPtr &req,
 		FilterCallback &&cb,
 		FilterChainCallback &&ccb) {
-	trantor::Date now = trantor::Date::date();
+	Date now = Date::date();
 	if (!req->session()) {
 		// no session support by framework,pls enable session
 		auto resp = HttpResponse::newNotFoundResponse();
 		cb(resp);
 		return;
 	}
-	auto lastDate = req->session()->getOptional<trantor::Date>(VDate);
+	auto lastDate = req->session()->getOptional<Date>(VDate);
 	if (lastDate) {
 		LOG_TRACE << "last:" << lastDate->toFormattedString(false);
-		req->session()->modify<trantor::Date>(VDate,
-				[now](trantor::Date &vdate) {
+		req->session()->modify<Date>(VDate,
+				[now](Date &vdate) {
 					vdate = now;
 				});
 		LOG_TRACE << "update visitDate";

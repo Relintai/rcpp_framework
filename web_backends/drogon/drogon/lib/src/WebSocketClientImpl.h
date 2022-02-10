@@ -47,17 +47,17 @@ public:
 	void connectToServer(const HttpRequestPtr &request,
 			const WebSocketRequestCallback &callback) override;
 
-	trantor::EventLoop *getLoop() override {
+	EventLoop *getLoop() override {
 		return loop_;
 	}
 
-	WebSocketClientImpl(trantor::EventLoop *loop,
-			const trantor::InetAddress &addr,
+	WebSocketClientImpl(EventLoop *loop,
+			const InetAddress &addr,
 			bool useSSL = false,
 			bool useOldTLS = false,
 			bool validateCert = true);
 
-	WebSocketClientImpl(trantor::EventLoop *loop,
+	WebSocketClientImpl(EventLoop *loop,
 			const std::string &hostString,
 			bool useOldTLS = false,
 			bool validateCert = true);
@@ -65,9 +65,9 @@ public:
 	~WebSocketClientImpl() override;
 
 private:
-	std::shared_ptr<trantor::TcpClient> tcpClientPtr_;
-	trantor::EventLoop *loop_;
-	trantor::InetAddress serverAddr_;
+	std::shared_ptr<TcpClient> tcpClientPtr_;
+	EventLoop *loop_;
+	InetAddress serverAddr_;
 	std::string domain_;
 	bool useSSL_{ false };
 	bool useOldTLS_{ false };
@@ -89,13 +89,13 @@ private:
 	WebSocketConnectionImplPtr websockConnPtr_;
 
 	void connectToServerInLoop();
-	void sendReq(const trantor::TcpConnectionPtr &connPtr);
-	void onRecvMessage(const trantor::TcpConnectionPtr &, trantor::MsgBuffer *);
-	void onRecvWsMessage(const trantor::TcpConnectionPtr &,
-			trantor::MsgBuffer *);
+	void sendReq(const TcpConnectionPtr &connPtr);
+	void onRecvMessage(const TcpConnectionPtr &, MsgBuffer *);
+	void onRecvWsMessage(const TcpConnectionPtr &,
+			MsgBuffer *);
 	void reconnect();
 	void createTcpClient();
-	std::shared_ptr<trantor::Resolver> resolver_;
+	std::shared_ptr<Resolver> resolver_;
 };
 
 } // namespace drogon

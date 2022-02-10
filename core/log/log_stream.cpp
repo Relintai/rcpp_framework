@@ -38,10 +38,8 @@
 #include <iostream>
 #include <limits>
 
-using namespace trantor;
-using namespace trantor::detail;
+using namespace detail;
 
-namespace trantor {
 namespace detail {
 const char digits[] = "9876543210123456789";
 const char *zero = digits + 9;
@@ -89,7 +87,6 @@ template class FixedBuffer<kSmallBuffer>;
 template class FixedBuffer<kLargeBuffer>;
 
 } // namespace detail
-} // namespace trantor
 
 template <int SIZE>
 const char *FixedBuffer<SIZE>::debugString() {

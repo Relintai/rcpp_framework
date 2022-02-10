@@ -16,8 +16,6 @@
 
 #include <trantor/exports.h>
 
-namespace trantor
-{
 /**
  * @brief This class represents a non-copyable object.
  *
@@ -37,5 +35,3 @@ class TRANTOR_EXPORT NonCopyable
     NonCopyable(NonCopyable &&) noexcept(true) = default;
     NonCopyable &operator=(NonCopyable &&) noexcept(true) = default;
 };
-
-}  // namespace trantor

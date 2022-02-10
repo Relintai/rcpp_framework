@@ -12,7 +12,7 @@ int main()
     counter = 0;
     std::promise<int> pro;
     auto ft = pro.get_future();
-    trantor::SerialTaskQueue queue("");
+    SerialTaskQueue queue("");
     queue.runTaskInQueue([&counter, &pro, &queue]() {
         for (int i = 0; i < 10000; ++i)
         {

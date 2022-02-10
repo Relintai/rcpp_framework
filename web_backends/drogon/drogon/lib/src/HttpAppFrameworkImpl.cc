@@ -365,8 +365,8 @@ HttpAppFramework &HttpAppFrameworkImpl::setLogPath(
 	return *this;
 }
 HttpAppFramework &HttpAppFrameworkImpl::setLogLevel(
-		trantor::Logger::LogLevel level) {
-	trantor::Logger::setLogLevel(level);
+		Logger::LogLevel level) {
+	Logger::setLogLevel(level);
 	return *this;
 }
 HttpAppFramework &HttpAppFrameworkImpl::setSSLConfigCommands(
@@ -386,7 +386,7 @@ void HttpAppFrameworkImpl::run() {
 		getLoop()->moveToCurrentThread();
 	}
 	LOG_TRACE << "Start to run...";
-	trantor::AsyncFileLogger asyncFileLogger;
+	AsyncFileLogger asyncFileLogger;
 	// Create dirs for cache files
 	for (int i = 0; i < 256; ++i) {
 		char dirName[4];
@@ -443,7 +443,7 @@ void HttpAppFrameworkImpl::run() {
 			asyncFileLogger.setFileName(baseName, ".log", logPath_);
 			asyncFileLogger.startLogging();
 
-			trantor::Logger::setOutputFunction(
+			Logger::setOutputFunction(
 					[&](const char *msg, const uint64_t len) {
 						asyncFileLogger.output(msg, len);
 					},
@@ -518,7 +518,7 @@ void HttpAppFrameworkImpl::run() {
 	getLoop()->loop();
 }
 
-void HttpAppFrameworkImpl::onConnection(const trantor::TcpConnectionPtr &conn) {
+void HttpAppFrameworkImpl::onConnection(const TcpConnectionPtr &conn) {
 	static std::mutex mtx;
 	LOG_TRACE << "connect!!!" << maxConnectionNum_
 			  << " num=" << connectionNum_.load();
@@ -737,13 +737,13 @@ void HttpAppFrameworkImpl::onAsyncRequest(
 	}*/
 }
 
-trantor::EventLoop *HttpAppFrameworkImpl::getLoop() const {
-	//static trantor::EventLoop loop;
+EventLoop *HttpAppFrameworkImpl::getLoop() const {
+	//static EventLoop loop;
 	//return &loop;]
 	return nullptr;
 }
 
-trantor::EventLoop *HttpAppFrameworkImpl::getIOLoop(size_t id) const {
+EventLoop *HttpAppFrameworkImpl::getIOLoop(size_t id) const {
 	assert(listenerManagerPtr_);
 	return listenerManagerPtr_->getIOLoop(id);
 }
@@ -781,7 +781,7 @@ void HttpAppFrameworkImpl::forward(
 				clientPtr = iter->second;
 			} else {
 				clientPtr = std::make_shared<HttpClientImpl>(
-						trantor::EventLoop::getEventLoopOfCurrentThread() ? trantor::EventLoop::getEventLoopOfCurrentThread() : getLoop(),
+						EventLoop::getEventLoopOfCurrentThread() ? EventLoop::getEventLoopOfCurrentThread() : getLoop(),
 						hostString);
 				clientsMap[hostString] = clientPtr;
 			}
@@ -815,7 +815,7 @@ const HttpResponsePtr &HttpAppFrameworkImpl::getCustom404Page() {
 	if (!custom404_) {
 		return custom404_;
 	}
-	auto loop = trantor::EventLoop::getEventLoopOfCurrentThread();
+	auto loop = EventLoop::getEventLoopOfCurrentThread();
 	if (loop && loop->index() < app().getThreadNum()) {
 		// If the current thread is an IO thread
 		static IOThreadStorage<HttpResponsePtr> thread404Pages;
@@ -869,7 +869,7 @@ const std::function<HttpResponsePtr(HttpStatusCode)>
 	return customErrorHandler_;
 }
 
-std::vector<trantor::InetAddress> HttpAppFrameworkImpl::getListeners() const {
+std::vector<InetAddress> HttpAppFrameworkImpl::getListeners() const {
 	return listenerManagerPtr_->getListeners();
 }
 HttpAppFramework &HttpAppFrameworkImpl::setDefaultHandler(

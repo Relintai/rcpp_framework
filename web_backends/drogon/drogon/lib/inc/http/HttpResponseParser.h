@@ -22,7 +22,7 @@
 #include <mutex>
 
 namespace drogon {
-class HttpResponseParser : public trantor::NonCopyable {
+class HttpResponseParser : public NonCopyable {
 public:
 	enum class HttpResponseParseStatus {
 		kExpectResponseLine,
@@ -35,12 +35,12 @@ public:
 		kGotAll,
 	};
 
-	explicit HttpResponseParser(const trantor::TcpConnectionPtr &connPtr);
+	explicit HttpResponseParser(const TcpConnectionPtr &connPtr);
 
 	// default copy-ctor, dtor and assignment are fine
 
 	// return false if any error
-	bool parseResponse(trantor::MsgBuffer *buf);
+	bool parseResponse(MsgBuffer *buf);
 	bool parseResponseOnClose();
 
 	bool gotAll() const {
@@ -65,7 +65,7 @@ private:
 	bool parseResponseForHeadMethod_{ false };
 	size_t leftBodyLength_{ 0 };
 	size_t currentChunkLength_{ 0 };
-	std::weak_ptr<trantor::TcpConnection> conn_;
+	std::weak_ptr<TcpConnection> conn_;
 };
 
 } // namespace drogon

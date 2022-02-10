@@ -43,7 +43,7 @@
 #include <poll.h>
 #endif
 #include <iostream>
-namespace trantor {
+
 const int Channel::kNoneEvent = 0;
 
 const int Channel::kReadEvent = POLLIN | POLLPRI;
@@ -111,4 +111,3 @@ void Channel::handleEventSafely() {
 	}
 }
 
-} // namespace trantor

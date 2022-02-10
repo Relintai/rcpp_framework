@@ -35,7 +35,6 @@
 #include <atomic>
 #include <memory>
 
-namespace trantor {
 class Connector : public std::enable_shared_from_this<Connector> {
 protected:
 	Connector(const Connector &) = delete;
@@ -98,5 +97,3 @@ private:
 	void handleError();
 	void retry(int sockfd);
 };
-
-} // namespace trantor

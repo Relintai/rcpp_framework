@@ -41,7 +41,7 @@ struct hostent;
 struct ares_channeldata;
 using ares_channel = struct ares_channeldata *;
 }
-namespace trantor {
+
 class AresResolver : public Resolver,
 					 public std::enable_shared_from_this<AresResolver> {
 protected:
@@ -52,7 +52,7 @@ protected:
 	AresResolver &operator=(AresResolver &&) noexcept(true) = default;
 
 public:
-	AresResolver(trantor::EventLoop *loop, size_t timeout);
+	AresResolver(EventLoop *loop, size_t timeout);
 	~AresResolver();
 
 	virtual void resolve(const std::string &hostname,
@@ -65,7 +65,7 @@ public:
 			if (iter != globalCache().end()) {
 				auto &cachedAddr = iter->second;
 				if (timeout_ == 0 ||
-						cachedAddr.second.after(timeout_) > trantor::Date::date()) {
+						cachedAddr.second.after(timeout_) > Date::date()) {
 					struct sockaddr_in addr;
 					memset(&addr, 0, sizeof addr);
 					addr.sin_family = AF_INET;
@@ -102,16 +102,16 @@ private:
 	};
 	void resolveInLoop(const std::string &hostname, const Callback &cb);
 	void init();
-	trantor::EventLoop *loop_;
+	EventLoop *loop_;
 	ares_channel ctx_{ nullptr };
 	bool timerActive_{ false };
-	using ChannelList = std::map<int, std::unique_ptr<trantor::Channel> >;
+	using ChannelList = std::map<int, std::unique_ptr<Channel> >;
 	ChannelList channels_;
 	static std::unordered_map<std::string,
-			std::pair<struct in_addr, trantor::Date> > &
+			std::pair<struct in_addr, Date> > &
 	globalCache() {
 		static std::unordered_map<std::string,
-				std::pair<struct in_addr, trantor::Date> >
+				std::pair<struct in_addr, Date> >
 				dnsCache;
 		return dnsCache;
 	}
@@ -158,4 +158,3 @@ private:
 	};
 	static LibraryInitializer libraryInitializer_;
 };
-} // namespace trantor

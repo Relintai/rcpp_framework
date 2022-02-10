@@ -34,7 +34,6 @@
 #include <memory>
 #include <type_traits>
 
-namespace trantor {
 /**
  * @brief This class template represents a lock-free multiple producers single
  * consumer queue
@@ -122,5 +121,3 @@ private:
 	std::atomic<BufferNode *> head_;
 	std::atomic<BufferNode *> tail_;
 };
-
-} // namespace trantor

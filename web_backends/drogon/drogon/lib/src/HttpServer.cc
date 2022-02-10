@@ -35,7 +35,7 @@
 
 using namespace std::placeholders;
 using namespace drogon;
-using namespace trantor;
+
 namespace drogon {
 static HttpResponsePtr getCompressedResponse(const HttpRequestImplPtr &req,
 		const HttpResponsePtr &response,
@@ -127,7 +127,7 @@ static void defaultWebSockAsyncCallback(
 	callback(resp);
 }
 
-static void defaultConnectionCallback(const trantor::TcpConnectionPtr &) {
+static void defaultConnectionCallback(const TcpConnectionPtr &) {
 	return;
 }
 } // namespace drogon
@@ -218,7 +218,7 @@ void HttpServer::onMessage(const TcpConnectionPtr &conn, MsgBuffer *buf) {
 				requestParser->requestImpl()->setPeerAddr(conn->peerAddr());
 				requestParser->requestImpl()->setLocalAddr(conn->localAddr());
 				requestParser->requestImpl()->setCreationDate(
-						trantor::Date::date());
+						Date::date());
 				requestParser->requestImpl()->setSecure(
 						conn->isSSLConnection());
 				if (requestParser->firstReq() &&
@@ -457,7 +457,7 @@ void HttpServer::sendResponse(const TcpConnectionPtr &conn,
 void HttpServer::sendResponses(
 		const TcpConnectionPtr &conn,
 		const std::vector<std::pair<HttpResponsePtr, bool> > &responses,
-		trantor::MsgBuffer &buffer) {
+		MsgBuffer &buffer) {
 	conn->getLoop()->assertInLoopThread();
 	if (responses.empty())
 		return;

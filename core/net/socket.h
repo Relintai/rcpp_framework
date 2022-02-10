@@ -40,7 +40,6 @@
 #endif
 #include <fcntl.h>
 
-namespace trantor {
 class Socket {
 
 protected:
@@ -167,5 +166,3 @@ public:
 #endif
 	}
 };
-
-} // namespace trantor

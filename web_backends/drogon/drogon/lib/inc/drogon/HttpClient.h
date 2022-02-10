@@ -42,7 +42,7 @@ using HttpClientPtr = std::shared_ptr<HttpClient>;
  * response callbacks are invoked without fear of accidental deconstruction.
  *
  */
-class HttpClient : public trantor::NonCopyable {
+class HttpClient : public NonCopyable {
 public:
 	/**
      * @brief Send a request asynchronously to the server
@@ -178,12 +178,12 @@ public:
 	static HttpClientPtr newHttpClient(const std::string &ip,
 			uint16_t port,
 			bool useSSL = false,
-			trantor::EventLoop *loop = nullptr,
+			EventLoop *loop = nullptr,
 			bool useOldTLS = false,
 			bool validateCert = true);
 
 	/// Get the event loop of the client;
-	virtual trantor::EventLoop *getLoop() = 0;
+	virtual EventLoop *getLoop() = 0;
 
 	/// Get the number of bytes sent or received
 	virtual size_t bytesSent() const = 0;
@@ -221,7 +221,7 @@ public:
      *
      */
 	static HttpClientPtr newHttpClient(const std::string &hostString,
-			trantor::EventLoop *loop = nullptr,
+			EventLoop *loop = nullptr,
 			bool useOldTLS = false,
 			bool validateCert = true);
 

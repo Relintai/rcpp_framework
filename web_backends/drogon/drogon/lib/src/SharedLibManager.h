@@ -38,7 +38,7 @@
 #endif
 
 namespace drogon {
-class SharedLibManager : public trantor::NonCopyable {
+class SharedLibManager : public NonCopyable {
 public:
 	SharedLibManager(const std::vector<std::string> &libPaths,
 			const std::string &outputPath);
@@ -57,7 +57,7 @@ private:
 	void *loadLib(const std::string &soFile, void *oldHld);
 	bool shouldCompileLib(const std::string &soFile,
 			const struct stat &sourceStat);
-	trantor::TimerId timeId_;
-	trantor::EventLoopThread workingThread_;
+	TimerId timeId_;
+	EventLoopThread workingThread_;
 };
 } // namespace drogon

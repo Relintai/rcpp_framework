@@ -56,7 +56,7 @@ public:
 
 	const std::string &get_upload_path() const;
 
-	const std::shared_ptr<trantor::Resolver> &get_resolver() const;
+	const std::shared_ptr<Resolver> &get_resolver() const;
 
 	void set_upload_path(const std::string &uploadPath);
 	void set_file_types(const std::vector<std::string> &types);
@@ -65,7 +65,7 @@ public:
 	void set_max_connection_num_per_ip(size_t maxConnectionsPerIP);
 
 	void set_log_path(const std::string &logPath, const std::string &logfileBaseName, size_t logfileSize);
-	void set_log_level(trantor::Logger::LogLevel level);
+	void set_log_level(Logger::LogLevel level);
 	void enable_sendfile(bool sendFile);
 	void enable_gzip(bool useGzip);
 	bool is_gzip_enabled() const;
@@ -110,8 +110,8 @@ public:
 
 	const std::pair<unsigned int, std::string> &get_float_precision_in_json() const;
 
-	trantor::EventLoop *get_loop() const;
-	trantor::EventLoop *get_io_loop(size_t id) const;
+	EventLoop *get_loop() const;
+	EventLoop *get_io_loop(size_t id) const;
 
 	void set_server_header_field(const std::string &server);
 
@@ -123,7 +123,7 @@ public:
 
 	const std::string &get_server_header_string() const;
 
-	std::vector<trantor::InetAddress> get_listeners() const;
+	std::vector<InetAddress> get_listeners() const;
 
 	bool use_sendfile() const;
 
@@ -137,7 +137,7 @@ public:
 
 	void on_async_request(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback);
 	void on_new_websock_request(const HttpRequestImplPtr &req, std::function<void(const HttpResponsePtr &)> &&callback, const WebSocketConnectionImplPtr &wsConnPtr);
-	void on_connection(const trantor::TcpConnectionPtr &conn);
+	void on_connection(const TcpConnectionPtr &conn);
 
 	void find_session_for_request(const HttpRequestImplPtr &req);
 
@@ -197,10 +197,10 @@ protected:
 	bool _enable_date_header{ true };
 	bool _reuse_port{ false };
 
-	trantor::EventLoop *_loop;
+	EventLoop *_loop;
 
 	std::vector<std::function<void()> > _beginning_advices;
-	std::vector<std::function<bool(const trantor::InetAddress &, const trantor::InetAddress &)> > _new_connection_advices;
+	std::vector<std::function<bool(const InetAddress &, const InetAddress &)> > _new_connection_advices;
 	std::vector<std::function<HttpResponsePtr(const HttpRequestPtr &)> > _sync_advices;
 	std::vector<std::function<void(const HttpRequestPtr &, const HttpResponsePtr &)> > _pre_sending_advices;
 };

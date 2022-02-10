@@ -4,10 +4,10 @@
 #include <thread>
 int main()
 {
-    trantor::AsyncFileLogger asyncFileLogger;
+    AsyncFileLogger asyncFileLogger;
     asyncFileLogger.setFileName("async_test");
     asyncFileLogger.startLogging();
-    trantor::Logger::setOutputFunction(
+    Logger::setOutputFunction(
         [&](const char *msg, const uint64_t len) {
             asyncFileLogger.output(msg, len);
         },

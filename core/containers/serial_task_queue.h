@@ -36,8 +36,8 @@
 #include <queue>
 #include <mutex>
 #include <atomic>
-namespace trantor
-{
+
+
 /**
  * @brief This class represents a task queue in which all tasks are executed one
  * by one.
@@ -112,4 +112,3 @@ class SerialTaskQueue : public TaskQueue
     EventLoopThread loopThread_;
     bool stop_{false};
 };
-}  // namespace trantor

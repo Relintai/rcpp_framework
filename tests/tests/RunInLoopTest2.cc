@@ -12,7 +12,7 @@ int main()
     counter = 0;
     std::promise<int> pro;
     auto ft = pro.get_future();
-    trantor::EventLoopThread loopThread;
+    EventLoopThread loopThread;
 
     auto loop = loopThread.getLoop();
     loop->runInLoop([&counter, &pro, loop]() {

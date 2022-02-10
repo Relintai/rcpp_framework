@@ -40,13 +40,9 @@
 #include <functional>
 #include <iostream>
 
-namespace trantor {
 static constexpr std::chrono::seconds kLogFlushTimeout{ 1 };
 static constexpr size_t kMemBufferSize{ 4 * 1024 * 1024 };
 extern const char *strerror_tl(int savedErrno);
-} // namespace trantor
-
-using namespace trantor;
 
 AsyncFileLogger::AsyncFileLogger() :
 		logBufferPtr_(new std::string), nextBufferPtr_(new std::string) {

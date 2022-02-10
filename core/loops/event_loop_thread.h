@@ -37,7 +37,6 @@
 #include <mutex>
 #include <thread>
 
-namespace trantor {
 /**
  * @brief This class represents an event loop thread.
  *
@@ -86,5 +85,3 @@ private:
 	std::once_flag once_;
 	std::thread thread_;
 };
-
-} // namespace trantor

@@ -324,7 +324,7 @@ public:
 		return hf;
 	}
 
-	// Taken from trantor (MIT License) - Funcs.h
+	// Taken from Trantor (BSD-style License) - Funcs.h
 	// Copyright (c) 2018 An Tao
 	static _ALWAYS_INLINE_ uint64_t hton64(uint64_t n) {
 		static const int one = 1;
@@ -336,7 +336,7 @@ public:
 		return n;
 	}
 
-	// Taken from trantor (MIT License) - Funcs.h
+	// Taken from Trantor (BSD-style License) - Funcs.h
 	// Copyright (c) 2018 An Tao
 	static _ALWAYS_INLINE_ uint64_t ntoh64(uint64_t n) {
 		return hton64(n);

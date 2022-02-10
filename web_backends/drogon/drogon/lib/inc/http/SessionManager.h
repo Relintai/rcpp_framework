@@ -23,9 +23,9 @@
 #include <string>
 
 namespace drogon {
-class SessionManager : public trantor::NonCopyable {
+class SessionManager : public NonCopyable {
 public:
-	SessionManager(trantor::EventLoop *loop, size_t timeout);
+	SessionManager(EventLoop *loop, size_t timeout);
 	~SessionManager() {
 		sessionMapPtr_.reset();
 	}
@@ -34,7 +34,7 @@ public:
 
 private:
 	std::unique_ptr<CacheMap<std::string, SessionPtr> > sessionMapPtr_;
-	trantor::EventLoop *loop_;
+	EventLoop *loop_;
 	size_t timeout_;
 };
 } // namespace drogon

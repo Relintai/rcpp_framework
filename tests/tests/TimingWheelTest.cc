@@ -26,9 +26,9 @@ MyClass::~MyClass()
 int main()
 {
     LOG_DEBUG << "start";
-    trantor::EventLoop loop;
+    EventLoop loop;
     std::weak_ptr<MyClass> weakEntry;
-    trantor::TimingWheel wheel(&loop, 75, 0.1, 100);
+    TimingWheel wheel(&loop, 75, 0.1, 100);
     {
         auto entry = std::shared_ptr<MyClass>(new MyClass);
 

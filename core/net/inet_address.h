@@ -46,8 +46,6 @@ using uint16_t = unsigned short;
 #include <unordered_map>
 #include <mutex>
 
-namespace trantor
-{
 /**
  * @brief Wrapper of sockaddr_in. This is an POD interface class.
  *
@@ -230,7 +228,5 @@ class InetAddress
     bool isIpV6_{false};
     bool isUnspecified_{true};
 };
-
-}  // namespace trantor
 
 #endif  // MUDUO_NET_INETADDRESS_H

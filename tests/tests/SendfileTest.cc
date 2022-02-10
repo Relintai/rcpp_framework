@@ -10,7 +10,7 @@
 #include <unistd.h>
 #endif
 
-using namespace trantor;
+
 #define USE_IPV6 0
 int main(int argc, char *argv[])
 {

@@ -39,7 +39,6 @@
 #include <sys/socket.h>
 #endif
 
-using namespace trantor;
 
 bool Socket::isSelfConnect(int sockfd) {
 	struct sockaddr_in6 localaddr = getLocalAddr(sockfd);

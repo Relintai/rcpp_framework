@@ -37,7 +37,6 @@
 #include <queue>
 #include <unordered_set>
 
-namespace trantor {
 // class Timer;
 class EventLoop;
 class Channel;
@@ -92,4 +91,3 @@ protected:
 private:
 	std::unordered_set<uint64_t> timerIdSet_;
 };
-} // namespace trantor

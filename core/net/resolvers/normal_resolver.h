@@ -35,8 +35,8 @@
 #include <thread>
 #include <vector>
 
-namespace trantor {
 constexpr size_t kResolveBufferLength{ 16 * 1024 };
+
 class NormalResolver : public Resolver,
 					   public std::enable_shared_from_this<NormalResolver> {
 protected:
@@ -57,11 +57,11 @@ public:
 
 private:
 	static std::unordered_map<std::string,
-			std::pair<trantor::InetAddress, trantor::Date> > &
+			std::pair<InetAddress, Date> > &
 	globalCache() {
 		static std::unordered_map<
 				std::string,
-				std::pair<trantor::InetAddress, trantor::Date> >
+				std::pair<InetAddress, Date> >
 				dnsCache_;
 		return dnsCache_;
 	}
@@ -69,8 +69,8 @@ private:
 		static std::mutex mutex_;
 		return mutex_;
 	}
-	static trantor::ConcurrentTaskQueue &concurrentTaskQueue() {
-		static trantor::ConcurrentTaskQueue queue(
+	static ConcurrentTaskQueue &concurrentTaskQueue() {
+		static ConcurrentTaskQueue queue(
 				std::thread::hardware_concurrency() < 8 ? 8 : std::thread::hardware_concurrency(),
 				"Dns Queue");
 		return queue;
@@ -78,4 +78,3 @@ private:
 	const size_t timeout_;
 	std::vector<char> resolveBuffer_;
 };
-} // namespace trantor

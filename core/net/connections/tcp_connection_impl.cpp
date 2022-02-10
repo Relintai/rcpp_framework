@@ -54,10 +54,7 @@
 #endif
 #include <regex>
 
-using namespace trantor;
-
 #ifdef USE_OPENSSL
-namespace trantor {
 namespace internal {
 #ifdef _WIN32
 // Code yanked from stackoverflow
@@ -316,9 +313,9 @@ std::shared_ptr<SSLContext> newSSLServerContext(
 	}
 	return ctx;
 }
-} // namespace trantor
+
 #else
-namespace trantor {
+
 std::shared_ptr<SSLContext> newSSLServerContext(
 		const std::string &certPath,
 		const std::string &keyPath,
@@ -327,7 +324,7 @@ std::shared_ptr<SSLContext> newSSLServerContext(
 	LOG_FATAL << "OpenSSL is not found in your system!";
 	abort();
 }
-} // namespace trantor
+
 #endif
 
 TcpConnectionImpl::TcpConnectionImpl(EventLoop *loop,

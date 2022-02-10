@@ -32,9 +32,9 @@
 #include "core/net/tcp_client.h"
 
 #include "connector.h"
-#include "core/net/connections/tcp_connection_impl.h"
-#include "core/loops/event_loop.h"
 #include "core/log/logger.h"
+#include "core/loops/event_loop.h"
+#include "core/net/connections/tcp_connection_impl.h"
 
 #include <algorithm>
 #include <functional>
@@ -43,10 +43,8 @@
 
 #include <stdio.h> // snprintf
 
-using namespace trantor;
 using namespace std::placeholders;
 
-namespace trantor {
 // void removeConnector(const ConnectorPtr &)
 // {
 //     // connector->
@@ -66,8 +64,6 @@ static void defaultConnectionCallback(const TcpConnectionPtr &conn) {
 static void defaultMessageCallback(const TcpConnectionPtr &, MsgBuffer *buf) {
 	buf->retrieveAll();
 }
-
-} // namespace trantor
 
 TcpClient::TcpClient(EventLoop *loop,
 		const InetAddress &serverAddr,

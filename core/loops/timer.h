@@ -36,7 +36,6 @@
 #include <functional>
 #include <iostream>
 
-namespace trantor {
 using TimerId = uint64_t;
 using TimePoint = std::chrono::steady_clock::time_point;
 using TimeInterval = std::chrono::microseconds;
@@ -82,4 +81,3 @@ private:
 	static std::atomic<TimerId> timersCreated_;
 };
 
-} // namespace trantor

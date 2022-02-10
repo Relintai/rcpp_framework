@@ -32,8 +32,6 @@
 #include "core/loops/channel.h"
 #include "core/net/socket.h"
 
-using namespace trantor;
-
 Connector::Connector(EventLoop *loop, const InetAddress &addr, bool retry) :
 		loop_(loop), serverAddr_(addr), retry_(retry) {
 }

@@ -13,7 +13,7 @@
 using namespace std::chrono_literals;
 int main()
 {
-    trantor::EventLoop loop;
+    EventLoop loop;
     std::thread thread([&loop]() {
         std::this_thread::sleep_for(3s);
         loop.runInLoop([&loop]() {

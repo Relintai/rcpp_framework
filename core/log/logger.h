@@ -61,7 +61,6 @@ public:
 	static void _log_index_error(const char *p_function, const char *p_file, int p_line, const int index, const int size, const char *str);
 };
 
-namespace trantor {
 /**
  * @brief This class implements log functions.
  *
@@ -249,64 +248,64 @@ private:
 #ifdef NDEBUG
 #define LOG_TRACE                                                          \
 	if (0)                                                                 \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kTrace, __func__) \
+	Logger(__FILE__, __LINE__, Logger::kTrace, __func__) \
 			.stream()
 #else
 #define LOG_TRACE                                                          \
-	if (trantor::Logger::logLevel() <= trantor::Logger::kTrace)            \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kTrace, __func__) \
+	if (Logger::logLevel() <= Logger::kTrace)            \
+	Logger(__FILE__, __LINE__, Logger::kTrace, __func__) \
 			.stream()
 #define LOG_TRACE_TO(index)                                                \
-	if (trantor::Logger::logLevel() <= trantor::Logger::kTrace)            \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kTrace, __func__) \
+	if (Logger::logLevel() <= Logger::kTrace)            \
+	Logger(__FILE__, __LINE__, Logger::kTrace, __func__) \
 			.setIndex(index)                                               \
 			.stream()
 
 #endif
 
 #define LOG_DEBUG                                                          \
-	if (trantor::Logger::logLevel() <= trantor::Logger::kDebug)            \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kDebug, __func__) \
+	if (Logger::logLevel() <= Logger::kDebug)            \
+	Logger(__FILE__, __LINE__, Logger::kDebug, __func__) \
 			.stream()
 #define LOG_DEBUG_TO(index)                                                \
-	if (trantor::Logger::logLevel() <= trantor::Logger::kDebug)            \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kDebug, __func__) \
+	if (Logger::logLevel() <= Logger::kDebug)            \
+	Logger(__FILE__, __LINE__, Logger::kDebug, __func__) \
 			.setIndex(index)                                               \
 			.stream()
 #define LOG_INFO                                               \
-	if (trantor::Logger::logLevel() <= trantor::Logger::kInfo) \
-	trantor::Logger(__FILE__, __LINE__).stream()
+	if (Logger::logLevel() <= Logger::kInfo) \
+	Logger(__FILE__, __LINE__).stream()
 #define LOG_INFO_TO(index)                                     \
-	if (trantor::Logger::logLevel() <= trantor::Logger::kInfo) \
-	trantor::Logger(__FILE__, __LINE__).setIndex(index).stream()
+	if (Logger::logLevel() <= Logger::kInfo) \
+	Logger(__FILE__, __LINE__).setIndex(index).stream()
 #define LOG_WARN \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kWarn).stream()
+	Logger(__FILE__, __LINE__, Logger::kWarn).stream()
 #define LOG_WARN_TO(index)                                      \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kWarn) \
+	Logger(__FILE__, __LINE__, Logger::kWarn) \
 			.setIndex(index)                                    \
 			.stream()
 #define LOG_ERROR \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kError).stream()
+	Logger(__FILE__, __LINE__, Logger::kError).stream()
 #define LOG_ERROR_TO(index)                                      \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kError) \
+	Logger(__FILE__, __LINE__, Logger::kError) \
 			.setIndex(index)                                     \
 			.stream()
 #define LOG_FATAL \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kFatal).stream()
+	Logger(__FILE__, __LINE__, Logger::kFatal).stream()
 #define LOG_FATAL_TO(index)                                      \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kFatal) \
+	Logger(__FILE__, __LINE__, Logger::kFatal) \
 			.setIndex(index)                                     \
 			.stream()
-#define LOG_SYSERR trantor::Logger(__FILE__, __LINE__, true).stream()
+#define LOG_SYSERR Logger(__FILE__, __LINE__, true).stream()
 #define LOG_SYSERR_TO(index) \
-	trantor::Logger(__FILE__, __LINE__, true).setIndex(index).stream()
+	Logger(__FILE__, __LINE__, true).setIndex(index).stream()
 
-#define LOG_RAW trantor::RawLogger().stream()
-#define LOG_RAW_TO(index) trantor::RawLogger().setIndex(index).stream()
+#define LOG_RAW RawLogger().stream()
+#define LOG_RAW_TO(index) RawLogger().setIndex(index).stream()
 
 #define LOG_TRACE_IF(cond)                                                  \
-	if ((trantor::Logger::logLevel() <= trantor::Logger::kTrace) && (cond)) \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kTrace, __func__)  \
+	if ((Logger::logLevel() <= Logger::kTrace) && (cond)) \
+	Logger(__FILE__, __LINE__, Logger::kTrace, __func__)  \
 			.stream()
 #define LOG_DEBUG_IF(cond)                                                \
 	if ((Tensor::Logger::logLevel() <= Tensor::Logger::kDebug) && (cond)) \
@@ -328,7 +327,7 @@ private:
 #ifdef NDEBUG
 #define DLOG_TRACE                                                         \
 	if (0)                                                                 \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kTrace, __func__) \
+	Logger(__FILE__, __LINE__, Logger::kTrace, __func__) \
 			.stream()
 #define DLOG_DEBUG                                                       \
 	if (0)                                                               \
@@ -349,7 +348,7 @@ private:
 
 #define DLOG_TRACE_IF(cond)                                                \
 	if (0)                                                                 \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kTrace, __func__) \
+	Logger(__FILE__, __LINE__, Logger::kTrace, __func__) \
 			.stream()
 #define DLOG_DEBUG_IF(cond)                                              \
 	if (0)                                                               \
@@ -369,8 +368,8 @@ private:
 	Tensor::Logger(__FILE__, __LINE__, Tensor::Logger::kFatal).stream()
 #else
 #define DLOG_TRACE                                                         \
-	if (trantor::Logger::logLevel() <= trantor::Logger::kTrace)            \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kTrace, __func__) \
+	if (Logger::logLevel() <= Logger::kTrace)            \
+	Logger(__FILE__, __LINE__, Logger::kTrace, __func__) \
 			.stream()
 #define DLOG_DEBUG                                                       \
 	if (Tensor::Logger::logLevel() <= Tensor::Logger::kDebug)            \
@@ -387,8 +386,8 @@ private:
 	Tensor::Logger(__FILE__, __LINE__, Tensor::Logger::kFatal).stream()
 
 #define DLOG_TRACE_IF(cond)                                                 \
-	if ((trantor::Logger::logLevel() <= trantor::Logger::kTrace) && (cond)) \
-	trantor::Logger(__FILE__, __LINE__, trantor::Logger::kTrace, __func__)  \
+	if ((Logger::logLevel() <= Logger::kTrace) && (cond)) \
+	Logger(__FILE__, __LINE__, Logger::kTrace, __func__)  \
 			.stream()
 #define DLOG_DEBUG_IF(cond)                                               \
 	if ((Tensor::Logger::logLevel() <= Tensor::Logger::kDebug) && (cond)) \
@@ -409,6 +408,5 @@ private:
 #endif
 
 const char *strerror_tl(int savedErrno);
-} // namespace trantor
 
 #endif

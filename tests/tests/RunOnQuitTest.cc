@@ -10,7 +10,7 @@ int main()
 {
     std::atomic<bool> flag(false);
     {
-        trantor::EventLoopThread thr;
+        EventLoopThread thr;
         thr.getLoop()->runOnQuit([&]() { flag = true; });
         thr.run();
         thr.getLoop()->quit();

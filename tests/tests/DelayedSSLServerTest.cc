@@ -3,7 +3,7 @@
 #include "core/loops/event_loop_thread.h"
 #include <string>
 #include <iostream>
-using namespace trantor;
+
 #define USE_IPV6 0
 int main()
 {

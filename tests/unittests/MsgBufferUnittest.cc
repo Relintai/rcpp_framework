@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <iostream>
-using namespace trantor;
+
 TEST(MsgBufferTest, readableTest)
 {
     MsgBuffer buffer;

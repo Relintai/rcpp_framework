@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <iostream>
-using namespace trantor;
+
 TEST(InetAddress, innerIpTest)
 {
     EXPECT_EQ(true, InetAddress("192.168.0.1", 0).isIntranetIp());

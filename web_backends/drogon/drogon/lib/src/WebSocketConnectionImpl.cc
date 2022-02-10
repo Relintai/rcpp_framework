@@ -18,7 +18,7 @@
 
 using namespace drogon;
 WebSocketConnectionImpl::WebSocketConnectionImpl(
-		const trantor::TcpConnectionPtr &conn,
+		const TcpConnectionPtr &conn,
 		bool isServer) :
 		tcpConnectionPtr_(conn),
 		localAddr_(conn->localAddr()),
@@ -133,10 +133,10 @@ void WebSocketConnectionImpl::send(const std::string &msg,
 		const WebSocketMessageType type) {
 	send(msg.data(), msg.length(), type);
 }
-const trantor::InetAddress &WebSocketConnectionImpl::localAddr() const {
+const InetAddress &WebSocketConnectionImpl::localAddr() const {
 	return localAddr_;
 }
-const trantor::InetAddress &WebSocketConnectionImpl::peerAddr() const {
+const InetAddress &WebSocketConnectionImpl::peerAddr() const {
 	return peerAddr_;
 }
 
@@ -189,7 +189,7 @@ void WebSocketConnectionImpl::disablePing() {
 	}
 }
 
-bool WebSocketMessageParser::parse(trantor::MsgBuffer *buffer) {
+bool WebSocketMessageParser::parse(MsgBuffer *buffer) {
 	// According to the rfc6455
 	gotAll_ = false;
 	if (buffer->readableBytes() >= 2) {
@@ -305,8 +305,8 @@ bool WebSocketMessageParser::parse(trantor::MsgBuffer *buffer) {
 }
 
 void WebSocketConnectionImpl::onNewMessage(
-		const trantor::TcpConnectionPtr &connPtr,
-		trantor::MsgBuffer *buffer) {
+		const TcpConnectionPtr &connPtr,
+		MsgBuffer *buffer) {
 	while (buffer->readableBytes() > 0) {
 		auto success = parser_.parse(buffer);
 		if (success) {
@@ -338,7 +338,7 @@ void WebSocketConnectionImpl::onNewMessage(
 }
 
 void WebSocketConnectionImpl::disablePingInLoop() {
-	if (pingTimerId_ != trantor::InvalidTimerId) {
+	if (pingTimerId_ != InvalidTimerId) {
 		tcpConnectionPtr_->getLoop()->invalidateTimer(pingTimerId_);
 	}
 }

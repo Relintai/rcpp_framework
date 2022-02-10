@@ -4,11 +4,11 @@
 #include <string>
 #include <iostream>
 #include <atomic>
-using namespace trantor;
+
 #define USE_IPV6 0
 int main()
 {
-    trantor::Logger::setLogLevel(trantor::Logger::kTrace);
+    Logger::setLogLevel(Logger::kTrace);
     LOG_DEBUG << "TcpClient class test!";
     EventLoop loop;
 #if USE_IPV6
@@ -16,12 +16,12 @@ int main()
 #else
     InetAddress serverAddr("127.0.0.1", 8888);
 #endif
-    std::shared_ptr<trantor::TcpClient> client[10];
+    std::shared_ptr<TcpClient> client[10];
     std::atomic_int connCount;
     connCount = 1;
     for (int i = 0; i < connCount; ++i)
     {
-        client[i] = std::make_shared<trantor::TcpClient>(&loop,
+        client[i] = std::make_shared<TcpClient>(&loop,
                                                          serverAddr,
                                                          "tcpclienttest");
         client[i]->enableSSL(false, false);

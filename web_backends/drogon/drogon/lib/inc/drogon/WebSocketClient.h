@@ -66,7 +66,7 @@ public:
 			const WebSocketRequestCallback &callback) = 0;
 
 	/// Get the event loop of the client;
-	virtual trantor::EventLoop *getLoop() = 0;
+	virtual EventLoop *getLoop() = 0;
 
 	/**
      * @brief Create a websocket client using the given ip and port to connect
@@ -91,7 +91,7 @@ public:
 			const std::string &ip,
 			uint16_t port,
 			bool useSSL = false,
-			trantor::EventLoop *loop = nullptr,
+			EventLoop *loop = nullptr,
 			bool useOldTLS = false,
 			bool validateCert = true);
 
@@ -121,7 +121,7 @@ public:
      */
 	static WebSocketClientPtr newWebSocketClient(
 			const std::string &hostString,
-			trantor::EventLoop *loop = nullptr,
+			EventLoop *loop = nullptr,
 			bool useOldTLS = false,
 			bool validateCert = true);
 

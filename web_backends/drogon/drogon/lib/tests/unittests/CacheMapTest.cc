@@ -9,7 +9,7 @@ using namespace drogon;
 using namespace std::chrono_literals;
 
 DROGON_TEST(CacheMapTest) {
-	trantor::EventLoopThread loopThread;
+	EventLoopThread loopThread;
 	loopThread.run();
 	drogon::CacheMap<std::string, std::string> cache(loopThread.getLoop(),
 			0.1,

@@ -40,8 +40,6 @@
 using ssize_t = long long;
 #endif
 
-namespace trantor
-{
 static constexpr size_t kBufferDefaultLength{2048};
 static constexpr char CRLF[]{"\r\n"};
 
@@ -379,12 +377,11 @@ inline void swap(MsgBuffer &one, MsgBuffer &two) noexcept
 {
     one.swap(two);
 }
-}  // namespace trantor
 
 namespace std
 {
 template <>
-inline void swap(trantor::MsgBuffer &one, trantor::MsgBuffer &two) noexcept
+inline void swap(MsgBuffer &one, MsgBuffer &two) noexcept
 {
     one.swap(two);
 }

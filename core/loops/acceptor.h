@@ -36,7 +36,6 @@
 #include "event_loop.h"
 #include <functional>
 
-namespace trantor {
 using NewConnectionCallback = std::function<void(int fd, const InetAddress &)>;
 class Acceptor {
 protected:
@@ -71,4 +70,3 @@ protected:
 	Channel acceptChannel_;
 	void readCallback();
 };
-} // namespace trantor

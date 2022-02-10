@@ -71,7 +71,6 @@ static const in_addr_t kInaddrLoopback = INADDR_LOOPBACK;
 //         uint32_t        sin6_scope_id; /* IPv6 scope-id */
 //     };
 
-using namespace trantor;
 
 /*
 #ifdef __linux__

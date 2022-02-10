@@ -19,10 +19,10 @@
 #include <memory>
 
 namespace drogon {
-class TaskTimeoutFlag : public trantor::NonCopyable,
+class TaskTimeoutFlag : public NonCopyable,
 						public std::enable_shared_from_this<TaskTimeoutFlag> {
 public:
-	TaskTimeoutFlag(trantor::EventLoop *loop,
+	TaskTimeoutFlag(EventLoop *loop,
 			const std::chrono::duration<double> &timeout,
 			std::function<void()> timeoutCallback);
 	bool done();
@@ -30,7 +30,7 @@ public:
 
 private:
 	std::atomic<bool> isDone_{ false };
-	trantor::EventLoop *loop_;
+	EventLoop *loop_;
 	std::chrono::duration<double> timeout_;
 	std::function<void()> timeoutFunc_;
 };

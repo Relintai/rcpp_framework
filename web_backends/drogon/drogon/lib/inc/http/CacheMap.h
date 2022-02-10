@@ -79,7 +79,7 @@ public:
      * The max delay of the CacheMap is about
      * tickInterval*(bucketsNumPerWheel^wheelsNum) seconds.
      */
-	CacheMap(trantor::EventLoop *loop,
+	CacheMap(EventLoop *loop,
 			float tickInterval = TICK_INTERVAL,
 			size_t wheelsNum = WHEELS_NUM,
 			size_t bucketsNumPerWheel = BUCKET_NUM_PER_WHEEL) :
@@ -327,9 +327,9 @@ public:
 	/**
      * @brief Get the event loop object
      *
-     * @return trantor::EventLoop*
+     * @return EventLoop*
      */
-	trantor::EventLoop *getLoop() {
+	EventLoop *getLoop() {
 		return loop_;
 	}
 
@@ -377,8 +377,8 @@ private:
 
 	std::mutex mtx_;
 	std::mutex bucketMutex_;
-	trantor::TimerId timerId_;
-	trantor::EventLoop *loop_;
+	TimerId timerId_;
+	EventLoop *loop_;
 
 	float tickInterval_;
 	size_t wheelsNumber_;

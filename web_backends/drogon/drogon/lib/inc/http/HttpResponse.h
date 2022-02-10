@@ -101,8 +101,8 @@ public:
 	}
 
 	/// Get the creation timestamp of the response.
-	virtual const trantor::Date &creationDate() const = 0;
-	const trantor::Date &getCreationDate() const {
+	virtual const Date &creationDate() const = 0;
+	const Date &getCreationDate() const {
 		return creationDate();
 	}
 

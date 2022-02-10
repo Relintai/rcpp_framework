@@ -15,7 +15,7 @@
 #include "TaskTimeoutFlag.h"
 using namespace drogon;
 
-TaskTimeoutFlag::TaskTimeoutFlag(trantor::EventLoop *loop,
+TaskTimeoutFlag::TaskTimeoutFlag(EventLoop *loop,
 		const std::chrono::duration<double> &timeout,
 		std::function<void()> timeoutCallback) :
 		loop_(loop), timeout_(timeout), timeoutFunc_(timeoutCallback) {

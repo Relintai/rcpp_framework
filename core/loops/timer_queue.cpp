@@ -41,7 +41,6 @@
 #include <unistd.h>
 #endif
 
-using namespace trantor;
 #ifdef __linux__
 static int createTimerfd() {
 	int timerfd = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);

@@ -25,7 +25,7 @@
 #ifdef _WIN32
 #define stat _stati64
 #endif
-using namespace trantor;
+
 using namespace drogon;
 
 namespace drogon {
@@ -98,7 +98,7 @@ void HttpResponseImpl::generateBodyFromJson() const {
 }
 
 HttpResponsePtr HttpResponse::newNotFoundResponse() {
-	auto loop = trantor::EventLoop::getEventLoopOfCurrentThread();
+	auto loop = EventLoop::getEventLoopOfCurrentThread();
 	auto &resp = HttpAppFrameworkImpl::instance().getCustom404Page();
 	if (resp) {
 		if (loop && loop->index() < app().getThreadNum()) {
@@ -243,7 +243,7 @@ HttpResponsePtr HttpResponse::newFileResponse(const std::string &fullPath, const
 	return resp;
 }
 
-void HttpResponseImpl::makeHeaderString(trantor::MsgBuffer &buffer) {
+void HttpResponseImpl::makeHeaderString(MsgBuffer &buffer) {
 	buffer.ensureWritableBytes(128);
 	int len{ 0 };
 	if (version_ == Version::kHttp11) {
@@ -320,7 +320,7 @@ void HttpResponseImpl::makeHeaderString(trantor::MsgBuffer &buffer) {
 		buffer.append("\r\n");
 	}
 }
-void HttpResponseImpl::renderToBuffer(trantor::MsgBuffer &buffer) {
+void HttpResponseImpl::renderToBuffer(MsgBuffer &buffer) {
 	if (expriedTime_ >= 0) {
 		auto strPtr = renderToBuffer();
 		buffer.append(strPtr->peek(), strPtr->readableBytes());
@@ -344,7 +344,7 @@ void HttpResponseImpl::renderToBuffer(trantor::MsgBuffer &buffer) {
 	if (!passThrough_ &&
 			drogon::HttpAppFrameworkImpl::instance().sendDateHeader()) {
 		buffer.append("date: ");
-		buffer.append(utils::getHttpFullDate(trantor::Date::date()),
+		buffer.append(utils::getHttpFullDate(Date::date()),
 				httpFullDateStringLength);
 		buffer.append("\r\n\r\n");
 	} else {
@@ -353,12 +353,12 @@ void HttpResponseImpl::renderToBuffer(trantor::MsgBuffer &buffer) {
 	if (bodyPtr_)
 		buffer.append(bodyPtr_->data(), bodyPtr_->length());
 }
-std::shared_ptr<trantor::MsgBuffer> HttpResponseImpl::renderToBuffer() {
+std::shared_ptr<MsgBuffer> HttpResponseImpl::renderToBuffer() {
 	if (expriedTime_ >= 0) {
 		if (!passThrough_ &&
 				drogon::HttpAppFrameworkImpl::instance().sendDateHeader()) {
 			if (datePos_ != static_cast<size_t>(-1)) {
-				auto now = trantor::Date::now();
+				auto now = Date::now();
 				bool isDateChanged =
 						((now.microSecondsSinceEpoch() / MICRO_SECONDS_PRE_SEC) !=
 								httpStringDate_);
@@ -369,7 +369,7 @@ std::shared_ptr<trantor::MsgBuffer> HttpResponseImpl::renderToBuffer() {
 					auto newDate = utils::getHttpFullDate(now);
 
 					httpString_ =
-							std::make_shared<trantor::MsgBuffer>(*httpString_);
+							std::make_shared<MsgBuffer>(*httpString_);
 					memcpy((void *)&(*httpString_)[datePos_],
 							newDate,
 							httpFullDateStringLength);
@@ -383,7 +383,7 @@ std::shared_ptr<trantor::MsgBuffer> HttpResponseImpl::renderToBuffer() {
 				return httpString_;
 		}
 	}
-	auto httpString = std::make_shared<trantor::MsgBuffer>(256);
+	auto httpString = std::make_shared<MsgBuffer>(256);
 	if (!fullHeaderString_) {
 		makeHeaderString(*httpString);
 	} else {
@@ -402,7 +402,7 @@ std::shared_ptr<trantor::MsgBuffer> HttpResponseImpl::renderToBuffer() {
 			drogon::HttpAppFrameworkImpl::instance().sendDateHeader()) {
 		httpString->append("date: ");
 		auto datePos = httpString->readableBytes();
-		httpString->append(utils::getHttpFullDate(trantor::Date::date()),
+		httpString->append(utils::getHttpFullDate(Date::date()),
 				httpFullDateStringLength);
 		httpString->append("\r\n\r\n");
 		datePos_ = datePos;
@@ -420,9 +420,9 @@ std::shared_ptr<trantor::MsgBuffer> HttpResponseImpl::renderToBuffer() {
 	return httpString;
 }
 
-std::shared_ptr<trantor::MsgBuffer> HttpResponseImpl::
+std::shared_ptr<MsgBuffer> HttpResponseImpl::
 		renderHeaderForHeadMethod() {
-	auto httpString = std::make_shared<trantor::MsgBuffer>(256);
+	auto httpString = std::make_shared<MsgBuffer>(256);
 	if (!fullHeaderString_) {
 		makeHeaderString(*httpString);
 	} else {
@@ -440,7 +440,7 @@ std::shared_ptr<trantor::MsgBuffer> HttpResponseImpl::
 	if (!passThrough_ &&
 			drogon::HttpAppFrameworkImpl::instance().sendDateHeader()) {
 		httpString->append("date: ");
-		httpString->append(utils::getHttpFullDate(trantor::Date::date()),
+		httpString->append(utils::getHttpFullDate(Date::date()),
 				httpFullDateStringLength);
 		httpString->append("\r\n\r\n");
 	} else {

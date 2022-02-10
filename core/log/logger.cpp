@@ -88,7 +88,6 @@ void RLogger::_log_index_error(const char *p_function, const char *p_file, int p
 	printf("!INDEX ERROR: (%s) %s:%d :: index: %d/%d. %s\n", p_file, p_function, p_line, index, size, str);
 }
 
-namespace trantor {
 // helper class for known string length at compile time
 class T {
 public:
@@ -120,8 +119,6 @@ inline LogStream &operator<<(LogStream &s, const Logger::SourceFile &v) {
 	s.append(v.data_, v.size_);
 	return s;
 }
-} // namespace trantor
-using namespace trantor;
 
 static thread_local uint64_t lastSecond_{ 0 };
 static thread_local char lastTimeString_[32] = { 0 };

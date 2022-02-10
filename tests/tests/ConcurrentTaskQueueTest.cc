@@ -10,7 +10,7 @@ using namespace std::chrono_literals;
 
 int main()
 {
-    trantor::ConcurrentTaskQueue queue(5, "concurrT");
+    ConcurrentTaskQueue queue(5, "concurrT");
     std::atomic_int sum;
     sum = 0;
     for (int i = 0; i < 4; ++i)

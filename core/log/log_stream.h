@@ -36,7 +36,6 @@
 #include <string.h> // memcpy
 #include <string>
 
-namespace trantor {
 namespace detail {
 static constexpr size_t kSmallBuffer{ 4000 };
 static constexpr size_t kLargeBuffer{ 4000 * 1000 };
@@ -260,4 +259,3 @@ inline LogStream &operator<<(LogStream &s, const Fmt &fmt) {
 	return s;
 }
 
-} // namespace trantor

@@ -20,7 +20,7 @@
 #include <string>
 
 namespace drogon {
-class CacheFile : public trantor::NonCopyable {
+class CacheFile : public NonCopyable {
 public:
 	explicit CacheFile(const std::string &path, bool autoDelete = true);
 	~CacheFile();

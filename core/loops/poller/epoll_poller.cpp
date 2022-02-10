@@ -48,7 +48,6 @@
 #define EPOLL_CLOEXEC _O_NOINHERIT
 #endif
 
-namespace trantor {
 #if defined __linux__ || defined _WIN32
 
 #if defined __linux__
@@ -219,4 +218,3 @@ void EpollPoller::removeChannel(Channel *) {
 }
 
 #endif
-} // namespace trantor

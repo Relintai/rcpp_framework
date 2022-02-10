@@ -37,7 +37,8 @@
 #else
 #include "poller/kqueue.h"
 #endif
-using namespace trantor;
+
+
 Poller *Poller::newPoller(EventLoop *loop) {
 #if defined __linux__ || defined _WIN32
 	return new EpollPoller(loop);

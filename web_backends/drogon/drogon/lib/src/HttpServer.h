@@ -23,10 +23,10 @@
 #include <vector>
 
 namespace drogon {
-class HttpServer : trantor::NonCopyable {
+class HttpServer : NonCopyable {
 public:
-	HttpServer(trantor::EventLoop *loop,
-			const trantor::InetAddress &listenAddr,
+	HttpServer(EventLoop *loop,
+			const InetAddress &listenAddr,
 			const std::string &name,
 			const std::vector<
 					std::function<HttpResponsePtr(const HttpRequestPtr &)> >
@@ -37,7 +37,7 @@ public:
 
 	~HttpServer();
 
-	trantor::EventLoop *getLoop() const {
+	EventLoop *getLoop() const {
 		return server_.getLoop();
 	}
 
@@ -48,11 +48,11 @@ public:
 	void setNewWebsocketCallback(const WebSocketNewAsyncCallback &cb) {
 		newWebsocketCallback_ = cb;
 	}
-	void setConnectionCallback(const trantor::ConnectionCallback &cb) {
+	void setConnectionCallback(const ConnectionCallback &cb) {
 		connectionCallback_ = cb;
 	}
 	void setIoLoopThreadPool(
-			const std::shared_ptr<trantor::EventLoopThreadPool> &pool) {
+			const std::shared_ptr<EventLoopThreadPool> &pool) {
 		server_.setIoLoopThreadPool(pool);
 	}
 	void setIoLoopNum(int numThreads) {
@@ -61,10 +61,10 @@ public:
 	void kickoffIdleConnections(size_t timeout) {
 		server_.kickoffIdleConnections(timeout);
 	}
-	trantor::EventLoop *getLoop() {
+	EventLoop *getLoop() {
 		return server_.getLoop();
 	}
-	std::vector<trantor::EventLoop *> getIoLoops() {
+	std::vector<EventLoop *> getIoLoops() {
 		return server_.getIoLoops();
 	}
 	void start();
@@ -78,27 +78,27 @@ public:
 		server_.enableSSL(certPath, keyPath, useOldTLS, sslConfCmds);
 	}
 
-	const trantor::InetAddress &address() const {
+	const InetAddress &address() const {
 		return server_.address();
 	}
 
 private:
-	void onConnection(const trantor::TcpConnectionPtr &conn);
-	void onMessage(const trantor::TcpConnectionPtr &, trantor::MsgBuffer *);
-	void onRequests(const trantor::TcpConnectionPtr &,
+	void onConnection(const TcpConnectionPtr &conn);
+	void onMessage(const TcpConnectionPtr &, MsgBuffer *);
+	void onRequests(const TcpConnectionPtr &,
 			const std::vector<HttpRequestImplPtr> &,
 			const std::shared_ptr<HttpRequestParser> &);
-	void sendResponse(const trantor::TcpConnectionPtr &,
+	void sendResponse(const TcpConnectionPtr &,
 			const HttpResponsePtr &,
 			bool isHeadMethod);
 	void sendResponses(
-			const trantor::TcpConnectionPtr &conn,
+			const TcpConnectionPtr &conn,
 			const std::vector<std::pair<HttpResponsePtr, bool> > &responses,
-			trantor::MsgBuffer &buffer);
-	trantor::TcpServer server_;
+			MsgBuffer &buffer);
+	TcpServer server_;
 	HttpAsyncCallback httpAsyncCallback_;
 	WebSocketNewAsyncCallback newWebsocketCallback_;
-	trantor::ConnectionCallback connectionCallback_;
+	ConnectionCallback connectionCallback_;
 	const std::vector<std::function<HttpResponsePtr(const HttpRequestPtr &)> >
 			&syncAdvices_;
 	const std::vector<

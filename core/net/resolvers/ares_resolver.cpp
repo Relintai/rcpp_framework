@@ -42,10 +42,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-using namespace trantor;
 using namespace std::placeholders;
 
-namespace {
 double getSeconds(struct timeval *tv) {
 	if (tv)
 		return double(tv->tv_sec) + double(tv->tv_usec) / 1000000.0;
@@ -62,8 +60,6 @@ const char *getSocketType(int type) {
 		return "Unknown";
 }
 
-} // namespace
-
 bool Resolver::isCAresUsed() {
 	return true;
 }
@@ -77,7 +73,7 @@ AresResolver::LibraryInitializer::~LibraryInitializer() {
 
 AresResolver::LibraryInitializer AresResolver::libraryInitializer_;
 
-std::shared_ptr<Resolver> Resolver::newResolver(trantor::EventLoop *loop,
+std::shared_ptr<Resolver> Resolver::newResolver(EventLoop *loop,
 		size_t timeout) {
 	return std::make_shared<AresResolver>(loop, timeout);
 }
@@ -122,7 +118,7 @@ void AresResolver::resolveInLoop(const std::string &hostname,
 	loop_->assertInLoopThread();
 #ifdef _WIN32
 	if (hostname == "localhost") {
-		const static trantor::InetAddress localhost_{ "127.0.0.1", 0 };
+		const static InetAddress localhost_{ "127.0.0.1", 0 };
 		cb(localhost_);
 		return;
 	}
@@ -182,7 +178,7 @@ void AresResolver::onQueryResult(int status,
 		std::lock_guard<std::mutex> lock(globalMutex());
 		auto &addrItem = globalCache()[hostname];
 		addrItem.first = addr.sin_addr;
-		addrItem.second = trantor::Date::date();
+		addrItem.second = Date::date();
 	}
 	callback(inet);
 }

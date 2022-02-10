@@ -41,7 +41,6 @@
 #include <time.h>
 #endif
 
-namespace trantor {
 #ifdef _WIN32
 int gettimeofday(timeval *tp, void *tzp) {
 	time_t clock;
@@ -295,7 +294,7 @@ Date Date::fromDbStringLocal(const std::string &datetime) {
 		}
 	}
 	return std::move(
-			trantor::Date(year, month, day, hour, minute, second, microSecond));
+			Date(year, month, day, hour, minute, second, microSecond));
 }
 std::string Date::toCustomedFormattedStringLocal(const std::string &fmtStr,
 		bool showMicroseconds) const {
@@ -337,5 +336,3 @@ Date::Date(unsigned int year,
 	epoch = mktime(&tm);
 	microSecondsSinceEpoch_ = epoch * MICRO_SECONDS_PRE_SEC + microSecond;
 }
-
-} // namespace trantor

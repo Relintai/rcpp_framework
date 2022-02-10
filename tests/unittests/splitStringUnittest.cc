@@ -1,7 +1,7 @@
 #include "core/math/date.h"
 #include <gtest/gtest.h>
 #include <iostream>
-using namespace trantor;
+
 TEST(splitString, ACCEPT_EMPTY_STRING1)
 {
     std::string originString = "1,2,3";
@@ -31,7 +31,7 @@ TEST(splitString, ACCEPT_EMPTY_STRING4)
 }
 TEST(splitString, ACCEPT_EMPTY_STRING5)
 {
-    std::string originString = "trantor::splitString";
+    std::string originString = "splitString";
     auto out = splitString(originString, "::", true);
     EXPECT_EQ(out.size(), 2);
     EXPECT_STREQ(out[0].data(), "trantor");
@@ -39,7 +39,7 @@ TEST(splitString, ACCEPT_EMPTY_STRING5)
 }
 TEST(splitString, ACCEPT_EMPTY_STRING6)
 {
-    std::string originString = "trantor::::splitString";
+    std::string originString = "::splitString";
     auto out = splitString(originString, "::", true);
     EXPECT_EQ(out.size(), 3);
     EXPECT_STREQ(out[0].data(), "trantor");
@@ -48,7 +48,7 @@ TEST(splitString, ACCEPT_EMPTY_STRING6)
 }
 TEST(splitString, ACCEPT_EMPTY_STRING7)
 {
-    std::string originString = "trantor:::splitString";
+    std::string originString = ":splitString";
     auto out = splitString(originString, "::", true);
     EXPECT_EQ(out.size(), 2);
     EXPECT_STREQ(out[0].data(), "trantor");
@@ -56,8 +56,8 @@ TEST(splitString, ACCEPT_EMPTY_STRING7)
 }
 TEST(splitString, ACCEPT_EMPTY_STRING8)
 {
-    std::string originString = "trantor:::splitString";
-    auto out = splitString(originString, "trantor:::splitString", true);
+    std::string originString = ":splitString";
+    auto out = splitString(originString, ":splitString", true);
     EXPECT_EQ(out.size(), 2);
     EXPECT_STREQ(out[0].data(), "");
     EXPECT_STREQ(out[1].data(), "");
@@ -105,7 +105,7 @@ TEST(splitString, NO_ACCEPT_EMPTY_STRING3)
 }
 TEST(splitString, NO_ACCEPT_EMPTY_STRING4)
 {
-    std::string originString = "trantor::splitString";
+    std::string originString = "splitString";
     auto out = splitString(originString, "::");
     EXPECT_EQ(out.size(), 2);
     EXPECT_STREQ(out[0].data(), "trantor");
@@ -113,7 +113,7 @@ TEST(splitString, NO_ACCEPT_EMPTY_STRING4)
 }
 TEST(splitString, NO_ACCEPT_EMPTY_STRING5)
 {
-    std::string originString = "trantor::::splitString";
+    std::string originString = "::splitString";
     auto out = splitString(originString, "::");
     EXPECT_EQ(out.size(), 2);
     EXPECT_STREQ(out[0].data(), "trantor");
@@ -121,7 +121,7 @@ TEST(splitString, NO_ACCEPT_EMPTY_STRING5)
 }
 TEST(splitString, NO_ACCEPT_EMPTY_STRING6)
 {
-    std::string originString = "trantor:::splitString";
+    std::string originString = ":splitString";
     auto out = splitString(originString, "::");
     EXPECT_EQ(out.size(), 2);
     EXPECT_STREQ(out[0].data(), "trantor");
@@ -129,8 +129,8 @@ TEST(splitString, NO_ACCEPT_EMPTY_STRING6)
 }
 TEST(splitString, NO_ACCEPT_EMPTY_STRING7)
 {
-    std::string originString = "trantor:::splitString";
-    auto out = splitString(originString, "trantor:::splitString");
+    std::string originString = ":splitString";
+    auto out = splitString(originString, ":splitString");
     EXPECT_EQ(out.size(), 0);
 }
 TEST(splitString, NO_ACCEPT_EMPTY_STRING8)

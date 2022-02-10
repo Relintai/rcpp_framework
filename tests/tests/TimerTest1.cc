@@ -3,9 +3,9 @@
 #include <iostream>
 int main()
 {
-    trantor::EventLoop loop;
-    LOG_FATAL << trantor::Date::date().roundDay().microSecondsSinceEpoch();
-    trantor::Date begin = trantor::Date::date().roundSecond().after(2);
+    EventLoop loop;
+    LOG_FATAL << Date::date().roundDay().microSecondsSinceEpoch();
+    Date begin = Date::date().roundSecond().after(2);
     auto id = loop.runAt(begin, [begin, &loop]() {
         LOG_DEBUG << "test begin:";
         srand((unsigned int)time(NULL));

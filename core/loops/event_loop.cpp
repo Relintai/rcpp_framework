@@ -57,7 +57,6 @@ using ssize_t = long long;
 #include <signal.h>
 #include <algorithm>
 
-namespace trantor {
 #ifdef __linux__
 int createEventfd() {
 	int evtfd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
@@ -334,5 +333,3 @@ void EventLoop::runOnQuit(Func &&cb) {
 void EventLoop::runOnQuit(const Func &cb) {
 	funcsOnQuit_.enqueue(cb);
 }
-
-} // namespace trantor

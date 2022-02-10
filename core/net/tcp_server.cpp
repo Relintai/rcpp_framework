@@ -34,7 +34,7 @@
 #include "core/log/logger.h"
 #include <functional>
 #include <vector>
-using namespace trantor;
+
 using namespace std::placeholders;
 
 TcpServer::TcpServer(EventLoop *loop,
@@ -175,7 +175,7 @@ const std::string TcpServer::ipPort() const {
 	return acceptorPtr_->addr().toIpPort();
 }
 
-const trantor::InetAddress &TcpServer::address() const {
+const InetAddress &TcpServer::address() const {
 	return acceptorPtr_->addr();
 }
 

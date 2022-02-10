@@ -40,9 +40,7 @@
 #include <sys/socket.h>
 #endif
 
-using namespace trantor;
-
-std::shared_ptr<Resolver> Resolver::newResolver(trantor::EventLoop *,
+std::shared_ptr<Resolver> Resolver::newResolver(EventLoop *,
 		size_t timeout) {
 	return std::make_shared<NormalResolver>(timeout);
 }
@@ -57,7 +55,7 @@ void NormalResolver::resolve(const std::string &hostname,
 		if (iter != globalCache().end()) {
 			auto &cachedAddr = iter->second;
 			if (timeout_ == 0 || cachedAddr.second.after(static_cast<double>(
-										 timeout_)) > trantor::Date::date()) {
+										 timeout_)) > Date::date()) {
 				callback(cachedAddr.first);
 				return;
 			}
@@ -73,7 +71,7 @@ void NormalResolver::resolve(const std::string &hostname,
 						auto &cachedAddr = iter->second;
 						if (thisPtr->timeout_ == 0 ||
 								cachedAddr.second.after(static_cast<double>(
-										thisPtr->timeout_)) > trantor::Date::date()) {
+										thisPtr->timeout_)) > Date::date()) {
 							callback(cachedAddr.first);
 							return;
 						}
@@ -107,7 +105,7 @@ void NormalResolver::resolve(const std::string &hostname,
 					std::lock_guard<std::mutex> guard(thisPtr->globalMutex());
 					auto &addrItem = thisPtr->globalCache()[hostname];
 					addrItem.first = inet;
-					addrItem.second = trantor::Date::date();
+					addrItem.second = Date::date();
 				}
 				return;
 			});

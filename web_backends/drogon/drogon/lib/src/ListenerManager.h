@@ -21,11 +21,11 @@
 #include <memory>
 #include <string>
 #include <vector>
-namespace trantor {
+
 class InetAddress;
-}
+
 namespace drogon {
-class ListenerManager : public trantor::NonCopyable {
+class ListenerManager : public NonCopyable {
 public:
 	void addListener(const std::string &ip,
 			uint16_t port,
@@ -35,10 +35,10 @@ public:
 			bool useOldTLS = false,
 			const std::vector<std::pair<std::string, std::string> >
 					&sslConfCmds = {});
-	std::vector<trantor::EventLoop *> createListeners(trantor::EventLoop *event_loop,
+	std::vector<EventLoop *> createListeners(EventLoop *event_loop,
 			const HttpAsyncCallback &httpCallback,
 			const WebSocketNewAsyncCallback &webSocketCallback,
-			const trantor::ConnectionCallback &connectionCallback,
+			const ConnectionCallback &connectionCallback,
 			size_t connectionTimeout,
 			const std::string &globalCertFile,
 			const std::string &globalKeyFile,
@@ -51,12 +51,12 @@ public:
 					const HttpResponsePtr &)> >
 					&preSendingAdvices);
 	void startListening();
-	std::vector<trantor::InetAddress> getListeners() const;
+	std::vector<InetAddress> getListeners() const;
 	~ListenerManager() = default;
 
-	trantor::EventLoop *getIOLoop(size_t id) const;
+	EventLoop *getIOLoop(size_t id) const;
 	void stopListening();
-	std::vector<trantor::EventLoop *> ioLoops_;
+	std::vector<EventLoop *> ioLoops_;
 
 private:
 	struct ListenerInfo {
@@ -86,9 +86,9 @@ private:
 	};
 	std::vector<ListenerInfo> listeners_;
 	std::vector<std::shared_ptr<HttpServer> > servers_;
-	std::vector<std::shared_ptr<trantor::EventLoopThread> >
+	std::vector<std::shared_ptr<EventLoopThread> >
 			listeningloopThreads_;
-	std::shared_ptr<trantor::EventLoopThreadPool> ioLoopThreadPoolPtr_;
+	std::shared_ptr<EventLoopThreadPool> ioLoopThreadPoolPtr_;
 };
 
 } // namespace drogon

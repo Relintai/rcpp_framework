@@ -41,7 +41,6 @@
 #include <set>
 #include <string>
 
-namespace trantor {
 class Acceptor;
 class SSLContext;
 /**
@@ -169,9 +168,9 @@ public:
 	/**
 	 * @brief Get the address of the server.
 	 *
-	 * @return const trantor::InetAddress&
+	 * @return const InetAddress&
 	 */
-	const trantor::InetAddress &address() const;
+	const InetAddress &address() const;
 
 	/**
 	 * @brief Get the event loop of the server.
@@ -253,5 +252,3 @@ private:
 	// OpenSSL SSL context Object;
 	std::shared_ptr<SSLContext> sslCtxPtr_;
 };
-
-} // namespace trantor

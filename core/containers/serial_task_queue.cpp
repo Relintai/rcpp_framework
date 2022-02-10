@@ -33,7 +33,8 @@
 #ifdef __linux__
 #include <sys/prctl.h>
 #endif
-namespace trantor {
+
+
 SerialTaskQueue::SerialTaskQueue(const std::string &name) :
 		queueName_(name.empty() ? "SerailTaskQueue" : name),
 		loopThread_(queueName_) {
@@ -62,4 +63,3 @@ void SerialTaskQueue::waitAllTasksFinished() {
 	});
 }
 
-} // namespace trantor

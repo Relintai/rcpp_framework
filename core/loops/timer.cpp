@@ -32,7 +32,6 @@
 #include "core/log/logger.h"
 #include "core/loops/event_loop.h"
 
-namespace trantor {
 std::atomic<TimerId> Timer::timersCreated_ = ATOMIC_VAR_INIT(InvalidTimerId);
 Timer::Timer(const TimerCallback &cb,
 		const TimePoint &when,
@@ -68,4 +67,3 @@ bool Timer::operator<(const Timer &t) const {
 bool Timer::operator>(const Timer &t) const {
 	return when_ > t.when_;
 }
-} // namespace trantor

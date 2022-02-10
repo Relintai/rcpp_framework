@@ -34,7 +34,6 @@
 #include <memory>
 #include <vector>
 
-namespace trantor {
 /**
  * @brief This class represents a pool of EventLoopThread objects
  *
@@ -108,4 +107,3 @@ private:
 	std::vector<std::shared_ptr<EventLoopThread> > loopThreadVector_;
 	size_t loopIndex_;
 };
-} // namespace trantor

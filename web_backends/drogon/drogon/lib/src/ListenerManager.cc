@@ -28,7 +28,7 @@
 
 namespace drogon {
 #ifndef _WIN32
-class DrogonFileLocker : public trantor::NonCopyable {
+class DrogonFileLocker : public NonCopyable {
 public:
 	DrogonFileLocker() {
 		fd_ = open("/tmp/drogon.lock", O_TRUNC | O_CREAT, 0666);
@@ -45,7 +45,7 @@ private:
 #endif
 } // namespace drogon
 
-using namespace trantor;
+
 using namespace drogon;
 
 void ListenerManager::addListener(
@@ -65,7 +65,7 @@ void ListenerManager::addListener(
 			ip, port, useSSL, certFile, keyFile, useOldTLS, sslConfCmds);
 }
 
-std::vector<trantor::EventLoop *> ListenerManager::createListeners(trantor::EventLoop *event_loop,
+std::vector<EventLoop *> ListenerManager::createListeners(EventLoop *event_loop,
 		const HttpAsyncCallback &httpCallback,
 		const WebSocketNewAsyncCallback &webSocketCallback,
 		const ConnectionCallback &connectionCallback,
@@ -224,7 +224,7 @@ void ListenerManager::startListening() {
 	}
 }
 
-trantor::EventLoop *ListenerManager::getIOLoop(size_t id) const {
+EventLoop *ListenerManager::getIOLoop(size_t id) const {
 	auto const n = listeningloopThreads_.size();
 	if (0 == n) {
 		LOG_WARN << "Please call getIOLoop() after drogon::app().run()";
@@ -275,8 +275,8 @@ void ListenerManager::stopListening() {
 #endif
 }
 
-std::vector<trantor::InetAddress> ListenerManager::getListeners() const {
-	std::vector<trantor::InetAddress> listeners;
+std::vector<InetAddress> ListenerManager::getListeners() const {
+	std::vector<InetAddress> listeners;
 	for (auto &server : servers_) {
 		listeners.emplace_back(server->address());
 	}

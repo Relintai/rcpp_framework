@@ -35,8 +35,8 @@ class HttpRequestImpl : public HttpRequest {
 public:
 	friend class HttpRequestParser;
 
-	explicit HttpRequestImpl(trantor::EventLoop *loop) :
-			creationDate_(trantor::Date::now()), loop_(loop) {
+	explicit HttpRequestImpl(EventLoop *loop) :
+			creationDate_(Date::now()), loop_(loop) {
 	}
 	void reset() {
 		method_ = Invalid;
@@ -62,7 +62,7 @@ public:
 		keepAlive_ = true;
 		jsonParsingErrorPtr_.reset();
 	}
-	trantor::EventLoop *getLoop() {
+	EventLoop *getLoop() {
 		return loop_;
 	}
 
@@ -174,27 +174,27 @@ public:
 		return query_;
 	}
 
-	virtual const trantor::InetAddress &peerAddr() const override {
+	virtual const InetAddress &peerAddr() const override {
 		return peer_;
 	}
 
-	virtual const trantor::InetAddress &localAddr() const override {
+	virtual const InetAddress &localAddr() const override {
 		return local_;
 	}
 
-	virtual const trantor::Date &creationDate() const override {
+	virtual const Date &creationDate() const override {
 		return creationDate_;
 	}
 
-	void setCreationDate(const trantor::Date &date) {
+	void setCreationDate(const Date &date) {
 		creationDate_ = date;
 	}
 
-	void setPeerAddr(const trantor::InetAddress &peer) {
+	void setPeerAddr(const InetAddress &peer) {
 		peer_ = peer;
 	}
 
-	void setLocalAddr(const trantor::InetAddress &local) {
+	void setLocalAddr(const InetAddress &local) {
 		local_ = local;
 	}
 
@@ -287,7 +287,7 @@ public:
 		return passThrough_;
 	}
 
-	void appendToBuffer(trantor::MsgBuffer *output) const;
+	void appendToBuffer(MsgBuffer *output) const;
 
 	virtual const SessionPtr &session() const override {
 		return sessionPtr_;
@@ -419,9 +419,9 @@ private:
 	mutable std::shared_ptr<Json::Value> jsonPtr_;
 	SessionPtr sessionPtr_;
 	mutable AttributesPtr attributesPtr_;
-	trantor::InetAddress peer_;
-	trantor::InetAddress local_;
-	trantor::Date creationDate_;
+	InetAddress peer_;
+	InetAddress local_;
+	Date creationDate_;
 	std::unique_ptr<CacheFile> cacheFilePtr_;
 	mutable std::unique_ptr<std::string> jsonParsingErrorPtr_;
 	std::unique_ptr<std::string> expectPtr_;
@@ -431,7 +431,7 @@ private:
 
 protected:
 	std::string content_;
-	trantor::EventLoop *loop_;
+	EventLoop *loop_;
 	mutable ContentType contentType_{ CT_TEXT_PLAIN };
 	mutable bool flagForParsingContentType_{ false };
 	std::string contentTypeString_;

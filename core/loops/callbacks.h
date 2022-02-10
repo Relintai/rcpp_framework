@@ -32,8 +32,7 @@
 
 #include <functional>
 #include <memory>
-namespace trantor
-{
+
 enum class SSLError
 {
     kSSLHandshakeError,
@@ -56,4 +55,3 @@ using HighWaterMarkCallback =
     std::function<void(const TcpConnectionPtr &, const size_t)>;
 using SSLErrorCallback = std::function<void(SSLError)>;
 
-}  // namespace trantor
