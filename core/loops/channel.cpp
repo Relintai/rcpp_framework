@@ -12,8 +12,9 @@
  *
  */
 
-#include "Channel.h"
-#include <trantor/net/EventLoop.h>
+#include "channel.h"
+#include "event_loop.h"
+
 #ifdef _WIN32
 #include "Wepoll.h"
 #define POLLIN EPOLLIN

@@ -15,12 +15,13 @@
 
 // Author: Tao An
 
-#include <trantor/net/EventLoop.h>
+#include "event_loop.h"
 #include "core/log/logger.h"
 
-#include "Channel.h"
-#include "Poller.h"
-#include "TimerQueue.h"
+#include "channel.h"
+#include "poller.h"
+
+#include "timer_queue.h"
 
 #include <assert.h>
 #include <thread>

@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <trantor/net/EventLoop.h>
+#include "core/loops/event_loop.h"
 #include "core/net/inet_address.h"
 #include "core/math/date.h"
 #include "core/log/logger.h"

@@ -15,7 +15,7 @@
 #pragma once
 
 #include "impl_forwards.h"
-#include <trantor/net/EventLoopThreadPool.h>
+#include "core/loops/event_loop_thread_pool.h"
 #include <trantor/net/callbacks.h>
 #include <trantor/utils/NonCopyable.h>
 #include <memory>

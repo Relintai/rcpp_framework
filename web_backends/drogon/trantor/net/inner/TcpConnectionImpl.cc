@@ -13,7 +13,7 @@
  */
 
 #include "TcpConnectionImpl.h"
-#include "Channel.h"
+#include "core/loops/channel.h"
 #include "core/net/socket.h"
 #ifdef __linux__
 #include <sys/sendfile.h>

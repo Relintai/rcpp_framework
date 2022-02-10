@@ -12,7 +12,7 @@
  *
  */
 
-#include <trantor/net/EventLoopThread.h>
+#include "event_loop_thread.h"
 #include "core/log/logger.h"
 #ifdef __linux__
 #include <sys/prctl.h>

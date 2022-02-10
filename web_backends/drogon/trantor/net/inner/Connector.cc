@@ -13,7 +13,7 @@
  */
 
 #include "Connector.h"
-#include "Channel.h"
+#include "core/loops/channel.h"
 #include "core/net/socket.h"
 
 using namespace trantor;

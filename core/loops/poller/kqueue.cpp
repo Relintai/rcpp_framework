@@ -1,13 +1,15 @@
-#include "KQueue.h"
-#include "Channel.h"
+#include "kqueue.h"
+
+#include "core/loops/channel.h"
 #ifdef USE_KQUEUE
+#include "core/log/logger.h"
 #include <poll.h>
 #include <sys/event.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include "core/log/logger.h"
 #include <unistd.h>
 #endif
+
 namespace trantor {
 #ifdef USE_KQUEUE
 namespace {

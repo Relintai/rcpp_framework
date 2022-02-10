@@ -15,7 +15,7 @@
 #pragma once
 
 #include <assert.h>
-#include <trantor/net/EventLoop.h>
+#include "core/loops/event_loop.h"
 #include "core/log/logger.h"
 #include <atomic>
 #include <deque>

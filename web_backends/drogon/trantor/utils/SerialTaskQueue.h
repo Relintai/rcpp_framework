@@ -15,7 +15,7 @@
 #pragma once
 
 #include "TaskQueue.h"
-#include <trantor/net/EventLoopThread.h>
+#include "core/loops/event_loop_thread.h"
 #include <trantor/exports.h>
 #include <string>
 #include <queue>

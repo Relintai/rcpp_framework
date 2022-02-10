@@ -12,10 +12,10 @@
  *
  */
 
-#include <trantor/net/EventLoop.h>
+#include "event_loop.h"
 
-#include "Channel.h"
-#include "TimerQueue.h"
+#include "channel.h"
+#include "timer_queue.h"
 #ifdef __linux__
 #include <sys/timerfd.h>
 #endif

@@ -18,7 +18,7 @@
 #include <drogon/HttpAppFramework.h>
 #include <drogon/drogon.h>
 #include <drogon/drogon_test.h>
-#include <trantor/net/EventLoopThread.h>
+#include "core/loops/event_loop_thread.h"
 #include <trantor/net/TcpClient.h>
 
 #include <algorithm>

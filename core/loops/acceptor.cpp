@@ -12,7 +12,7 @@
  *
  */
 
-#include "Acceptor.h"
+#include "acceptor.h"
 using namespace trantor;
 
 #ifndef O_CLOEXEC

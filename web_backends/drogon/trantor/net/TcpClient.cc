@@ -13,7 +13,7 @@
 
 #include "Connector.h"
 #include "inner/TcpConnectionImpl.h"
-#include <trantor/net/EventLoop.h>
+#include "core/loops/event_loop.h"
 #include "core/log/logger.h"
 
 #include <algorithm>

@@ -19,7 +19,7 @@
 #include <http/HttpTypes.h>
 #include <drogon/drogon_callbacks.h>
 
-#include <trantor/net/EventLoop.h>
+#include "core/loops/event_loop.h"
 #include <trantor/utils/NonCopyable.h>
 #include <functional>
 #include <future>

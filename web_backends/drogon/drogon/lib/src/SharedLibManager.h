@@ -15,7 +15,7 @@
 #pragma once
 
 #include <sys/stat.h>
-#include <trantor/net/EventLoopThread.h>
+#include "core/loops/event_loop_thread.h"
 #include <trantor/utils/NonCopyable.h>
 #include <unordered_map>
 #include <vector>

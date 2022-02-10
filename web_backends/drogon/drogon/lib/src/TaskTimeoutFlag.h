@@ -11,7 +11,7 @@
  *  Drogon
  *
  */
-#include <trantor/net/EventLoop.h>
+#include "core/loops/event_loop.h"
 #include <trantor/utils/NonCopyable.h>
 #include <atomic>
 #include <chrono>

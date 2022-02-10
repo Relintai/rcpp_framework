@@ -17,7 +17,7 @@
 #include "impl_forwards.h"
 #include <http/Cookie.h>
 #include <drogon/HttpClient.h>
-#include <trantor/net/EventLoop.h>
+#include "core/loops/event_loop.h"
 #include <trantor/net/Resolver.h>
 #include <trantor/net/TcpClient.h>
 #include <list>

@@ -14,7 +14,7 @@
 
 #pragma once
 #include <trantor/exports.h>
-#include <trantor/net/EventLoop.h>
+#include "core/loops/event_loop.h"
 #include "core/net/inet_address.h"
 #include <trantor/utils/NonCopyable.h>
 #include "core/containers/msg_buffer.h"

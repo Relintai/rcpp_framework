@@ -20,7 +20,7 @@
 #include <http/HttpRequest.h>
 #include <drogon/utils/Utilities.h>
 #include <stdio.h>
-#include <trantor/net/EventLoop.h>
+#include "core/loops/event_loop.h"
 #include "core/net/inet_address.h"
 #include "core/log/logger.h"
 #include "core/containers/msg_buffer.h"

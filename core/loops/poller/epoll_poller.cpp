@@ -12,9 +12,10 @@
  *
  */
 
-#include "EpollPoller.h"
-#include "Channel.h"
+#include "epoll_poller.h"
 #include "core/log/logger.h"
+#include "core/loops/channel.h"
+
 #ifdef __linux__
 #include <assert.h>
 #include <poll.h>
@@ -30,6 +31,7 @@
 #include <iostream>
 #define EPOLL_CLOEXEC _O_NOINHERIT
 #endif
+
 namespace trantor {
 #if defined __linux__ || defined _WIN32
 

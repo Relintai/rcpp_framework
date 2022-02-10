@@ -12,9 +12,9 @@
  *
  */
 
-#include "Timer.h"
-#include <trantor/net/EventLoop.h>
+#include "timer.h"
 #include "core/log/logger.h"
+#include "core/loops/event_loop.h"
 
 namespace trantor {
 std::atomic<TimerId> Timer::timersCreated_ = ATOMIC_VAR_INIT(InvalidTimerId);

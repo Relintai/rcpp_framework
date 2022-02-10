@@ -1,6 +1,6 @@
 #include <trantor/net/TcpServer.h>
 #include "core/log/logger.h"
-#include <trantor/net/EventLoopThread.h>
+#include "core/loops/event_loop_thread.h"
 #include <string>
 #include <iostream>
 #include <thread>

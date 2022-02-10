@@ -18,7 +18,7 @@
 #include <http/HttpResponse.h>
 #include <http/HttpTypes.h>
 #include <drogon/WebSocketConnection.h>
-#include <trantor/net/EventLoop.h>
+#include "core/loops/event_loop.h"
 #include <functional>
 #include <memory>
 #include <string>

@@ -7,7 +7,7 @@
 
 #include "AresResolver.h"
 #include <ares.h>
-#include <trantor/net/Channel.h>
+#include "core/loops/channel.h"
 #ifdef _WIN32
 #include <winsock2.h>
 #else

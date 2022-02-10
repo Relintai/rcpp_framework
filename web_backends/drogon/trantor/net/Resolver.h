@@ -8,7 +8,7 @@
 #pragma once
 #include <trantor/exports.h>
 #include <memory>
-#include <trantor/net/EventLoop.h>
+#include "core/loops/event_loop.h"
 #include "core/net/inet_address.h"
 
 namespace trantor

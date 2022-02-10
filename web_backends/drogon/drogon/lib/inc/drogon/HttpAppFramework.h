@@ -25,7 +25,7 @@
 #include <drogon/plugins/Plugin.h>
 #include <drogon/utils/HttpConstraint.h>
 #include <drogon/utils/Utilities.h>
-#include <trantor/net/EventLoop.h>
+#include "core/loops/event_loop.h"
 #include <trantor/net/Resolver.h>
 #include <trantor/utils/NonCopyable.h>
 #include <chrono>

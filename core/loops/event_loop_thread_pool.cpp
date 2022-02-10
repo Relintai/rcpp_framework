@@ -12,7 +12,8 @@
  *
  */
 
-#include <trantor/net/EventLoopThreadPool.h>
+#include "event_loop_thread_pool.h"
+
 using namespace trantor;
 EventLoopThreadPool::EventLoopThreadPool(size_t threadNum,
 		const std::string &name) :

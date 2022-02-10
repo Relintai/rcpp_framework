@@ -8,7 +8,7 @@
 #pragma once
 #include <trantor/net/Resolver.h>
 #include <trantor/utils/NonCopyable.h>
-#include <trantor/net/EventLoopThread.h>
+#include "core/loops/event_loop_thread.h"
 #include <map>
 #include <memory>
 #include <string.h>

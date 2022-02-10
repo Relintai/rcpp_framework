@@ -16,7 +16,7 @@
 #include <trantor/net/callbacks.h>
 #include <trantor/utils/NonCopyable.h>
 #include "core/log/logger.h"
-#include <trantor/net/EventLoopThreadPool.h>
+#include "core/loops/event_loop_thread_pool.h"
 #include "core/net/inet_address.h"
 #include <trantor/net/TcpConnection.h>
 #include <trantor/utils/TimingWheel.h>
