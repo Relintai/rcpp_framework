@@ -138,8 +138,7 @@ public:
 	}
 
 	// set callbacks
-	virtual void setHighWaterMarkCallback(const HighWaterMarkCallback &cb,
-			size_t markLen) override {
+	virtual void setHighWaterMarkCallback(const HighWaterMarkCallback &cb, size_t markLen) override {
 		highWaterMarkCallback_ = cb;
 		highWaterMarkLen_ = markLen;
 	}
@@ -186,8 +185,7 @@ private:
 	size_t idleTimeout_{ 0 };
 	Date lastTimingWheelUpdateTime_;
 
-	void enableKickingOff(size_t timeout,
-			const std::shared_ptr<TimingWheel> &timingWheel) {
+	void enableKickingOff(size_t timeout, const std::shared_ptr<TimingWheel> &timingWheel) {
 		assert(timingWheel);
 		assert(timingWheel->getLoop() == loop_);
 		assert(timeout > 0);
@@ -207,15 +205,19 @@ private:
 	void setRecvMsgCallback(const RecvMessageCallback &cb) {
 		recvMsgCallback_ = cb;
 	}
+
 	void setConnectionCallback(const ConnectionCallback &cb) {
 		connectionCallback_ = cb;
 	}
+
 	void setWriteCompleteCallback(const WriteCompleteCallback &cb) {
 		writeCompleteCallback_ = cb;
 	}
+
 	void setCloseCallback(const CloseCallback &cb) {
 		closeCallback_ = cb;
 	}
+
 	void setSSLErrorCallback(const SSLErrorCallback &cb) {
 		sslErrorCallback_ = cb;
 	}

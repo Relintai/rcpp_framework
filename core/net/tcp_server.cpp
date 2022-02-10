@@ -81,12 +81,7 @@ void TcpServer::newConnection(int sockfd, const InetAddress &peer) {
 
 	if (sslCtxPtr_) {
 #ifdef USE_OPENSSL
-		newPtr = std::make_shared<TcpConnectionImpl>(
-				ioLoop,
-				sockfd,
-				InetAddress(Socket::getLocalAddr(sockfd)),
-				peer,
-				sslCtxPtr_);
+		newPtr = std::make_shared<TcpConnectionImpl>(ioLoop, sockfd, InetAddress(Socket::getLocalAddr(sockfd)), peer, sslCtxPtr_);
 #else
 		LOG_FATAL << "OpenSSL is not found in your system!";
 		abort();
@@ -123,26 +118,21 @@ void TcpServer::start() {
 	loop_->runInLoop([this]() {
 		assert(!started_);
 		started_ = true;
+
 		if (idleTimeout_ > 0) {
-			timingWheelMap_[loop_] =
-					std::make_shared<TimingWheel>(loop_,
-							idleTimeout_,
-							1.0F,
-							idleTimeout_ < 500 ? idleTimeout_ + 1 : 100);
+			timingWheelMap_[loop_] = std::make_shared<TimingWheel>(loop_, idleTimeout_, 1.0F, idleTimeout_ < 500 ? idleTimeout_ + 1 : 100);
+
 			if (loopPoolPtr_) {
 				auto loopNum = loopPoolPtr_->size();
 				while (loopNum > 0) {
 					// LOG_TRACE << "new Wheel loopNum=" << loopNum;
 					auto poolLoop = loopPoolPtr_->getNextLoop();
-					timingWheelMap_[poolLoop] =
-							std::make_shared<TimingWheel>(poolLoop,
-									idleTimeout_,
-									1.0F,
-									idleTimeout_ < 500 ? idleTimeout_ + 1 : 100);
+					timingWheelMap_[poolLoop] = std::make_shared<TimingWheel>(poolLoop, idleTimeout_, 1.0F, idleTimeout_ < 500 ? idleTimeout_ + 1 : 100);
 					--loopNum;
 				}
 			}
 		}
+		
 		LOG_TRACE << "map size=" << timingWheelMap_.size();
 		acceptorPtr_->listen();
 	});
@@ -150,17 +140,22 @@ void TcpServer::start() {
 
 void TcpServer::stop() {
 	loop_->runInLoop([this]() { acceptorPtr_.reset(); });
+
 	for (auto connection : connSet_) {
 		connection->forceClose();
 	}
+
 	loopPoolPtr_.reset();
+
 	for (auto &iter : timingWheelMap_) {
 		std::promise<int> pro;
 		auto f = pro.get_future();
+
 		iter.second->getLoop()->runInLoop([&iter, &pro]() mutable {
 			iter.second.reset();
 			pro.set_value(1);
 		});
+
 		f.get();
 	}
 }
@@ -169,9 +164,11 @@ void TcpServer::connectionClosed(const TcpConnectionPtr &connectionPtr) {
 	LOG_TRACE << "connectionClosed";
 	// loop_->assertInLoopThread();
 	loop_->runInLoop([this, connectionPtr]() {
+		
 		size_t n = connSet_.erase(connectionPtr);
 		(void)n;
 		assert(n == 1);
+
 	});
 
 	static_cast<TcpConnectionImpl *>(connectionPtr.get())->connectDestroyed();
