@@ -12,7 +12,7 @@
  *
  */
 
-#include <trantor/utils/WindowsSupport.h>
+#include "windows_support.h"
 #include <winsock2.h>
 
 // from polipo
