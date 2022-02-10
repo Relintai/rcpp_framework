@@ -13,7 +13,7 @@
  */
 
 #include <assert.h>
-#include "core/containers/concurrent_task_queue.h"
+#include "concurrent_task_queue.h"
 #include "core/log/logger.h"
 #ifdef __linux__
 #include <sys/prctl.h>
