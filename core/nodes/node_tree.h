@@ -13,7 +13,7 @@ public:
 	Node *get_root();
 	virtual void set_root(Node *root);
 
-	virtual void send_update(float delta);
+	virtual void update();
 
 	void request_write_lock();
 
@@ -21,8 +21,11 @@ public:
 	~NodeTree();
 
 protected:
+	virtual void _send_update();
+
 	Node *_root_node;
 	float _update_interval;
+
 	bool _write_lock_requested;
 	RWLock _rw_lock;
 };

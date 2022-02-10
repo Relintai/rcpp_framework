@@ -20,7 +20,9 @@ void WebServer::set_root(Node *root) {
 void WebServer::handle_request(Request *request) {
 	ERR_FAIL_COND(!_web_root);
 
+	_rw_lock.read_lock();
 	_web_root->handle_request_main(request);
+	_rw_lock.read_unlock();
 }
 
 

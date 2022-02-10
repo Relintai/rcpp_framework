@@ -19,8 +19,24 @@ void NodeTree::set_root(Node *root) {
 	}
 }
 
-void NodeTree::send_update(float delta) {
-	// todo
+void NodeTree::update() {
+	if (!_root_node) {
+		return;
+	}
+
+	_root_node->notification(Node::NOTIFICATION_UPDATE);
+
+	if (_write_lock_requested) {
+		_rw_lock.write_lock();
+		_root_node->notification(Node::NOTIFICATION_TREE_WRITE_LOCKED);
+		_rw_lock.write_unlock();
+	}
+}
+
+void NodeTree::_send_update() {
+	if (_root_node) {
+		_root_node->notification(Node::NOTIFICATION_UPDATE);
+	}
 }
 
 NodeTree::NodeTree() :
