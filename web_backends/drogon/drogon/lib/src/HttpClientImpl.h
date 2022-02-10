@@ -18,8 +18,8 @@
 #include <http/Cookie.h>
 #include <drogon/HttpClient.h>
 #include "core/loops/event_loop.h"
-#include <trantor/net/Resolver.h>
-#include <trantor/net/TcpClient.h>
+#include "core/net/resolver.h"
+#include "core/net/tcp_client.h"
 #include <list>
 #include <mutex>
 #include <queue>

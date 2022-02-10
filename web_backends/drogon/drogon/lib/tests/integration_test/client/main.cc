@@ -19,7 +19,7 @@
 #include <drogon/drogon.h>
 #include <drogon/drogon_test.h>
 #include "core/loops/event_loop_thread.h"
-#include <trantor/net/TcpClient.h>
+#include "core/net/tcp_client.h"
 
 #include <algorithm>
 #include <atomic>

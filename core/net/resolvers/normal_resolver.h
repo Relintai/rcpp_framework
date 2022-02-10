@@ -6,7 +6,7 @@
 // Author: Tao An
 
 #pragma once
-#include <trantor/net/Resolver.h>
+#include "core/net/resolver.h"
 #include <trantor/utils/NonCopyable.h>
 #include "core/containers/concurrent_task_queue.h"
 #include <memory>

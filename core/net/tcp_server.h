@@ -18,7 +18,7 @@
 #include "core/log/logger.h"
 #include "core/loops/event_loop_thread_pool.h"
 #include "core/net/inet_address.h"
-#include <trantor/net/TcpConnection.h>
+#include "core/net/tcp_connection.h"
 #include "core/loops/timing_wheel.h"
 #include <trantor/exports.h>
 #include <string>

@@ -12,7 +12,7 @@
  *
  */
 
-#include "TcpConnectionImpl.h"
+#include "tcp_connection_impl.h"
 #include "core/loops/channel.h"
 #include "core/net/socket.h"
 #ifdef __linux__

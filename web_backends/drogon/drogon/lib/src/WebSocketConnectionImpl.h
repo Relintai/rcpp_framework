@@ -16,7 +16,7 @@
 
 #include "impl_forwards.h"
 #include <drogon/WebSocketConnection.h>
-#include <trantor/net/TcpConnection.h>
+#include "core/net/tcp_connection.h"
 #include <trantor/utils/NonCopyable.h>
 
 namespace drogon {

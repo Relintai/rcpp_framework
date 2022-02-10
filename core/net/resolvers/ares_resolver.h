@@ -6,7 +6,7 @@
 // Author: Tao An
 
 #pragma once
-#include <trantor/net/Resolver.h>
+#include "core/net/resolver.h"
 #include <trantor/utils/NonCopyable.h>
 #include "core/loops/event_loop_thread.h"
 #include <map>

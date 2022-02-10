@@ -17,7 +17,7 @@
 #include "impl_forwards.h"
 #include <drogon/WebSocketClient.h>
 #include "core/loops/event_loop.h"
-#include <trantor/net/TcpClient.h>
+#include "core/net/tcp_client.h"
 #include <trantor/utils/NonCopyable.h>
 
 #include <memory>

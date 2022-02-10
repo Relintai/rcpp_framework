@@ -13,8 +13,8 @@
  */
 
 #include "core/loops/acceptor.h"
-#include "inner/TcpConnectionImpl.h"
-#include <trantor/net/TcpServer.h>
+#include "core/net/connections/tcp_connection_impl.h"
+#include "core/net/tcp_server.h"
 #include "core/log/logger.h"
 #include <functional>
 #include <vector>

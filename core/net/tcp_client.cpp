@@ -9,10 +9,10 @@
 
 // Taken from muduo and modified by an tao
 
-#include <trantor/net/TcpClient.h>
+#include "core/net/tcp_client.h"
 
-#include "Connector.h"
-#include "inner/TcpConnectionImpl.h"
+#include "connector.h"
+#include "core/net/connections/tcp_connection_impl.h"
 #include "core/loops/event_loop.h"
 #include "core/log/logger.h"
 

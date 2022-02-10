@@ -5,7 +5,7 @@
 
 // Author: Tao An
 
-#include "AresResolver.h"
+#include "ares_resolver.h"
 #include <ares.h>
 #include "core/loops/channel.h"
 #ifdef _WIN32

@@ -15,7 +15,7 @@
 #pragma once
 
 #include "impl_forwards.h"
-#include <trantor/net/TcpServer.h>
+#include "core/net/tcp_server.h"
 #include "core/loops/callbacks.h"
 #include <trantor/utils/NonCopyable.h>
 #include <functional>

@@ -16,7 +16,7 @@
 
 #include "../src/impl_forwards.h"
 #include <http/HttpTypes.h>
-#include <trantor/net/TcpConnection.h>
+#include "core/net/tcp_connection.h"
 #include "core/containers/msg_buffer.h"
 #include <trantor/utils/NonCopyable.h>
 #include <deque>

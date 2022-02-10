@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <trantor/net/TcpConnection.h>
+#include "core/net/tcp_connection.h"
 #include "core/log/async_file_logger.h"
 
 #include <fcntl.h>

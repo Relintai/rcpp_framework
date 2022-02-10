@@ -1,4 +1,4 @@
-#include "NormalResolver.h"
+#include "normal_resolver.h"
 #include "core/log/logger.h"
 #ifdef _WIN32
 #include <ws2tcpip.h>

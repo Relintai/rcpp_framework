@@ -13,7 +13,7 @@
 #include <mutex>
 
 #include "core/net/inet_address.h"
-#include <trantor/net/Resolver.h>
+#include "core/net/resolver.h"
 #include "core/log/logger.h"
 
 #include "http/HttpRequestImpl.h"

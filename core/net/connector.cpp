@@ -12,7 +12,7 @@
  *
  */
 
-#include "Connector.h"
+#include "connector.h"
 #include "core/loops/channel.h"
 #include "core/net/socket.h"
 
