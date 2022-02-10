@@ -18,7 +18,7 @@
 #include "core/net/inet_address.h"
 #include <trantor/utils/NonCopyable.h>
 #include "core/containers/msg_buffer.h"
-#include <trantor/net/callbacks.h>
+#include "core/loops/callbacks.h"
 #include <memory>
 #include <functional>
 #include <string>

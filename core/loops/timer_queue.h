@@ -15,7 +15,7 @@
 #pragma once
 
 #include "timer.h"
-#include <trantor/net/callbacks.h>
+#include "core/loops/callbacks.h"
 #include <atomic>
 #include <memory>
 #include <queue>

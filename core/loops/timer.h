@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <trantor/net/callbacks.h>
+#include "core/loops/callbacks.h"
 #include <atomic>
 #include <chrono>
 #include <functional>

@@ -16,7 +16,7 @@
 
 #include "impl_forwards.h"
 #include <trantor/net/TcpServer.h>
-#include <trantor/net/callbacks.h>
+#include "core/loops/callbacks.h"
 #include <trantor/utils/NonCopyable.h>
 #include <functional>
 #include <string>

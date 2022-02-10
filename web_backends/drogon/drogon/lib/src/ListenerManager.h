@@ -16,7 +16,7 @@
 
 #include "impl_forwards.h"
 #include "core/loops/event_loop_thread_pool.h"
-#include <trantor/net/callbacks.h>
+#include "core/loops/callbacks.h"
 #include <trantor/utils/NonCopyable.h>
 #include <memory>
 #include <string>
