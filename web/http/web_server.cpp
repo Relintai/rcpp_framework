@@ -25,6 +25,9 @@ void WebServer::handle_request(Request *request) {
 	_rw_lock.read_unlock();
 }
 
+float WebServer::get_update_delta_time() {
+	return _update_interval;
+}
 
 WebServer::WebServer() : NodeTree() {
 	_web_root = nullptr;

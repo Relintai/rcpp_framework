@@ -16,6 +16,8 @@ public:
 
 	void handle_request(Request *request);
 
+	float get_update_delta_time();
+
 	WebServer();
 	virtual ~WebServer();
 

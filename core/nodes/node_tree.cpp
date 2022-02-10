@@ -39,6 +39,10 @@ void NodeTree::_send_update() {
 	}
 }
 
+float NodeTree::get_update_delta_time() {
+	return 0;
+}
+
 NodeTree::NodeTree() :
 		Object() {
 

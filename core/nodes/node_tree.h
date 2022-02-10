@@ -17,6 +17,8 @@ public:
 
 	void request_write_lock();
 
+	virtual float get_update_delta_time();
+
 	NodeTree();
 	~NodeTree();
 
