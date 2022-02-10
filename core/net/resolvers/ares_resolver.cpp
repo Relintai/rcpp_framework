@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ares_resolver.h"
-#include "core/loops/channel.h"
+#include "core/net/channel.h"
 #include <ares.h>
 #ifdef _WIN32
 #include <winsock2.h>

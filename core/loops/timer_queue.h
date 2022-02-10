@@ -31,7 +31,7 @@
 #pragma once
 
 #include "timer.h"
-#include "core/loops/callbacks.h"
+#include "core/net/callbacks.h"
 #include <atomic>
 #include <memory>
 #include <queue>

@@ -30,7 +30,7 @@
 
 #include "epoll_poller.h"
 #include "core/log/logger.h"
-#include "core/loops/channel.h"
+#include "core/net/channel.h"
 
 #ifdef __linux__
 #include <assert.h>

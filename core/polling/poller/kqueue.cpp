@@ -31,7 +31,7 @@
 
 #include "kqueue.h"
 
-#include "core/loops/channel.h"
+#include "core/net/channel.h"
 #ifdef USE_KQUEUE
 #include "core/log/logger.h"
 #include <poll.h>

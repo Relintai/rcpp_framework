@@ -1,5 +1,5 @@
 
-// This file is originally from Trantor - Poller.h
+// This file is originally from Trantor - KQueue.h
 
 // Copyright (c) 2016-2021, Tao An.  All rights reserved.
 
@@ -29,43 +29,38 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
+#include "core/loops/event_loop.h"
+#include "core/polling/poller.h"
 
-#include "event_loop.h"
-
-#include <map>
+#if (defined(__unix__) && !defined(__linux__)) || \
+		(defined(__APPLE__) && defined(__MACH__))
+#define USE_KQUEUE
 #include <memory>
+#include <unordered_map>
+#include <vector>
+using EventList = std::vector<struct kevent>;
+#endif
 
 class Channel;
-#ifdef _WIN32
-using EventCallback = std::function<void(uint64_t)>;
-#endif
-class Poller {
-protected:
-	Poller(const Poller &) = delete;
-	Poller &operator=(const Poller &) = delete;
-	// some uncopyable classes maybe support move constructor....
-	Poller(Poller &&) noexcept(true) = default;
-	Poller &operator=(Poller &&) noexcept(true) = default;
 
+class KQueue : public Poller {
 public:
-	explicit Poller(EventLoop *loop) :
-			ownerLoop_(loop){};
-	virtual ~Poller() {
-	}
-	void assertInLoopThread() {
-		ownerLoop_->assertInLoopThread();
-	}
-	virtual void poll(int timeoutMs, ChannelList *activeChannels) = 0;
-	virtual void updateChannel(Channel *channel) = 0;
-	virtual void removeChannel(Channel *channel) = 0;
-#ifdef _WIN32
-	virtual void postEvent(uint64_t event) = 0;
-	virtual void setEventCallback(const EventCallback &cb) = 0;
-#endif
-	virtual void resetAfterFork() {
-	}
-	static Poller *newPoller(EventLoop *loop);
+	explicit KQueue(EventLoop *loop);
+	virtual ~KQueue();
+	virtual void poll(int timeoutMs, ChannelList *activeChannels) override;
+	virtual void updateChannel(Channel *channel) override;
+	virtual void removeChannel(Channel *channel) override;
+	virtual void resetAfterFork() override;
 
 private:
-	EventLoop *ownerLoop_;
+#ifdef USE_KQUEUE
+	static const int kInitEventListSize = 16;
+	int kqfd_;
+	EventList events_;
+	using ChannelMap = std::unordered_map<int, std::pair<int, Channel *> >;
+	ChannelMap channels_;
+
+	void fillActiveChannels(int numEvents, ChannelList *activeChannels) const;
+	void update(Channel *channel);
+#endif
 };

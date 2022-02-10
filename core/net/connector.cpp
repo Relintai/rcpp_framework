@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "connector.h"
-#include "core/loops/channel.h"
+#include "channel.h"
 #include "core/net/socket.h"
 
 Connector::Connector(EventLoop *loop, const InetAddress &addr, bool retry) :

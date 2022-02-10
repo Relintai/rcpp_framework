@@ -31,7 +31,7 @@
 #pragma once
 
 #include "core/log/logger.h"
-#include "core/loops/callbacks.h"
+#include "core/net/callbacks.h"
 #include "core/loops/event_loop_thread_pool.h"
 #include "core/loops/timing_wheel.h"
 #include "core/net/inet_address.h"

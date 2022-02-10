@@ -1,5 +1,5 @@
 
-// This file is originally from Trantor - Poller.cc
+// This file is originally from Trantor - EpollPoller.h
 
 // Copyright (c) 2016-2021, Tao An.  All rights reserved.
 
@@ -28,21 +28,48 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "core/loops/poller.h"
-#ifdef __linux__
-#include "poller/epoll_poller.h"
-#elif defined _WIN32
-#include "Wepoll.h"
-#include "poller/epoll_poller.h"
-#else
-#include "poller/kqueue.h"
-#endif
+#pragma once
 
+#include "core/loops/event_loop.h"
+#include "core/polling/poller.h"
 
-Poller *Poller::newPoller(EventLoop *loop) {
 #if defined __linux__ || defined _WIN32
-	return new EpollPoller(loop);
-#else
-	return new KQueue(loop);
+#include <map>
+#include <memory>
+using EventList = std::vector<struct epoll_event>;
 #endif
-}
+
+class Channel;
+
+class EpollPoller : public Poller {
+public:
+	explicit EpollPoller(EventLoop *loop);
+	virtual ~EpollPoller();
+	virtual void poll(int timeoutMs, ChannelList *activeChannels) override;
+	virtual void updateChannel(Channel *channel) override;
+	virtual void removeChannel(Channel *channel) override;
+#ifdef _WIN32
+	virtual void postEvent(uint64_t event) override;
+	virtual void setEventCallback(const EventCallback &cb) override {
+		eventCallback_ = cb;
+	}
+#endif
+
+private:
+#if defined __linux__ || defined _WIN32
+	static const int kInitEventListSize = 16;
+#ifdef _WIN32
+	void *epollfd_;
+	EventCallback eventCallback_{ [](uint64_t event) {} };
+#else
+	int epollfd_;
+#endif
+	EventList events_;
+	void update(int operation, Channel *channel);
+#ifndef NDEBUG
+	using ChannelMap = std::map<int, Channel *>;
+	ChannelMap channels_;
+#endif
+	void fillActiveChannels(int numEvents, ChannelList *activeChannels) const;
+#endif
+};

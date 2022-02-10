@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "channel.h"
-#include "event_loop.h"
+#include "core/loops/event_loop.h"
 
 #ifdef _WIN32
 #include "Wepoll.h"

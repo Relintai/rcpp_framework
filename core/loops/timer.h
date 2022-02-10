@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "core/loops/callbacks.h"
+#include "core/net/callbacks.h"
 #include <atomic>
 #include <chrono>
 #include <functional>

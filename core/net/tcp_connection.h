@@ -31,7 +31,7 @@
 #pragma once
 
 #include "core/containers/msg_buffer.h"
-#include "core/loops/callbacks.h"
+#include "core/net/callbacks.h"
 #include "core/loops/event_loop.h"
 #include "core/net/inet_address.h"
 #include <functional>

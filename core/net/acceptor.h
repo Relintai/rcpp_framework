@@ -33,7 +33,7 @@
 #include "channel.h"
 #include "core/net/inet_address.h"
 #include "core/net/socket.h"
-#include "event_loop.h"
+#include "core/loops/event_loop.h"
 #include <functional>
 
 // Inherit from socket?

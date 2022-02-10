@@ -1,5 +1,5 @@
 
-// This file is originally from Trantor - KQueue.h
+// This file is originally from Trantor - Poller.cc
 
 // Copyright (c) 2016-2021, Tao An.  All rights reserved.
 
@@ -28,39 +28,22 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
-#include "core/loops/event_loop.h"
-#include "core/loops/poller.h"
+#include "poller.h"
 
-#if (defined(__unix__) && !defined(__linux__)) || \
-		(defined(__APPLE__) && defined(__MACH__))
-#define USE_KQUEUE
-#include <memory>
-#include <unordered_map>
-#include <vector>
-using EventList = std::vector<struct kevent>;
+#ifdef __linux__
+#include "poller/epoll_poller.h"
+#elif defined _WIN32
+#include "Wepoll.h"
+#include "poller/epoll_poller.h"
+#else
+#include "poller/kqueue.h"
 #endif
 
-class Channel;
 
-class KQueue : public Poller {
-public:
-	explicit KQueue(EventLoop *loop);
-	virtual ~KQueue();
-	virtual void poll(int timeoutMs, ChannelList *activeChannels) override;
-	virtual void updateChannel(Channel *channel) override;
-	virtual void removeChannel(Channel *channel) override;
-	virtual void resetAfterFork() override;
-
-private:
-#ifdef USE_KQUEUE
-	static const int kInitEventListSize = 16;
-	int kqfd_;
-	EventList events_;
-	using ChannelMap = std::unordered_map<int, std::pair<int, Channel *> >;
-	ChannelMap channels_;
-
-	void fillActiveChannels(int numEvents, ChannelList *activeChannels) const;
-	void update(Channel *channel);
+Poller *Poller::newPoller(EventLoop *loop) {
+#if defined __linux__ || defined _WIN32
+	return new EpollPoller(loop);
+#else
+	return new KQueue(loop);
 #endif
-};
+}

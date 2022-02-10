@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "tcp_connection_impl.h"
-#include "core/loops/channel.h"
+#include "core/net/channel.h"
 #include "core/net/socket.h"
 #ifdef __linux__
 #include <sys/sendfile.h>

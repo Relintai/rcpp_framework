@@ -1,5 +1,5 @@
 
-// This file is originally from Trantor - EpollPoller.h
+// This file is originally from Trantor - Poller.h
 
 // Copyright (c) 2016-2021, Tao An.  All rights reserved.
 
@@ -31,45 +31,41 @@
 #pragma once
 
 #include "core/loops/event_loop.h"
-#include "core/loops/poller.h"
 
-#if defined __linux__ || defined _WIN32
 #include <map>
 #include <memory>
-using EventList = std::vector<struct epoll_event>;
-#endif
 
 class Channel;
-
-class EpollPoller : public Poller {
-public:
-	explicit EpollPoller(EventLoop *loop);
-	virtual ~EpollPoller();
-	virtual void poll(int timeoutMs, ChannelList *activeChannels) override;
-	virtual void updateChannel(Channel *channel) override;
-	virtual void removeChannel(Channel *channel) override;
 #ifdef _WIN32
-	virtual void postEvent(uint64_t event) override;
-	virtual void setEventCallback(const EventCallback &cb) override {
-		eventCallback_ = cb;
-	}
+using EventCallback = std::function<void(uint64_t)>;
 #endif
+class Poller {
+protected:
+	Poller(const Poller &) = delete;
+	Poller &operator=(const Poller &) = delete;
+	// some uncopyable classes maybe support move constructor....
+	Poller(Poller &&) noexcept(true) = default;
+	Poller &operator=(Poller &&) noexcept(true) = default;
+
+public:
+	explicit Poller(EventLoop *loop) :
+			ownerLoop_(loop){};
+	virtual ~Poller() {
+	}
+	void assertInLoopThread() {
+		ownerLoop_->assertInLoopThread();
+	}
+	virtual void poll(int timeoutMs, ChannelList *activeChannels) = 0;
+	virtual void updateChannel(Channel *channel) = 0;
+	virtual void removeChannel(Channel *channel) = 0;
+#ifdef _WIN32
+	virtual void postEvent(uint64_t event) = 0;
+	virtual void setEventCallback(const EventCallback &cb) = 0;
+#endif
+	virtual void resetAfterFork() {
+	}
+	static Poller *newPoller(EventLoop *loop);
 
 private:
-#if defined __linux__ || defined _WIN32
-	static const int kInitEventListSize = 16;
-#ifdef _WIN32
-	void *epollfd_;
-	EventCallback eventCallback_{ [](uint64_t event) {} };
-#else
-	int epollfd_;
-#endif
-	EventList events_;
-	void update(int operation, Channel *channel);
-#ifndef NDEBUG
-	using ChannelMap = std::map<int, Channel *>;
-	ChannelMap channels_;
-#endif
-	void fillActiveChannels(int numEvents, ChannelList *activeChannels) const;
-#endif
+	EventLoop *ownerLoop_;
 };

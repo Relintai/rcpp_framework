@@ -30,7 +30,7 @@
 
 #include "event_loop.h"
 
-#include "channel.h"
+#include "core/net/channel.h"
 #include "timer_queue.h"
 #ifdef __linux__
 #include <sys/timerfd.h>
