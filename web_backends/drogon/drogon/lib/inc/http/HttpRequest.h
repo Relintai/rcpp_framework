@@ -21,8 +21,8 @@
 
 #include <drogon/utils/string_view.h>
 #include <json/json.h>
-#include "core/net/inet_address.h"
-#include "core/math/date.h"
+#include <trantor/net/InetAddress.h>
+#include <trantor/utils/Date.h>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -248,20 +248,20 @@ public:
 	virtual const std::string &getParameter(const std::string &key) const = 0;
 
 	/// Return the remote IP address and port
-	virtual const InetAddress &peerAddr() const = 0;
-	const InetAddress &getPeerAddr() const {
+	virtual const trantor::InetAddress &peerAddr() const = 0;
+	const trantor::InetAddress &getPeerAddr() const {
 		return peerAddr();
 	}
 
 	/// Return the local IP address and port
-	virtual const InetAddress &localAddr() const = 0;
-	const InetAddress &getLocalAddr() const {
+	virtual const trantor::InetAddress &localAddr() const = 0;
+	const trantor::InetAddress &getLocalAddr() const {
 		return localAddr();
 	}
 
 	/// Return the creation timestamp set by the framework.
-	virtual const Date &creationDate() const = 0;
-	const Date &getCreationDate() const {
+	virtual const trantor::Date &creationDate() const = 0;
+	const trantor::Date &getCreationDate() const {
 		return creationDate();
 	}
 

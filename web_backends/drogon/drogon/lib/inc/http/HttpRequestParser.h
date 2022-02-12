@@ -16,14 +16,14 @@
 
 #include "../src/impl_forwards.h"
 #include <http/HttpTypes.h>
-#include "core/net/tcp_connection.h"
-#include "core/containers/msg_buffer.h"
+#include <trantor/net/TcpConnection.h>
+#include <trantor/utils/MsgBuffer.h>
 #include <trantor/utils/NonCopyable.h>
 #include <deque>
 #include <mutex>
 
 namespace drogon {
-class HttpRequestParser : public NonCopyable,
+class HttpRequestParser : public trantor::NonCopyable,
 						  public std::enable_shared_from_this<HttpRequestParser> {
 public:
 	enum class HttpRequestParseStatus {
@@ -37,10 +37,10 @@ public:
 		kGotAll,
 	};
 
-	explicit HttpRequestParser(const TcpConnectionPtr &connPtr);
+	explicit HttpRequestParser(const trantor::TcpConnectionPtr &connPtr);
 
 	// return false if any error
-	bool parseRequest(MsgBuffer *buf);
+	bool parseRequest(trantor::MsgBuffer *buf);
 
 	bool gotAll() const {
 		return status_ == HttpRequestParseStatus::kGotAll;
@@ -88,7 +88,7 @@ public:
 	size_t numberOfRequestsParsed() const {
 		return requestsCounter_;
 	}
-	MsgBuffer &getBuffer() {
+	trantor::MsgBuffer &getBuffer() {
 		return sendBuffer_;
 	}
 	std::vector<std::pair<HttpResponsePtr, bool> > &getResponseBuffer() {
@@ -114,16 +114,16 @@ private:
 	void shutdownConnection(HttpStatusCode code);
 	bool processRequestLine(const char *begin, const char *end);
 	HttpRequestParseStatus status_;
-	EventLoop *loop_;
+	trantor::EventLoop *loop_;
 	HttpRequestImplPtr request_;
 	bool firstRequest_{ true };
 	WebSocketConnectionImplPtr websockConnPtr_;
 	std::deque<std::pair<HttpRequestPtr, std::pair<HttpResponsePtr, bool> > >
 			requestPipelining_;
 	size_t requestsCounter_{ 0 };
-	std::weak_ptr<TcpConnection> conn_;
+	std::weak_ptr<trantor::TcpConnection> conn_;
 	bool stopWorking_{ false };
-	MsgBuffer sendBuffer_;
+	trantor::MsgBuffer sendBuffer_;
 	std::unique_ptr<std::vector<std::pair<HttpResponsePtr, bool> > >
 			responseBuffer_;
 	std::unique_ptr<std::vector<HttpRequestImplPtr> > requestBuffer_;

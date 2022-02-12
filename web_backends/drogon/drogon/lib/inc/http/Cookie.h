@@ -14,7 +14,7 @@
 #pragma once
 
 
-#include "core/math/date.h"
+#include <trantor/utils/Date.h>
 #include <limits>
 #include <string>
 
@@ -42,7 +42,7 @@ public:
      *
      * @param date The expiration date
      */
-	void setExpiresDate(const Date &date) {
+	void setExpiresDate(const trantor::Date &date) {
 		expiresDate_ = date;
 	}
 
@@ -114,14 +114,14 @@ public:
 	/**
      * @brief Get the expiration date of the cookie
      */
-	const Date &expiresDate() const {
+	const trantor::Date &expiresDate() const {
 		return expiresDate_;
 	}
 
 	/**
      * @brief Get the expiration date of the cookie
      */
-	const Date &getExpiresDate() const {
+	const trantor::Date &getExpiresDate() const {
 		return expiresDate_;
 	}
 
@@ -212,7 +212,7 @@ public:
 	}
 
 private:
-	Date expiresDate_{ (std::numeric_limits<int64_t>::max)() };
+	trantor::Date expiresDate_{ (std::numeric_limits<int64_t>::max)() };
 	bool httpOnly_{ true };
 	bool secure_{ false };
 	std::string domain_;

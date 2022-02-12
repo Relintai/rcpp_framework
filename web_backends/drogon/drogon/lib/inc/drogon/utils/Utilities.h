@@ -16,8 +16,8 @@
 
 
 #include <drogon/utils/string_view.h>
-#include "core/math/date.h"
-#include "core/utilities.h"
+#include <trantor/utils/Date.h>
+#include <trantor/utils/Funcs.h>
 #include <limits>
 #include <memory>
 #include <set>
@@ -60,7 +60,7 @@ std::vector<char> hexToBinaryVector(const char *ptr,
 inline std::vector<std::string> splitString(const std::string &str,
 		const std::string &separator,
 		bool acceptEmptyString = false) {
-	return Utilities::splitString(str, separator, acceptEmptyString);
+	return trantor::splitString(str, separator, acceptEmptyString);
 }
 
 std::set<std::string> splitStringToSet(
@@ -131,13 +131,13 @@ std::string brotliDecompress(const char *data,
    @endcode
  */
 char *getHttpFullDate(
-		const Date &date = Date::now());
+		const trantor::Date &date = trantor::Date::now());
 
-/// Get the Date object according to the http full date string
+/// Get the trantor::Date object according to the http full date string
 /**
- * Returns Date(std::numeric_limits<int64_t>::max()) upon failure.
+ * Returns trantor::Date(std::numeric_limits<int64_t>::max()) upon failure.
  */
-Date getHttpDate(const std::string &httpFullDateString);
+trantor::Date getHttpDate(const std::string &httpFullDateString);
 
 /// Get a formatted string
 std::string formattedString(const char *format, ...);

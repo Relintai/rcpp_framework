@@ -17,7 +17,7 @@
 
 using namespace drogon;
 
-SessionManager::SessionManager(EventLoop *loop, size_t timeout) :
+SessionManager::SessionManager(trantor::EventLoop *loop, size_t timeout) :
 		loop_(loop), timeout_(timeout) {
 	if (timeout_ > 0) {
 		size_t wheelNum = 1;

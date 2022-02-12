@@ -3,7 +3,7 @@
 #include <drogon/drogon_test.h>
 
 using namespace drogon;
-
+using namespace trantor;
 
 DROGON_TEST(TestFrameworkSelfTest) {
 	CHECK(TEST_CTX->name() == "TestFrameworkSelfTest");

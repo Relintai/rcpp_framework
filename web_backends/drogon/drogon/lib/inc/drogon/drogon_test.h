@@ -318,7 +318,7 @@ inline ThreadSafeStream printErr() {
 	return ThreadSafeStream(std::cerr);
 }
 
-class CaseBase : public NonCopyable {
+class CaseBase : public trantor::NonCopyable {
 public:
 	CaseBase() = default;
 	CaseBase(const std::string &name) :

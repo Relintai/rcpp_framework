@@ -114,8 +114,8 @@ public:
 	}
 
 	HttpAppFramework &registerNewConnectionAdvice(
-			const std::function<bool(const InetAddress &,
-					const InetAddress &)> &advice)
+			const std::function<bool(const trantor::InetAddress &,
+					const trantor::InetAddress &)> &advice)
 			override {
 		newConnectionAdvices_.emplace_back(advice);
 		return *this;
@@ -222,8 +222,8 @@ public:
 	const std::string &getUploadPath() const override {
 		return uploadPath_;
 	}
-	const std::shared_ptr<Resolver> &getResolver() const override {
-		static auto resolver = Resolver::newResolver(getLoop());
+	const std::shared_ptr<trantor::Resolver> &getResolver() const override {
+		static auto resolver = trantor::Resolver::newResolver(getLoop());
 		return resolver;
 	}
 	HttpAppFramework &setUploadPath(const std::string &uploadPath) override;
@@ -255,7 +255,7 @@ public:
 	HttpAppFramework &setLogPath(const std::string &logPath,
 			const std::string &logfileBaseName,
 			size_t logfileSize) override;
-	HttpAppFramework &setLogLevel(Logger::LogLevel level) override;
+	HttpAppFramework &setLogLevel(trantor::Logger::LogLevel level) override;
 	HttpAppFramework &enableSendfile(bool sendFile) override {
 		useSendfile_ = sendFile;
 		return *this;
@@ -365,9 +365,9 @@ public:
 			const noexcept override {
 		return floatPrecisionInJson_;
 	}
-	EventLoop *getLoop() const override;
+	trantor::EventLoop *getLoop() const override;
 
-	EventLoop *getIOLoop(size_t id) const override;
+	trantor::EventLoop *getIOLoop(size_t id) const override;
 
 	void quit() override;
 
@@ -396,7 +396,7 @@ public:
 		return serverHeader_;
 	}
 
-	std::vector<InetAddress> getListeners() const override;
+	std::vector<trantor::InetAddress> getListeners() const override;
 	inline static HttpAppFrameworkImpl &instance() {
 		static HttpAppFrameworkImpl instance;
 		return instance;
@@ -417,7 +417,7 @@ public:
 	}
 
 	size_t getCurrentThreadIndex() const override {
-		auto *loop = EventLoop::getEventLoopOfCurrentThread();
+		auto *loop = trantor::EventLoop::getEventLoopOfCurrentThread();
 		if (loop) {
 			return loop->index();
 		}
@@ -466,7 +466,7 @@ private:
 			const HttpRequestImplPtr &req,
 			std::function<void(const HttpResponsePtr &)> &&callback,
 			const WebSocketConnectionImplPtr &wsConnPtr);
-	void onConnection(const TcpConnectionPtr &conn);
+	void onConnection(const trantor::TcpConnectionPtr &conn);
 
 	void findSessionForRequest(const HttpRequestImplPtr &req);
 
@@ -539,8 +539,8 @@ private:
 	bool enableDateHeader_{ true };
 	bool reusePort_{ false };
 	std::vector<std::function<void()> > beginningAdvices_;
-	std::vector<std::function<bool(const InetAddress &,
-			const InetAddress &)> >
+	std::vector<std::function<bool(const trantor::InetAddress &,
+			const trantor::InetAddress &)> >
 			newConnectionAdvices_;
 	std::vector<std::function<void(const HttpResponsePtr &)> >
 			responseCreationAdvices_;

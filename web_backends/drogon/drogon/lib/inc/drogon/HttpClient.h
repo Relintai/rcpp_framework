@@ -19,7 +19,7 @@
 #include <http/HttpTypes.h>
 #include <drogon/drogon_callbacks.h>
 
-#include "core/loops/event_loop.h"
+#include <trantor/net/EventLoop.h>
 #include <trantor/utils/NonCopyable.h>
 #include <functional>
 #include <future>
@@ -42,7 +42,7 @@ using HttpClientPtr = std::shared_ptr<HttpClient>;
  * response callbacks are invoked without fear of accidental deconstruction.
  *
  */
-class HttpClient : public NonCopyable {
+class HttpClient : public trantor::NonCopyable {
 public:
 	/**
      * @brief Send a request asynchronously to the server
@@ -178,12 +178,12 @@ public:
 	static HttpClientPtr newHttpClient(const std::string &ip,
 			uint16_t port,
 			bool useSSL = false,
-			EventLoop *loop = nullptr,
+			trantor::EventLoop *loop = nullptr,
 			bool useOldTLS = false,
 			bool validateCert = true);
 
 	/// Get the event loop of the client;
-	virtual EventLoop *getLoop() = 0;
+	virtual trantor::EventLoop *getLoop() = 0;
 
 	/// Get the number of bytes sent or received
 	virtual size_t bytesSent() const = 0;
@@ -221,7 +221,7 @@ public:
      *
      */
 	static HttpClientPtr newHttpClient(const std::string &hostString,
-			EventLoop *loop = nullptr,
+			trantor::EventLoop *loop = nullptr,
 			bool useOldTLS = false,
 			bool validateCert = true);
 

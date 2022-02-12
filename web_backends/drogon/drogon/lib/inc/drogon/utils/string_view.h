@@ -20,7 +20,7 @@
 #include <boost/utility/string_view.hpp>
 #endif
 
-#include "core/log/log_stream.h"
+#include <trantor/utils/LogStream.h>
 
 namespace drogon {
 #if __cplusplus >= 201703L || (defined _MSC_VER && _MSC_VER > 1900)
@@ -29,11 +29,12 @@ using std::string_view;
 using boost::string_view;
 #endif
 } // namespace drogon
-
+namespace trantor {
 inline LogStream &operator<<(LogStream &ls, const drogon::string_view &v) {
 	ls.append(v.data(), v.length());
 	return ls;
 }
+} // namespace trantor
 
 #if __cplusplus < 201703L && !(defined _MSC_VER && _MSC_VER > 1900)
 namespace std {

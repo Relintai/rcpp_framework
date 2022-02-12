@@ -17,9 +17,9 @@
 #include "impl_forwards.h"
 #include <http/Cookie.h>
 #include <drogon/HttpClient.h>
-#include "core/loops/event_loop.h"
-#include "core/net/resolver.h"
-#include "core/net/tcp_client.h"
+#include <trantor/net/EventLoop.h>
+#include <trantor/net/Resolver.h>
+#include <trantor/net/TcpClient.h>
 #include <list>
 #include <mutex>
 #include <queue>
@@ -29,12 +29,12 @@ namespace drogon {
 class HttpClientImpl final : public HttpClient,
 							 public std::enable_shared_from_this<HttpClientImpl> {
 public:
-	HttpClientImpl(EventLoop *loop,
-			const InetAddress &addr,
+	HttpClientImpl(trantor::EventLoop *loop,
+			const trantor::InetAddress &addr,
 			bool useSSL = false,
 			bool useOldTLS = false,
 			bool validateCert = true);
-	HttpClientImpl(EventLoop *loop,
+	HttpClientImpl(trantor::EventLoop *loop,
 			const std::string &hostString,
 			bool useOldTLS = false,
 			bool validateCert = true);
@@ -44,7 +44,7 @@ public:
 	void sendRequest(const HttpRequestPtr &req,
 			HttpReqCallback &&callback,
 			double timeout = 0) override;
-	EventLoop *getLoop() override {
+	trantor::EventLoop *getLoop() override {
 		return loop_;
 	}
 	void setPipeliningDepth(size_t depth) override {
@@ -75,12 +75,12 @@ public:
 	}
 
 private:
-	std::shared_ptr<TcpClient> tcpClientPtr_;
-	EventLoop *loop_;
-	InetAddress serverAddr_;
+	std::shared_ptr<trantor::TcpClient> tcpClientPtr_;
+	trantor::EventLoop *loop_;
+	trantor::InetAddress serverAddr_;
 	bool useSSL_;
 	bool validateCert_;
-	void sendReq(const TcpConnectionPtr &connPtr,
+	void sendReq(const trantor::TcpConnectionPtr &connPtr,
 			const HttpRequestPtr &req);
 	void sendRequestInLoop(const HttpRequestPtr &req,
 			HttpReqCallback &&callback);
@@ -90,11 +90,11 @@ private:
 	void handleCookies(const HttpResponseImplPtr &resp);
 	void handleResponse(const HttpResponseImplPtr &resp,
 			std::pair<HttpRequestPtr, HttpReqCallback> &&reqAndCb,
-			const TcpConnectionPtr &connPtr);
+			const trantor::TcpConnectionPtr &connPtr);
 	void createTcpClient();
 	std::queue<std::pair<HttpRequestPtr, HttpReqCallback> > pipeliningCallbacks_;
 	std::list<std::pair<HttpRequestPtr, HttpReqCallback> > requestsBuffer_;
-	void onRecvMessage(const TcpConnectionPtr &, MsgBuffer *);
+	void onRecvMessage(const trantor::TcpConnectionPtr &, trantor::MsgBuffer *);
 	void onError(ReqResult result);
 	std::string domain_;
 	size_t pipeliningDepth_{ 0 };
@@ -103,7 +103,7 @@ private:
 	size_t bytesSent_{ 0 };
 	size_t bytesReceived_{ 0 };
 	bool dns_{ false };
-	std::shared_ptr<Resolver> resolverPtr_;
+	std::shared_ptr<trantor::Resolver> resolverPtr_;
 	bool useOldTLS_{ false };
 	std::string userAgent_{ "DrogonClient" };
 };

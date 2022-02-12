@@ -14,7 +14,7 @@
 
 
 #include <drogon/utils/Utilities.h>
-#include "core/log/logger.h"
+#include <trantor/utils/Logger.h>
 #ifdef OPENSSL_FOUND
 #include <openssl/md5.h>
 #include <openssl/rand.h>
@@ -838,7 +838,7 @@ std::string gzipDecompress(const char *data, const size_t ndata) {
 	}
 }
 
-char *getHttpFullDate(const Date &date) {
+char *getHttpFullDate(const trantor::Date &date) {
 	static thread_local int64_t lastSecond = 0;
 	static thread_local char lastTimeString[128] = { 0 };
 	auto nowSecond = date.microSecondsSinceEpoch() / MICRO_SECONDS_PRE_SEC;
@@ -851,7 +851,7 @@ char *getHttpFullDate(const Date &date) {
 			sizeof(lastTimeString));
 	return lastTimeString;
 }
-Date getHttpDate(const std::string &httpFullDateString) {
+trantor::Date getHttpDate(const std::string &httpFullDateString) {
 	static const std::array<const char *, 4> formats = {
 		// RFC822 (default)
 		"%a, %d %b %Y %H:%M:%S",
@@ -866,11 +866,11 @@ Date getHttpDate(const std::string &httpFullDateString) {
 	for (const char *format : formats) {
 		if (strptime(httpFullDateString.c_str(), format, &tmptm) != NULL) {
 			auto epoch = timegm(&tmptm);
-			return Date(epoch * MICRO_SECONDS_PRE_SEC);
+			return trantor::Date(epoch * MICRO_SECONDS_PRE_SEC);
 		}
 	}
 	LOG_WARN << "invalid datetime format: '" << httpFullDateString << "'";
-	return Date((std::numeric_limits<int64_t>::max)());
+	return trantor::Date((std::numeric_limits<int64_t>::max)());
 }
 std::string formattedString(const char *format, ...) {
 	std::string strBuffer(128, 0);

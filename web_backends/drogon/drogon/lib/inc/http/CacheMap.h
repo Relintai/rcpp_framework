@@ -15,8 +15,8 @@
 #pragma once
 
 #include <assert.h>
-#include "core/loops/event_loop.h"
-#include "core/log/logger.h"
+#include <trantor/net/EventLoop.h>
+#include <trantor/utils/Logger.h>
 #include <atomic>
 #include <deque>
 #include <future>
@@ -79,7 +79,7 @@ public:
      * The max delay of the CacheMap is about
      * tickInterval*(bucketsNumPerWheel^wheelsNum) seconds.
      */
-	CacheMap(EventLoop *loop,
+	CacheMap(trantor::EventLoop *loop,
 			float tickInterval = TICK_INTERVAL,
 			size_t wheelsNum = WHEELS_NUM,
 			size_t bucketsNumPerWheel = BUCKET_NUM_PER_WHEEL) :
@@ -134,7 +134,7 @@ public:
 		for (auto iter = wheels_.rbegin(); iter != wheels_.rend(); ++iter) {
 			iter->clear();
 		}
-		//LOG_TRACE << "CacheMap destruct!";
+		LOG_TRACE << "CacheMap destruct!";
 	}
 	struct MapValue {
 		MapValue(const T2 &value,
@@ -327,9 +327,9 @@ public:
 	/**
      * @brief Get the event loop object
      *
-     * @return EventLoop*
+     * @return trantor::EventLoop*
      */
-	EventLoop *getLoop() {
+	trantor::EventLoop *getLoop() {
 		return loop_;
 	}
 
@@ -377,8 +377,8 @@ private:
 
 	std::mutex mtx_;
 	std::mutex bucketMutex_;
-	TimerId timerId_;
-	EventLoop *loop_;
+	trantor::TimerId timerId_;
+	trantor::EventLoop *loop_;
 
 	float tickInterval_;
 	size_t wheelsNumber_;

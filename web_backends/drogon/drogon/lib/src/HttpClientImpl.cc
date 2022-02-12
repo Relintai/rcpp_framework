@@ -21,16 +21,16 @@
 #include <stdlib.h>
 #include <algorithm>
 
-
+using namespace trantor;
 using namespace drogon;
 using namespace std::placeholders;
-
+namespace trantor {
 const static size_t kDefaultDNSTimeout{ 600 };
-
+}
 void HttpClientImpl::createTcpClient() {
 	LOG_TRACE << "New TcpClient," << serverAddr_.toIpPort();
 	tcpClientPtr_ =
-			std::make_shared<TcpClient>(loop_, serverAddr_, "httpClient");
+			std::make_shared<trantor::TcpClient>(loop_, serverAddr_, "httpClient");
 
 #ifdef OPENSSL_FOUND
 	if (useSSL_) {
@@ -43,7 +43,7 @@ void HttpClientImpl::createTcpClient() {
 	std::weak_ptr<HttpClientImpl> weakPtr = thisPtr;
 
 	tcpClientPtr_->setConnectionCallback(
-			[weakPtr](const TcpConnectionPtr &connPtr) {
+			[weakPtr](const trantor::TcpConnectionPtr &connPtr) {
 				auto thisPtr = weakPtr.lock();
 				if (!thisPtr)
 					return;
@@ -89,8 +89,8 @@ void HttpClientImpl::createTcpClient() {
 		thisPtr->onError(ReqResult::BadServerAddress);
 	});
 	tcpClientPtr_->setMessageCallback(
-			[weakPtr](const TcpConnectionPtr &connPtr,
-					MsgBuffer *msg) {
+			[weakPtr](const trantor::TcpConnectionPtr &connPtr,
+					trantor::MsgBuffer *msg) {
 				auto thisPtr = weakPtr.lock();
 				if (thisPtr) {
 					thisPtr->onRecvMessage(connPtr, msg);
@@ -100,9 +100,9 @@ void HttpClientImpl::createTcpClient() {
 		auto thisPtr = weakPtr.lock();
 		if (!thisPtr)
 			return;
-		if (err == SSLError::kSSLHandshakeError)
+		if (err == trantor::SSLError::kSSLHandshakeError)
 			thisPtr->onError(ReqResult::HandshakeError);
-		else if (err == SSLError::kSSLInvalidCertificate)
+		else if (err == trantor::SSLError::kSSLInvalidCertificate)
 			thisPtr->onError(ReqResult::InvalidCertificate);
 		else {
 			LOG_FATAL << "Invalid value for SSLError";
@@ -112,8 +112,8 @@ void HttpClientImpl::createTcpClient() {
 	tcpClientPtr_->connect();
 }
 
-HttpClientImpl::HttpClientImpl(EventLoop *loop,
-		const InetAddress &addr,
+HttpClientImpl::HttpClientImpl(trantor::EventLoop *loop,
+		const trantor::InetAddress &addr,
 		bool useSSL,
 		bool useOldTLS,
 		bool validateCert) :
@@ -124,7 +124,7 @@ HttpClientImpl::HttpClientImpl(EventLoop *loop,
 		useOldTLS_(useOldTLS) {
 }
 
-HttpClientImpl::HttpClientImpl(EventLoop *loop,
+HttpClientImpl::HttpClientImpl(trantor::EventLoop *loop,
 		const std::string &hostString,
 		bool useOldTLS,
 		bool validateCert) :
@@ -285,7 +285,7 @@ void HttpClientImpl::sendRequestInLoop(const drogon::HttpRequestPtr &req,
 	}
 	for (auto &cookie : validCookies_) {
 		if ((cookie.expiresDate().microSecondsSinceEpoch() == 0 ||
-					cookie.expiresDate() > Date::now()) &&
+					cookie.expiresDate() > trantor::Date::now()) &&
 				(cookie.path().empty() || req->path().find(cookie.path()) == 0)) {
 			req->addCookie(cookie.key(), cookie.value());
 		}
@@ -316,13 +316,13 @@ void HttpClientImpl::sendRequestInLoop(const drogon::HttpRequestPtr &req,
 				dns_ = true;
 				if (!resolverPtr_) {
 					resolverPtr_ =
-							Resolver::newResolver(loop_,
+							trantor::Resolver::newResolver(loop_,
 									kDefaultDNSTimeout);
 				}
 				resolverPtr_->resolve(
 						domain_,
 						[thisPtr = shared_from_this(),
-								hasIpv6Address](const InetAddress &addr) {
+								hasIpv6Address](const trantor::InetAddress &addr) {
 							thisPtr->loop_->runInLoop([thisPtr,
 															  addr,
 															  hasIpv6Address]() {
@@ -394,9 +394,9 @@ void HttpClientImpl::sendRequestInLoop(const drogon::HttpRequestPtr &req,
 	}
 }
 
-void HttpClientImpl::sendReq(const TcpConnectionPtr &connPtr,
+void HttpClientImpl::sendReq(const trantor::TcpConnectionPtr &connPtr,
 		const HttpRequestPtr &req) {
-	MsgBuffer buffer;
+	trantor::MsgBuffer buffer;
 	assert(req);
 	auto implPtr = static_cast<HttpRequestImpl *>(req.get());
 	implPtr->appendToBuffer(&buffer);
@@ -409,7 +409,7 @@ void HttpClientImpl::sendReq(const TcpConnectionPtr &connPtr,
 void HttpClientImpl::handleResponse(
 		const HttpResponseImplPtr &resp,
 		std::pair<HttpRequestPtr, HttpReqCallback> &&reqAndCb,
-		const TcpConnectionPtr &connPtr) {
+		const trantor::TcpConnectionPtr &connPtr) {
 	assert(!pipeliningCallbacks_.empty());
 	auto &type = resp->getHeaderBy("content-type");
 	auto &coding = resp->getHeaderBy("content-encoding");
@@ -452,8 +452,8 @@ void HttpClientImpl::handleResponse(
 		}
 	}
 }
-void HttpClientImpl::onRecvMessage(const TcpConnectionPtr &connPtr,
-		MsgBuffer *msg) {
+void HttpClientImpl::onRecvMessage(const trantor::TcpConnectionPtr &connPtr,
+		trantor::MsgBuffer *msg) {
 	auto responseParser = connPtr->getContext<HttpResponseParser>();
 
 	// LOG_TRACE << "###:" << msg->readableBytes();
@@ -488,20 +488,20 @@ void HttpClientImpl::onRecvMessage(const TcpConnectionPtr &connPtr,
 HttpClientPtr HttpClient::newHttpClient(const std::string &ip,
 		uint16_t port,
 		bool useSSL,
-		EventLoop *loop,
+		trantor::EventLoop *loop,
 		bool useOldTLS,
 		bool validateCert) {
 	bool isIpv6 = ip.find(':') == std::string::npos ? false : true;
 	return std::make_shared<HttpClientImpl>(
 			loop == nullptr ? HttpAppFrameworkImpl::instance().getLoop() : loop,
-			InetAddress(ip, port, isIpv6),
+			trantor::InetAddress(ip, port, isIpv6),
 			useSSL,
 			useOldTLS,
 			validateCert);
 }
 
 HttpClientPtr HttpClient::newHttpClient(const std::string &hostString,
-		EventLoop *loop,
+		trantor::EventLoop *loop,
 		bool useOldTLS,
 		bool validateCert) {
 	return std::make_shared<HttpClientImpl>(

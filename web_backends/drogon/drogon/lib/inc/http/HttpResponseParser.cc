@@ -14,10 +14,10 @@
 
 #include "HttpResponseParser.h"
 #include "HttpResponseImpl.h"
-#include "core/log/logger.h"
-#include "core/containers/msg_buffer.h"
+#include <trantor/utils/Logger.h>
+#include <trantor/utils/MsgBuffer.h>
 #include <iostream>
-
+using namespace trantor;
 using namespace drogon;
 
 void HttpResponseParser::reset() {
@@ -28,7 +28,7 @@ void HttpResponseParser::reset() {
 	currentChunkLength_ = 0;
 }
 
-HttpResponseParser::HttpResponseParser(const TcpConnectionPtr &connPtr) :
+HttpResponseParser::HttpResponseParser(const trantor::TcpConnectionPtr &connPtr) :
 		status_(HttpResponseParseStatus::kExpectResponseLine),
 		responsePtr_(new HttpResponseImpl),
 		conn_(connPtr) {

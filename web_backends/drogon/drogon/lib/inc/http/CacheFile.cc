@@ -13,7 +13,7 @@
  */
 
 #include "CacheFile.h"
-#include "core/log/logger.h"
+#include <trantor/utils/Logger.h>
 #ifdef _WIN32
 #include <mman.h>
 #else

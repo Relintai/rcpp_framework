@@ -10,6 +10,19 @@ env_mod.add_source_files(env_mod.core_sources, "drogon/lib/src/*.cc")
 env_mod.add_source_files(env_mod.core_sources, "drogon/lib/inc/http/*.cc")
 env_mod.add_source_files(env_mod.core_sources, "drogon/lib/src/ssl_funcs/*.cc")
 
+env_mod.add_source_files(env_mod.core_sources, "trantor/net/*.cc")
+env_mod.add_source_files(env_mod.core_sources, "trantor/net/inner/*.cc")
+env_mod.add_source_files(env_mod.core_sources, "trantor/net/inner/poller/*.cc")
+
+env_mod.add_source_files(env_mod.core_sources, "trantor/utils/AsyncFileLogger.cc")
+env_mod.add_source_files(env_mod.core_sources, "trantor/utils/ConcurrentTaskQueue.cc")
+env_mod.add_source_files(env_mod.core_sources, "trantor/utils/Date.cc")
+env_mod.add_source_files(env_mod.core_sources, "trantor/utils/Logger.cc")
+env_mod.add_source_files(env_mod.core_sources, "trantor/utils/LogStream.cc")
+env_mod.add_source_files(env_mod.core_sources, "trantor/utils/MsgBuffer.cc")
+env_mod.add_source_files(env_mod.core_sources, "trantor/utils/SerialTaskQueue.cc")
+env_mod.add_source_files(env_mod.core_sources, "trantor/utils/TimingWheel.cc")
+
 # Build it all as a library
 lib = env_mod.add_library("drogon", env_mod.core_sources)
 env.Prepend(LIBS=[lib])

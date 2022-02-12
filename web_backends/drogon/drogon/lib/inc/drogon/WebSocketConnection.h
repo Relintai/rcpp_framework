@@ -15,7 +15,7 @@
 #pragma once
 
 #include <http/HttpTypes.h>
-#include "core/net/inet_address.h"
+#include <trantor/net/InetAddress.h>
 #include <trantor/utils/NonCopyable.h>
 #include <memory>
 #include <string>
@@ -111,10 +111,10 @@ public:
 			const WebSocketMessageType type = WebSocketMessageType::Text) = 0;
 
 	/// Return the local IP address and port number of the connection
-	virtual const InetAddress &localAddr() const = 0;
+	virtual const trantor::InetAddress &localAddr() const = 0;
 
 	/// Return the remote IP address and port number of the connection
-	virtual const InetAddress &peerAddr() const = 0;
+	virtual const trantor::InetAddress &peerAddr() const = 0;
 
 	/// Return true if the connection is open
 	virtual bool connected() const = 0;

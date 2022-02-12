@@ -9,7 +9,7 @@
 #include <http/HttpRequest.h>
 #include <http/HttpResponse.h>
 #include <drogon/plugins/Plugin.h>
-#include "core/log/async_file_logger.h"
+#include <trantor/utils/AsyncFileLogger.h>
 #include <vector>
 
 namespace drogon {
@@ -84,89 +84,89 @@ public:
 	void shutdown() override;
 
 private:
-	AsyncFileLogger asyncFileLogger_;
+	trantor::AsyncFileLogger asyncFileLogger_;
 	int logIndex_{ 0 };
 	bool useLocalTime_{ true };
-	using LogFunction = std::function<void(LogStream &,
+	using LogFunction = std::function<void(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &)>;
 	std::vector<LogFunction> logFunctions_;
-	void logging(LogStream &stream,
+	void logging(trantor::LogStream &stream,
 			const drogon::HttpRequestPtr &req,
 			const drogon::HttpResponsePtr &resp);
 	void createLogFunctions(std::string format);
 	LogFunction newLogFunction(const std::string &placeholder);
 	std::map<std::string, LogFunction> logFunctionMap_;
 	//$request_path
-	static void outputReqPath(LogStream &,
+	static void outputReqPath(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 	//$request_query
-	static void outputReqQuery(LogStream &,
+	static void outputReqQuery(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 	//$request_url
-	static void outputReqURL(LogStream &,
+	static void outputReqURL(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 	//$date
-	void outputDate(LogStream &,
+	void outputDate(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &) const;
 	//$request_date
-	void outputReqDate(LogStream &,
+	void outputReqDate(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &) const;
 	//$remote_addr
-	static void outputRemoteAddr(LogStream &,
+	static void outputRemoteAddr(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 	//$local_addr
-	static void outputLocalAddr(LogStream &,
+	static void outputLocalAddr(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 	//$request_len $body_bytes_received
-	static void outputReqLength(LogStream &,
+	static void outputReqLength(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 	//$response_len $body_bytes_sent
-	static void outputRespLength(LogStream &,
+	static void outputRespLength(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 	//$method
-	static void outputMethod(LogStream &,
+	static void outputMethod(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 	//$thread
-	static void outputThreadNumber(LogStream &,
+	static void outputThreadNumber(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 	//$http_[header_name]
-	static void outputReqHeader(LogStream &stream,
+	static void outputReqHeader(trantor::LogStream &stream,
 			const drogon::HttpRequestPtr &req,
 			const std::string &headerName);
 	//$cookie_[cookie_name]
-	static void outputReqCookie(LogStream &stream,
+	static void outputReqCookie(trantor::LogStream &stream,
 			const drogon::HttpRequestPtr &req,
 			const std::string &cookie);
 	//$upstream_http_[header_name]
-	static void outputRespHeader(LogStream &stream,
+	static void outputRespHeader(trantor::LogStream &stream,
 			const drogon::HttpResponsePtr &resp,
 			const std::string &headerName);
 	//$status
-	static void outputStatusString(LogStream &,
+	static void outputStatusString(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 	//$status_code
-	static void outputStatusCode(LogStream &,
+	static void outputStatusCode(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 	//$processing_time
-	static void outputProcessingTime(LogStream &,
+	static void outputProcessingTime(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 	//$upstream_http_content-type $upstream_http_content_type
-	static void outputRespContentType(LogStream &,
+	static void outputRespContentType(trantor::LogStream &,
 			const drogon::HttpRequestPtr &,
 			const drogon::HttpResponsePtr &);
 };

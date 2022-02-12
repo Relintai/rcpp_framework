@@ -25,8 +25,8 @@
 #include <drogon/plugins/Plugin.h>
 #include <drogon/utils/HttpConstraint.h>
 #include <drogon/utils/Utilities.h>
-#include "core/loops/event_loop.h"
-#include "core/net/resolver.h"
+#include <trantor/net/EventLoop.h>
+#include <trantor/net/Resolver.h>
 #include <trantor/utils/NonCopyable.h>
 #include <chrono>
 #include <functional>
@@ -59,7 +59,7 @@ using DefaultHandler =
 		std::function<void(const HttpRequestPtr &,
 				std::function<void(const HttpResponsePtr &)> &&)>;
 
-class HttpAppFramework : public NonCopyable {
+class HttpAppFramework : public trantor::NonCopyable {
 public:
 	virtual ~HttpAppFramework() = default;
 	/// Get the instance of HttpAppFramework
@@ -104,7 +104,7 @@ public:
      * User can run some timer tasks or other tasks in this loop;
      * This method can be call in any thread.
      */
-	virtual EventLoop *getLoop() const = 0;
+	virtual trantor::EventLoop *getLoop() const = 0;
 
 	/// Get an IO loop with id. E.g. 0 <= id < #Total thread-loops
 	/**
@@ -114,7 +114,7 @@ public:
      * REMARKS : Function assumed the number of threads will not exceed 2^32.
      *           Change to long long for alien computers.
      */
-	virtual EventLoop *getIOLoop(size_t id) const = 0;
+	virtual trantor::EventLoop *getIOLoop(size_t id) const = 0;
 
 	/// Set custom 404 page
 	/**
@@ -191,8 +191,8 @@ public:
      * Users can use this advice to implement some security policies.
      */
 	virtual HttpAppFramework &registerNewConnectionAdvice(
-			const std::function<bool(const InetAddress &,
-					const InetAddress &)> &advice) = 0;
+			const std::function<bool(const trantor::InetAddress &,
+					const trantor::InetAddress &)> &advice) = 0;
 
 	/**
      * @brief Register an advice for new HTTP responses.
@@ -878,7 +878,7 @@ public:
      * @note
      * This operation can be performed by an option in the configuration file.
      */
-	virtual HttpAppFramework &setLogLevel(Logger::LogLevel level) = 0;
+	virtual HttpAppFramework &setLogLevel(trantor::Logger::LogLevel level) = 0;
 
 	/// Enable the sendfile system call in linux.
 	/**
@@ -1179,7 +1179,7 @@ public:
      * When the c-ares library is installed in the system, it runs with the best
      * performance.
      */
-	virtual const std::shared_ptr<Resolver> &getResolver() const = 0;
+	virtual const std::shared_ptr<trantor::Resolver> &getResolver() const = 0;
 
 	/// Return true is drogon supports SSL(https)
 	virtual bool supportSSL() const = 0;
@@ -1204,11 +1204,11 @@ public:
 	/**
      * @brief Get the addresses of listeners.
      *
-     * @return std::vector<InetAddress>
+     * @return std::vector<trantor::InetAddress>
      * @note This method should be called after calling the app().run(). One
      * could run this method in an AOP join point (such as the BeginningAdvice).
      */
-	virtual std::vector<InetAddress> getListeners() const = 0;
+	virtual std::vector<trantor::InetAddress> getListeners() const = 0;
 
 	/**
      * @brief Enable ReusePort mode or not. If the mode is enabled, one can run

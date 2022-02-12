@@ -14,7 +14,7 @@
 
 #include "HttpUtils.h"
 #include <drogon/utils/Utilities.h>
-#include "core/log/logger.h"
+#include <trantor/utils/Logger.h>
 #include <unordered_map>
 
 namespace drogon {

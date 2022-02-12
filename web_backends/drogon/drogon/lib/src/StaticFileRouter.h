@@ -40,7 +40,7 @@ public:
 	void setBrStatic(bool useBrStatic) {
 		brStaticFlag_ = useBrStatic;
 	}
-	void init(const std::vector<EventLoop *> &ioloops);
+	void init(const std::vector<trantor::EventLoop *> &ioloops);
 
 	void sendStaticFileResponse(
 			const std::string &filePath,

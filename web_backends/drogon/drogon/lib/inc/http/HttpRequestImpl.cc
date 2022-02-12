@@ -143,7 +143,7 @@ void HttpRequestImpl::parseParameters() const {
 	}
 }
 
-void HttpRequestImpl::appendToBuffer(MsgBuffer *output) const {
+void HttpRequestImpl::appendToBuffer(trantor::MsgBuffer *output) const {
 	switch (method_) {
 		case Get:
 			output->append("GET ");

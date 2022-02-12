@@ -14,10 +14,10 @@
 
 #pragma once
 
-#include "core/loops/event_loop.h"
-#include "core/net/inet_address.h"
-#include "core/math/date.h"
-#include "core/log/logger.h"
+#include <trantor/net/EventLoop.h>
+#include <trantor/net/InetAddress.h>
+#include <trantor/utils/Date.h>
+#include <trantor/utils/Logger.h>
 
 #include <http/CacheMap.h>
 #include <http/Cookie.h>

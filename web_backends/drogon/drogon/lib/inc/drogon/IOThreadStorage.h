@@ -56,7 +56,7 @@ namespace drogon {
  * @endcode
  */
 template <typename C>
-class IOThreadStorage : public NonCopyable {
+class IOThreadStorage : public trantor::NonCopyable {
 public:
 	using ValueType = C;
 	using InitCallback = std::function<void(ValueType &, size_t)>;

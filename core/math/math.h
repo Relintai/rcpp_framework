@@ -323,24 +323,6 @@ public:
 
 		return hf;
 	}
-
-	// Taken from Trantor (BSD-style License) - Funcs.h
-	// Copyright (c) 2018 An Tao
-	static _ALWAYS_INLINE_ uint64_t hton64(uint64_t n) {
-		static const int one = 1;
-		static const char sig = *(char *)&one;
-		if (sig == 0)
-			return n; // for big endian machine just return the input
-		char *ptr = reinterpret_cast<char *>(&n);
-		std::reverse(ptr, ptr + sizeof(uint64_t));
-		return n;
-	}
-
-	// Taken from Trantor (BSD-style License) - Funcs.h
-	// Copyright (c) 2018 An Tao
-	static _ALWAYS_INLINE_ uint64_t ntoh64(uint64_t n) {
-		return hton64(n);
-	}
 };
 
 #ifndef ABS

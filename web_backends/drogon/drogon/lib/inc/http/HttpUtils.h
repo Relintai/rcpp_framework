@@ -16,7 +16,7 @@
 
 #include "HttpTypes.h"
 #include <drogon/utils/string_view.h>
-#include "core/containers/msg_buffer.h"
+#include <trantor/utils/MsgBuffer.h>
 #include <string>
 
 namespace drogon {

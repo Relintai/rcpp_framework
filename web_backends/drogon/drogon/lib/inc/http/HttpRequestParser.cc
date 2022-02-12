@@ -18,14 +18,14 @@
 #include "HttpResponseImpl.h"
 #include "HttpUtils.h"
 #include <http/HttpTypes.h>
-#include "core/log/logger.h"
-#include "core/containers/msg_buffer.h"
+#include <trantor/utils/Logger.h>
+#include <trantor/utils/MsgBuffer.h>
 #include <iostream>
 
-
+using namespace trantor;
 using namespace drogon;
 
-HttpRequestParser::HttpRequestParser(const TcpConnectionPtr &connPtr) :
+HttpRequestParser::HttpRequestParser(const trantor::TcpConnectionPtr &connPtr) :
 		status_(HttpRequestParseStatus::kExpectMethod),
 		loop_(connPtr->getLoop()),
 		conn_(connPtr) {
@@ -99,7 +99,7 @@ void HttpRequestParser::reset() {
 		auto req = std::move(requestsPool_.back());
 		requestsPool_.pop_back();
 		request_ = std::move(req);
-		request_->setCreationDate(Date::now());
+		request_->setCreationDate(trantor::Date::now());
 	}
 }
 // Return false if any error

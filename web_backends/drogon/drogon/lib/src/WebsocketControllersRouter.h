@@ -28,7 +28,7 @@
 
 namespace drogon {
 class HttpAppFrameworkImpl;
-class WebsocketControllersRouter : public NonCopyable {
+class WebsocketControllersRouter : public trantor::NonCopyable {
 public:
 	WebsocketControllersRouter(
 			const std::vector<std::function<void(const HttpRequestPtr &,

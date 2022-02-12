@@ -16,16 +16,16 @@
 
 #include "CacheMap.h"
 #include "Session.h"
-#include "core/loops/event_loop.h"
+#include <trantor/net/EventLoop.h>
 #include <trantor/utils/NonCopyable.h>
 #include <memory>
 #include <mutex>
 #include <string>
 
 namespace drogon {
-class SessionManager : public NonCopyable {
+class SessionManager : public trantor::NonCopyable {
 public:
-	SessionManager(EventLoop *loop, size_t timeout);
+	SessionManager(trantor::EventLoop *loop, size_t timeout);
 	~SessionManager() {
 		sessionMapPtr_.reset();
 	}
@@ -34,7 +34,7 @@ public:
 
 private:
 	std::unique_ptr<CacheMap<std::string, SessionPtr> > sessionMapPtr_;
-	EventLoop *loop_;
+	trantor::EventLoop *loop_;
 	size_t timeout_;
 };
 } // namespace drogon

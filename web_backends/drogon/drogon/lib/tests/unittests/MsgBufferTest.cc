@@ -1,9 +1,9 @@
 #include <drogon/drogon_test.h>
-#include "core/containers/msg_buffer.h"
+#include <trantor/utils/MsgBuffer.h>
 #include <iostream>
 #include <string>
 
-
+using namespace trantor;
 DROGON_TEST(MsgBufferTest) {
 	SUBSECTION(readableTest) {
 		MsgBuffer buffer;

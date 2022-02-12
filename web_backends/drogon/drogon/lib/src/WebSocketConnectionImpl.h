@@ -16,7 +16,7 @@
 
 #include "impl_forwards.h"
 #include <drogon/WebSocketConnection.h>
-#include "core/net/tcp_connection.h"
+#include <trantor/net/TcpConnection.h>
 #include <trantor/utils/NonCopyable.h>
 
 namespace drogon {
@@ -25,7 +25,7 @@ using WebSocketConnectionImplPtr = std::shared_ptr<WebSocketConnectionImpl>;
 
 class WebSocketMessageParser {
 public:
-	bool parse(MsgBuffer *buffer);
+	bool parse(trantor::MsgBuffer *buffer);
 	bool gotAll(std::string &message, WebSocketMessageType &type) {
 		assert(message.empty());
 		if (!gotAll_)
@@ -44,9 +44,9 @@ private:
 class WebSocketConnectionImpl final
 		: public WebSocketConnection,
 		  public std::enable_shared_from_this<WebSocketConnectionImpl>,
-		  public NonCopyable {
+		  public trantor::NonCopyable {
 public:
-	explicit WebSocketConnectionImpl(const TcpConnectionPtr &conn,
+	explicit WebSocketConnectionImpl(const trantor::TcpConnectionPtr &conn,
 			bool isServer = true);
 
 	~WebSocketConnectionImpl() override;
@@ -58,8 +58,8 @@ public:
 			const std::string &msg,
 			const WebSocketMessageType type = WebSocketMessageType::Text) override;
 
-	const InetAddress &localAddr() const override;
-	const InetAddress &peerAddr() const override;
+	const trantor::InetAddress &localAddr() const override;
+	const trantor::InetAddress &peerAddr() const override;
 
 	bool connected() const override;
 	bool disconnected() const override;
@@ -85,22 +85,22 @@ public:
 		closeCallback_ = callback;
 	}
 
-	void onNewMessage(const TcpConnectionPtr &connPtr,
-			MsgBuffer *buffer);
+	void onNewMessage(const trantor::TcpConnectionPtr &connPtr,
+			trantor::MsgBuffer *buffer);
 
 	void onClose() {
-		if (pingTimerId_ != InvalidTimerId)
+		if (pingTimerId_ != trantor::InvalidTimerId)
 			tcpConnectionPtr_->getLoop()->invalidateTimer(pingTimerId_);
 		closeCallback_(shared_from_this());
 	}
 
 private:
-	TcpConnectionPtr tcpConnectionPtr_;
-	InetAddress localAddr_;
-	InetAddress peerAddr_;
+	trantor::TcpConnectionPtr tcpConnectionPtr_;
+	trantor::InetAddress localAddr_;
+	trantor::InetAddress peerAddr_;
 	bool isServer_{ true };
 	WebSocketMessageParser parser_;
-	TimerId pingTimerId_{ InvalidTimerId };
+	trantor::TimerId pingTimerId_{ trantor::InvalidTimerId };
 	std::vector<uint32_t> masks_;
 	std::atomic<bool> usingMask_;
 

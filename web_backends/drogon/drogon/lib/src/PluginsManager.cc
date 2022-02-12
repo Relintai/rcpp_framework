@@ -13,7 +13,7 @@
  */
 
 #include "PluginsManager.h"
-#include "core/log/logger.h"
+#include <trantor/utils/Logger.h>
 
 using namespace drogon;
 

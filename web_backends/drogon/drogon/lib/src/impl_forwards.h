@@ -45,12 +45,12 @@ class RedisClientManager;
 } // namespace nosql
 } // namespace drogon
 
-
+namespace trantor {
 class EventLoop;
 class TcpConnection;
 using TcpConnectionPtr = std::shared_ptr<TcpConnection>;
 class Resolver;
-
+} // namespace trantor
 
 namespace drogon {
 using HttpAsyncCallback =

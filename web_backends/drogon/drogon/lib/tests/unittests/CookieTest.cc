@@ -11,7 +11,7 @@ DROGON_TEST(CookieTest) {
 
 	drogon::Cookie cookie3("test", "3");
 	cookie3.setDomain("drogon.org");
-	cookie3.setExpiresDate(Date(1621561557000000L));
+	cookie3.setExpiresDate(trantor::Date(1621561557000000L));
 	CHECK(cookie3.cookieString() ==
 			"Set-Cookie: test=3; Expires=Fri, 21 May 2021 01:45:57 GMT; "
 			"Domain=drogon.org; HttpOnly\r\n");

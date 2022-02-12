@@ -1,5 +1,5 @@
 #include "PipeliningTest.h"
-#include "core/loops/event_loop.h"
+#include <trantor/net/EventLoop.h>
 #include <atomic>
 
 void PipeliningTest::asyncHandleHttpRequest(
@@ -27,7 +27,7 @@ void PipeliningTest::asyncHandleHttpRequest(
 		});
 		return;
 	}
-	EventLoop::getEventLoopOfCurrentThread()->runAfter(
+	trantor::EventLoop::getEventLoopOfCurrentThread()->runAfter(
 			delay, [c, callback]() {
 				auto resp = HttpResponse::newHttpResponse();
 				auto str = utils::formattedString("<P>the %dth response</P>", c);

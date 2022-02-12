@@ -15,17 +15,17 @@
 #pragma once
 
 #include "impl_forwards.h"
-#include "core/loops/event_loop_thread_pool.h"
-#include "core/net/callbacks.h"
+#include <trantor/net/EventLoopThreadPool.h>
+#include <trantor/net/callbacks.h>
 #include <trantor/utils/NonCopyable.h>
 #include <memory>
 #include <string>
 #include <vector>
-
+namespace trantor {
 class InetAddress;
-
+}
 namespace drogon {
-class ListenerManager : public NonCopyable {
+class ListenerManager : public trantor::NonCopyable {
 public:
 	void addListener(const std::string &ip,
 			uint16_t port,
@@ -35,10 +35,10 @@ public:
 			bool useOldTLS = false,
 			const std::vector<std::pair<std::string, std::string> >
 					&sslConfCmds = {});
-	std::vector<EventLoop *> createListeners(EventLoop *event_loop,
+	std::vector<trantor::EventLoop *> createListeners(trantor::EventLoop *event_loop,
 			const HttpAsyncCallback &httpCallback,
 			const WebSocketNewAsyncCallback &webSocketCallback,
-			const ConnectionCallback &connectionCallback,
+			const trantor::ConnectionCallback &connectionCallback,
 			size_t connectionTimeout,
 			const std::string &globalCertFile,
 			const std::string &globalKeyFile,
@@ -51,12 +51,12 @@ public:
 					const HttpResponsePtr &)> >
 					&preSendingAdvices);
 	void startListening();
-	std::vector<InetAddress> getListeners() const;
+	std::vector<trantor::InetAddress> getListeners() const;
 	~ListenerManager() = default;
 
-	EventLoop *getIOLoop(size_t id) const;
+	trantor::EventLoop *getIOLoop(size_t id) const;
 	void stopListening();
-	std::vector<EventLoop *> ioLoops_;
+	std::vector<trantor::EventLoop *> ioLoops_;
 
 private:
 	struct ListenerInfo {
@@ -86,9 +86,9 @@ private:
 	};
 	std::vector<ListenerInfo> listeners_;
 	std::vector<std::shared_ptr<HttpServer> > servers_;
-	std::vector<std::shared_ptr<EventLoopThread> >
+	std::vector<std::shared_ptr<trantor::EventLoopThread> >
 			listeningloopThreads_;
-	std::shared_ptr<EventLoopThreadPool> ioLoopThreadPoolPtr_;
+	std::shared_ptr<trantor::EventLoopThreadPool> ioLoopThreadPoolPtr_;
 };
 
 } // namespace drogon

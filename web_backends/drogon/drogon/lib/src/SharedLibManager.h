@@ -15,7 +15,7 @@
 #pragma once
 
 #include <sys/stat.h>
-#include "core/loops/event_loop_thread.h"
+#include <trantor/net/EventLoopThread.h>
 #include <trantor/utils/NonCopyable.h>
 #include <unordered_map>
 #include <vector>
@@ -38,7 +38,7 @@
 #endif
 
 namespace drogon {
-class SharedLibManager : public NonCopyable {
+class SharedLibManager : public trantor::NonCopyable {
 public:
 	SharedLibManager(const std::vector<std::string> &libPaths,
 			const std::string &outputPath);
@@ -57,7 +57,7 @@ private:
 	void *loadLib(const std::string &soFile, void *oldHld);
 	bool shouldCompileLib(const std::string &soFile,
 			const struct stat &sourceStat);
-	TimerId timeId_;
-	EventLoopThread workingThread_;
+	trantor::TimerId timeId_;
+	trantor::EventLoopThread workingThread_;
 };
 } // namespace drogon

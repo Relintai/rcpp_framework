@@ -21,7 +21,7 @@
 #include <http/HttpRequest.h>
 #include <http/HttpResponse.h>
 #include <drogon/utils/Utilities.h>
-#include "core/log/logger.h"
+#include <trantor/utils/Logger.h>
 #include <functional>
 
 #if COZ_PROFILING
@@ -35,7 +35,7 @@
 
 using namespace std::placeholders;
 using namespace drogon;
-
+using namespace trantor;
 namespace drogon {
 static HttpResponsePtr getCompressedResponse(const HttpRequestImplPtr &req,
 		const HttpResponsePtr &response,
@@ -127,7 +127,7 @@ static void defaultWebSockAsyncCallback(
 	callback(resp);
 }
 
-static void defaultConnectionCallback(const TcpConnectionPtr &) {
+static void defaultConnectionCallback(const trantor::TcpConnectionPtr &) {
 	return;
 }
 } // namespace drogon
@@ -218,7 +218,7 @@ void HttpServer::onMessage(const TcpConnectionPtr &conn, MsgBuffer *buf) {
 				requestParser->requestImpl()->setPeerAddr(conn->peerAddr());
 				requestParser->requestImpl()->setLocalAddr(conn->localAddr());
 				requestParser->requestImpl()->setCreationDate(
-						Date::date());
+						trantor::Date::date());
 				requestParser->requestImpl()->setSecure(
 						conn->isSSLConnection());
 				if (requestParser->firstReq() &&
@@ -457,7 +457,7 @@ void HttpServer::sendResponse(const TcpConnectionPtr &conn,
 void HttpServer::sendResponses(
 		const TcpConnectionPtr &conn,
 		const std::vector<std::pair<HttpResponsePtr, bool> > &responses,
-		MsgBuffer &buffer) {
+		trantor::MsgBuffer &buffer) {
 	conn->getLoop()->assertInLoopThread();
 	if (responses.empty())
 		return;

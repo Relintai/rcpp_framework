@@ -15,14 +15,14 @@
 #pragma once
 
 #include "../src/impl_forwards.h"
-#include "core/net/tcp_connection.h"
-#include "core/containers/msg_buffer.h"
+#include <trantor/net/TcpConnection.h>
+#include <trantor/utils/MsgBuffer.h>
 #include <trantor/utils/NonCopyable.h>
 #include <list>
 #include <mutex>
 
 namespace drogon {
-class HttpResponseParser : public NonCopyable {
+class HttpResponseParser : public trantor::NonCopyable {
 public:
 	enum class HttpResponseParseStatus {
 		kExpectResponseLine,
@@ -35,12 +35,12 @@ public:
 		kGotAll,
 	};
 
-	explicit HttpResponseParser(const TcpConnectionPtr &connPtr);
+	explicit HttpResponseParser(const trantor::TcpConnectionPtr &connPtr);
 
 	// default copy-ctor, dtor and assignment are fine
 
 	// return false if any error
-	bool parseResponse(MsgBuffer *buf);
+	bool parseResponse(trantor::MsgBuffer *buf);
 	bool parseResponseOnClose();
 
 	bool gotAll() const {
@@ -65,7 +65,7 @@ private:
 	bool parseResponseForHeadMethod_{ false };
 	size_t leftBodyLength_{ 0 };
 	size_t currentChunkLength_{ 0 };
-	std::weak_ptr<TcpConnection> conn_;
+	std::weak_ptr<trantor::TcpConnection> conn_;
 };
 
 } // namespace drogon

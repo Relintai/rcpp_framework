@@ -19,8 +19,8 @@
 #include <drogon/utils/string_view.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include "core/log/logger.h"
-#include "core/containers/msg_buffer.h"
+#include <trantor/utils/Logger.h>
+#include <trantor/utils/MsgBuffer.h>
 #include <sstream>
 #include <string>
 #include <type_traits>

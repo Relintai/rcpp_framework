@@ -31,7 +31,7 @@
 
 using namespace drogon;
 
-void StaticFileRouter::init(const std::vector<EventLoop *> &ioloops) {
+void StaticFileRouter::init(const std::vector<trantor::EventLoop *> &ioloops) {
 	// Max timeout up to about 70 days;
 	staticFilesCacheMap_ = decltype(staticFilesCacheMap_)(
 			new IOThreadStorage<std::unique_ptr<CacheMap<std::string, char> > >);

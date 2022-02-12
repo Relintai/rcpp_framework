@@ -18,8 +18,8 @@
 #include <drogon/HttpAppFramework.h>
 #include <drogon/drogon.h>
 #include <drogon/drogon_test.h>
-#include "core/loops/event_loop_thread.h"
-#include "core/net/tcp_client.h"
+#include <trantor/net/EventLoopThread.h>
+#include <trantor/net/TcpClient.h>
 
 #include <algorithm>
 #include <atomic>
@@ -889,7 +889,7 @@ DROGON_TEST(HttpsTest) {
 }
 
 int main(int argc, char **argv) {
-	Logger::setLogLevel(Logger::LogLevel::kDebug);
+	trantor::Logger::setLogLevel(trantor::Logger::LogLevel::kDebug);
 	loadFileLengths();
 
 	std::promise<void> p1;

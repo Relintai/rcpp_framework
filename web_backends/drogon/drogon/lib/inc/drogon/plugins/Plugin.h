@@ -14,7 +14,7 @@
 #pragma once
 
 #include <json/json.h>
-#include "core/log/logger.h"
+#include <trantor/utils/Logger.h>
 #include <trantor/utils/NonCopyable.h>
 #include <memory>
 
@@ -29,7 +29,7 @@ enum class PluginStatus {
  * @brief The abstract base class for plugins.
  *
  */
-class PluginBase : public NonCopyable {
+class PluginBase : public trantor::NonCopyable {
 public:
 	/// This method must be called by drogon.
 	void initialize() {
