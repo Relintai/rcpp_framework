@@ -10,6 +10,13 @@
 
 #include "web/http/request.h"
 
+// This class will load and process all md files from the folder set to it's articles_folder property,
+// and serve every file from the directory set to it's serve_folder property.
+// if it finds a summary.md, it will serve it as the root.
+// It uses pagination.
+// THe links is generates currently look like: <url>/01_test.md
+// files are served under <url>/files/<file>
+
 class PagedArticle : public WebNode {
 	RCPP_OBJECT(PagedArticle, WebNode);
 

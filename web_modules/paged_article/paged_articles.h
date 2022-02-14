@@ -9,7 +9,20 @@
 
 #include "web/http/request.h"
 
-// todo pagination
+// This class will load and process all md files from the folder set to it's folder property,
+// and generate one page from them. TThe files are processed in alphabetical order.
+
+// The generated HTML looks like:
+
+// render_menu()
+// <div class="article_list_entry">
+//	Contents of the first md file.
+// </div>
+// <div class="article_list_entry">
+//	Contents of the second md file.
+// </div>
+// ...
+// </div>
 
 class PagedArticles : public WebNode {
 	RCPP_OBJECT(PagedArticles, WebNode);
