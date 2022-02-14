@@ -154,7 +154,7 @@ void WebNode::handle_error_send_request(Request *request, const int error_code) 
 	request->send();
 }
 
-void WebNode::render(Request *request) {
+void WebNode::render_index(Request *request) {
 }
 void WebNode::render_preview(Request *request) {
 }

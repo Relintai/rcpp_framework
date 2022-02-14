@@ -29,7 +29,7 @@ void PagedArticle::handle_request_main(Request *request) {
 	if (rp == "") {
 		render_menu(request);
 
-		render(request);
+		render_index(request);
 
 		request->compile_and_send_body();
 		return;
@@ -48,7 +48,7 @@ void PagedArticle::handle_request_main(Request *request) {
 	request->compile_and_send_body();
 }
 
-void PagedArticle::render(Request *request) {
+void PagedArticle::render_index(Request *request) {
 	// summary page
 	request->body += index_page;
 }

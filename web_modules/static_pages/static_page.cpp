@@ -11,11 +11,11 @@ void StaticPage::_handle_request_main(Request *request) {
 		render_menu(request);
 	}
 
-	render(request);
+	render_index(request);
 	request->compile_and_send_body();
 }
 
-void StaticPage::render(Request *request) {
+void StaticPage::render_index(Request *request) {
 	request->body += data;
 }
 

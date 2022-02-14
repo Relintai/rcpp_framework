@@ -12,7 +12,7 @@ class BrowsableFolderServeNode : public FolderServeNode {
 public:
 	void _handle_request_main(Request *request);
 
-	void render(Request *request);
+	void render_index(Request *request);
 	void render_preview(Request *request);
 
 	virtual void load();

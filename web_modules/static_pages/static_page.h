@@ -11,7 +11,7 @@ class StaticPage : public WebNode {
 public:
 	void _handle_request_main(Request *request);
 
-	void render(Request *request);
+	void render_index(Request *request);
 	void render_preview(Request *request);
 
 	void load_file(const String &path);

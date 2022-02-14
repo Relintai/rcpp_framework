@@ -47,7 +47,7 @@ public:
 	virtual void _handle_request_main(Request *request);
 	virtual void handle_error_send_request(Request *request, const int error_code);
 
-	virtual void render(Request *request);
+	virtual void render_index(Request *request);
 	virtual void render_preview(Request *request);
 	
 	virtual void render_menu(Request *request);

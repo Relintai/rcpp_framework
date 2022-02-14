@@ -23,7 +23,7 @@ void BrowsableFolderServeNode::_handle_request_main(Request *request) {
 	request->compile_and_send_body();
 }
 
-void BrowsableFolderServeNode::render(Request *request) {
+void BrowsableFolderServeNode::render_index(Request *request) {
 	String *s = _folder_indexes["/"];
 
 	if (!s) {

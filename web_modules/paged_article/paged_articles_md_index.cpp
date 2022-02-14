@@ -21,8 +21,8 @@ void PagedArticlesMDIndex::handle_request_main(Request *request) {
 	articles->handle_request_main(request);
 }
 
-void PagedArticlesMDIndex::render(Request *request) {
-	main_page->render(request);
+void PagedArticlesMDIndex::render_index(Request *request) {
+	main_page->render_index(request);
 }
 
 void PagedArticlesMDIndex::render_preview(Request *request) {

@@ -17,7 +17,7 @@ class PagedArticlesMDIndex : public WebNode {
 public:
 	void handle_request_main(Request *request);
 
-	void render(Request *request);
+	void render_index(Request *request);
 	void render_preview(Request *request);
 
 	void load();

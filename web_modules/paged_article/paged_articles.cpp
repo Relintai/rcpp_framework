@@ -11,12 +11,12 @@
 void PagedArticles::_handle_request_main(Request *request) {
 	render_menu(request);
 
-	render(request);
+	render_index(request);
 
 	request->compile_and_send_body();
 }
 
-void PagedArticles::render(Request *request) {
+void PagedArticles::render_index(Request *request) {
 	// summary page
 	request->body += index_page;
 }
