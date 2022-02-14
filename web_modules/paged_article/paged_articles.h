@@ -9,13 +9,16 @@
 
 #include "web/http/request.h"
 
-//todo pagination
+// todo pagination
 
 class PagedArticles : public WebNode {
 	RCPP_OBJECT(PagedArticles, WebNode);
 
 public:
 	void _handle_request_main(Request *request);
+
+	void render(Request *request);
+	void render_preview(Request *request);
 
 	void load();
 	void generate_index_page();

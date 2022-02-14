@@ -1,9 +1,9 @@
 #ifndef PAGED_ARTICLE_H
 #define PAGED_ARTICLE_H
 
-#include <map>
 #include "core/containers/vector.h"
 #include "core/string.h"
+#include <map>
 
 #include "web/file_cache.h"
 #include "web/http/web_node.h"
@@ -15,6 +15,9 @@ class PagedArticle : public WebNode {
 
 public:
 	void handle_request_main(Request *request);
+
+	void render(Request *request);
+	void render_preview(Request *request);
 
 	void load();
 	void load_folder(const String &folder, const String &path);

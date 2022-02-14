@@ -1,8 +1,8 @@
 #include "paged_articles_md_index.h"
 
+#include "web/html/html_builder.h"
 #include "web/http/request.h"
 #include "web/http/web_permission.h"
-#include "web/html/html_builder.h"
 
 void PagedArticlesMDIndex::handle_request_main(Request *request) {
 	if (_web_permission.is_valid()) {
@@ -19,6 +19,14 @@ void PagedArticlesMDIndex::handle_request_main(Request *request) {
 	}
 
 	articles->handle_request_main(request);
+}
+
+void PagedArticlesMDIndex::render(Request *request) {
+	main_page->render(request);
+}
+
+void PagedArticlesMDIndex::render_preview(Request *request) {
+	main_page->render_preview(request);
 }
 
 void PagedArticlesMDIndex::load() {

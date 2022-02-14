@@ -3,18 +3,24 @@
 #include "web/html/html_builder.h"
 
 #include "core/os/directory.h"
-#include "web/html/utils.h"
 #include "paged_article.h"
+#include "web/html/utils.h"
 
 #include <iostream>
 
 void PagedArticles::_handle_request_main(Request *request) {
 	render_menu(request);
 
-	// summary page
-	request->body += index_page;
+	render(request);
 
 	request->compile_and_send_body();
+}
+
+void PagedArticles::render(Request *request) {
+	// summary page
+	request->body += index_page;
+}
+void PagedArticles::render_preview(Request *request) {
 }
 
 void PagedArticles::load() {
