@@ -11,14 +11,19 @@ class StaticPage : public WebNode {
 public:
 	void _handle_request_main(Request *request);
 
+	void render(Request *request);
+	void render_preview(Request *request);
+
 	void load_file(const String &path);
 	void load_and_process_file(const String &path);
 	void load_md_file(const String &path);
-	
+
 	void set_data_md(const String &d);
 	void set_data(const String &d);
+	void set_preview_data(const String &d);
 
 	String data;
+	String preview_data;
 	bool should_render_menu;
 
 	StaticPage();
