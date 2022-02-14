@@ -8,7 +8,7 @@
 
 #include "web/http/request.h"
 
-// This class will load and generate pages from a folder of md files. It supports pagination, 
+// This class will load and generate pages from a folder of md files. It supports pagination,
 // it will put entry_per_page md files per page. It generates html on enter tree, and caches everything.
 // Each md file gets rendered into a div with a class of "list_entry"
 
@@ -33,20 +33,23 @@ class ListPage : public WebNode {
 public:
 	void handle_request_main(Request *request);
 
+	void render(Request *request);
+	void render_preview(Request *request);
+
 	void load();
 
 	virtual void render_entries(const Vector<String> &list_entries);
-    virtual String render_page(const int page_index, const int page_count, const Vector<String> &list_entries, const int efrom, const int eto);
+	virtual String render_page(const int page_index, const int page_count, const Vector<String> &list_entries, const int efrom, const int eto);
 	virtual String render_entry(const String &list_entry);
 	virtual void render_no_entries_response();
 
-    void _notification(const int what);
+	void _notification(const int what);
 
 	ListPage();
 	~ListPage();
 
 	bool paginate;
-    int max_visible_navigation_links;
+	int max_visible_navigation_links;
 	int entry_per_page;
 	String folder;
 

@@ -12,6 +12,9 @@ class BrowsableFolderServeNode : public FolderServeNode {
 public:
 	void _handle_request_main(Request *request);
 
+	void render(Request *request);
+	void render_preview(Request *request);
+
 	virtual void load();
 
 	void evaluate_dir(const String &path, const bool top_level = false);
@@ -23,7 +26,7 @@ public:
 	~BrowsableFolderServeNode();
 
 protected:
-	std::map<String, String*> _folder_indexes;
+	std::map<String, String *> _folder_indexes;
 };
 
 #endif

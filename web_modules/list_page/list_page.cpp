@@ -26,7 +26,7 @@ void ListPage::handle_request_main(Request *request) {
 
 	if (cs == "") {
 		render_menu(request);
-		request->body += _pages[0];
+		render(request);
 		request->compile_and_send_body();
 		return;
 	}
@@ -48,6 +48,12 @@ void ListPage::handle_request_main(Request *request) {
 	render_menu(request);
 	request->body += _pages[p];
 	request->compile_and_send_body();
+}
+
+void ListPage::render(Request *request) {
+	request->body += _pages[0];
+}
+void ListPage::render_preview(Request *request) {
 }
 
 void ListPage::load() {
