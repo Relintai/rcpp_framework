@@ -13,38 +13,38 @@
 
 class Variant;
 
-typedef char StringChar;
+// TODO move to wchar_t!
 
 class String {
 public:
-	void push_back(const StringChar element);
+	void push_back(const char element);
 	void push_back(const wchar_t element);
 	void pop_back();
 	void remove(const int index);
-	void erase(const StringChar element);
+	void erase(const char element);
 	void erase(const int start_index, const int length);
 	void clear();
 	bool empty() const;
 	char get(const int index);
-	const StringChar get(const int index) const;
-	void set(const int index, const StringChar value);
+	const char get(const int index) const;
+	void set(const int index, const char value);
 
 	int size() const;
 	int capacity() const;
 	void ensure_capacity(const int capacity);
 	void resize(const int s);
-	int find(const StringChar val, const int from = 0) const;
+	int find(const char val, const int from = 0) const;
 	int find(const String &val, const int from = 0) const;
-	int find_reversed(const StringChar val, const int from = -1) const;
+	int find_reversed(const char val, const int from = -1) const;
 	int find_reversed(const String &val, const int from = -1) const;
 	void get_substr(char *into_buf, const int start_index, const int len);
 	void get_substr_nt(char *into_buf, const int start_index, const int len);
 	String substr(const int start_index, const int len) const;
 	String substr_index(const int start_index, const int end_index) const;
-	bool contains(const StringChar val) const;
+	bool contains(const char val) const;
 	bool contains(const String &val) const;
 
-	bool is_word_at(const int index, const StringChar *str) const;
+	bool is_word_at(const int index, const char *str) const;
 	bool is_word_at(const int index, const String &val) const;
 
 	void replace_from(const int start_index, const int length, const String &with);
@@ -62,18 +62,18 @@ public:
 	void trim_beginning();
 	void trim_end();
 
-	bool ends_with(const StringChar c) const;
+	bool ends_with(const char c) const;
 	bool ends_with(const String &str) const;
 
-	bool starts_with(const StringChar c) const;
+	bool starts_with(const char c) const;
 	bool starts_with(const String &str) const;
 
-	int get_slice_count(const StringChar splitter) const;
+	int get_slice_count(const char splitter) const;
 	int get_slice_count(const String &splitter) const;
-	String get_slice(const StringChar splitter, int index);
+	String get_slice(const char splitter, int index);
 	String get_slice(const String &splitter, int index);
 
-	Vector<String> split(const StringChar splitter) const;
+	Vector<String> split(const char splitter) const;
 	Vector<String> split(const String &splitter) const;
 
 	uint8_t read_uint8_bytes_at(int &index, bool advance_index = true);
@@ -101,17 +101,17 @@ public:
 	double read_double_bytes_at(int &index, bool advance_index = true);
 	void append_double_bytes(const double val);
 
-	void append_str(const StringChar *str);
+	void append_str(const char *str);
 	void append_str(const wchar_t *str);
 	void append_str(const String &other);
 	void append_str(const std::string &str);
 	void append_str(const String &other, const int from);
 	void append_str(const std::string &str, const int from);
 
-	void append_repeat(const StringChar *str, const int times);
+	void append_repeat(const char *str, const int times);
 	void append_repeat(const String &other, const int times);
 
-	void append_path(const StringChar *path);
+	void append_path(const char *path);
 	void append_path(const String &path);
 	void path_clean_end_slash();
 	void path_ensure_end_slash();
@@ -140,11 +140,11 @@ public:
 	void print() const;
 
 	// Generic set of append helpers
-	void append(const StringChar *str);
+	void append(const char *str);
 	void append(const wchar_t *str);
 	void append(const String &other);
 	void append(const std::string &str);
-	void append(const StringChar chr);
+	void append(const char chr);
 	void append(const wchar_t chr);
 	void append(const int num);
 	void append(const unsigned int num);
@@ -170,46 +170,46 @@ public:
 	// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 	String ascii(bool p_allow_extended = false) const;
 	String utf8() const;
-	bool parse_utf8(const StringChar *p_utf8, int p_len = -1); // return true on error
-	static String utf8(const StringChar *p_utf8, int p_len = -1);
+	bool parse_utf8(const char *p_utf8, int p_len = -1); // return true on error
+	static String utf8(const char *p_utf8, int p_len = -1);
 
 	// Taken from the Godot Engine (MIT License)
 	// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
 	// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 	static uint32_t hash(const wchar_t *p_cstr, int p_len); /* hash the string */
 	static uint32_t hash(const wchar_t *p_cstr); /* hash the string */
-	static uint32_t hash(const StringChar *p_cstr, int p_len); /* hash the string */
-	static uint32_t hash(const StringChar *p_cstr); /* hash the string */
+	static uint32_t hash(const char *p_cstr, int p_len); /* hash the string */
+	static uint32_t hash(const char *p_cstr); /* hash the string */
 	uint32_t hash() const; /* hash the string */
 	uint64_t hash64() const; /* hash the string */
 
 	char *c_str();
-	const StringChar *c_str() const;
+	const char *c_str() const;
 
 	char *dataw();
-	const StringChar *data() const;
+	const char *data() const;
 
-	const StringChar operator[](const int index) const;
+	const char operator[](const int index) const;
 	char &operator[](const int index);
 
 	String &operator+=(const String &b);
-	String &operator+=(const StringChar chr);
-	String &operator+=(const StringChar *p_c_str);
+	String &operator+=(const char chr);
+	String &operator+=(const char *p_c_str);
 	String &operator+=(const std::string &b);
 
 	friend String operator+(String lhs, const String &rhs);
-	friend String operator+(String lhs, const StringChar *rhs);
-	friend String operator+(String lhs, const StringChar rhs);
+	friend String operator+(String lhs, const char *rhs);
+	friend String operator+(String lhs, const char rhs);
 	friend String operator+(String lhs, const std::string &rhs);
 
 	friend bool operator==(const String &a, const String &b);
 	friend bool operator!=(const String &a, const String &b);
 
-	friend bool operator==(const String &a, const StringChar *b);
-	friend bool operator!=(const String &a, const StringChar *b);
+	friend bool operator==(const String &a, const char *b);
+	friend bool operator!=(const String &a, const char *b);
 
-	friend bool operator==(const StringChar *b, const String &a);
-	friend bool operator!=(const StringChar *b, const String &a);
+	friend bool operator==(const char *b, const String &a);
+	friend bool operator!=(const char *b, const String &a);
 
 	friend bool operator==(const String &a, const wchar_t *b);
 	friend bool operator!=(const String &a, const wchar_t *b);
@@ -233,14 +233,14 @@ public:
 
 	String &operator=(const String &other);
 	String &operator=(const std::string &other);
-	String &operator=(const StringChar *other);
+	String &operator=(const char *other);
 	String &operator=(const wchar_t *other);
 
 	String();
 	String(const String &other);
 	String(const String &other, const int grow_by);
-	String(const StringChar *p_c_str);
-	String(const StringChar *p_c_str, const int grow_by);
+	String(const char *p_c_str);
+	String(const char *p_c_str, const int grow_by);
 	String(const wchar_t *p_c_str);
 	String(const int prealloc);
 	String(const int prealloc, const int grow_by);

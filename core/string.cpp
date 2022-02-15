@@ -9,7 +9,7 @@
 
 static const int MAX_DECIMALS = 32;
 
-void String::push_back(const StringChar element) {
+void String::push_back(const char element) {
 	ensure_capacity(_size + 1);
 
 	_data[_size++] = element;
@@ -41,7 +41,7 @@ void String::remove(const int index) {
 	_data[_size] = '\0';
 }
 
-void String::erase(const StringChar element) {
+void String::erase(const char element) {
 	int index = find(element);
 
 	if (index != -1) {
@@ -79,11 +79,11 @@ char String::get(const int index) {
 	return _data[index];
 }
 
-const StringChar String::get(const int index) const {
+const char String::get(const int index) const {
 	return _data[index];
 }
 
-void String::set(const int index, const StringChar value) {
+void String::set(const int index, const char value) {
 	_data[index] = value;
 }
 
@@ -124,7 +124,7 @@ void String::resize(const int s) {
 	_data[_size] = '\0';
 }
 
-int String::find(const StringChar val, const int from) const {
+int String::find(const char val, const int from) const {
 	for (int i = from; i < _size; ++i) {
 		if (_data[i] == val) {
 			return i;
@@ -154,7 +154,7 @@ int String::find(const String &val, const int from) const {
 	return -1;
 }
 
-int String::find_reversed(const StringChar val, const int from) const {
+int String::find_reversed(const char val, const int from) const {
 	if (_size == 0) {
 		return -1;
 	}
@@ -272,14 +272,14 @@ String String::substr_index(const int start_index, const int end_index) const {
 	return str;
 }
 
-bool String::contains(const StringChar val) const {
+bool String::contains(const char val) const {
 	return find(val) != -1;
 }
 bool String::contains(const String &val) const {
 	return find(val) != -1;
 }
 
-bool String::is_word_at(const int index, const StringChar *str) const {
+bool String::is_word_at(const int index, const char *str) const {
 	ERR_FAIL_INDEX_V(index, _size, false);
 
 	int i = 0;
@@ -505,7 +505,7 @@ void String::trim_end() {
 	_size = last_index;
 }
 
-bool String::ends_with(const StringChar c) const {
+bool String::ends_with(const char c) const {
 	if (_size == 0) {
 		return false;
 	}
@@ -533,7 +533,7 @@ bool String::ends_with(const String &str) const {
 	return true;
 }
 
-bool String::starts_with(const StringChar c) const {
+bool String::starts_with(const char c) const {
 	if (_size == 0) {
 		return false;
 	}
@@ -560,7 +560,7 @@ bool String::starts_with(const String &str) const {
 	return true;
 }
 
-int String::get_slice_count(const StringChar splitter) const {
+int String::get_slice_count(const char splitter) const {
 	int count = 1;
 
 	for (int i = 0; i < _size; ++i) {
@@ -582,7 +582,7 @@ int String::get_slice_count(const String &splitter) const {
 
 	return count;
 }
-String String::get_slice(const StringChar splitter, int index) {
+String String::get_slice(const char splitter, int index) {
 	if (_size == 0) {
 		return "";
 	}
@@ -633,7 +633,7 @@ String String::get_slice(const String &splitter, int index) {
 	return substr_index(start_index, _size - 1);
 }
 
-Vector<String> String::split(const StringChar splitter) const {
+Vector<String> String::split(const char splitter) const {
 	Vector<String> v;
 
 	if (_size == 0) {
@@ -815,7 +815,7 @@ void String::append_uint8_bytes(const uint8_t val) {
 void String::append_uint16_bytes(const uint16_t val) {
 	ensure_capacity(_size + 2);
 
-	const StringChar *vp = static_cast<const StringChar *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
 	// printf("a %u %u\n", static_cast<uint8_t>(vp[0]),  static_cast<uint8_t>(vp[1]));
 
@@ -828,7 +828,7 @@ void String::append_uint16_bytes(const uint16_t val) {
 void String::append_uint32_bytes(const uint32_t val) {
 	ensure_capacity(_size + 4);
 
-	const StringChar *vp = static_cast<const StringChar *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
 	memcpy(&_data[_size], vp, 4);
 
@@ -839,7 +839,7 @@ void String::append_uint32_bytes(const uint32_t val) {
 void String::append_uint64_bytes(const uint64_t val) {
 	ensure_capacity(_size + 8);
 
-	const StringChar *vp = static_cast<const StringChar *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
 	memcpy(&_data[_size], vp, 8);
 
@@ -857,7 +857,7 @@ void String::append_int8_bytes(const int8_t val) {
 void String::append_int16_bytes(const int16_t val) {
 	ensure_capacity(_size + 2);
 
-	const StringChar *vp = static_cast<const StringChar *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
 	// printf("a %u %u\n", static_cast<uint8_t>(vp[0]),  static_cast<uint8_t>(vp[1]));
 
@@ -870,7 +870,7 @@ void String::append_int16_bytes(const int16_t val) {
 void String::append_int32_bytes(const int32_t val) {
 	ensure_capacity(_size + 4);
 
-	const StringChar *vp = static_cast<const StringChar *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
 	memcpy(&_data[_size], vp, 4);
 
@@ -881,7 +881,7 @@ void String::append_int32_bytes(const int32_t val) {
 void String::append_int64_bytes(const int64_t val) {
 	ensure_capacity(_size + 8);
 
-	const StringChar *vp = static_cast<const StringChar *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
 	memcpy(&_data[_size], vp, 8);
 
@@ -909,7 +909,7 @@ float String::read_float_bytes_at(int &index, bool advance_index) {
 void String::append_float_bytes(const float val) {
 	ensure_capacity(_size + 4);
 
-	const StringChar *vp = static_cast<const StringChar *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
 	memcpy(&_data[_size], vp, 4);
 
@@ -937,7 +937,7 @@ double String::read_double_bytes_at(int &index, bool advance_index) {
 void String::append_double_bytes(const double val) {
 	ensure_capacity(_size + 8);
 
-	const StringChar *vp = static_cast<const StringChar *>((void *)&val);
+	const char *vp = static_cast<const char *>((void *)&val);
 
 	memcpy(&_data[_size], vp, 8);
 
@@ -946,7 +946,7 @@ void String::append_double_bytes(const double val) {
 	_data[_size] = '\0';
 }
 
-void String::append_str(const StringChar *str) {
+void String::append_str(const char *str) {
 	if (str == nullptr) {
 		return;
 	}
@@ -1017,7 +1017,7 @@ void String::append_str(const std::string &str, const int from) {
 	_data[_size] = '\0';
 }
 
-void String::append_repeat(const StringChar *str, const int times) {
+void String::append_repeat(const char *str, const int times) {
 	for (int i = 0; i < times; ++i) {
 		append_str(str);
 	}
@@ -1028,7 +1028,7 @@ void String::append_repeat(const String &other, const int times) {
 	}
 }
 
-void String::append_path(const StringChar *path) {
+void String::append_path(const char *path) {
 	if (path[0] == '\0') {
 		return;
 	}
@@ -1432,7 +1432,7 @@ void String::print() const {
 }
 
 // Generic set of append helpers
-void String::append(const StringChar *str) {
+void String::append(const char *str) {
 	append_str(str);
 }
 void String::append(const wchar_t *str) {
@@ -1444,7 +1444,7 @@ void String::append(const String &other) {
 void String::append(const std::string &str) {
 	append_str(str);
 }
-void String::append(const StringChar chr) {
+void String::append(const char chr) {
 	push_back(chr);
 }
 void String::append(const wchar_t chr) {
@@ -1819,7 +1819,7 @@ String String::ascii(bool p_allow_extended) const {
 // Taken from the Godot Engine (MIT License)
 // Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
 // Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
-String String::utf8(const StringChar *p_utf8, int p_len) {
+String String::utf8(const char *p_utf8, int p_len) {
 	String ret;
 	ret.parse_utf8(p_utf8, p_len);
 
@@ -1829,7 +1829,7 @@ String String::utf8(const StringChar *p_utf8, int p_len) {
 // Taken from the Godot Engine (MIT License)
 // Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
 // Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
-bool String::parse_utf8(const StringChar *p_utf8, int p_len) {
+bool String::parse_utf8(const char *p_utf8, int p_len) {
 	//#define _UNICERROR(m_err) print_line("Unicode error: " + String(m_err));
 
 	if (!p_utf8) {
@@ -1854,8 +1854,8 @@ bool String::parse_utf8(const StringChar *p_utf8, int p_len) {
 	}
 
 	{
-		const StringChar *ptrtmp = p_utf8;
-		const StringChar *ptrtmp_limit = &p_utf8[p_len];
+		const char *ptrtmp = p_utf8;
+		const char *ptrtmp_limit = &p_utf8[p_len];
 		int skip = 0;
 		while (ptrtmp != ptrtmp_limit && *ptrtmp) {
 			if (skip == 0) {
@@ -1989,7 +1989,7 @@ String String::utf8() const {
 		return String();
 	}
 
-	const StringChar *d = data();
+	const char *d = data();
 	int fl = 0;
 	for (int i = 0; i < l; i++) {
 		uint32_t c = d[i];
@@ -2092,7 +2092,7 @@ uint32_t String::hash(const wchar_t *p_cstr) {
 // Taken from the Godot Engine (MIT License)
 // Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
 // Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
-uint32_t String::hash(const StringChar *p_cstr) {
+uint32_t String::hash(const char *p_cstr) {
 	uint32_t hashv = 5381;
 	uint32_t c;
 
@@ -2106,7 +2106,7 @@ uint32_t String::hash(const StringChar *p_cstr) {
 // Taken from the Godot Engine (MIT License)
 // Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
 // Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
-uint32_t String::hash(const StringChar *p_cstr, int p_len) {
+uint32_t String::hash(const char *p_cstr, int p_len) {
 	uint32_t hashv = 5381;
 	for (int i = 0; i < p_len; i++) {
 		hashv = ((hashv << 5) + hashv) + p_cstr[i]; /* hash * 33 + c */
@@ -2121,7 +2121,7 @@ uint32_t String::hash(const StringChar *p_cstr, int p_len) {
 uint32_t String::hash() const {
 	/* simple djb2 hashing */
 
-	const StringChar *chr = c_str();
+	const char *chr = c_str();
 	uint32_t hashv = 5381;
 	uint32_t c;
 
@@ -2138,7 +2138,7 @@ uint32_t String::hash() const {
 uint64_t String::hash64() const {
 	/* simple djb2 hashing */
 
-	const StringChar *chr = c_str();
+	const char *chr = c_str();
 	uint64_t hashv = 5381;
 	uint64_t c;
 
@@ -2153,7 +2153,7 @@ char *String::c_str() {
 	return _data;
 }
 
-const StringChar *String::c_str() const {
+const char *String::c_str() const {
 	return _data;
 }
 
@@ -2161,11 +2161,11 @@ char *String::dataw() {
 	return _data;
 }
 
-const StringChar *String::data() const {
+const char *String::data() const {
 	return _data;
 }
 
-const StringChar String::operator[](const int index) const {
+const char String::operator[](const int index) const {
 	return _data[index];
 }
 
@@ -2185,13 +2185,13 @@ String &String::operator+=(const String &b) {
 	return *this;
 }
 
-String &String::operator+=(const StringChar chr) {
+String &String::operator+=(const char chr) {
 	push_back(chr);
 
 	return *this;
 }
 
-String &String::operator+=(const StringChar *p_c_str) {
+String &String::operator+=(const char *p_c_str) {
 	int i = 0;
 	while (p_c_str[i] != '\0') {
 		push_back(p_c_str[i]);
@@ -2212,13 +2212,13 @@ String operator+(String lhs, const String &rhs) {
 	return lhs;
 }
 
-String operator+(String lhs, const StringChar *rhs) {
+String operator+(String lhs, const char *rhs) {
 	lhs.append_str(rhs);
 
 	return lhs;
 }
 
-String operator+(String lhs, const StringChar rhs) {
+String operator+(String lhs, const char rhs) {
 	lhs.push_back(rhs);
 
 	return lhs;
@@ -2248,7 +2248,7 @@ bool operator!=(const String &a, const String &b) {
 	return !(a == b);
 }
 
-bool operator==(const String &a, const StringChar *b) {
+bool operator==(const String &a, const char *b) {
 	if (a._size == 0) {
 		return b[0] == '\0';
 	}
@@ -2269,11 +2269,11 @@ bool operator==(const String &a, const StringChar *b) {
 	return true;
 }
 
-bool operator!=(const String &a, const StringChar *b) {
+bool operator!=(const String &a, const char *b) {
 	return !(a == b);
 }
 
-bool operator==(const StringChar *b, const String &a) {
+bool operator==(const char *b, const String &a) {
 	if (a._size == 0) {
 		return b[0] == '\0';
 	}
@@ -2294,7 +2294,7 @@ bool operator==(const StringChar *b, const String &a) {
 	return true;
 }
 
-bool operator!=(const StringChar *b, const String &a) {
+bool operator!=(const char *b, const String &a) {
 	return !(a == b);
 }
 
@@ -2405,7 +2405,7 @@ String &String::operator=(const std::string &other) {
 	return *this;
 }
 
-String &String::operator=(const StringChar *other) {
+String &String::operator=(const char *other) {
 	clear();
 
 	append_str(other);
@@ -2466,7 +2466,7 @@ String::String(const String &other, int grow_by) {
 	_data[_size] = '\0';
 }
 
-String::String(const StringChar *p_c_str) {
+String::String(const char *p_c_str) {
 	_data = nullptr;
 	_actual_size = 0;
 	_size = 0;
@@ -2475,7 +2475,7 @@ String::String(const StringChar *p_c_str) {
 	append_str(p_c_str);
 }
 
-String::String(const StringChar *p_c_str, const int grow_by) {
+String::String(const char *p_c_str, const int grow_by) {
 	_data = nullptr;
 	_actual_size = 0;
 	_size = 0;
