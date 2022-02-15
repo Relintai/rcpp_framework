@@ -7,6 +7,9 @@
 
 class PNGLoader {
 public:
+	static Error load_image(Ref<Image> p_image, const char* f, bool p_force_linear);
+	static Error save_image(const char* f, const Ref<Image> &p_img);
+
 	// Taken from the Godot Engine (MIT License)
 	// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
 	// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).

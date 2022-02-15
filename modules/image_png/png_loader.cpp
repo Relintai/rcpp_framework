@@ -5,6 +5,13 @@
 
 #include "core/os/directory.h"
 
+Error PNGLoader::load_image(Ref<Image> p_image, const char *f, bool p_force_linear) {
+	return load_image(p_image, String(f), p_force_linear);
+}
+Error PNGLoader::save_image(const char *f, const Ref<Image> &p_img) {
+	return save_image(String(f), p_img);
+}
+
 // Taken from the Godot Engine (MIT License)
 // Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
 // Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
