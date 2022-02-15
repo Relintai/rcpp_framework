@@ -11,7 +11,9 @@
 #define DEFAULT_DIRECTORY_SEPARATOR '/'
 #endif
 
-//TODO move to wchar_t!
+class Variant;
+
+// TODO move to wchar_t!
 
 class String {
 public:
@@ -42,9 +44,9 @@ public:
 	bool contains(const char val) const;
 	bool contains(const String &val) const;
 
-	bool is_word_at(const int index, const char* str) const;
+	bool is_word_at(const int index, const char *str) const;
 	bool is_word_at(const int index, const String &val) const;
-	
+
 	void replace_from(const int start_index, const int length, const String &with);
 	void replace(const String &find_str, const String &with);
 	void replace(const String &find_str, const String &with, const int count);
@@ -95,21 +97,21 @@ public:
 	void append_int64_bytes(const int64_t val);
 
 	float read_float_bytes_at(int &index, bool advance_index = true);
-    void append_float_bytes(const float val);
-    double read_double_bytes_at(int &index, bool advance_index = true);
-    void append_double_bytes(const double val);
+	void append_float_bytes(const float val);
+	double read_double_bytes_at(int &index, bool advance_index = true);
+	void append_double_bytes(const double val);
 
-	void append_str(const char* str);
-	void append_str(const wchar_t* str);
+	void append_str(const char *str);
+	void append_str(const wchar_t *str);
 	void append_str(const String &other);
 	void append_str(const std::string &str);
 	void append_str(const String &other, const int from);
 	void append_str(const std::string &str, const int from);
 
-	void append_repeat(const char* str, const int times);
+	void append_repeat(const char *str, const int times);
 	void append_repeat(const String &other, const int times);
 
-	void append_path(const char* path);
+	void append_path(const char *path);
 	void append_path(const String &path);
 	void path_clean_end_slash();
 	void path_ensure_end_slash();
@@ -136,13 +138,26 @@ public:
 	uint32_t to_uint() const;
 	std::string to_string() const;
 	void print() const;
-	
+
+	// Generic set of append helpers
+	void append(const char *str);
+	void append(const wchar_t *str);
+	void append(const String &other);
+	void append(const std::string &str);
+	void append(const char chr);
+	void append(const wchar_t chr);
+	void append(const int num);
+	void append(const unsigned int num);
+	void append(const float num);
+	void append(const double num);
+	void append(const Variant &variant);
+
 	static String bool_num(bool val);
 	static String bool_str(bool val);
 
-	//Taken from the Godot Engine (MIT License)
-	//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-	//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	// Taken from the Godot Engine (MIT License)
+	// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+	// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 	static String num(double p_num, int p_decimals = -1);
 	static String num_scientific(double p_num);
 	static String num_real(double p_num, bool p_trailing = true);
@@ -150,17 +165,17 @@ public:
 	static String num_uint64(uint64_t p_num, int base = 10, bool capitalize_hex = false);
 	static String chr(char32_t p_char);
 
-	//Taken from the Godot Engine (MIT License)
-	//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-	//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	// Taken from the Godot Engine (MIT License)
+	// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+	// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 	String ascii(bool p_allow_extended = false) const;
 	String utf8() const;
-	bool parse_utf8(const char *p_utf8, int p_len = -1); //return true on error
+	bool parse_utf8(const char *p_utf8, int p_len = -1); // return true on error
 	static String utf8(const char *p_utf8, int p_len = -1);
 
-	//Taken from the Godot Engine (MIT License)
-	//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-	//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+	// Taken from the Godot Engine (MIT License)
+	// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+	// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 	static uint32_t hash(const wchar_t *p_cstr, int p_len); /* hash the string */
 	static uint32_t hash(const wchar_t *p_cstr); /* hash the string */
 	static uint32_t hash(const char *p_cstr, int p_len); /* hash the string */
@@ -216,17 +231,17 @@ public:
 	operator std::string() { return to_string(); }
 	operator std::string() const { return to_string(); }
 
-	String& operator=(const String &other);
-	String& operator=(const std::string &other);
-	String& operator=(const char* other);
-	String& operator=(const wchar_t* other);
+	String &operator=(const String &other);
+	String &operator=(const std::string &other);
+	String &operator=(const char *other);
+	String &operator=(const wchar_t *other);
 
 	String();
 	String(const String &other);
 	String(const String &other, const int grow_by);
-	String(const char* p_c_str);
-	String(const char* p_c_str, const int grow_by);
-	String(const wchar_t* p_c_str);
+	String(const char *p_c_str);
+	String(const char *p_c_str, const int grow_by);
+	String(const wchar_t *p_c_str);
 	String(const int prealloc);
 	String(const int prealloc, const int grow_by);
 	String(const std::string &str);
@@ -239,9 +254,9 @@ private:
 	int _grow_by;
 };
 
-//Taken from the Godot Engine (MIT License)
-//Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
-//Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
+// Taken from the Godot Engine (MIT License)
+// Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur.
+// Copyright (c) 2014-2021 Godot Engine contributors (cf. AUTHORS.md).
 template <typename L, typename R>
 bool is_str_less(const L *l_ptr, const R *r_ptr) {
 	while (true) {

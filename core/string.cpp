@@ -2,6 +2,7 @@
 
 #include "core/math/math.h"
 #include "error_macros.h"
+#include "variant.h"
 #include <stdlib.h>
 #include <cstdio>
 #include <cstring>
@@ -1428,6 +1429,41 @@ void String::print() const {
 	}
 
 	::printf("%s\n", c_str());
+}
+
+// Generic set of append helpers
+void String::append(const char *str) {
+	append_str(str);
+}
+void String::append(const wchar_t *str) {
+	append_str(str);
+}
+void String::append(const String &other) {
+	append_str(other);
+}
+void String::append(const std::string &str) {
+	append_str(str);
+}
+void String::append(const char chr) {
+	push_back(chr);
+}
+void String::append(const wchar_t chr) {
+	push_back(chr);
+}
+void String::append(const int num) {
+	append_str(String::num(num));
+}
+void String::append(const unsigned int num) {
+	append_str(String::num(num));
+}
+void String::append(const float num) {
+	append_str(String::num(num));
+}
+void String::append(const double num) {
+	append_str(String::num(num));
+}
+void String::append(const Variant &variant) {
+	append_str(variant.to_string());
 }
 
 String String::bool_num(bool val) {
