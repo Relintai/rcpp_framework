@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+
+Import("env_mod")
+Import("env")
+
+env_mod.core_sources = []
+
+env_mod.Append(CPPDEFINES=[("PNG_ARM_NEON_OPT", 0)])
+env_mod.add_source_files(env_mod.core_sources, "libpng/*.c")
+env_mod.add_source_files(env_mod.core_sources, "png_driver_common.cpp")
+env_mod.add_source_files(env_mod.core_sources, "png_loader.cpp")
+
+# Build it all as a library
+lib = env_mod.add_library("module_png", env_mod.core_sources)
+env.Prepend(LIBS=[lib])
+
