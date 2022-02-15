@@ -78,21 +78,21 @@ _FORCE_INLINE_ void _RLOG_MACRO_TEMPLATE_FUNC(STR str, A p0, B p1, C p2, D p3, E
 #define RLOG_MSG(str) \
 	RLogger::log_message(__FUNCTION__, __FILE__, __LINE__, str);
 
-#define RLOG_MSGP(...)                                                                                 \
-	{                                                                                                  \
+#define RLOG_MSGP(...)                                                                                   \
+	{                                                                                                    \
 		String *_rlogger_string_ptr = RLogger::get_message_string_ptr(__FUNCTION__, __FILE__, __LINE__); \
-		_RLOG_MACRO_TEMPLATE_FUNC(_rlogger_string_ptr, __VA_ARGS__);                                   \
-		RLogger::log_ret_ptr(_rlogger_string_ptr);                                                     \
+		_RLOG_MACRO_TEMPLATE_FUNC(_rlogger_string_ptr, __VA_ARGS__);                                     \
+		RLogger::log_ret_ptr(_rlogger_string_ptr);                                                       \
 	}
 
 #define RLOG_WARN(str) \
 	RLogger::log_warning(__FUNCTION__, __FILE__, __LINE__, str);
 
-#define RLOG_WARNP(...)                                                                                \
-	{                                                                                                  \
+#define RLOG_WARNP(...)                                                                                  \
+	{                                                                                                    \
 		String *_rlogger_string_ptr = RLogger::get_warning_string_ptr(__FUNCTION__, __FILE__, __LINE__); \
-		_RLOG_MACRO_TEMPLATE_FUNC(_rlogger_string_ptr, __VA_ARGS__);                                   \
-		RLogger::log_ret_ptr(_rlogger_string_ptr);                                                     \
+		_RLOG_MACRO_TEMPLATE_FUNC(_rlogger_string_ptr, __VA_ARGS__);                                     \
+		RLogger::log_ret_ptr(_rlogger_string_ptr);                                                       \
 	}
 
 #define RLOG_ERR(str) \
