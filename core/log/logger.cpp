@@ -4,8 +4,8 @@
 #include "core/string.h"
 #include <cstdio>
 
-#include <stdio.h>
 #include "logger.h"
+#include <stdio.h>
 #include <thread>
 
 void RLogger::log_trace(const String &str) {
@@ -65,4 +65,81 @@ void RLogger::log_msg_error(const char *p_function, const char *p_file, int p_li
 }
 void RLogger::log_index_error(const char *p_function, const char *p_file, int p_line, const int index, const int size, const char *str) {
 	printf("E (INDEX) | %s::%s:%d | :: index: %d/%d. %s\n", p_file, p_function, p_line, index, size, str);
+}
+
+String *RLogger::get_string_ptr(const int p_default_size) {
+	return new String(p_default_size);
+}
+String *RLogger::get_string_ptr(const char *p_function, const char *p_file, int p_line, const int p_default_size) {
+	String *s = new String(p_default_size);
+
+	s->append_str(p_function);
+	s->append_str("::");
+	s->append_str(p_file);
+	s->append_str(":");
+	s->append_str(String::num(p_line));
+	s->append_str(" | ");
+
+	return s;
+}
+String *RLogger::get_string_ptr(const char *p_prefix, const char *p_function, const char *p_file, int p_line, const int p_default_size) {
+	String *s = new String(p_default_size);
+
+	s->append_str(p_prefix);
+	s->append_str(" | ");
+	s->append_str(p_function);
+	s->append_str("::");
+	s->append_str(p_file);
+	s->append_str(":");
+	s->append_str(String::num(p_line));
+	s->append_str(" | ");
+
+	return s;
+}
+void RLogger::return_string_ptr(String *str) {
+	delete str;
+}
+
+String *RLogger::get_trace_string_ptr(const int p_default_size) {
+	String *str = get_string_ptr(p_default_size);
+	str->append_str("T ");
+	return str;
+}
+String *RLogger::get_message_string_ptr(const int p_default_size) {
+	String *str = get_string_ptr(p_default_size);
+	str->append_str("M ");
+	return str;
+}
+String *RLogger::get_warning_string_ptr(const int p_default_size) {
+	String *str = get_string_ptr(p_default_size);
+	str->append_str("W ");
+	return str;
+}
+String *RLogger::get_error_string_ptr(const int p_default_size) {
+	String *str = get_string_ptr(p_default_size);
+	str->append_str("E ");
+	return str;
+}
+
+String *RLogger::get_trace_string_ptr(const char *p_function, const char *p_file, int p_line, const int p_default_size) {
+	return get_string_ptr("T", p_function, p_file, p_line, p_default_size);
+}
+String *RLogger::get_message_string_ptr(const char *p_function, const char *p_file, int p_line, const int p_default_size) {
+	return get_string_ptr("M", p_function, p_file, p_line, p_default_size);
+}
+String *RLogger::get_warning_string_ptr(const char *p_function, const char *p_file, int p_line, const int p_default_size) {
+	return get_string_ptr("W", p_function, p_file, p_line, p_default_size);
+}
+String *RLogger::get_error_string_ptr(const char *p_function, const char *p_file, int p_line, const int p_default_size) {
+	return get_string_ptr("E", p_function, p_file, p_line, p_default_size);
+}
+
+void RLogger::log_ptr(String *str) {
+	printf("%s\n", str->data());
+}
+
+void RLogger::log_ret_ptr(String *str) {
+	log_ptr(str);
+
+	return_string_ptr(str);
 }
