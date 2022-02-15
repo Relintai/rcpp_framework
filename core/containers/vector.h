@@ -35,9 +35,12 @@ public:
 	const T &operator[](const int index) const;
 	T &operator[](const int index);
 
+	Vector &operator=(const Vector &other);
+
 	Vector();
 	Vector(int prealloc);
 	Vector(int prealloc, int grow_by);
+	Vector(const Vector &other);
 	~Vector();
 
 private:
@@ -140,7 +143,7 @@ void Vector<T>::sort_dec() {
 			}
 		}
 	}
-} 
+}
 
 template <class T>
 int Vector<T>::size() const {
@@ -222,6 +225,15 @@ T &Vector<T>::operator[](const int index) {
 }
 
 template <class T>
+Vector<T> &Vector<T>::operator=(const Vector<T> &other) {
+	resize(0);
+	ensure_capacity(other.size());
+	append_array(other);
+
+	return *this;
+}
+
+template <class T>
 Vector<T>::Vector() {
 	_data = nullptr;
 	_actual_size = 0;
@@ -247,6 +259,21 @@ Vector<T>::Vector(int prealloc, int grow_by) {
 	_grow_by = grow_by;
 
 	ensure_capacity(prealloc);
+}
+
+template <class T>
+Vector<T>::Vector(const Vector<T> &other) {
+	_actual_size = other._actual_size;
+	_size = other._size;
+	_grow_by = other._grow_by;
+
+	if (other._data) {
+		_data = new T[_actual_size];
+
+		for (int i = 0; i < _size; ++i) {
+			_data[i] = other._data[i];
+		}
+	}
 }
 
 template <class T>
