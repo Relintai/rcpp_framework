@@ -11,6 +11,28 @@ class String;
 
 class RLogger {
 public:
+	static void print_trace(const String &str);
+	static void print_trace(const char *str);
+	static void print_trace(const char *p_function, const char *p_file, int p_line, const String &str);
+	static void print_trace(const char *p_function, const char *p_file, int p_line, const char *str);
+
+	static void print_message(const String &str);
+	static void print_message(const char *str);
+	static void print_message(const char *p_function, const char *p_file, int p_line, const String &str);
+	static void print_message(const char *p_function, const char *p_file, int p_line, const char *str);
+
+	static void print_warning(const String &str);
+	static void print_warning(const char *str);
+	static void print_warning(const char *p_function, const char *p_file, int p_line, const String &str);
+	static void print_warning(const char *p_function, const char *p_file, int p_line, const char *str);
+
+	static void print_error(const String &str);
+	static void print_error(const char *str);
+	static void print_error(const char *p_function, const char *p_file, int p_line, const char *str);
+	static void print_error(const char *p_function, const char *p_file, int p_line, const String &str);
+	static void print_msg_error(const char *p_function, const char *p_file, int p_line, const char *p_msg, const char *str);
+	static void print_index_error(const char *p_function, const char *p_file, int p_line, const int index, const int size, const char *str);
+
 	static void log_trace(const String &str);
 	static void log_trace(const char *str);
 	static void log_trace(const char *p_function, const char *p_file, int p_line, const String &str);

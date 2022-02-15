@@ -66,7 +66,7 @@ _FORCE_INLINE_ void _RLOG_MACRO_TEMPLATE_FUNC(STR str, A p0, B p1, C p2, D p3, E
 }
 
 #define RPRINT_TRACE(str) \
-	RLogger::log_trace(__FUNCTION__, __FILE__, __LINE__, str);
+	RLogger::print_trace(__FUNCTION__, __FILE__, __LINE__, str);
 
 #define RLOG_TRACE(...)                                                                               \
 	{                                                                                                  \
@@ -76,7 +76,7 @@ _FORCE_INLINE_ void _RLOG_MACRO_TEMPLATE_FUNC(STR str, A p0, B p1, C p2, D p3, E
 	}
 
 #define RPRINT_MSG(str) \
-	RLogger::log_message(__FUNCTION__, __FILE__, __LINE__, str);
+	RLogger::print_message(__FUNCTION__, __FILE__, __LINE__, str);
 
 #define RLOG_MSG(...)                                                                                   \
 	{                                                                                                    \
@@ -86,7 +86,7 @@ _FORCE_INLINE_ void _RLOG_MACRO_TEMPLATE_FUNC(STR str, A p0, B p1, C p2, D p3, E
 	}
 
 #define RPRINT_WARN(str) \
-	RLogger::log_warning(__FUNCTION__, __FILE__, __LINE__, str);
+	RLogger::print_warning(__FUNCTION__, __FILE__, __LINE__, str);
 
 #define RLOG_WARN(...)                                                                                  \
 	{                                                                                                    \
@@ -96,7 +96,7 @@ _FORCE_INLINE_ void _RLOG_MACRO_TEMPLATE_FUNC(STR str, A p0, B p1, C p2, D p3, E
 	}
 
 #define RPRINT_ERR(str) \
-	RLogger::log_error(__FUNCTION__, __FILE__, __LINE__, str);
+	RLogger::print_error(__FUNCTION__, __FILE__, __LINE__, str);
 
 #define RLOG_ERR(...)                                                                                 \
 	{                                                                                                  \
