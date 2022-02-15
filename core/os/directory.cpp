@@ -127,6 +127,7 @@ String Directory::read_file(const String &path) {
 
 	return fd;
 }
+
 Error Directory::read_file_into(const String &path, String *str) {
 	if (!str) {
 		return ERR_PARAMETER_RANGE_ERROR;
@@ -145,6 +146,72 @@ Error Directory::read_file_into(const String &path, String *str) {
 	str->resize(fsize);
 
 	fread(str->dataw(), 1, fsize, f);
+	fclose(f);
+
+	return OK;
+}
+
+Vector<uint8_t> Directory::read_file_bin(const String &path) {
+	FILE *f = fopen(path.c_str(), "rb");
+
+	Vector<uint8_t> fd;
+
+	ERR_FAIL_COND_V_MSG(!f, fd, "Error opening file! " + path);
+
+	fseek(f, 0, SEEK_END);
+	long fsize = ftell(f);
+	fseek(f, 0, SEEK_SET); /* same as rewind(f); */
+
+	fread(fd.dataw(), 1, fsize, f);
+	fclose(f);
+
+	return fd;
+}
+
+Error Directory::read_file_into_bin(const String &path, Vector<uint8_t> *data) {
+	if (!data) {
+		return ERR_PARAMETER_RANGE_ERROR;
+	}
+
+	FILE *f = fopen(path.c_str(), "rb");
+
+	if (!f) {
+		return ERR_FILE_CANT_OPEN;
+	}
+
+	fseek(f, 0, SEEK_END);
+	long fsize = ftell(f);
+	fseek(f, 0, SEEK_SET); /* same as rewind(f); */
+
+	data->resize(fsize);
+
+	fread(data->dataw(), 1, fsize, f);
+	fclose(f);
+
+	return OK;
+}
+
+Error Directory::write_file(const String &path, const String &str) {
+	FILE *f = fopen(path.c_str(), "w");
+
+	if (!f) {
+		return ERR_FILE_CANT_OPEN;
+	}
+
+	fwrite(str.data(), sizeof(char), str.size(), f);
+	fclose(f);
+
+	return OK;
+}
+
+Error Directory::write_file_bin(const String &path, const Vector<uint8_t> &data) {
+	FILE *f = fopen(path.c_str(), "wb");
+
+	if (!f) {
+		return ERR_FILE_CANT_OPEN;
+	}
+
+	fwrite(data.data(), sizeof(uint8_t), data.size(), f);
 	fclose(f);
 
 	return OK;
