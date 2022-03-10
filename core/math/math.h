@@ -323,6 +323,26 @@ public:
 
 		return hf;
 	}
+
+	static _ALWAYS_INLINE_ double sigmoid(const double x) {
+		return 1 / (1 + exp(-x));
+	}
+
+	static _ALWAYS_INLINE_ double sigmoid_derived(const double x) {
+		return sigmoid(x) * (1 - sigmoid(x));
+	}
+
+	static _ALWAYS_INLINE_ double tanh_derived(const double x) {
+		return 1 - pow(tanh(x), 2);
+	}
+
+	static _ALWAYS_INLINE_ double linear(const double x) {
+		return x;
+	}
+
+	static _ALWAYS_INLINE_ double linear_derived(const double x) {
+		return 1;
+	}
 };
 
 #ifndef ABS
