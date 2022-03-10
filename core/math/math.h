@@ -9,6 +9,8 @@
 #include <algorithm>
 #include <cstdint>
 
+#include "core/containers/vector.h"
+
 #define MATH_PI 3.1415926535897932384626433833
 #define EPSILON 0.00001
 
@@ -342,6 +344,22 @@ public:
 
 	static _ALWAYS_INLINE_ double linear_derived(const double x) {
 		return 1;
+	}
+
+	static _ALWAYS_INLINE_ void softmax(Vector<double> *data_in_out) {
+		double *dwp = data_in_out->dataw();
+		int s = data_in_out->size();
+
+		double acc = 0;
+		for (int i = 0; i < s; ++i) {
+			double e = exp(dwp[i]);
+			dwp[i] = e;
+			acc += e;
+		}
+
+		for (int i = 0; i < s; ++i) {
+			dwp[i] /= acc;
+		}
 	}
 };
 
