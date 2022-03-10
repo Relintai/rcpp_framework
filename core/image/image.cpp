@@ -1685,6 +1685,9 @@ const uint8_t *Image::datar() const {
 uint8_t *Image::dataw() {
 	return data.dataw();
 }
+int Image::get_data_size() const {
+	return data.size();
+}
 
 void Image::create(int p_width, int p_height, bool p_use_mipmaps, Format p_format) {
 	ERR_FAIL_COND_MSG(p_width <= 0, "Image width must be greater than 0.");

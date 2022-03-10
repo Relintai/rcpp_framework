@@ -212,6 +212,7 @@ public:
 	Vector<uint8_t> get_data() const;
 	const uint8_t* datar() const;
 	uint8_t* dataw();
+	int get_data_size() const;
 
 	Image();
 	Image(int p_width, int p_height, bool p_use_mipmaps, Format p_format);
