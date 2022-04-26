@@ -164,6 +164,8 @@ Vector<uint8_t> Directory::read_file_bin(const String &path) {
 	long fsize = ftell(f);
 	fseek(f, 0, SEEK_SET); /* same as rewind(f); */
 
+	fd.resize(fsize);
+
 	fread(fd.dataw(), 1, fsize, f);
 	fclose(f);
 
