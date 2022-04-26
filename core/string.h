@@ -40,7 +40,7 @@ public:
 	void get_substr(char *into_buf, const int start_index, const int len);
 	void get_substr_nt(char *into_buf, const int start_index, const int len);
 	String substr(const int start_index, const int len) const;
-	String substr_index(const int start_index, const int end_index) const;
+	String substr_index(const int start_index, const int end_index) const; //end_index is not included
 	bool contains(const char val) const;
 	bool contains(const String &val) const;
 

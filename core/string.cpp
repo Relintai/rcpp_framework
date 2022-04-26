@@ -253,17 +253,13 @@ String String::substr(const int start_index, const int len) const {
 }
 
 String String::substr_index(const int start_index, const int end_index) const {
-	if (start_index == end_index) {
-		return String();
-	}
-
-	ERR_FAIL_INDEX_V(start_index, _size, String());
-	ERR_FAIL_INDEX_V(end_index, _size, String());
+	ERR_FAIL_INDEX_V(start_index, _size + 1, String());
+	ERR_FAIL_INDEX_V(end_index, _size + 1, String());
 	ERR_FAIL_COND_V(start_index > end_index, String());
 
 	String str;
 	str.ensure_capacity(end_index - start_index + 1);
-	for (int i = start_index; i <= end_index; ++i) {
+	for (int i = start_index; i < end_index; ++i) {
 		str._data[str._size++] = _data[i];
 	}
 
@@ -600,12 +596,12 @@ String String::get_slice(const char splitter, int index) {
 			}
 
 			if (count == index + 1) {
-				return substr_index(start_index, i - 1);
+				return substr_index(start_index, i);
 			}
 		}
 	}
 
-	return substr_index(start_index, _size - 1);
+	return substr_index(start_index, _size);
 }
 String String::get_slice(const String &splitter, int index) {
 	if (_size == 0) {
@@ -626,11 +622,11 @@ String String::get_slice(const String &splitter, int index) {
 		}
 
 		if (count == index + 1) {
-			return substr_index(start_index, n - 1);
+			return substr_index(start_index, n);
 		}
 	}
 
-	return substr_index(start_index, _size - 1);
+	return substr_index(start_index, _size);
 }
 
 Vector<String> String::split(const char splitter) const {
@@ -648,7 +644,7 @@ Vector<String> String::split(const char splitter) const {
 			if (start_index == i) {
 				v.push_back(String());
 			} else {
-				v.push_back(substr_index(start_index, i - 1));
+				v.push_back(substr_index(start_index, i));
 			}
 
 			start_index = i + 1;
@@ -656,7 +652,7 @@ Vector<String> String::split(const char splitter) const {
 	}
 
 	if (start_index < _size - 1) {
-		v.push_back(substr_index(start_index, _size - 1));
+		v.push_back(substr_index(start_index, _size));
 	}
 
 	return v;
@@ -674,13 +670,13 @@ Vector<String> String::split(const String &splitter) const {
 	while (n != -1) {
 		n = find(splitter, n);
 
-		v.push_back(substr_index(start_index, n - 1));
+		v.push_back(substr_index(start_index, n));
 
 		start_index = n + splitter.size();
 	}
 
 	if (start_index < _size - 1) {
-		v.push_back(substr_index(start_index, _size - 1));
+		v.push_back(substr_index(start_index, _size));
 	}
 
 	return v;
@@ -1142,7 +1138,7 @@ String String::path_get_basename() const {
 
 	++ssind;
 
-	return substr_index(ssind, _size - 1);
+	return substr_index(ssind, _size);
 }
 
 String String::path_get_last_segment() const {
@@ -1214,7 +1210,7 @@ String String::file_get_extension() const {
 		return String();
 	}
 
-	return substr_index(dind + 1, _size - 1);
+	return substr_index(dind + 1, _size);
 }
 
 void String::to_html_special_chars() {
