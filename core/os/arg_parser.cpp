@@ -49,7 +49,7 @@ void ArgParser::post_process_args() {
 				if (main_arg) {
 					main_arg = false;
 					arguments_set.insert(arg_main_command);
-					arguments_map[arg_main_command] = &arg_command;
+					arguments_map[arg_main_command] = new String(arg_command);
 				} else {
 					arguments_set.insert(arg_command);
 				}
@@ -75,4 +75,13 @@ String *ArgParser::get_value(const String &arg) {
 ArgParser::ArgParser() {
 }
 ArgParser::~ArgParser() {
+	for (std::map<String, String *>::iterator it = arguments_map.begin(); it != arguments_map.end(); it++) {
+		String *s = it->second;
+
+		if (s) {
+			delete s;
+		}
+	}
+
+	arguments_map.clear();
 }
