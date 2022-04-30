@@ -2885,7 +2885,7 @@ HTMLBuilder *HTMLBuilder::input_email(const String &name, const String &value, c
 }
 
 HTMLBuilder *HTMLBuilder::input_file(const String &name, const String &accept, const String &cls, const String &id) {
-	HTMLTag *t = input_email();
+	HTMLTag *t = input_file();
 
 	t->name(name);
 
