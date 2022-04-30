@@ -27,7 +27,6 @@ void DRequest::parse_files() {
 
 	_multipart_parser = new drogon::MultiPartParser();
 	if (_multipart_parser->parse(request) != 0) {
-		RLOG_ERR("asd2");
 		delete _multipart_parser;
 		_multipart_parser = nullptr;
 	}
