@@ -15,9 +15,47 @@ void DRequest::remove_cookie(const String &key) {
 }
 
 HTTPMethod DRequest::get_method() const {
-	//the enums are in the same order
+	// the enums are in the same order
 
 	return static_cast<HTTPMethod>(static_cast<int>(request->getMethod()));
+}
+
+void DRequest::parse_files() {
+	if (_multipart_parser) {
+		return;
+	}
+
+	_multipart_parser = new drogon::MultiPartParser();
+	if (_multipart_parser->parse(request) != 0) {
+		RLOG_ERR("asd2");
+		delete _multipart_parser;
+		_multipart_parser = nullptr;
+	}
+}
+int DRequest::get_file_count() const {
+	if (!_multipart_parser) {
+		return 0;
+	}
+
+	return _multipart_parser->getFiles().size();
+}
+int DRequest::get_file_length(const int index) const {
+	if (!_multipart_parser) {
+		return 0;
+	}
+
+	ERR_FAIL_INDEX_V(index, _multipart_parser->getFiles().size(), 0);
+
+	return static_cast<int>(_multipart_parser->getFiles()[index].fileLength());
+}
+const uint8_t *DRequest::get_file_data(const int index) const {
+	if (!_multipart_parser) {
+		return nullptr;
+	}
+
+	ERR_FAIL_INDEX_V(index, _multipart_parser->getFiles().size(), nullptr);
+
+	return reinterpret_cast<const uint8_t*>(_multipart_parser->getFiles()[index].fileData());
 }
 
 const String DRequest::get_parameter(const String &key) const {
@@ -38,10 +76,10 @@ void DRequest::send_redirect(const String &location, const HTTPStatusCode status
 }
 
 void DRequest::send() {
-	//if (connection_closed) {
+	// if (connection_closed) {
 	//	DRequestPool::return_request(this);
 	//	return;
-	//}
+	// }
 
 	drogon::HttpResponsePtr response = drogon::HttpResponse::newHttpResponse();
 
@@ -74,7 +112,12 @@ void DRequest::reset() {
 	_added_cookies.clear();
 	_removed_cookies.clear();
 
-	//response = new HttpResponse();
+	if (_multipart_parser) {
+		delete _multipart_parser;
+		_multipart_parser = nullptr;
+	}
+
+	// response = new HttpResponse();
 }
 
 String DRequest::parser_get_path() {
@@ -82,7 +125,7 @@ String DRequest::parser_get_path() {
 }
 
 String DRequest::get_host() const {
-	//todo
+	// todo
 	return "/";
 }
 
@@ -106,10 +149,12 @@ void DRequest::pool() {
 DRequest::DRequest() :
 		Request() {
 
-	//This value will need benchmarks, 2 MB seems to be just as fast for me as 4 MB, but 1MB is slower
-	//It is a tradeoff on server memory though, as every active download will consume this amount of memory
-	//where the file is bigger than this number
-	file_chunk_size = 1 << 21; //2MB
+	_multipart_parser = nullptr;
+
+	// This value will need benchmarks, 2 MB seems to be just as fast for me as 4 MB, but 1MB is slower
+	// It is a tradeoff on server memory though, as every active download will consume this amount of memory
+	// where the file is bigger than this number
+	file_chunk_size = 1 << 21; // 2MB
 
 	reset();
 }
@@ -175,8 +220,8 @@ void DRequest::_response_additional_setup(const drogon::HttpResponsePtr &req) {
 		::Cookie &co = _added_cookies[i];
 		drogon::Cookie c;
 		c.setDomain(co.domain);
-		//todo
-		//c.setExpiresDate
+		// todo
+		// c.setExpiresDate
 		c.setHttpOnly(co.http_only);
 		c.setKey(co.key);
 		c.setPath(co.path);

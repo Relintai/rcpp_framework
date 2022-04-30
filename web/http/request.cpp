@@ -95,6 +95,18 @@ HTTPMethod Request::get_method() const {
 	return HTTP_METHOD_GET;
 }
 
+void Request::parse_files() {
+}
+int Request::get_file_count() const {
+	return 0;
+}
+int Request::get_file_length(const int index) const {
+	return 0;
+}
+const uint8_t *Request::get_file_data(const int index) const {
+	return nullptr;
+}
+
 const String Request::get_parameter(const String &key) const {
 	static String str(0);
 	return str;

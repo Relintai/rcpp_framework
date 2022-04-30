@@ -60,6 +60,11 @@ public:
 
 	virtual HTTPMethod get_method() const;
 
+	virtual void parse_files();
+	virtual int get_file_count() const;
+	virtual int get_file_length(const int index) const;
+	virtual const uint8_t *get_file_data(const int index) const;
+
 	virtual const String get_parameter(const String &key) const;
 
 	HTTPStatusCode get_status_code() const;
