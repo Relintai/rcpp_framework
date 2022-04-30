@@ -2562,7 +2562,7 @@ HTMLBuilder *HTMLBuilder::form_get(const String &action, const String &cls, cons
 HTMLBuilder *HTMLBuilder::form_post(const String &action, const String &cls, const String &id) {
 	HTMLTag *t = form_post();
 
-	t->fora(action);
+	t->action(action);
 
 	if (cls != "") {
 		t->cls(cls);
