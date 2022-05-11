@@ -9,11 +9,20 @@ albeit lot more efficient way. Also standard app/game like optimizations can be 
 For example it's possible to load and cache users, and only save them in a 
 different thread when necessary (they get dirty).
 
-It's still in an experimental state, it should be expected to change a lot.
+I consider it's design mostly stable, it needs cleanups, and some features, but it shouldn't change that much anymore fundamentally.
+
+Note that most of this readme is outdated. It will be updated soon (-ish).
+I ended up using this framework as part of my MSc thesis, and so I already managed to write proper up to date documentation for it,
+which (at least the framework related things) will be reworked into a new readme / documentation, after it's accepted / graded / dealt with.
+
+It likely wouldn't matter, but I decided I'd rather play it safe.
+
+For the time being I recommend looking at my other projects that use this for usage examples.
 
 If you want to try it clone https://github.com/Relintai/rcpp_cms_project instead, it will set this up for you.
+Note that this needs to be updated aswell, will be done eventually.
 
-Only works on linux for now. Eventually I'll reimplement compile on wiondows.
+Only works on linux for now. Eventually I'll reimplement compile on windows.
 
 Supports SQlite (built in), MySQL, and PostgreSQL databases.
 
