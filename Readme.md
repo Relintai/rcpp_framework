@@ -1,5 +1,13 @@
 # rcpp framework
 
+## State
+
+I consider this deprecated, as I ended up merging all of it's functionality into the [Pandemonium Engine](https://github.com/Relintai/pandemonium_engine). Further development will happen there.
+
+The web nodes ended up in the [web module](https://github.com/Relintai/pandemonium_engine/tree/master/modules/web), and the database classes in the [database module](https://github.com/Relintai/pandemonium_engine/tree/master/modules/database).
+
+## Intro
+
 This is a c++ html framework, with a different core design than the current mainstream html frameworks.
 
 It's more similar to Codeigniter 3, but of course it's still different, because it's a c++ app.
@@ -10,12 +18,6 @@ For example it's possible to load and cache users, and only save them in a
 different thread when necessary (they get dirty).
 
 I consider it's design mostly stable, it needs cleanups, and some features, but it shouldn't change that much anymore fundamentally.
-
-Note that most of this readme is outdated. It will be updated soon (-ish).
-I ended up using this framework as part of my MSc thesis, and so I already managed to write proper up to date documentation for it,
-which (at least the framework related things) will be reworked into a new readme / documentation, after it's accepted / graded / dealt with.
-
-It likely wouldn't matter, but I decided I'd rather play it safe.
 
 For the time being I recommend looking at my other projects that use this for usage examples.
 
