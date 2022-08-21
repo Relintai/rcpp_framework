@@ -4,7 +4,7 @@
 
 I consider this deprecated, as I ended up merging all of it's functionality into the [Pandemonium Engine](https://github.com/Relintai/pandemonium_engine).
 
-The web nodes ended up in the [web module](https://github.com/Relintai/pandemonium_engine/tree/master/modules/web), and the database classes in the [database module](https://github.com/Relintai/pandemonium_engine/tree/master/modules/database).
+The web classes ended up in the [web module](https://github.com/Relintai/pandemonium_engine/tree/master/modules/web), and the database classes in the [database module](https://github.com/Relintai/pandemonium_engine/tree/master/modules/database).
 
 Further development will happen there.
 
